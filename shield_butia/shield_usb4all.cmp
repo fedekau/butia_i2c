@@ -1,0 +1,150 @@
+Cmp-Mod V01 Created by CvPCB (2010-03-14)-final date = sáb 16 abr 2011 20:17:12 UYT
+
+BeginCmp
+TimeStamp = /4DAA21D1;
+Reference = K1;
+ValeurCmp = CONN_3;
+IdModule  = SIL-3;
+EndCmp
+
+BeginCmp
+TimeStamp = /4C503DF8;
+Reference = P1;
+ValeurCmp = CONN_20X2_PIC;
+IdModule  = con_20_pic;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DA3ACB8;
+Reference = P2;
+ValeurCmp = CONN_5X2;
+IdModule  = PIN_ARRAY_5x2;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DA3AE4A;
+Reference = P3;
+ValeurCmp = CONN_5X2;
+IdModule  = PIN_ARRAY_5x2;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DA3AE80;
+Reference = P4;
+ValeurCmp = CONN_5X2;
+IdModule  = PIN_ARRAY_5x2;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DA3AE7F;
+Reference = P5;
+ValeurCmp = CONN_5X2;
+IdModule  = PIN_ARRAY_5x2;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DA3AE9B;
+Reference = P6;
+ValeurCmp = CONN_5X2;
+IdModule  = PIN_ARRAY_5x2;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DA3AE9A;
+Reference = P7;
+ValeurCmp = CONN_5X2;
+IdModule  = PIN_ARRAY_5x2;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DA3AE98;
+Reference = P8;
+ValeurCmp = CONN_5X2;
+IdModule  = PIN_ARRAY_5x2;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DA3AE99;
+Reference = P9;
+ValeurCmp = CONN_5X2;
+IdModule  = PIN_ARRAY_5x2;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DAA210D;
+Reference = P10;
+ValeurCmp = CONN_2;
+IdModule  = bornier2;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DA4D189;
+Reference = R1;
+ValeurCmp = 4K7;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DA4D191;
+Reference = R2;
+ValeurCmp = 4K7;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DA4D276;
+Reference = R3;
+ValeurCmp = 4K7;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DA4D292;
+Reference = R4;
+ValeurCmp = 4K7;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DA4D26D;
+Reference = R5;
+ValeurCmp = 4K7;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DA4D293;
+Reference = R6;
+ValeurCmp = 4K7;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DA3A75B;
+Reference = U1;
+ValeurCmp = 74HC04;
+IdModule  = SO14N;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DA39D20;
+Reference = U2;
+ValeurCmp = 74LS153;
+IdModule  = SO16E;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DA39CDE;
+Reference = U4;
+ValeurCmp = 74LS153;
+IdModule  = SO16E;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DA3A475;
+Reference = U6;
+ValeurCmp = 74HC02;
+IdModule  = SO14N;
+EndCmp
+
+EndListe

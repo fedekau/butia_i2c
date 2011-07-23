@@ -1,0 +1,10 @@
+## GIT IGNORE FILE
+
+$savepcb.brd
+*.hex
+*.o
+*.err
+*.cof
+*.lst
+*.map
+*.cod

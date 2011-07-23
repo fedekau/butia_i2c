@@ -1,0 +1,136 @@
+Cmp-Mod V01 Created by CvPCB (2010-03-14)-final date = lun 02 may 2011 18:30:18 UYT
+
+BeginCmp
+TimeStamp = /4DB73AF4;
+Reference = J1;
+ValeurCmp = RJ45;
+IdModule  = RJ45_8;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DB73815;
+Reference = J2;
+ValeurCmp = RJ45;
+IdModule  = RJ45_8;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DB73AF3;
+Reference = J3;
+ValeurCmp = RJ45;
+IdModule  = RJ45_8;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DB73AAF;
+Reference = J4;
+ValeurCmp = RJ45;
+IdModule  = RJ45_8;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DB73AF1;
+Reference = J5;
+ValeurCmp = RJ45;
+IdModule  = RJ45_8;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DB73AD1;
+Reference = J6;
+ValeurCmp = RJ45;
+IdModule  = RJ45_8;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DB73AF2;
+Reference = J7;
+ValeurCmp = RJ45;
+IdModule  = RJ45_8;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DB73AD0;
+Reference = J8;
+ValeurCmp = RJ45;
+IdModule  = RJ45_8;
+EndCmp
+
+BeginCmp
+TimeStamp = /4C503DF8;
+Reference = P1;
+ValeurCmp = CONN_20X2_PIC;
+IdModule  = con_20_pic;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DB73BC4;
+Reference = P2;
+ValeurCmp = CONN_2;
+IdModule  = bornier2;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DB892B5;
+Reference = R3;
+ValeurCmp = R;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DB89287;
+Reference = R4;
+ValeurCmp = R;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DB892BB;
+Reference = R5;
+ValeurCmp = R;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DB89293;
+Reference = R6;
+ValeurCmp = R;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DB892C1;
+Reference = R7;
+ValeurCmp = R;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DB8929E;
+Reference = R8;
+ValeurCmp = R;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DB892C8;
+Reference = R9;
+ValeurCmp = R;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DB892A5;
+Reference = R10;
+ValeurCmp = R;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DA39EB3;
+Reference = U5;
+ValeurCmp = 4051;
+IdModule  = SO16E;
+EndCmp
+
+EndListe
