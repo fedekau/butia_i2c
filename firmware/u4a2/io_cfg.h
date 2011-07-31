@@ -107,6 +107,16 @@
 #define puerta_on()		    puerta = 1;
 #define puerta_off()		puerta = 0;
 
+/** MUX        *****************************************************/
+
+#define S0Init                 TRISDbits.TRISD7=0; 
+#define S1Init                 TRISDbits.TRISD6=0; 
+#define S2Init                 TRISDbits.TRISD5=0; 
+
+#define S0                     LATDbits.LATD7 
+#define S1                     LATDbits.LATD6 
+#define S2                     LATDbits.LATD5 
+
 /** S W I T C H *****************************************************/
 //#define mInitAllSwitches()  TRISBbits.TRISB4=1;/*TRISBbits.TRISB5=1;*/ /*Modificado*/
 //#define mInitSwitch2()      TRISBbits.TRISB4=1;
