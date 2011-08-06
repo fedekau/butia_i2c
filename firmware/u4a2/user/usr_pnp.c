@@ -66,6 +66,7 @@ void UserPNPInit(byte i){
 	//TODO return res value 
 	mInitIDAnalog();
 	ADCON2bits.ADFM = 1;   // ADC result right justified
+    S0Init S1Init S2Init
 }//end UserPNPInit
 
 /******************************************************************************
@@ -161,48 +162,48 @@ void UserPNPReceived(byte* recBuffPtr, byte len){
       switch(((PNP_DATA_PACKET*)recBuffPtr)->CMD){
         case READ_VERSION:
               //dataPacket._byte[1] is len
-	      ((PNP_DATA_PACKET*)sendBufferUsrPNP)->_byte[0] = ((PNP_DATA_PACKET*)recBuffPtr)->_byte[0]; 
-	      ((PNP_DATA_PACKET*)sendBufferUsrPNP)->_byte[1] = ((PNP_DATA_PACKET*)recBuffPtr)->_byte[1]; 
-              ((PNP_DATA_PACKET*)sendBufferUsrPNP)->_byte[2] = PNP_MINOR_VERSION;
-              ((PNP_DATA_PACKET*)sendBufferUsrPNP)->_byte[3] = PNP_MAJOR_VERSION;
-              userPNPCounter = 0x04;
-              break;  
+            ((PNP_DATA_PACKET*)sendBufferUsrPNP)->_byte[0] = ((PNP_DATA_PACKET*)recBuffPtr)->_byte[0]; 
+	        ((PNP_DATA_PACKET*)sendBufferUsrPNP)->_byte[1] = ((PNP_DATA_PACKET*)recBuffPtr)->_byte[1]; 
+            ((PNP_DATA_PACKET*)sendBufferUsrPNP)->_byte[2] = PNP_MINOR_VERSION;
+            ((PNP_DATA_PACKET*)sendBufferUsrPNP)->_byte[3] = PNP_MAJOR_VERSION;
+            userPNPCounter = 0x04;
+        break;  
 	          
         case ASK_ID:
-              	((PNP_DATA_PACKET*)sendBufferUsrPNP)->_byte[0] = ((PNP_DATA_PACKET*)recBuffPtr)->_byte[0]; 
-		port_id = ((PNP_DATA_PACKET*)recBuffPtr)->_byte[0];	
-		switch(port_id){
-		    case 0:
-			S2=0;S1=0;S0=0;
-	            break;
-		    case 1:
-			S2=0;S1=0;S0=1;
-	            break;
-		    case 2:
-			S2=0;S1=1;S0=0;
-	            break;
-		    case 3:
-			S2=0;S1=1;S0=1;
-	            break;
-		    case 4:
-			S2=1;S1=0;S0=0;
-	            break;
-		    case 5:
-			S2=1;S1=0;S0=1;
-	            break;
-		    case 6:
-			S2=1;S1=1;S0=0;
-	            break;
-		    case 7:
-			S2=1;S1=1;S0=1;
-	            break;
-		}	
-		ADCON0bits.GO = 1;              // Start AD conversion
-		while(ADCON0bits.NOT_DONE);     // Wait for conversion
-		((PNP_DATA_PACKET*)sendBufferUsrPNP)->_byte[1] = ADRESL;
-		((PNP_DATA_PACKET*)sendBufferUsrPNP)->_byte[2] = ADRESH;
-		userPNPCounter = 0x02;
-		break;  
+            ((PNP_DATA_PACKET*)sendBufferUsrPNP)->_byte[0] = ((PNP_DATA_PACKET*)recBuffPtr)->_byte[0]; 
+            port_id = ((PNP_DATA_PACKET*)recBuffPtr)->_byte[1];	
+            switch(port_id){
+		        case 0:
+                    S2=0;S1=0;S0=0;
+                break;
+                case 1:
+                    S2=0;S1=0;S0=1;
+                break;
+                case 2:
+                    S2=0;S1=1;S0=0;
+                break;
+                case 3:
+                    S2=0;S1=1;S0=1;
+                break;
+                case 4:
+                    S2=1;S1=0;S0=0;
+                break;
+                case 5:
+                    S2=1;S1=0;S0=1;
+                break;
+                case 6:
+                    S2=1;S1=1;S0=0;
+                break;
+                case 7:
+                    S2=1;S1=1;S0=1;
+                break;
+            }           	
+            ADCON0bits.GO = 1;              // Start AD conversion
+            while(ADCON0bits.NOT_DONE);     // Wait for conversion
+            ((PNP_DATA_PACKET*)sendBufferUsrPNP)->_byte[1] = ADRESH;
+            ((PNP_DATA_PACKET*)sendBufferUsrPNP)->_byte[2] = ADRESL;
+            userPNPCounter = 0x03;
+        break;  
         
 	  case RESET:
               Reset();
