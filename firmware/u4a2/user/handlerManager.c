@@ -76,7 +76,7 @@ void USBGenRead2(void){
 	    //aviso al modulo de usuario respectivo que tengo datos
 		//hmi = epHandlerMap[dph->handlerNumber];
 		//ep = hmi.ep.EPNum;
-		handlerReceivedFuncion[dph->handlerNumber](EPBUFFEROUT(ep)+SIZE__HM_DATA_PACKET_HEADER,len-SIZE__HM_DATA_PACKET_HEADER);
+		handlerReceivedFuncion[dph->handlerNumber](EPBUFFEROUT(ep)+SIZE__HM_DATA_PACKET_HEADER,len-SIZE__HM_DATA_PACKET_HEADER, dph->handlerNumber);
 		/*
 	         * Prepare dual-ram buffer for next OUT transaction
 	         */

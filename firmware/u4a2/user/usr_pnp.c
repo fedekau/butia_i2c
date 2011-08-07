@@ -13,14 +13,19 @@
 #include "io_cfg.h"              // I/O pin mapping
 #include "user\handlerManager.h"
 #include "dynamicPolling.h"                              
+#include "usb4all\proxys\T0Service.h"                      
+
 #define mInitIDAnalog() TRISEbits.TRISE2=1;ADCON0=0x1D;ADCON2=0x3C;
+#define TICKS_INICIAL 40
+#define HOTPLUG_TIME_UNIT 1000
  
 /** V A R I A B L E S ********************************************************/
 #pragma udata 
 
-byte  usrPNPHandler;	 // Handler number asigned to the module
 byte* sendBufferUsrPNP; // buffer to send data
-
+byte id_by_port_low[8];
+byte id_by_port_high[8];
+byte timeOutTicksEvent = TICKS_INICIAL;
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
 void UserPNPProcessIO(void);
 void UserPNPInit(byte i);
@@ -36,6 +41,102 @@ uTab userPNPModuleTable = {&UserPNPInit,&UserPNPRelease,&UserPNPConfigure,"pnp"}
 
 /** D E C L A R A T I O N S **************************************************/
 #pragma code module
+
+/*helper function to set the control lines of the mulptiplexer with the byte pass as parameter*/
+void set_mux(byte port_id){
+//TODO do this with masks
+    switch(port_id){
+        case 0:
+            S2=0;S1=0;S0=0;
+        break;
+        case 1:
+            S2=0;S1=0;S0=1;
+        break;
+        case 2:
+            S2=0;S1=1;S0=0;
+        break;
+        case 3:
+            S2=0;S1=1;S0=1;
+        break;
+        case 4:
+            S2=1;S1=0;S0=0;
+        break;
+        case 5:
+            S2=1;S1=0;S0=1;
+        break;
+        case 6:
+            S2=1;S1=1;S0=0;
+        break;
+        case 7:
+            S2=1;S1=1;S0=1;
+        break;
+    }     
+}      	
+
+byte countDevicesConnected(void){
+    byte port_id = 0;
+    counterDevices = 0;
+    for(port_id=0;port_id<8;port_id++){
+        set_mux(port_id);
+        ADCON0bits.GO = 1;              // Start AD conversion
+        while(ADCON0bits.NOT_DONE);     // Wait for conversion
+        if((ADRESH*256 + ADRESL)>0){
+            counterDevices++;
+        }
+    }
+    return counterDevices;
+}
+//devuelve en deviceName el string correspondiente al nombre del módulo concatenado con el número de instancia correspondiente al puerto port, retorna
+//el código de error en caso de no encontrarse el módulo grabado en el firmware.
+
+byte getDeviceName(char* deviceName, byte port){
+   //TODO to be done!  
+   return 0;
+
+}
+
+byte readPort(byte port){
+    //TODO
+    byte error = 0;
+    byte dataLow  = 0;
+    byte dataHigh = 0;
+    error = isInputPort?();
+    if(!error){
+        //TODO averiguar los pines
+        switch(port_id){
+            case 0:
+                data=PORTDbits.RD7;
+            break;
+            case 1:
+                data=PORTDbits.RD7;
+            break;
+            case 2:
+                data=PORTDbits.RD7;
+            break;
+            case 3:
+                data=PORTDbits.RD7;
+            break;
+            case 4:
+                data=PORTDbits.RD7;
+            break;
+            case 5:
+                data=PORTDbits.RD7;
+            break;
+            case 6:
+                data=PORTDbits.RD7;
+            break;
+            case 7:
+                data=PORTDbits.RD7;
+            break;
+        }     
+
+    }
+    return error
+}
+
+byte writePort(byte port){
+//TODO just do it!
+}
 
 /******************************************************************************
  * Function:        UsePNPInit(void)
@@ -56,17 +157,18 @@ uTab userPNPModuleTable = {&UserPNPInit,&UserPNPRelease,&UserPNPConfigure,"pnp"}
 
 void UserPNPInit(byte i){
 	BOOL res;
-	usrPNPHandler = i;
+	byte usrPNPHandler = i;
 	// add my receive function to the handler module, to be called automatically when the pc sends data to the user module
 	setHandlerReceiveFunction(usrPNPHandler,&UserPNPReceived);
 	// add my receive pooling function to the dynamic pooling module, to be called periodically 
 	//res = addPollingFunction(&UserPNPProcessIO);
 	// initialize the send buffer, used to send data to the PC
 	sendBufferUsrPNP = getSharedBuffer(usrPNPHandler);
-	//TODO return res value 
 	mInitIDAnalog();
 	ADCON2bits.ADFM = 1;   // ADC result right justified
     S0Init S1Init S2Init
+    //register the detection mecanism in the timmer interrupt
+    registerT0event(HOTPLUG_TIME_UNIT, &hotplugEvent); 
 }//end UserPNPInit
 
 /******************************************************************************
@@ -89,6 +191,28 @@ void UserPNPConfigure(void){
 // Do the configuration
 }
 
+void detectEvent(void){
+    byte port_id = 0;
+    byte data_low;
+    byte data_high;
+    for(port_id=0;port_id<8;port_id++){
+        set_mux(port_id);
+        ADCON0bits.GO = 1;              // Start AD conversion
+        while(ADCON0bits.NOT_DONE);     // Wait for conversion
+        byte id_by_port_high[port_id] = ADRESH;
+        byte id_by_port_low[port_id]  = ADRESL;
+    }
+}
+
+void hotplugEvent(){
+    timeOutTicksEvent --;
+    if(timeOutTicksEvent<=0){
+        detectEvent();
+        registerT0eventInEvent(HOTPLUG_TIME_UNIT, &hotplugEvent); 
+        timeOutTicksEvent = TICKS_INICIAL;    
+    }
+}
+
 /******************************************************************************
  * Function:        UserPNPProcessIO(void)
  *
@@ -105,11 +229,14 @@ void UserPNPConfigure(void){
  *
  * Note:            None
  *****************************************************************************/
-
+//Deje configurado para que se haga por interrupción de timmer, asi que esta función no creo la usemos
 void UserPNPProcessIO(void){  
-
     if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND==1)) return;
-	// here enter the code that want to be called periodically, per example interaction with buttons and leds
+    timeOutTicksEvent --;
+    if(timeOutTicksEvent<=0){
+        detectEvent();
+        timeOutTicksEvent = TICKS_INICIAL;    
+    }
 }//end ProcessIO
 
 
@@ -135,6 +262,7 @@ void UserPNPRelease(byte i){
 	unsetHandlerReceiveBuffer(i);
 	unsetHandlerReceiveFunction(i);
 	//removePoolingFunction(&UserPNPProcessIO);
+    unregisterT0event(&hotplugEvent); 
 }
 
 
@@ -154,9 +282,8 @@ void UserPNPRelease(byte i){
  * Note:            None
  *****************************************************************************/
 
-void UserPNPReceived(byte* recBuffPtr, byte len){
+void UserPNPReceived(byte* recBuffPtr, byte len, byte handler){
       byte index;
-      char mens[9] = "puerta";	
       byte port_id = 0;
       byte userPNPCounter = 0;
       switch(((PNP_DATA_PACKET*)recBuffPtr)->CMD){
@@ -172,32 +299,7 @@ void UserPNPReceived(byte* recBuffPtr, byte len){
         case ASK_ID:
             ((PNP_DATA_PACKET*)sendBufferUsrPNP)->_byte[0] = ((PNP_DATA_PACKET*)recBuffPtr)->_byte[0]; 
             port_id = ((PNP_DATA_PACKET*)recBuffPtr)->_byte[1];	
-            switch(port_id){
-		        case 0:
-                    S2=0;S1=0;S0=0;
-                break;
-                case 1:
-                    S2=0;S1=0;S0=1;
-                break;
-                case 2:
-                    S2=0;S1=1;S0=0;
-                break;
-                case 3:
-                    S2=0;S1=1;S0=1;
-                break;
-                case 4:
-                    S2=1;S1=0;S0=0;
-                break;
-                case 5:
-                    S2=1;S1=0;S0=1;
-                break;
-                case 6:
-                    S2=1;S1=1;S0=0;
-                break;
-                case 7:
-                    S2=1;S1=1;S0=1;
-                break;
-            }           	
+            set_mux(port_id);
             ADCON0bits.GO = 1;              // Start AD conversion
             while(ADCON0bits.NOT_DONE);     // Wait for conversion
             ((PNP_DATA_PACKET*)sendBufferUsrPNP)->_byte[1] = ADRESH;
@@ -208,11 +310,7 @@ void UserPNPReceived(byte* recBuffPtr, byte len){
 	  case RESET:
               Reset();
 			  break;
-		  
-		 case MESS:
-				sendMes(mens, sizeof(mens));
-              break;
-         
+		           
 		 default:
               break;
       }//end switch(s)
