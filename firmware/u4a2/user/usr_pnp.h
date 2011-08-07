@@ -51,7 +51,7 @@ typedef union PNP_DATA_PACKET
 } PNP_DATA_PACKET;
 
 /** P U B L I C  P R O T O T Y P E S *****************************************/
-
-
+void registerOpenedModuleInShieldPort(char* moduleID, byte handler);
+void unregisterOpenedModuleInShieldPort(byte handler);
 
 #endif //USER_PNP_H

@@ -18,13 +18,15 @@
 #define mInitIDAnalog() TRISEbits.TRISE2=1;ADCON0=0x1D;ADCON2=0x3C;
 #define TICKS_INICIAL 40
 #define HOTPLUG_TIME_UNIT 1000
+#define PORT_QTY 8
  
 /** V A R I A B L E S ********************************************************/
 #pragma udata 
 
 byte* sendBufferUsrPNP; // buffer to send data
-byte id_by_port_low[8];
-byte id_by_port_high[8];
+byte id_by_port_low[PORT_QTY];
+byte id_by_port_high[PORT_QTY];
+byte handlerPortMapping[PORT_QTY];
 byte timeOutTicksEvent = TICKS_INICIAL;
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
 void UserPNPProcessIO(void);
@@ -72,24 +74,33 @@ void set_mux(byte port_id){
         break;
     }     
 }      	
-
-moduleOpened(char* moduleID, byte handler){
+//this function assign a physical identifier to a recently open user module wich is logic identified by the handler number
+void registerOpenedModuleInShieldPort(char* moduleID, byte handler){
+    //TODO matchPort es simplemente una comparación de strings dado que en la funcion getDeviceName voy a guardar correctamente el nombre
+    //matchPort debe de chequear que el id en el puerto port_id (id_by_port_high[port_id]*256 + byte id_by_port_low[port_id]) coincida con 
+    //el valor de un moduleID
     byte port_id = 0;
-    for(port_id=0;port_id<8;port_id++){
-        if(matchPort(port_id,(id_by_port_high[port_id]*256 + byte id_by_port_low[port_id])){
+    for(port_id=0;port_id<PORT_QTY;port_id++){
+        if(matchPortIDValueWithDeviceName((id_by_port_high[port_id]*256 + byte id_by_port_low[port_id]),moduleID) && handlerPortMapping[port_id]==0){
             handlerPortMapping[port_id] = handler;
             break();
         }
     }
 }
+//this function frees the assigment of a logic usermodule to a physical port
+void unregisterOpenedModuleInShieldPort(byte handler)
+    byte port_id = 0;
+    for(port_id=0;port_id<PORT_QTY;port_id++){
+        if(handlerPortMapping[port_id] == handler)
+            handlerPortMapping[port_id];
+        }
+    }
 
-moduleClosed(handler){
-//TODO
 }
-
+/*This function will be called by the user modules, to know wich is the port where the device is being controll it is connected*/
 byte getPort(byte handler){
     byte port_id = 0;
-    for(port_id=0;port_id<8;port_id++){
+    for(port_id=0;port_id<PORT_QTY;port_id++){
         if(handlerPortMapping[port_id] == handler){
             return(port_id);
         }
@@ -98,26 +109,29 @@ byte getPort(byte handler){
     return ERROR;
 }
 
+/*This function will be used by the admin module to perform the GET_USER_MODULES_SIZE command with the new LIST command*/
 byte countDevicesConnected(void){
     byte port_id = 0;
     counterDevices = 0;
-    for(port_id=0;port_id<8;port_id++){
+    for(port_id=0;port_id<PORT_QTY;port_id++){
         set_mux(port_id);
-        ADCON0bits.GO = 1;              // Start AD conversion
-        while(ADCON0bits.NOT_DONE);     // Wait for conversion
-        if((ADRESH*256 + ADRESL)>0){
+        if((id_by_port_high[port_id]*256 + id_by_port_low[port_id])>0){
             counterDevices++;
         }
     }
     return counterDevices;
 }
+
 //devuelve en deviceName el string correspondiente al nombre del módulo concatenado con el número de instancia correspondiente al puerto port, retorna
 //el código de error en caso de no encontrarse el módulo grabado en el firmware.
 //sirve para el list
 byte getDeviceName(char* deviceName, byte port){
-   //TODO to be done!  
-   return 0;
-
+    //TODO to be done!
+    portDeviceNameMapping[port] = calculateDeviceName(id_by_port_high[port_id]*256 + id_by_port_low[port_id]);
+    portDeviceInstanceNumberMapping[port] = DeviceInstanceNumber(port_id); 
+    //DeviceInstanceNumber se tiene que fijar que tensión tiene en la pata id, y contar la cantidad de coincidencias con ese id hay en los puertos menores a port_id pasado por parametro
+    deviceName = concatenarString(portDeviceNameMapping[port],portDeviceInstanceNumberMapping[port]);
+    return 0;
 }
 
 byte readPort(byte port){
@@ -220,12 +234,12 @@ void detectEvent(void){
     byte port_id = 0;
     byte data_low;
     byte data_high;
-    for(port_id=0;port_id<8;port_id++){
+    for(port_id=0;port_id<PORT_QTY;port_id++){
         set_mux(port_id);
         ADCON0bits.GO = 1;              // Start AD conversion
         while(ADCON0bits.NOT_DONE);     // Wait for conversion
-        byte id_by_port_high[port_id] = ADRESH;
-        byte id_by_port_low[port_id]  = ADRESL;
+        id_by_port_high[port_id] = ADRESH;
+        id_by_port_low[port_id]  = ADRESL;
         //TODO si hubo cambio reconfigurar el TRIS y si es digital o analog
     }
 }
@@ -308,6 +322,8 @@ void UserPNPRelease(byte i){
  * Note:            None
  *****************************************************************************/
 
+
+//This is a internal module model as a user module, so this command are for testing purpouse only
 void UserPNPReceived(byte* recBuffPtr, byte len, byte handler){
       byte index;
       byte port_id = 0;

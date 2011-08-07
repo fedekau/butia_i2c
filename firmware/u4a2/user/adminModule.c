@@ -5,6 +5,7 @@
  ********************************************************************/
 
 #include "user\adminModule.h"
+#include "user\usr_pnp.h"
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata
@@ -77,7 +78,7 @@ void adminReceived(byte* recBuffPtr,byte len){
 				handler = newHandlerTableEntry(endIn,tableDirec);  
 				pUser = dir;
 				pUser(handler); //hago el init ;)
-                //invoco al pnp: moduleOpened(moduleID, handler)
+                ///registerOpenedModuleInShieldPort(moduleID, handler); uncomment when usr_pnp is finished
 				((AM_PACKET*)sendBufferAdmin)->handlerNumber = handler;
 			}else{
 				((AM_PACKET*)sendBufferAdmin)->handlerNumber = ERROR;
@@ -92,7 +93,8 @@ void adminReceived(byte* recBuffPtr,byte len){
 	/* Cierra un user module */
 	case CLOSE:
 		handler  = ((AM_PACKET*)recBuffPtr)->handlerNumber;
-		response = removeHandlerTableEntry(handler);	
+		response = removeHandlerTableEntry(handler);
+        //unregisterOpenedModuleInShieldPort(handler); uncomment when usr_pnp is finished
 		((AM_PACKET*)sendBufferAdmin)->response = response;
 		((AM_PACKET*)sendBufferAdmin)->CMD = CLOSE; 
         //tengo que invocar al module closed de pnp
