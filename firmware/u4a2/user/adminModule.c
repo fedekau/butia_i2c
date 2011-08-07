@@ -77,6 +77,7 @@ void adminReceived(byte* recBuffPtr,byte len){
 				handler = newHandlerTableEntry(endIn,tableDirec);  
 				pUser = dir;
 				pUser(handler); //hago el init ;)
+                //invoco al pnp: moduleOpened(moduleID, handler)
 				((AM_PACKET*)sendBufferAdmin)->handlerNumber = handler;
 			}else{
 				((AM_PACKET*)sendBufferAdmin)->handlerNumber = ERROR;
@@ -94,6 +95,7 @@ void adminReceived(byte* recBuffPtr,byte len){
 		response = removeHandlerTableEntry(handler);	
 		((AM_PACKET*)sendBufferAdmin)->response = response;
 		((AM_PACKET*)sendBufferAdmin)->CMD = CLOSE; 
+        //tengo que invocar al module closed de pnp
 		adminCounter = 0x02; //1 byte para el campo CMD, otro para la respuesta
 	break;
 	

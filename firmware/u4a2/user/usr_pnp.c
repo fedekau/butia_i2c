@@ -73,6 +73,31 @@ void set_mux(byte port_id){
     }     
 }      	
 
+moduleOpened(char* moduleID, byte handler){
+    byte port_id = 0;
+    for(port_id=0;port_id<8;port_id++){
+        if(matchPort(port_id,(id_by_port_high[port_id]*256 + byte id_by_port_low[port_id])){
+            handlerPortMapping[port_id] = handler;
+            break();
+        }
+    }
+}
+
+moduleClosed(handler){
+//TODO
+}
+
+byte getPort(byte handler){
+    byte port_id = 0;
+    for(port_id=0;port_id<8;port_id++){
+        if(handlerPortMapping[port_id] == handler){
+            return(port_id);
+        }
+    }
+    //TODO define error
+    return ERROR;
+}
+
 byte countDevicesConnected(void){
     byte port_id = 0;
     counterDevices = 0;
@@ -88,7 +113,7 @@ byte countDevicesConnected(void){
 }
 //devuelve en deviceName el string correspondiente al nombre del módulo concatenado con el número de instancia correspondiente al puerto port, retorna
 //el código de error en caso de no encontrarse el módulo grabado en el firmware.
-
+//sirve para el list
 byte getDeviceName(char* deviceName, byte port){
    //TODO to be done!  
    return 0;
@@ -201,6 +226,7 @@ void detectEvent(void){
         while(ADCON0bits.NOT_DONE);     // Wait for conversion
         byte id_by_port_high[port_id] = ADRESH;
         byte id_by_port_low[port_id]  = ADRESL;
+        //TODO si hubo cambio reconfigurar el TRIS y si es digital o analog
     }
 }
 
