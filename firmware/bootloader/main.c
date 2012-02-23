@@ -63,7 +63,7 @@ with the PIC18F87J50 Family of microcontrollers.
 #pragma config PLLDIV   = 5       // (20 MHz input)
 #pragma config CPUDIV   = OSC1_PLL2
 #pragma config USBDIV   = 2       // Clock source from 96MHz PLL/2
-#pragma config FOSC     = HSPLL_HS
+#pragma config FOSC     = HS
 #pragma config FCMEN    = OFF
 #pragma config IESO     = OFF
 #pragma config PWRT     = OFF
