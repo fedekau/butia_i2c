@@ -39,22 +39,20 @@
 /** I N C L U D E S **********************************************************/
 #include <p18cxxx.h>			
 #include <delays.h>
-#include "system\typedefs.h"                        // Required
-#include "system\usb\usb.h"                         // Required
+#include "system/typedefs.h"                        // Required
+#include "system/usb/usb.h"                         // Required
 #include "io_cfg.h"                                 // Required
 
 
-#include "system\usb\usb_compile_time_validation.h" // Optional
-#include "user\dynamicPolling.h"                    // Modifiable
-#include "usb4all\dynamicISR\dynamicISR.h"          // Modifiable
+#include "system/usb/usb_compile_time_validation.h" // Optional
+#include "user/dynamicPolling.h"                    // Modifiable
+#include "usb4all/dynamicISR/dynamicISR.h"          // Modifiable
 
-#include "user\usr_display.h"
-#include "user\usr_leds.h"
-#include "user\usr_buzzer.h"
+#include "user/usr_display.h"
+#include "user/usr_leds.h"
+#include "user/usr_buzzer.h"
 
-//#include "user\user.h" 
-//#include "usb4all\boot\boot.h"
-#include "user\handlerManager.h"                              // Modifiable
+#include "user/handlerManager.h"                              // Modifiable
 
 #pragma code sys
 

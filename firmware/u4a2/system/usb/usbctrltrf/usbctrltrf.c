@@ -36,8 +36,8 @@
 
 /** I N C L U D E S **********************************************************/
 #include <p18cxxx.h>
-#include "system\typedefs.h"
-#include "system\usb\usb.h"
+#include "system/typedefs.h"
+#include "system/usb/usb.h"
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata

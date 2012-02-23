@@ -7,7 +7,7 @@
 #define LOADER_MODULE_H
 
 /** I N C L U D E S **********************************************************/
-#include "system\typedefs.h"
+#include "system/typedefs.h"
 /** D E F I N I T I O N S ****************************************************/
 // Ver que la constante DIRECTION_TABLE tiene relacion con la seccion que esta definida en 18f4550.lkr correspondiente a user_sec
 #define DIRECTION_TABLE 0x33AB

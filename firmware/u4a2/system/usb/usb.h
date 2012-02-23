@@ -44,17 +44,17 @@
  * Dependency conflicts are resolved by the correct ordering.
  */
 
-#include "autofiles\usbcfg.h"
+#include "autofiles/usbcfg.h"
 
-#include "system\usb\usbdefs\usbdefs_std_dsc.h"
-#include "usb4all\usbconf\desc\usbdsc.h"
+#include "system/usb/usbdefs/usbdefs_std_dsc.h"
+#include "usb4all/usbconf/desc/usbdsc.h"
 
-#include "system\usb\usbdefs\usbdefs_ep0_buff.h"
-#include "usb4all\usbconf\usballoc\usbmmap.h"
+#include "system/usb/usbdefs/usbdefs_ep0_buff.h"
+#include "usb4all/usbconf/usballoc/usbmmap.h"
 
-#include "system\usb\usbdrv\usbdrv.h"
-#include "system\usb\usbctrltrf\usbctrltrf.h"
-#include "system\usb\usb9\usb9.h"
+#include "system/usb/usbdrv/usbdrv.h"
+#include "system/usb/usbctrltrf/usbctrltrf.h"
+#include "system/usb/usb9/usb9.h"
 
 #if defined(USB_USE_GEN)               // See autofiles\usbcfg.h
 #include "system\usb\class\generic\usbgen.h"

@@ -7,7 +7,7 @@
 #define TOP_LIST_TAD_H
 
 /** I N C L U D E S **********************************************************/
-#include "system\typedefs.h" //byte definition
+#include "system/typedefs.h" //byte definition
 
 /** D E F I N I T I O N S ****************************************************/
 #define LIST_SIZE   128 // 192 se pueden almacenar hasta 6 pantallas

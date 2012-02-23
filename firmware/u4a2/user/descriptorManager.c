@@ -3,7 +3,7 @@
  * Andres Aguirre	   07/04/07 	Original
  ********************************************************************/
 
-#include "user\descriptorManager.h"
+#include "user/descriptorManager.h"
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata

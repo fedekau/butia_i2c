@@ -67,9 +67,9 @@
 #define PARAM_SCLASS auto
 #define MEM_MODEL far  /* Change this to near for small memory model */
 /** I N C L U D E S **********************************************************/
-#include "system\typedefs.h"
-#include "user\adminModule.h"
-#include "user\loaderModule.h"
+#include "system/typedefs.h"
+#include "user/adminModule.h"
+#include "user/loaderModule.h"
 /*#include <stdio.h>*/
 /** D E F I N I T I O N S ****************************************************/
 
@@ -132,6 +132,7 @@ void DelayPORXLCD( void );
 void DelayXLCD( void );
 void printScreen(byte* msg);
 void displayInit(void);
+void printLine(byte* msg, byte line);
 
 /** P U B L I C  P R O T O T Y P E S *****************************************/
 

@@ -5,25 +5,25 @@
 #ifndef ADMIN_MODULE_H
 #define ADMIN_MODULE_H
 /** I N C L U D E S **********************************************************/
-#include "user\handlerManager.h"
-#include "user\defines.h"
-#include "user\descriptorManager.h"
-#include "user\loaderModule.h"
-#include "system\typedefs.h"
-#include "system\usb\usb.h"
+#include "user/handlerManager.h"
+#include "user/defines.h"
+#include "user/descriptorManager.h"
+#include "user/loaderModule.h"
+#include "system/typedefs.h"
+#include "system/usb/usb.h"
 #include "io_cfg.h"   
 #include <p18cxxx.h>
-#include "user\userTemp.h"
-#include "USB4all\boot\boot.h"
+#include "user/userTemp.h"
+#include "usb4all/boot/boot.h"
 #include <string.h>
 #include <EEP.h>
-#include "usb4all\proxys\T0Service.h"       
+#include "usb4all/proxys/T0Service.h"
 
 /** D E F I N I T I O N S ****************************************************/
 #define HM_PACKET_SIZE 253
 #define HM_PACKET_HEADER_SIZE 1
 #define HM_PACKET_PAYLOAD_SIZE (HM_PACKET_SIZE - HM_PACKET_HEADER_SIZE)
-#define TIME_UNIT   2000
+#define TIME_UNIT_WATCHDOG   65500
 #define ADDRESS_BOOT 0x09
 #define BOOT_FLAG 0x11
 

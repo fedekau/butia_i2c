@@ -7,13 +7,13 @@
 /** I N C L U D E S **********************************************************/
 #include <p18cxxx.h>
 #include <usart.h>
-#include "system\typedefs.h"
-#include "system\usb\usb.h"
-#include "user\defines.h"
-#include "user\loaderModule.h"
+#include "system/typedefs.h"
+#include "system/usb/usb.h"
+#include "user/defines.h"
+#include "user/loaderModule.h"
 #include "io_cfg.h"             // I/O pin mapping
-#include "user\adminModule.h"
-#include "user\handlerManager.h"
+#include "user/adminModule.h"
+#include "user/handlerManager.h"
 
 
 /** V A R I A B L E S ********************************************************/
@@ -76,7 +76,7 @@ void USBGenRead2(void){
 	    //aviso al modulo de usuario respectivo que tengo datos
 		//hmi = epHandlerMap[dph->handlerNumber];
 		//ep = hmi.ep.EPNum;
-		handlerReceivedFuncion[dph->handlerNumber](EPBUFFEROUT(ep)+SIZE__HM_DATA_PACKET_HEADER,len-SIZE__HM_DATA_PACKET_HEADER, dph->handlerNumber);
+		handlerReceivedFuncion[dph->handlerNumber](EPBUFFEROUT(ep)+SIZE__HM_DATA_PACKET_HEADER,len-SIZE__HM_DATA_PACKET_HEADER);
 		/*
 	         * Prepare dual-ram buffer for next OUT transaction
 	         */

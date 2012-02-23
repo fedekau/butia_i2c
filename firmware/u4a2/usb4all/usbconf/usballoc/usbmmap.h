@@ -5,8 +5,8 @@
 // I N C L U D E S **********************************************************
 
 #include <p18cxxx.h>		//sino no encontraba el UEP1
-#include "system\typedefs.h"
-#include "usb4all\boot\boot.h" //mia
+#include "system/typedefs.h"
+#include "usb4all/boot/boot.h" //mia
 // D E F I N I T I O N S ****************************************************
 
 //Buffer Descriptor Status Register Initialization Parameters

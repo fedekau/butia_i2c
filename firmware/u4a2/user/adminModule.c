@@ -4,8 +4,7 @@
  * Andres Aguirre 	   18/04/09     Se agrega el RESET
  ********************************************************************/
 
-#include "user\adminModule.h"
-#include "user\usr_pnp.h"
+#include "user/adminModule.h"
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata
@@ -78,7 +77,6 @@ void adminReceived(byte* recBuffPtr,byte len){
 				handler = newHandlerTableEntry(endIn,tableDirec);  
 				pUser = dir;
 				pUser(handler); //hago el init ;)
-                ///registerOpenedModuleInShieldPort(moduleID, handler); uncomment when usr_pnp is finished
 				((AM_PACKET*)sendBufferAdmin)->handlerNumber = handler;
 			}else{
 				((AM_PACKET*)sendBufferAdmin)->handlerNumber = ERROR;
@@ -93,11 +91,9 @@ void adminReceived(byte* recBuffPtr,byte len){
 	/* Cierra un user module */
 	case CLOSE:
 		handler  = ((AM_PACKET*)recBuffPtr)->handlerNumber;
-		response = removeHandlerTableEntry(handler);
-        //unregisterOpenedModuleInShieldPort(handler); uncomment when usr_pnp is finished
+		response = removeHandlerTableEntry(handler);	
 		((AM_PACKET*)sendBufferAdmin)->response = response;
 		((AM_PACKET*)sendBufferAdmin)->CMD = CLOSE; 
-        //tengo que invocar al module closed de pnp
 		adminCounter = 0x02; //1 byte para el campo CMD, otro para la respuesta
 	break;
 	
@@ -192,6 +188,7 @@ void sendMes(char* mensaje, byte len){
 
 void watchdogKeepAlive(void){
     keepAlive = TRUE;
+    mLED_3_On();
 }
 
 /***********************************************************************
@@ -201,17 +198,18 @@ void watchdogKeepAlive(void){
 ************************************************************************/
 
 void watchdogEvent(void) {    
-    timeOutTicksWatchdog --;
-    if(timeOutTicksWatchdog == 0){            
+//    timeOutTicksWatchdog --;
+//    if(timeOutTicksWatchdog == 0){            
+        mLED_3_Off();
         if(keepAlive){
-            timeOutTicksWatchdog = cantTicksW;
+//            timeOutTicksWatchdog = cantTicksW;
             keepAlive = FALSE;
         }
         else{
             goodByeCruelWorld();
         }
-    }
-    registerT0eventInEvent(TIME_UNIT, &watchdogEvent);
+//    }
+    registerT0eventInEvent(TIME_UNIT_WATCHDOG, &watchdogEvent);
 }
 
 /*****************************************************************************
@@ -219,7 +217,8 @@ void watchdogEvent(void) {
 *****************************************************************************/
 
 void watchdogStart(void){
-    registerT0event(0, &watchdogEvent);
+    keepAlive = TRUE;
+    registerT0event(2*TIME_UNIT_WATCHDOG, &watchdogEvent);
 }
 
 /*

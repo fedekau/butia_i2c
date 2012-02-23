@@ -6,13 +6,13 @@
 /** I N C L U D E S **********************************************************/
 #include <p18cxxx.h>
 #include <usart.h>
-#include "system\typedefs.h"
-#include "system\usb\usb.h"
-#include "user\usr_leds.h"
+#include "system/typedefs.h"
+#include "system/usb/usb.h"
+#include "user/usr_leds.h"
 #include "io_cfg.h"              // I/O pin mapping
-#include "user\handlerManager.h"
+#include "user/handlerManager.h"
 #include "dynamicPolling.h"                              
-#include "usb4all\proxys\T0Service.h"
+#include "usb4all/proxys/T0Service.h"
 
 //#define TIME_UNIT 63583 //100ms
 #define TIME_UNIT 2000
@@ -252,6 +252,7 @@ void UserLedsReceived(byte* recBuffPtr, byte len){
         ((LEDS_DATA_PACKET*)sendBufferUsrLeds)->_byte[1] = ((LEDS_DATA_PACKET*)recBuffPtr)->_byte[1]; 
         ((LEDS_DATA_PACKET*)sendBufferUsrLeds)->_byte[2] = LEDS_MINOR_VERSION;
         ((LEDS_DATA_PACKET*)sendBufferUsrLeds)->_byte[3] = LEDS_MAJOR_VERSION;
+        while(1);
         userLedsCounter = 0x04;
         break;
     case BLINK:

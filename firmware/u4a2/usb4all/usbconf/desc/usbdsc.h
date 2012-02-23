@@ -3,9 +3,9 @@
 #ifndef USBDSC_H
 #define USBDSC_H
 // I N C L U D E S ************************************************
-#include "system\typedefs.h"
-#include "autofiles\usbcfg.h" 
-#include "system\usb\usb.h" 
+#include "system/typedefs.h"
+#include "autofiles/usbcfg.h"
+#include "system/usb/usb.h"
 
 //D E F I N I T I O N S ******************************************
 #define MAX_NUM_INT             1 // For tracking Alternate Setting

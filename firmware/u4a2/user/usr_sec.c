@@ -11,13 +11,13 @@ Notar que aunque se desconecte la alimentacion del dispositivo la flag va a segu
 #include <p18cxxx.h>
 #include <usart.h>
 #include <delays.h>
-#include "system\typedefs.h"
-#include "system\usb\usb.h"
+#include "system/typedefs.h"
+#include "system/usb/usb.h"
 #include "io_cfg.h"              // I/O pin mapping
-#include "user\handlerManager.h"
+#include "user/handlerManager.h"
 #include "dynamicPolling.h"
-#include "user\usr_sec.h"
-#include "user\adminModule.h"
+#include "user/usr_sec.h"
+#include "user/adminModule.h"
 #define TRUE 0x01
 #define FALSE 0x00
   

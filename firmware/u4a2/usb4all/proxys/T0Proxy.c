@@ -6,14 +6,14 @@
 
 /** I N C L U D E S **********************************************************/
 #include <p18cxxx.h>
-#include "system\typedefs.h"                        // Required
-#include "system\usb\usb.h"                         // Required
+#include "system/typedefs.h"                        // Required
+#include "system/usb/usb.h"                         // Required
 #include "io_cfg.h"                                 // Required
 
-#include "usb4all\dynamicISR\dynamicISR.h"
-#include "t0Proxy.h"                              // Modifiable
+#include "usb4all/dynamicISR/dynamicISR.h"
+#include "T0Proxy.h"                              // Modifiable
 
-#include "system\usb\usb_compile_time_validation.h" // Optional
+#include "system/usb/usb_compile_time_validation.h"
 //#include "user\user.h" 
 //#include "user\handlerManager.h"                              // Modifiable
 

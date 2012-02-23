@@ -4,9 +4,9 @@
  ********************************************************************/
 
 /** I N C L U D E S **********************************************************/
-#include "system\typedefs.h"                        // Required
-#include "user\defines.h"
-#include "user\loaderModule.h"
+#include "system/typedefs.h"                        // Required
+#include "user/defines.h"
+#include "user/loaderModule.h"
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata

@@ -9,14 +9,14 @@
 #include <usart.h> 
 #include <delays.h>
 #include <stdio.h>
-#include "system\typedefs.h"
-#include "system\usb\usb.h"
+#include "system/typedefs.h"
+#include "system/usb/usb.h"
 #include "usr_display.h"
 #include "io_cfg.h"              // I/O pin mapping
-#include "user\handlerManager.h"
-#include "user\dynamicPolling.h"         
-#include "user\topList.h"
-#include "usb4all\proxys\T0Service.h"                      
+#include "user/handlerManager.h"
+#include "user/dynamicPolling.h"
+#include "user/topList.h"
+#include "usb4all/proxys/T0Service.h"
 
 #define FALSE 0
 #define TRUE  1
@@ -588,7 +588,7 @@ void UserDisplayInit(byte i) {
     // initialize the send buffer, used to send data to the PC
     sendBufferUsrDisplay = getSharedBuffer(usrDisplayHandler);
     //inicializo lista de mensajes
-    create(&list);
+    ///create(&list);
     //inicializo el servicio de eventos
     displayInit();
 } //end UserDisplayInit
@@ -644,7 +644,7 @@ void dispEvent(void) {
     timeOutTicksDisp --;
     if(timeOutTicksDisp <= 0){
         //andres getNextScreen(msg_string, &list, &isEnd);
-        getNextLine(msg_string, &list, &isEnd);
+        ///getNextLine(msg_string, &list, &isEnd);
 /*
         // Esto es para debuggear los punteros
         for(i=16;i<32;i++) msg_string[i] = ' ';
@@ -667,7 +667,7 @@ void dispEvent(void) {
 */
         ///andres printScreen(msg_string);
         printLine(msg_string, 0x01); 
-        getNextLine(msg_string, &list, &isEnd); 
+        ///getNextLine(msg_string, &list, &isEnd);
         printLine(msg_string, 0x02); 
         timeOutTicksDisp = cantTicksDisp;
         //isEnd = 0;
@@ -781,174 +781,6 @@ void resetList() {
  *****************************************************************************/
 
 void UserDisplayReceived(byte* recBuffPtr, byte len){
-    byte largo_msg_agendar, tmp, index, isCiclic, last_msg, j;
-    char linea_display[17];     /* caracteres a mostrar en el display en la linea x*/
-    int i=0;
-    byte userDisplayCounter = 0;
-    byte error = 0;
-    char screen_msg[32];
-    /*char msg_string1[] = "pase 1  ";    
-    char msg_string2[] = "pase 2  ";*/
-    last_msg = 0;  
-
-      
-    switch(((DISPLAY_DATA_PACKET*)recBuffPtr)->CMD){
-        case READ_VERSION:
-            //dataPacket._byte[1] is len
-            ((DISPLAY_DATA_PACKET*)sendBufferUsrDisplay)->_byte[0] = ((DISPLAY_DATA_PACKET*)recBuffPtr)->_byte[0]; 
-            ((DISPLAY_DATA_PACKET*)sendBufferUsrDisplay)->_byte[1] = DISPLAY_MINOR_VERSION;
-            ((DISPLAY_DATA_PACKET*)sendBufferUsrDisplay)->_byte[2] = DISPLAY_MAJOR_VERSION;
-            userDisplayCounter=0x03;
-            break;
-        case ESCRIBIR:
-            //displayInit();
-            unregisterT0event(&dispEvent);
-            ((DISPLAY_DATA_PACKET*)sendBufferUsrDisplay)->_byte[0] = ((DISPLAY_DATA_PACKET*)recBuffPtr)->_byte[0]; 
-            for(i=1;i<33;i++){
-                if(i<17){
-                    linea_display[i-1]= ((DISPLAY_DATA_PACKET*)recBuffPtr)->_byte[i];
-                    if (linea_display[i-1] == '_'){
-                        linea_display[i-1] = ' ';
-                    }
-                }else{
-                    if(i==17) printLine(linea_display, 0x01);
-                    linea_display[i-17]= ((DISPLAY_DATA_PACKET*)recBuffPtr)->_byte[i];
-                    if (linea_display[i-17] == '_'){
-                        linea_display[i-17] = ' ';
-                    }
-                }
-            }
-            printLine(linea_display, 0x02);
-            /*commandXLCD(LIMPIAR);
-            commandXLCD(CASA);*/        
-            userDisplayCounter=0x02; 
-            if(contBusy >= maxContBusy){
-                ((DISPLAY_DATA_PACKET*)sendBufferUsrDisplay)->_byte[1] = BUSY;
-            }else{
-                ((DISPLAY_DATA_PACKET*)sendBufferUsrDisplay)->_byte[1] = NO_BUSY;
-            }    
-            break;  
-        case SET_TICKS:
-            ((DISPLAY_DATA_PACKET*)sendBufferUsrDisplay)->_byte[0] = ((DISPLAY_DATA_PACKET*)recBuffPtr)->_byte[0]; /* codigo de operacion */
-            cantTicksDisp = ((DISPLAY_DATA_PACKET*)recBuffPtr)->_byte[1]; /* largo del mensaje */
-            userDisplayCounter=0x01;
-            break;
-        case AGENDAR_MSG:
-            if (!init) {
-                resetList();
-                init = 1;
-            }
-            /* Un problema que se prensenta es que los paquetes que se intercambian a nivel de USB son de 64bytes, por lo tanto la fragmentacion
-            la vamos a realizar en el alto nivel, no en el firmware, pero se brindan primitivas para poder hacer agendado de eventos. 
-            Si el 3er byte vale 1 indica el fin del mensaje, si es 0 indica que faltan caracteres para completar
-            el mensaje*/
-            timeOutTicksDisp = 1;
-            mensaje_agendar_iterator = 0;
-            ((DISPLAY_DATA_PACKET*)sendBufferUsrDisplay)->_byte[0] = ((DISPLAY_DATA_PACKET*)recBuffPtr)->_byte[0]; /* codigo de operacion */
-            largo_msg_agendar = ((DISPLAY_DATA_PACKET*)recBuffPtr)->_byte[1]; /* largo del mensaje */
-            last_msg          = ((DISPLAY_DATA_PACKET*)recBuffPtr)->_byte[2]; /* indica si es el fin de un mensaje */
-            isCiclic          = ((DISPLAY_DATA_PACKET*)recBuffPtr)->_byte[3]; /* es un mensaje ciclico? */
-
-            for(i=0;i<32;i++) screen_msg[i]=' ';
-            if(startMsg) {
-                startCommitiableInsert(&list);
-                startMsg = 0;
-                unregisterT0event(&dispEvent);
-            }    
-            for(i=4;i<largo_msg_agendar+5;i++){
-                tmp = ((DISPLAY_DATA_PACKET*)recBuffPtr)->_byte[i];
-                if (tmp == '_') {
-                    tmp = ' ';
-                }                                
-                mensaje_agendar[mensaje_agendar_iterator] = tmp;
-                mensaje_agendar_iterator ++;
-            }
-            error = insertCommitiable(mensaje_agendar, largo_msg_agendar, &list, isCiclic);
-            ((DISPLAY_DATA_PACKET*)sendBufferUsrDisplay)->_byte[1] = error; /* error en caso de que no haya espacio libre en la estructura   */ 
-            for(i=0;i<32;i++) screen_msg[i]=' ';
-            /*if(error){
-                screen_msg[0] = 'e';
-                screen_msg[1] = 'r';
-                screen_msg[2] = 'r';
-                screen_msg[3] = 'o';
-                screen_msg[4] = 'r';
-            }else{
-                screen_msg[0] = 'o';
-                screen_msg[1] = 'k';         
-            }*/
-/*
-            // Esto es para debuggear los punteros
-            screen_msg[16] = '0' + last_msg;
-            screen_msg[18] = '0' + list.full / 10;
-            screen_msg[19] = '0' + list.full % 10;
-            screen_msg[21] = '0' + list.empty / 10;
-            screen_msg[22] = '0' + list.empty % 10;
-            screen_msg[24] = '0' + list.space / 100;
-            screen_msg[25] = '0' + (list.space % 100) / 10;
-            screen_msg[26] = '0' + list.space % 10;
-            screen_msg[11] = ' ';
-            screen_msg[12] = ' ';
-            screen_msg[13] = '0' + list.space_mark / 100;
-            screen_msg[14] = '0' + (list.space_mark % 100) / 10;
-            screen_msg[15] = '0' + list.space_mark % 10;
-            screen_msg[28] = '0' + (list.mark % 100) / 10;
-            screen_msg[29] = '0' + list.mark % 10;
-*/
-            // printScreen(screen_msg);
-            if(last_msg == 1){ /* si llegue al final del mensaje */
-                commit(&list);
-                startMsg = 1;
-                //printScreen(screen_msg);
-                registerT0event(DISP_TIME_UNIT, &dispEvent);
-            }            
-            if(contBusy >= maxContBusy){
-                ((DISPLAY_DATA_PACKET*)sendBufferUsrDisplay)->_byte[2] = BUSY;
-            }else{
-                ((DISPLAY_DATA_PACKET*)sendBufferUsrDisplay)->_byte[2] = NO_BUSY;
-            }	
-            userDisplayCounter=0x03;
-            break;
-        case PRUEBA:    
-             /* lo pele en la version 2.4.20*/
-             userDisplayCounter=0x01;
-            break;
-        case BORRAR: 
-            ///andres commandXLCD(LIMPIAR);
-            ///andres commandXLCD(COMANDO_2);     /*Limpio la memoria DDRAM*/
-            ((DISPLAY_DATA_PACKET*)sendBufferUsrDisplay)->_byte[0] = ((DISPLAY_DATA_PACKET*)recBuffPtr)->_byte[0];
-            // Ahora el borrado genera que se reseté la lista y se desencolen los mensajes viejos
-            resetList();
-            unregisterT0event(&dispEvent);
-            // ------------------------------
-            userDisplayCounter=0x01;
-            break;
-        case INICIAR:
-            ///display_init = FALSE;
-            displayInit();
-            ((DISPLAY_DATA_PACKET*)sendBufferUsrDisplay)->_byte[0] = ((DISPLAY_DATA_PACKET*)recBuffPtr)->_byte[0]; 
-            userDisplayCounter=0x01;
-            break;
-        case PRENDER_BKL:
-            BACK_LIGHT_ON();
-            ((DISPLAY_DATA_PACKET*)sendBufferUsrDisplay)->_byte[0] = ((DISPLAY_DATA_PACKET*)recBuffPtr)->_byte[0]; 
-            userDisplayCounter=0x01;
-            break;
-        case APAGAR_BKL:
-            BACK_LIGHT_OFF();
-            ((DISPLAY_DATA_PACKET*)sendBufferUsrDisplay)->_byte[0] = ((DISPLAY_DATA_PACKET*)recBuffPtr)->_byte[0]; 
-            userDisplayCounter=0x01;
-            break;
-        case RESET:
-            DelayPORXLCD();Reset(); /*invocar el reset en el admin */
-            break;
-    }//end switch(s)
-    if(userDisplayCounter != 0){
-        j = 255;
-        while(mUSBGenTxIsBusy() && j-->0); // pruebo un máximo de 255 veces
-            if(!mUSBGenTxIsBusy()){
-                USBGenWrite2(usrDisplayHandler, userDisplayCounter);
-            }
-    }//end if          
 } //end UserDisplayReceived
 
 

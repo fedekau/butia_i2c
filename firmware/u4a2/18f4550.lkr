@@ -5,7 +5,7 @@ LIBPATH .
 
 FILES c018i.o
 FILES clib.lib
-FILES p18f4550.lib
+FILES p18F4550.lib
 
 CODEPAGE   NAME=boot       		START=0x0         END=0x8BF   PROTECTED
 CODEPAGE   NAME=vectors    		START=0x8C0       END=0x0x8E9 PROTECTED

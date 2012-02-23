@@ -8,9 +8,9 @@
 #define HANDLER_MANAGER_H
 
 /** I N C L U D E S **********************************************************/
-#include "system\typedefs.h"
-#include "user\defines.h"
-#include "user\descriptorManager.h"
+#include "system/typedefs.h"
+#include "user/defines.h"
+#include "user/descriptorManager.h"
 
 /** D E F I N I T I O N S ****************************************************/
 #define PACKET_MTU 256

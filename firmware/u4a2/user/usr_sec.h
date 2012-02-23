@@ -1,6 +1,6 @@
 /* Author                                                   Date        Comment
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *  Andrés Aguirre                                         08/09/2010    Original.
+ *  Andres Aguirre                                         08/09/2010    Original.
  *****************************************************************************/
 
 #ifndef USER_SEC_H
@@ -8,10 +8,10 @@
 
 /** I N C L U D E S **********************************************************/
 #include <EEP.h>
-#include "system\typedefs.h"
-#include "user\adminModule.h"
-#include "user\loaderModule.h"
-#include "usb4all\proxys\T0Service.h"
+#include "system/typedefs.h"
+#include "user/adminModule.h"
+#include "user/loaderModule.h"
+#include "usb4all/proxys/T0Service.h"
 #include "io_cfg.h"
 
 /** D E F I N I T I O N S ****************************************************/

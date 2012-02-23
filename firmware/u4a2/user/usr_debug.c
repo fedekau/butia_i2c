@@ -6,11 +6,11 @@
 /** I N C L U D E S **********************************************************/
 #include <p18cxxx.h>
 #include <usart.h>
-#include "system\typedefs.h"
-#include "system\usb\usb.h"
-#include "user\usr_debug.h"
+#include "system/typedefs.h"
+#include "system/usb/usb.h"
+#include "user/usr_debug.h"
 #include "io_cfg.h"              // I/O pin mapping
-#include "user\handlerManager.h"
+#include "user/handlerManager.h"
 #include "dynamicPolling.h"                              
 
 
