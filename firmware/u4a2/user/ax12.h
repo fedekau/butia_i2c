@@ -4,28 +4,28 @@
 /****************************************************************************** 
 * Nombre: ax12.h 
 * Tipo:   HEADER
-* Uso:    Librería para el control de los servos Dynamixel AX-12.
+* Uso:    Librerï¿½a para el control de los servos Dynamixel AX-12.
 ******************************************************************************* 
 * Microcontrolador: 18f4550
 * Compildador:      C18
 ******************************************************************************* 
 * Observaciones:
-*         1)Librería creada a partir de la Datasheet del servo Dynamixel AX-12.
-*           Incluye todas las direcciones tanto las que están en EEPROM como en
+*         1)Librerï¿½a creada a partir de la Datasheet del servo Dynamixel AX-12.
+*           Incluye todas las direcciones tanto las que estï¿½n en EEPROM como en
 *           RAM, instrucciones y constantes.
 *
-*         2)La librería puede ser modificada para ser utilizada por otro
+*         2)La librerï¿½a puede ser modificada para ser utilizada por otro
 *           microcontrolador. Se debe modificar "#include <p18f4550.h>" por el 
 *           nuevo HEADER. NOTA: El cambio de microcontrolador puede implicar
-*           modificaciones en funciones utilizadas en ésta librería.
+*           modificaciones en funciones utilizadas en ï¿½sta librerï¿½a.
 *
 ******************************************************************************* 
-* Creada por:           Andrés Aguirre | Kenji Nakasone
-*                                PROYECTO BUTÍA
+* Creada por:           Andrï¿½s Aguirre | Kenji Nakasone
+*                                PROYECTO BUTï¿½A
 *                             Fac. de ING | UDELAR
 ******************************************************************************* 
 * Fecha: 09|06|2010
-* Versión: 1.0
+* Versiï¿½n: 1.0
 * Errores y sugerencias: 
 ******************************************************************************/ 
    
@@ -40,7 +40,7 @@
     #define MODEL_NUMBER_L          0X00    //00
     #define MODEL_NUMBER_H          0X01    //01
     #define VERSION_FIRMWARE        0X02    //02
-    #define ID                      0x03    //03
+    #define BUSID                   0x03    //03
     #define BAUD_RATE               0x04    //04
     #define RETURN_DELAY            0x05    //05
     #define CW_ANGLELIMIT_L         0x06    //06
@@ -113,7 +113,7 @@
     #define AX12_BUFFER_SIZE        0x20    //32
 
 /*****************************************************************************/ 
-/***************************   Definición de Tipos   *************************/
+/***************************   Definiciï¿½n de Tipos   *************************/
 /*****************************************************************************/ 
     typedef unsigned char byte;
     typedef unsigned char boolean;
@@ -123,16 +123,16 @@
 /*************************   Prototipos de Funciones   ***********************/
 /*********************    Funciones utilizadas en ax12.c   *******************/
 /*****************************************************************************/ 
-    //Funciones Auxiliares para la implementación del Half-Duplex
+    //Funciones Auxiliares para la implementaciï¿½n del Half-Duplex
     void setTX(void);
     void setRX(void);
     void setNone(void);
     void autoDetect (int* list_motors, byte num_motors);
 
-    //Configuración de la USART
+    //Configuraciï¿½n de la USART
     void init (void);
 
-    //Funciones de Transmisión y Recepción
+    //Funciones de Transmisiï¿½n y Recepciï¿½n
     byte ax12writeB(byte data);
     void ax12SendPacket (byte id, byte datalength, byte instruction, byte* data);
     byte ax12ReadPacket (int* status_id, int* status_error, int* status_data);
@@ -140,15 +140,15 @@
     //Funciones de control del Ax-12 
     byte ping ();
     byte reset ();
-    byte readData (byte regstart, byte reglength);
+    byte readData (byte id, byte regstart, byte reglength);
     byte writeData (byte id,byte regstart, byte reglength, byte *values);
     byte action ();
     byte regWrite (byte regstart, byte reglength, int value);
     byte readInfo (byte regstart);
     byte writeInfo (byte id,byte regstart, int value);
     void setEndlessTurnMode (byte id,boolean onoff);
-    void endlessTurn (byte id, int velocidad, int giro);
-    byte presentPSL (int* PSL);
+    void endlessTurn (byte id, int velocidad);
+    byte presentPSL (boolean inverse, byte id, int* PSL);
 
     //Funciones auxiliares
     boolean sign2bin (int numero);

@@ -7,51 +7,51 @@
 * Compildador:      C18
 ******************************************************************************* 
 * Observaciones:
-*         1)En éste código se implementan las distintas funciones prototipos
+*         1)En ï¿½ste cï¿½digo se implementan las distintas funciones prototipos
 *           declaradas en ax12.h.
 *
-*         2)Los servos Ax-12 requieren una comunicación serial del tipo
-*           HALF-DUPLEX la cual será implementada por SOFTWARE. NOTA: No 
-*           utilizaremos la librería "usart.h" para tener mas control sobre
+*         2)Los servos Ax-12 requieren una comunicaciï¿½n serial del tipo
+*           HALF-DUPLEX la cual serï¿½ implementada por SOFTWARE. NOTA: No 
+*           utilizaremos la librerï¿½a "usart.h" para tener mas control sobre
 *           nuestra USART.
 *
-*         3)Éste código puede ser modificado para ser utilizado por otro
+*         3)ï¿½ste cï¿½digo puede ser modificado para ser utilizado por otro
 *           microcontrolador. Se debe modificar "#include <p18f4550.h>" por el 
 *           nuevo HEADER. NOTA: El cambio de microcontrolador puede implicar
-*           modificaciones en funciones utilizadas en ésta librería.
+*           modificaciones en funciones utilizadas en ï¿½sta librerï¿½a.
 *
 ******************************************************************************* 
-* Creada por:           Andrés Aguirre | Kenji Nakasone
-*                                PROYECTO BUTÍA
+* Creada por:           Andrï¿½s Aguirre | Kenji Nakasone
+*                                PROYECTO BUTï¿½A
 *                             Fac. de ING | UDELAR
 ******************************************************************************* 
 * Fecha: 09|06|2010
-* Versión: 1.1
-* 			Cambios en la carga del registro TXSTA y RCSTA
+* Versiï¿½n: 1.0
 * Errores y sugerencias: 
 ******************************************************************************/ 
    
     //Includes
     #include "p18f4550.h"                                  
-    #include "ax12.h"    
-                                   
+    #include "ax12.h"
+    
+#pragma udata
 /*****************************************************************************/ 
 /********************************   Variables   ******************************/
 /*****************************************************************************/ 
-    byte id;
-    boolean inverse;
+    //byte id
     int status_id;                              // ID del paquete de retorno
     int status_error;                           // error del paquete de retorno
     int status_data;                            // data del paquete de
                                                 // retornostatic void setTX();
 
-    static byte ax_rx_buffer[AX12_BUFFER_SIZE]; // buffer de recepción
+    static byte ax_rx_buffer[AX12_BUFFER_SIZE]; // buffer de recepciï¿½n
     static volatile byte ax_rx_Pointer;             
 
 
 /*****************************************************************************/ 
 /***************************   Funciones auxiliares   ************************/
-/*****************************************************************************/ 
+/*****************************************************************************/
+#pragma code module
 boolean sign2bin (int numero) {                        // numero > 0 --> true
     return (numero > 0);                               //numero <= 0 --> false
 }
@@ -81,60 +81,55 @@ int makeInt (byte l, byte h) {
 byte highByte(int value){
     return (value >> 8);
 }
-
+*/
 
 /*****************************************************************************/ 
-/*************************    Vector de Interrupción   ***********************/
-/*****************************************************************************/ 
+/*************************    Vector de Interrupciï¿½n   ***********************/
+/***************************************************************************** 
     #pragma code vector = 0x08
 void int_vector (void){
     _asm 
         goto isr_RX
     _endasm
 }
-    #pragma code
+  #pragma code
+
 /*****************************************************************************/ 
-/*************************    Rutina de Interrupción   ***********************/
-/*****************************************************************************/ 
+/*************************    Rutina de Interrupciï¿½n   ***********************/
+/***************************************************************************** 
      #pragma interrupt isr_RX
 void isr_RX(void){
     ax_rx_buffer[(ax_rx_Pointer++)] = RCREG;    //guarda el byte recibido en el 
                                                 //en el buffer
 }      
-/*****************************************************************************/ 
-/**********************   Configuración de la USART   ************************/
-/***************   Asincrónica | 8 bits | 1 stop | Sin paridad   *************/
-/*****************************************************************************/ 
-void init(void){
-	TXSTA = 0b00000100;				// configuración del registro TXSTA
-									// TXSTA:Transmit Status & Control Register
-		   							// TX9 = 0; transmisión de 8 bits
-									// TXEN = 0; transmisión deshabilitada*
-									// SYNC = 0; modo asincrónico
-									// SENDB = 0; Break Character
-									// BRGH = 1; High Speed
-    
 
-	RCSTA = 0b10000000;             // configuración del registro RCSTA
-								    // RCSTA:Receive Status & control Register
-						 		    // SPEN = 1; pins RX y TX para comunicación serial
-					                // RX9 = 0; recepción de 8 bits
-					                // CREN = 0; recepcion deshabilitada*
+/*****************************************************************************/ 
+/**********************   Configuraciï¿½n de la USART   ************************/
+/***************   Asincrï¿½nica | 8 bits | 1 stop | Sin paridad   *************/
+/*****************************************************************************/ 
+void init_serial(void){
+    TXSTA = 0;                      // configuraciï¿½n del registro TXSTA
+    TXSTAbits.TX9 = 0;              // transmisiï¿½n de 8 bits
+    TXSTAbits.TXEN = 0;             // transmisiï¿½n deshabilitada*
+    TXSTAbits.SYNC = 0;             // modo asincrï¿½nico
+    TXSTAbits.SENDB = 0;            // Break Character
+    TXSTAbits.BRGH = 1;             // High Speed
     
-	
-    BAUDCON = 0b00001000;  		    // configuración del registro BAUDCON
-									// BAUDCON:Baud Rate Control Register
-									// BRG16 = 1; Generador de BAUD RATE de 16 bits             
-             
+    RCSTA = 0;                      // configuraciï¿½n del registro RCSTA
+    RCSTAbits.SPEN = 1;             // pins RX y TX para comunicaciï¿½n serial
+    RCSTAbits.RX9 = 0;              // recepciï¿½n de 8 bits
+    RCSTAbits.CREN = 0;             // recepcion deshabilitada*
+    
+    BAUDCON = 0;                    // configuraciï¿½n del registro BAUDCON
+    BAUDCONbits.BRG16 = 1;          // Generador de BAUD RATE de 16 bits
     SPBRG = 0x04;                   // BRGH=BRG16 = 1 | OSC = 20MHZ => 1 Mbps
 
-    INTCON = 0b11000000;        	// configuración de interrupciones
-									// INTON:Interrupt Control Register
-						            // GIE = 1; habilito interrupciones globales
-						            // PEIE = 1; habilito interrupciones de periféricos
+                                    // configuraciï¿½n de interrupciones
+    INTCONbits.GIE = 1;             // habilito interrupciones globales
+    INTCONbits.PEIE = 1;            // habilito interrupciones de perifï¿½ricos
 
-   								    // configuración del puerto C
-    TRISC = 0b10000000;             // TRISC7 = 1; PORTC<7> como entrada
+   
+    TRISCbits.TRISC7 = 1;           // PORTC<7> como entrada
     
     ax_rx_Pointer = 0;                                    
     setRX();                        // MODO RX
@@ -142,42 +137,42 @@ void init(void){
    
 
 /*****************************************************************************/ 
-/*****   Funciones auxiliares para la implementación del HALF-DUPLEX   *******/
+/*****   Funciones auxiliares para la implementaciï¿½n del HALF-DUPLEX   *******/
 /***************************  Hardware Serial Level  *************************/
 /*****************************************************************************/ 
 void setTX(void){                   // Modo TX
-    PIE1bits.RCIE = 0;              // deshabilita la interrupción de recepción
-    RCSTAbits.CREN = 0;             // deshabilita la recepción
-                                    // Configuro la transmisión
+    PIE1bits.RCIE = 0;              // deshabilita la interrupciï¿½n de recepciï¿½n
+    RCSTAbits.CREN = 0;             // deshabilita la recepciï¿½n
+                                    // Configuro la transmisiï¿½n
     TRISCbits.TRISC6 = 0;           // PORTC<6> como salida
-    TXSTAbits.TXEN = 1;             // habilita la transmisión
+    TXSTAbits.TXEN = 1;             // habilita la transmisiï¿½n
 
 }
 
 void setRX(void){                   // Modo RX
-                                    // Desconfiguro la transmisión
+                                    // Desconfiguro la transmisiï¿½n
     TRISCbits.TRISC6 = 1;           // PORTC<6> como entrada
-    TXSTAbits.TXEN = 0;             // deshabilita la transmisión
+    TXSTAbits.TXEN = 0;             // deshabilita la transmisiï¿½n
 
-    RCSTAbits.CREN = 1;             // habilita la recepción
-    PIE1bits.RCIE = 1;              // habilita la interrupción de recepción
+    RCSTAbits.CREN = 1;             // habilita la recepciï¿½n
+    PIE1bits.RCIE = 1;              // habilita la interrupciï¿½n de recepciï¿½n
     ax_rx_Pointer = 0;              // resetea el puntero del buffer
 }
 
 void setNone(void){                 // Modo RESET
-    PIE1bits.RCIE = 0;              // deshabilita la interrupción de recepción
-    RCSTAbits.CREN = 0;             // deshabilita la recepción
-                                    // Desconfiguro la transmisión
-    TXSTAbits.TXEN = 0;             // deshabilita la transmisión
+    PIE1bits.RCIE = 0;              // deshabilita la interrupciï¿½n de recepciï¿½n
+    RCSTAbits.CREN = 0;             // deshabilita la recepciï¿½n
+                                    // Desconfiguro la transmisiï¿½n
+    TXSTAbits.TXEN = 0;             // deshabilita la transmisiï¿½n
 }
 
 byte ax12writeB(byte data){
-    while (!TXSTAbits.TRMT);        // espera que el micro esté pronto para TX
+    while (!TXSTAbits.TRMT);        // espera que el micro estï¿½ pronto para TX
     TXREG = data;                   // escribe el byte a trasmitir
     return data;
 }
 /*****************************************************************************/ 
-/******************  Funciones de Transmisión y Recepción  *******************/
+/******************  Funciones de Transmisiï¿½n y Recepciï¿½n  *******************/
 /******************************  Packet Level  *******************************/
 /*****************************************************************************/ 
 void ax12SendPacket (byte id, byte datalength, byte instruction, byte *data){
@@ -189,14 +184,14 @@ void ax12SendPacket (byte id, byte datalength, byte instruction, byte *data){
     checksum += ax12writeB(id);
     checksum += ax12writeB(datalength + 2);
     checksum += ax12writeB(instruction);
-    for (f=0; f<datalength; f++) {              
+    for (f=0; f<datalength; f++) {               // data = parï¿½metros
       checksum += ax12writeB(data[f]);
     }
-    ax12writeB(~checksum);                       // Espero que se complete
-    while(!TXSTAbits.TRMT);                      // la transmisión
+    ax12writeB(~checksum);                       // Espero que se
+    while(!TXSTAbits.TRMT);                      // complete la transmisiï¿½n
     setRX();                                     // Modo RX
 }
-                                 			     // Retorna el código
+                                 			    // Retorna el cï¿½digo
 byte ax12ReadPacket(int* status_id, int* status_error, int* status_data){          
     unsigned long ulCounter;
     byte f;
@@ -207,7 +202,7 @@ byte ax12ReadPacket(int* status_id, int* status_error, int* status_data){
     offset = 0;                                  // primero espera que 
     timeout = 0;                                 // llegue toda la data
     bcount = 0;
-    while(bcount < 13){                          // 10 es el largo máximo 
+    while(bcount < 13){                          // 10 es el largo mï¿½ximo 
         ulCounter = 0;                           // que puede tener un packet
 
         while((bcount + offset) == ax_rx_Pointer){
@@ -222,8 +217,8 @@ byte ax12ReadPacket(int* status_id, int* status_error, int* status_data){
     }
     setNone();
                                                  // decodifica el packet
-                                                 // corrección de cabecera
-    error = 0;                                   // código interno de error
+                                                 // correcciï¿½n de cabecera
+    error = 0;                                   // cï¿½digo interno de error
     do {
         error++;
         offset++;
@@ -236,7 +231,7 @@ byte ax12ReadPacket(int* status_id, int* status_error, int* status_data){
     // bcount = largo del mensaje leido (sin cabecera)
     status_length = 2 + ax_rx_buffer[offset+1]; // largo del mensaje decodificado
     if (bcount != status_length) error+=2;      // prueba de coherencia de data
-    checksum = 0;                               // cálculo de checksum
+    checksum = 0;                               // cï¿½lculo de checksum
     for (f=0; f<status_length; f++)
         checksum += ax_rx_buffer[offset+f];
     if (checksum != 255) error+=4;              // prueba de checksum
@@ -263,7 +258,7 @@ byte writeData(byte id,byte regstart, byte reglength, byte *values){
 	byte f;
     byte data [MAXPAQSIZE];
     data [0] = regstart; 	
-	for (f=0; f<reglength; f++) {               // data = parámetros
+	for (f=0; f<reglength; f++) {               // data = parï¿½metros
       data[f+1] = values[f];
     }
 
@@ -272,7 +267,7 @@ byte writeData(byte id,byte regstart, byte reglength, byte *values){
 }
 
 
-byte readData(byte regstart, byte reglength){
+byte readData(byte id, byte regstart, byte reglength){
     byte data [2];
     data [0] = regstart;
     data [1] = reglength;
@@ -318,15 +313,15 @@ void setEndlessTurnMode (byte id,boolean onoff) {
     }
 }
 	
-void endlessTurn (byte id,int velocidad,int giro) {
-		int movimiento = ((velocidad)|((giro)<<10));
-        writeInfo (id,MOVING_SPEED_L, movimiento);
+void endlessTurn (byte id,int velocidad) {
+    boolean direccion = sign2bin (velocidad);
+    writeInfo (id,MOVING_SPEED_L, abs(velocidad));
+//|((direccion^inverse)<<10)
 }
 
-
-byte presentPSL (int* PSL) {                     // lee posicion, velocidad 
+byte presentPSL (boolean inverse, byte id, int* PSL) {                     // lee posicion, velocidad
     byte f;
-    byte err = readData (PRESENT_POSITION_L, 6);       // y lo carga
+    byte err = readData (id, PRESENT_POSITION_L, 6);       // y lo carga
     for (f=0; f<3; f++) {
         PSL [f] = makeInt (ax_rx_buffer[status_data+2*f], ax_rx_buffer[status_data+1+2*f]);
         if (f>0) {

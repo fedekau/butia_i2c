@@ -68,7 +68,7 @@
 #pragma config USBDIV = 2
 
 /* Oscillator Selection bits */
-#pragma config FOSC = HS
+#pragma config FOSC = HS       /*needed for reach 1MBps in serial */
 //#pragma config FOSC = HSPLL_HS
 
 /* Fail Safe Clock Monitor */

@@ -6,33 +6,20 @@
                    projectFiles="true">
       <itemPath>../usb4all/proxys/T0Service.h</itemPath>
       <itemPath>../user/adminModule.h</itemPath>
-      <itemPath>../user/button_handler.h</itemPath>
+      <itemPath>../user/ax12.h</itemPath>
       <itemPath>../user/defines.h</itemPath>
       <itemPath>../user/descriptorManager.h</itemPath>
-      <itemPath>../user/drm.h</itemPath>
       <itemPath>../usb4all/dynamicISR/dynamicISR.h</itemPath>
       <itemPath>../user/dynamicPolling.h</itemPath>
-      <itemPath>../user/estado.h</itemPath>
-      <itemPath>../user/estado_alarma.h</itemPath>
-      <itemPath>../user/estado_cargando.h</itemPath>
-      <itemPath>../user/estado_max.h</itemPath>
-      <itemPath>../user/estado_min.h</itemPath>
-      <itemPath>../user/estado_telefono.h</itemPath>
-      <itemPath>../user/estado_temp.h</itemPath>
       <itemPath>../user/handlerManager.h</itemPath>
-      <itemPath>../user/heladera.h</itemPath>
-      <itemPath>../user/heladeraPersistance.h</itemPath>
       <itemPath>../io_cfg.h</itemPath>
       <itemPath>../user/loaderModule.h</itemPath>
-      <itemPath>../user/temp_handler.h</itemPath>
       <itemPath>../system/typedefs.h</itemPath>
       <itemPath>../system/usb/usb.h</itemPath>
       <itemPath>../autofiles/usbcfg.h</itemPath>
       <itemPath>../usb4all/usbconf/desc/usbdsc.h</itemPath>
       <itemPath>../usb4all/usbconf/usballoc/usbmmap.h</itemPath>
-      <itemPath>../user/usr_debug.h</itemPath>
-      <itemPath>../user/usr_display.h</itemPath>
-      <itemPath>../user/usr_ht9202.h</itemPath>
+      <itemPath>../user/usr_ax12.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LibraryFiles"
                    displayName="Library Files"
@@ -53,31 +40,19 @@
       <itemPath>../usb4all/proxys/T0Proxy.c</itemPath>
       <itemPath>../usb4all/proxys/T0Service.c</itemPath>
       <itemPath>../user/adminModule.c</itemPath>
-      <itemPath>../user/button_handler.c</itemPath>
+      <itemPath>../user/ax12.c</itemPath>
       <itemPath>../user/descriptorManager.c</itemPath>
-      <itemPath>../user/dri_lcd.c</itemPath>
       <itemPath>../usb4all/dynamicISR/dynamicISR.c</itemPath>
       <itemPath>../user/dynamicPolling.c</itemPath>
-      <itemPath>../user/estado.c</itemPath>
-      <itemPath>../user/estado_alarma.c</itemPath>
-      <itemPath>../user/estado_cargando.c</itemPath>
-      <itemPath>../user/estado_max.c</itemPath>
-      <itemPath>../user/estado_min.c</itemPath>
-      <itemPath>../user/estado_telefono.c</itemPath>
-      <itemPath>../user/estado_temp.c</itemPath>
       <itemPath>../user/handlerManager.c</itemPath>
-      <itemPath>../user/heladera.c</itemPath>
-      <itemPath>../user/heladeraPersistance.c</itemPath>
       <itemPath>../user/loaderModule.c</itemPath>
       <itemPath>../main.c</itemPath>
-      <itemPath>../user/temp_handler.c</itemPath>
       <itemPath>../system/usb/usb9/usb9.c</itemPath>
       <itemPath>../system/usb/usbctrltrf/usbctrltrf.c</itemPath>
       <itemPath>../system/usb/usbdrv/usbdrv.c</itemPath>
       <itemPath>../usb4all/usbconf/desc/usbdsc.c</itemPath>
       <itemPath>../usb4all/usbconf/usballoc/usbmmap.c</itemPath>
-      <itemPath>../user/usr_display.c</itemPath>
-      <itemPath>../user/usr_ht9202.c</itemPath>
+      <itemPath>../user/usr_ax12.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
