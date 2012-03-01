@@ -147,7 +147,7 @@
     byte readInfo (byte regstart);
     byte writeInfo (byte id,byte regstart, int value);
     void setEndlessTurnMode (byte id,boolean onoff);
-    void endlessTurn (byte id, int velocidad);
+    void endlessTurn (byte id, int velocidad, byte inverse  );
     byte presentPSL (boolean inverse, byte id, int* PSL);
 
     //Funciones auxiliares

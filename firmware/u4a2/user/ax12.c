@@ -300,7 +300,8 @@ byte writeInfo (byte id,byte regstart, int value) {
     data [1] = value&0xFF;
     if (reglength > 1) {data[2] = (value&0xFF00)>>8;}
     ax12SendPacket (id, reglength+1, WRITE_DATA, data);
-    return ax12ReadPacket(&status_id, &status_error, &status_data);
+    return 1;
+    //ax12ReadPacket(&status_id, &status_error, &status_data);
 }
 
 
@@ -313,10 +314,15 @@ void setEndlessTurnMode (byte id,boolean onoff) {
     }
 }
 	
-void endlessTurn (byte id,int velocidad) {
-    boolean direccion = sign2bin (velocidad);
-    writeInfo (id,MOVING_SPEED_L, abs(velocidad));
-//|((direccion^inverse)<<10)
+void endlessTurn (byte id,int velocidad, byte inverse) {
+    //boolean direccion = sign2bin (velocidad);
+    //writeInfo (id,MOVING_SPEED_L, abs(velocidad)|((direccion^inverse)<<10));
+    if (velocidad <0){        
+        writeInfo (id,MOVING_SPEED_L, 1023-velocidad);
+    }else{
+        writeInfo (id,MOVING_SPEED_L, velocidad);
+    }
+    
 }
 
 byte presentPSL (boolean inverse, byte id, int* PSL) {                     // lee posicion, velocidad
