@@ -57,7 +57,11 @@ boolean sign2bin (int numero) {                        // numero > 0 --> true
 }
 
 char bin2sign (boolean var) {                         // var = 0 --> sign = -1
-    return 2*var - 1;                                 // var = 1 --> sign = 1
+    //return 2*var - 1;                                 // var = 1 --> sign = 1
+    if(var>0)
+        return 1;
+    else
+        return -1;
 }
 
 int makeInt (byte l, byte h) {
@@ -107,7 +111,7 @@ void isr_RX(void){
 /**********************   Configuraci�n de la USART   ************************/
 /***************   Asincr�nica | 8 bits | 1 stop | Sin paridad   *************/
 /*****************************************************************************/ 
-void init_serial(void){
+void ax12InitSerial(void){
     TXSTA = 0;                      // configuraci�n del registro TXSTA
     TXSTAbits.TX9 = 0;              // transmisi�n de 8 bits
     TXSTAbits.TXEN = 0;             // transmisi�n deshabilitada*
@@ -155,7 +159,7 @@ void setRX(void){                   // Modo RX
     TXSTAbits.TXEN = 0;             // deshabilita la transmisi�n
 
     RCSTAbits.CREN = 1;             // habilita la recepci�n
-    PIE1bits.RCIE = 1;              // habilita la interrupci�n de recepci�n
+    // TODO FIXME PIE1bits.RCIE = 1;              // habilita la interrupci�n de recepci�n
     ax_rx_Pointer = 0;              // resetea el puntero del buffer
 }
 
@@ -313,16 +317,47 @@ void setEndlessTurnMode (byte id,boolean onoff) {
         writeInfo (id,CCW_ANGLELIMIT_L, 1023);
     }
 }
-	
+
+int negateVelocity(int velocity){
+    return (0x0001<<9)^(velocity);
+    /*int negVel = 0x0001<<10;
+    byte low = velocity % 256;
+    byte high = velocity / 256;
+    negVel = negVel ^ (high << 8);
+    negVel = negVel | low;*/
+}
 void endlessTurn (byte id,int velocidad, byte inverse) {
     //boolean direccion = sign2bin (velocidad);
-    //writeInfo (id,MOVING_SPEED_L, abs(velocidad)|((direccion^inverse)<<10));
-    if (velocidad <0){        
-        writeInfo (id,MOVING_SPEED_L, 1023-velocidad);
+/*    if(inverse==1){
+        if (velocidad<0){
+            writeInfo (id,MOVING_SPEED_L, 1023-velocidad);
+        }
+        else{
+            writeInfo (id,MOVING_SPEED_L, velocidad);
+        }
     }else{
-        writeInfo (id,MOVING_SPEED_L, velocidad);
+        if (velocidad>=0){
+            writeInfo (id,MOVING_SPEED_L, 1023+velocidad);
+        }
+        else{
+            writeInfo (id,MOVING_SPEED_L, abs(velocidad));
+        }
+    }*/
+    if(inverse==1){
+        if (velocidad<0){
+            writeInfo (id,MOVING_SPEED_L, abs(velocidad));
+        }
+        else{
+            writeInfo (id,MOVING_SPEED_L, 1024+(abs(velocidad)));
+        }
+    }else{
+        if (velocidad<0){
+            writeInfo (id,MOVING_SPEED_L, 1024-velocidad);
+        }
+        else{
+            writeInfo (id,MOVING_SPEED_L, velocidad);
+        }
     }
-    
 }
 
 byte presentPSL (boolean inverse, byte id, int* PSL) {                     // lee posicion, velocidad

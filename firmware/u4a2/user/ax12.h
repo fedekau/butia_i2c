@@ -101,7 +101,7 @@
     #define WRITE_DATA              0x03    //03 
     #define REG_WRITE               0x04    //04     
     #define ACTION                  0x05    //05
-    #define RESET                   0x06    //06 
+    #define RESET_AX12              0x06    //06
     #define SYNC_WRITE              0x83    //131 
 
 /*****************************************************************************/ 
@@ -130,7 +130,7 @@
     void autoDetect (int* list_motors, byte num_motors);
 
     //Configuraci�n de la USART
-    void init (void);
+    void ax12InitSerial(void);
 
     //Funciones de Transmisi�n y Recepci�n
     byte ax12writeB(byte data);

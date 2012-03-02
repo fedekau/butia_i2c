@@ -27,7 +27,7 @@ byte* sendBufferUsrMotores; // buffer to send data
 #define END         0x04
 
 #define TIME_UNIT        2000
-#define LONG_TIME_UNIT   10000
+#define LONG_TIME_UNIT   5000
 #define LEFT_MOTOR   0x01
 #define RIGHT_MOTOR  0x02
 
@@ -63,6 +63,17 @@ uTab userMotoresModuleTable = {&UserMotoresInit,&UserMotoresRelease,&UserMotores
  *
  * Note:            None
  *****************************************************************************/
+typedef struct _Motor{
+    int id;
+    int inverse;    
+} Motor;
+
+
+typedef struct _Wheels{
+    Motor left;
+    Motor rigth;
+} Wheels;
+
 
 void stopRight(){
     writeInfo (RIGHT_MOTOR, 32, 0);
@@ -70,12 +81,12 @@ void stopRight(){
 
 void backwardRight(){
     //writeInfo (LEFT_MOTOR, 32, -600);
-    endlessTurn(RIGHT_MOTOR, -600, 0 );
+    endlessTurn(RIGHT_MOTOR, -600, 1 );
     registerT0eventInEvent(LONG_TIME_UNIT, &stopRight);
 }
 void forwardRight(){
     //writeInfo (RIGHT_MOTOR, 32, 600);
-    endlessTurn(RIGHT_MOTOR, 600, 0);
+    endlessTurn(RIGHT_MOTOR, 600, 1);
     registerT0eventInEvent(LONG_TIME_UNIT, &backwardRight);
 }
 void stopLeft(){
@@ -84,7 +95,7 @@ void stopLeft(){
 }
 
 void backwardLeft(){
-    writeInfo (LEFT_MOTOR, 32, 0);
+    //writeInfo (LEFT_MOTOR, 32, 0);
     endlessTurn(LEFT_MOTOR, -600, 1);
     registerT0eventInEvent(LONG_TIME_UNIT, &stopLeft);
 }
@@ -110,65 +121,20 @@ void UserMotoresInit(byte i) {
     /* andres res = addPollingFunction(&UserMotoresProcessIO);*/
     // initialize the send buffer, used to send data to the PC
     sendBufferUsrMotores = getSharedBuffer(usrMotoresHandler);
-    init_serial(); /*serial configuration for ax12*/
-    sexyMotorMoveStart();    
-/*
-    writeInfo (BRODCAST, 32, 600);
-    Delay10TCYx (0x05);
-    writeInfo (BRODCAST, 32, -600);
-    Delay10KTCYx(20);
-    writeInfo (BRODCAST, 32, 0);*/
+    ax12InitSerial();  
+    //Wheels ruedas;
+    /*Implementar funcion de auto deteccion para que detecte los motores*/
+    /*writeInfo (ruedas.left.id, CW_COMPLIANCE_MARGIN, 0);
+    writeInfo (ruedas.left.id, CCW_COMPLIANCE_MARGIN, 0);
+    writeInfo (ruedas.left.id, CW_COMPLIANCE_SLOPE, 95);
+    writeInfo (ruedas.left.id, CCW_COMPLIANCE_SLOPE, 95);
+    writeInfo (ruedas.left.id, PUNCH_L, 150);
+    writeInfo (ruedas.left.id, MAX_TORQUE_L, 1023);
+    writeInfo (LIMIT_TEMPERATURE, 85);
+    writeInfo (DOWN_LIMIT_VOLTAGE, 60);
+    writeInfo (DOWN_LIMIT_VOLTAGE, 190);
+    writeInfo (RETURN_DELAY_TIME, 150);*/
 
-   /* writeInfo (0x01, 32, 600);
-    Delay100TCYx (0x09);
-    Delay100TCYx (0x09);
-    Delay100TCYx (0x09);
-    Delay100TCYx (0x09);
-
-    writeInfo (0x02, 32, 600); 
-*/
-
-
-    //resWriteInfo = writeInfo(0x02, LED, 1);
-    // setear registros de los motores
-   /* writeInfo (0x01, CW_COMPLIANCE_MARGIN, 0); Delay100TCYx (0x01);
-    writeInfo (0x01, CCW_COMPLIANCE_MARGIN, 0); Delay100TCYx (0x01);
-    writeInfo (0x01, CW_COMPLIANCE_SLOPE, 95); Delay100TCYx (0x01);
-    writeInfo (0x01, CCW_COMPLIANCE_SLOPE, 95); Delay100TCYx (0x01);
-    writeInfo (0x01, PUNCH_L, 150); Delay100TCYx (0x01);
-    writeInfo (0x01, MAX_TORQUE_L, 1023); Delay100TCYx (0x01);
-    writeInfo (0x01, LIMIT_TEMPERATURE, 85); Delay100TCYx (0x01);*/
-
-    /*Estas lineas fueron copiadas del firmware arduino, verificar si es un bug*/
-    //writeInfo (0x0b, LOWEST_LIMIT_VOLT, 60); //DOWN_LIMIT_VOLTAGE
-    //writeInfo (0x0b, LOWEST_LIMIT_VOLT, 190); DOWN_LIMIT_VOLTAGE/home/john/usb4all-code/firmware/u4a2/USB4all.X/dist/default/production/USB4all.X.production.hex
-
-    //writeInfo (0x0b, RETURN_DELAY_TIME, 150);
-    /*writeInfo (0x02, CW_COMPLIANCE_MARGIN, 0);
-    writeInfo (0x02, CCW_COMPLIANCE_MARGIN, 0);
-    writeInfo (0x02, CW_COMPLIANCE_SLOPE, 95);
-    writeInfo (0x02, CCW_COMPLIANCE_SLOPE, 95);*/
-    //writeInfo (0x0c, PUNCH, 150);
-    //writeInfo (0x02, MAX_TORQUE_L, 1023);
-    //writeInfo (0x02, LIMIT_TEMPERATURE, 85);
-    //writeInfo (0x0c, DOWN_LIMIT_VOLTAGE, 60);
-    //writeInfo (0x0c, DOWN_LIMIT_VOLTAGE, 190);
-    //writeInfo (0x0c, RETURN_DELAY_TIME, 150);
-    
-    /* ID = 11 = 0x0b 
-     El ID temporalmente se envia de esta manera para testear el funcionamiento, estamos intentando mover un motor con ID = 11*/
-    //setEndlessTurnMode (0x01, 1 ); Delay100TCYx (0x01);
-    
-    /*endlessTurn (0x01, 500); Delay100TCYx (0x01);
-    endlessTurn (0x01, -500); Delay100TCYx (0x01);
-    endlessTurn (0x01, 0);*/
-    /* ID = 12 = 0x0c
-     El ID temporalmente se envia de esta manera para testear el funcionamiento, estamos intentando mover un motor con ID = 12*/
-    /*setEndlessTurnMode (0x02, 1);
-    endlessTurn (0x02, 500); Delay100TCYx (0x0f);
-    endlessTurn (0x02, -500); Delay100TCYx (0x0f);
-    endlessTurn (0x02, 0);*/
-    
 }
 
 /******************************************************************************
@@ -234,7 +200,7 @@ void UserMotoresRelease(byte i) {
     unsetHandlerReceiveBuffer(i);
     unsetHandlerReceiveFunction(i);
     //unregisterT0event(&MotoresEvent);
-    removePoolingFunction(&UserMotoresProcessIO);
+    //removePoolingFunction(&UserMotoresProcessIO);
 }
 
 
@@ -255,46 +221,64 @@ void UserMotoresRelease(byte i) {
  *****************************************************************************/
 
 void UserMotoresReceived(byte* recBuffPtr, byte len){
-      byte index;
-      byte j;
-      byte userMotoresCounter = 0;
-      byte id, regstart, resWriteInfo, valueH, valueL, sentidoIzq, velIzq, sentidoDer, velDer;
-      int value;
-      switch(((MOTORES_DATA_PACKET*)recBuffPtr)->CMD){
+    byte index;
+    byte j;
+    byte userMotoresCounter = 0;
+    byte id, regstart, resWriteInfo, valueH, valueL, sentidoIzq, velIzq, sentidoDer, velDer;
+    int value;
+    byte direction1, direction2, lowVel1, lowVel2, highVel1, highVel2;
+    word vel1, vel2;
+    switch(((MOTORES_DATA_PACKET*)recBuffPtr)->CMD){
+
         case READ_VERSION:
               ((MOTORES_DATA_PACKET*)sendBufferUsrMotores)->_byte[0] = ((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[0];
               ((MOTORES_DATA_PACKET*)sendBufferUsrMotores)->_byte[1] = ((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[1];
-              ((MOTORES_DATA_PACKET*)sendBufferUsrMotores)->_byte[2] = AX12_MINOR_VERSION;
-              ((MOTORES_DATA_PACKET*)sendBufferUsrMotores)->_byte[3] = AX12_MAJOR_VERSION;
+              ((MOTORES_DATA_PACKET*)sendBufferUsrMotores)->_byte[2] = MOTORES_MINOR_VERSION;
+              ((MOTORES_DATA_PACKET*)sendBufferUsrMotores)->_byte[3] = MOTORES_MAJOR_VERSION;
               userMotoresCounter = 0x04;
               break;
         //byte writeInfo (byte id,byte regstart, int value) {
-        case WRITE_INFO:
-              ((MOTORES_DATA_PACKET*)sendBufferUsrMotores)->_byte[0] = ((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[0];
-              id       = (byte)(((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[1]);
-              regstart = (byte)(((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[2]);
-              valueH   = (byte)(((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[3]);
-              valueL   = (byte)(((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[4]);
-              value    = valueH;
-              value    = ((value << 8) | valueL);
-              resWriteInfo = writeInfo(id, regstart, value);
-              //resWriteInfo = writeInfo(0xFE, 0x19, 0x01);
-              ((MOTORES_DATA_PACKET*)sendBufferUsrMotores)->_byte[1] = resWriteInfo;
-              userMotoresCounter = 0x02;
-              break;
         case RESET:
               Reset();
-              break;
+        break;
+        case SET_VEL_2MTR:
+            ((MOTORES_DATA_PACKET*)sendBufferUsrMotores)->_byte[0] = ((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[0];
+            direction1 = ((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[1];
+            highVel1   = ((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[2];
+            lowVel1    = ((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[3];
+            vel1 = highVel1;
+            vel1 = vel1<<8|lowVel1;
+            direction2 = ((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[4];
+            highVel2   = ((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[5];
+            lowVel2    = ((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[6];
+            vel2 = highVel2;
+            vel2 = vel2<<8|lowVel2;
+            if(direction1==1)
+                endlessTurn(LEFT_MOTOR, vel1, 1);
+            else
+                endlessTurn(LEFT_MOTOR, -1*vel1, 1);
+            if(direction2==1)
+                endlessTurn(RIGHT_MOTOR, vel2, 0);
+            else
+                endlessTurn(RIGHT_MOTOR, -1*vel2, 0);
+            //TODO return error code
+            userMotoresCounter = 0x01;
+        break;
 
-         default:
+        case TEST_MOTORES:
+            sexyMotorMoveStart();
+            ((MOTORES_DATA_PACKET*)sendBufferUsrMotores)->_byte[0] = ((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[0];
+            userMotoresCounter = 0x01;
+        break;
+        default:
               break;
-      }//end switch(s)
-      if(userMotoresCounter != 0){
+        }//end switch(s)
+        if(userMotoresCounter != 0){
             j = 255;
             while(mUSBGenTxIsBusy() && j-->0); // pruebo un máximo de 255 veces
                 if(!mUSBGenTxIsBusy())
                     USBGenWrite2(usrMotoresHandler, userMotoresCounter);
-      }//end if
+        }//end if
 }//end UserMotoresReceived
 
 /** EOF usr_Buzzer.c ***************************************************************/

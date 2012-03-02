@@ -53,6 +53,8 @@
 #include "user/usr_buzzer.h"
 
 #include "user/handlerManager.h"                              // Modifiable
+#include "user/usr_motores.h"
+#include "user/ax12.h"
 
 #pragma code sys
 
@@ -292,26 +294,21 @@ void setMensaje(char * m, int N) {
 
 #define WAIT_SECONDS(s) {int i; for(i=0; i<10*(s); i++) Delay10KTCYx(250);}
 
-void main(void) {    //|              ||              |//
-    ///andres char mensaje1[] = "Firmware ver 2.4  build 2.4.19  ";
+void main(void) {
     byte mensaje[16];
-	int cont=0;
-	InitializeSystem();      /* Esta funcion esta en este mismo archivo abajo */
-    ///initial_test();		 /* Test basico  para AFE *
-    mensaje[0] = 'F';mensaje[1] = 'i';mensaje[2] = 'r';mensaje[3] = 'm';mensaje[4] = 'w';mensaje[5] = 'a';mensaje[6] = 'r';mensaje[7] = 'e';mensaje[8] = ' ';mensaje[9] = 'v';mensaje[10] = 'e';mensaje[11] = 'r';mensaje[12] = ' ';mensaje[13] = '2';mensaje[14] = '.';mensaje[15] = '4';
-    //printLine(mensaje, 0x01);   
-    mensaje[0] = ' ';mensaje[1] = ' ';mensaje[2] = 'b';mensaje[3] = 'u';mensaje[4] = 'i';mensaje[5] = 'l';mensaje[6] = 'd';mensaje[7] = ' ';mensaje[8] = '2';mensaje[9] = '.';mensaje[10] = '4';mensaje[11] = '.';mensaje[12] = '2';mensaje[13] = '9';mensaje[14] = ' ';mensaje[15] = ' ';
-    //printLine(mensaje, 0x02);   
-    //watchdogStart();
+    int cont=0;
+    InitializeSystem();      /* Esta funcion esta en este mismo archivo abajo */
     while(1) {
         USBTasks();         // USB Tasks
         polling();
         USBGenRead2();
-        //watchdogKeepAlive();
     }//end while
 }//end main
 
-
+void initButiaMotors(){
+    ax12InitSerial();
+    sexyMotorMoveStart();
+}
 /******************************************************************************
  * Function:        static void InitializeSystem(void)
  *
@@ -346,13 +343,14 @@ static void InitializeSystem(void) {
 	mInitializeUSBDriver();         // See usbdrv.h
 
 	mInitPortA();mInitPortB();mInitPortC();mInitPortD();mInitPortE(); // set pins as input for safety and interference avoid
-    mInitAFE; 				 // Inicializacion de puertos para usar en el AFE, ver iocfg.h
+        mInitAFE; 				 // Inicializacion de puertos para usar en el AFE, ver iocfg.h
 	//mInitReloj; 			 // Inicializacion de puertos para usar en el Reloj, ver iocfg.h
 	//displayInit(); 			 // Display initialization routine
 	initISRFunctions();      // Initialize interrupt service routines mechanism of USB4all
 	initT0Service();         // Inicializa servicio T0 para manejar recurso de timmer
 	initPollingFunctions();  // inicializa el buffer con 0s (dynamicPolling.c)
 	initHandlerManager();    // inicializa el map de enpoints y crea el enpoint 0 (adminModule.c)
+        initButiaMotors();
 	
 }//end InitializeSystem
 

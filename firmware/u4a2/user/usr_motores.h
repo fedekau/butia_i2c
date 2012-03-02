@@ -9,12 +9,12 @@
 #include "system/typedefs.h"
 #include "user/adminModule.h"
 #include "user/loaderModule.h"
-#include "user/usr_ax12.h"
+#include "user/ax12.h"
 
 /** D E F I N I T I O N S ****************************************************/
 
-//#define AX12_MINOR_VERSION   0x01    //ax12 version 0.1
-//#define AX12_MAJOR_VERSION   0x00
+#define  MOTORES_MINOR_VERSION   0x01    //ax12 version 0.1
+#define  MOTORES_MAJOR_VERSION   0x00
 
 /** S T R U C T U R E S ******************************************************/
 typedef union MOTORES_DATA_PACKET{
@@ -25,7 +25,8 @@ typedef union MOTORES_DATA_PACKET{
         enum
         {
             SET_VEL_MTR = 0x00,
-            SET_VEL_2MTR = 0x01
+            SET_VEL_2MTR = 0x01,
+            TEST_MOTORES = 0x02
         } CMD;
         byte len;
     };
@@ -48,6 +49,8 @@ typedef union MOTORES_DATA_PACKET{
 } MOTORES_DATA_PACKET;
 
 /** P U B L I C  P R O T O T Y P E S *****************************************/
+
+void sexyMotorMoveStart();
 
 #endif //USER_MOTORES_H
 
