@@ -155,13 +155,11 @@ void UserButiaReceived(byte* recBuffPtr, byte len){
       byte UserButiaCounter = 0;
       switch(((BUTIA_DATA_PACKET*)recBuffPtr)->CMD)
       {
-       case READ_VERSION:
+       case VERSION:
                 //dataPacket._byte[1] is len
                 ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[0] = ((BUTIA_DATA_PACKET*)recBuffPtr)->_byte[0];
-                ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[1] = ((BUTIA_DATA_PACKET*)recBuffPtr)->_byte[1];
-                ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[2] = BUTIA_MINOR_VERSION;
-                ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[3] = BUTIA_MAJOR_VERSION;
-                UserButiaCounter=0x04;
+                ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[1] = BUTIA_VERSION;
+                UserButiaCounter=0x02;
         break;
         case GET_VOLT:
                 //dataPacket._byte[1] is len

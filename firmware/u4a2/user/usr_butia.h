@@ -13,8 +13,7 @@
 
 /** D E F I N I T I O N S ****************************************************/
 
-#define BUTIA_MINOR_VERSION   0x0D    //Skeleton Version 0.13
-#define BUTIA_MAJOR_VERSION   0x00
+#define BUTIA_VERSION   0x14      //Butia Version 2.1
 
 /** S T R U C T U R E S ******************************************************/
 typedef union BUTIA_DATA_PACKET
@@ -26,6 +25,7 @@ typedef union BUTIA_DATA_PACKET
         enum
         { 
             READ_VERSION = 0x00,
+            VERSION      = 0x02,
             GET_VOLT     = 0x03,
             MESS	 = 0x05,
             RESET	 = 0xFF //backward compatibility
