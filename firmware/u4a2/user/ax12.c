@@ -318,46 +318,13 @@ void setEndlessTurnMode (byte id,boolean onoff) {
     }
 }
 
-int negateVelocity(int velocity){
-    return (0x0001<<9)^(velocity);
-    /*int negVel = 0x0001<<10;
-    byte low = velocity % 256;
-    byte high = velocity / 256;
-    negVel = negVel ^ (high << 8);
-    negVel = negVel | low;*/
-}
 void endlessTurn (byte id,int velocidad, byte inverse) {
     //boolean direccion = sign2bin (velocidad);
-/*    if(inverse==1){
-        if (velocidad<0){
-            writeInfo (id,MOVING_SPEED_L, 1023-velocidad);
-        }
-        else{
-            writeInfo (id,MOVING_SPEED_L, velocidad);
-        }
-    }else{
-        if (velocidad>=0){
-            writeInfo (id,MOVING_SPEED_L, 1023+velocidad);
-        }
-        else{
-            writeInfo (id,MOVING_SPEED_L, abs(velocidad));
-        }
-    }*/
-    if(inverse==1){
-        if (velocidad<0){
-            writeInfo (id,MOVING_SPEED_L, abs(velocidad));
-        }
-        else{
-            writeInfo (id,MOVING_SPEED_L, 1024+(abs(velocidad)));
-        }
-    }else{
-        if (velocidad<0){
-            writeInfo (id,MOVING_SPEED_L, 1024-velocidad);
-        }
-        else{
-            writeInfo (id,MOVING_SPEED_L, velocidad);
-        }
-    }
+    if(velocidad<0)
+        inverse^=1; //Cambio inverse si velocidad<0
+    velocidad=abs(velocidad);
+    velocidad|=inverse*1024;
+    writeInfo (id,MOVING_SPEED_L, velocidad);
 }
 
 byte presentPSL (boolean inverse, byte id, int* PSL) {                     // lee posicion, velocidad

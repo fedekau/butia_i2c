@@ -1,5 +1,6 @@
 /* Author                                                   Date        Comment
  *John Pereira                                              28/02/2012
+ * Andres Aguirre                                           02/03/2012
  *****************************************************************************/
 
 /** I N C L U D E S **********************************************************/
@@ -121,7 +122,9 @@ void UserMotoresInit(byte i) {
     /* andres res = addPollingFunction(&UserMotoresProcessIO);*/
     // initialize the send buffer, used to send data to the PC
     sendBufferUsrMotores = getSharedBuffer(usrMotoresHandler);
-    ax12InitSerial();  
+    ax12InitSerial();
+    setEndlessTurnMode(LEFT_MOTOR, 1);
+    setEndlessTurnMode(RIGHT_MOTOR, 1);
     //Wheels ruedas;
     /*Implementar funcion de auto deteccion para que detecte los motores*/
     /*writeInfo (ruedas.left.id, CW_COMPLIANCE_MARGIN, 0);
@@ -226,7 +229,8 @@ void UserMotoresReceived(byte* recBuffPtr, byte len){
     byte userMotoresCounter = 0;
     byte id, regstart, resWriteInfo, valueH, valueL, sentidoIzq, velIzq, sentidoDer, velDer;
     int value;
-    byte direction1, direction2, lowVel1, lowVel2, highVel1, highVel2;
+    char direction1, direction2;
+    byte lowVel1, lowVel2, highVel1, highVel2, res;
     word vel1, vel2;
     switch(((MOTORES_DATA_PACKET*)recBuffPtr)->CMD){
 
@@ -242,7 +246,8 @@ void UserMotoresReceived(byte* recBuffPtr, byte len){
               Reset();
         break;
         case SET_VEL_2MTR:
-            ((MOTORES_DATA_PACKET*)sendBufferUsrMotores)->_byte[0] = ((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[0];
+            ((MOTORES_DATA_PACKET*)sendBufferUsrMotores)->_byte[0] = ((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[1];
+            ((MOTORES_DATA_PACKET*)sendBufferUsrMotores)->_byte[1] = ((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[4];
             direction1 = ((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[1];
             highVel1   = ((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[2];
             lowVel1    = ((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[3];
@@ -253,16 +258,20 @@ void UserMotoresReceived(byte* recBuffPtr, byte len){
             lowVel2    = ((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[6];
             vel2 = highVel2;
             vel2 = vel2<<8|lowVel2;
-            if(direction1==1)
-                endlessTurn(LEFT_MOTOR, vel1, 1);
+            if(direction1==0x01){
+                endlessTurn(LEFT_MOTOR, vel1, 0);
+                res = writeInfo(LEFT_MOTOR, LED, 0);
+            }
+            else{
+                endlessTurn(LEFT_MOTOR, -vel1, 0);
+                res = writeInfo(RIGHT_MOTOR, LED, 0);
+            }
+            if(direction2==0x01)
+                endlessTurn(RIGHT_MOTOR, vel2, 1);
             else
-                endlessTurn(LEFT_MOTOR, -1*vel1, 1);
-            if(direction2==1)
-                endlessTurn(RIGHT_MOTOR, vel2, 0);
-            else
-                endlessTurn(RIGHT_MOTOR, -1*vel2, 0);
+                endlessTurn(RIGHT_MOTOR, -vel2, 1);
             //TODO return error code
-            userMotoresCounter = 0x01;
+            userMotoresCounter = 0x02;
         break;
 
         case TEST_MOTORES:

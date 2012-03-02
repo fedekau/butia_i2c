@@ -1,5 +1,6 @@
 /* Author             									  Date        Comment
  * John Pereira                             28/2/2012
+ * Andrew
  *****************************************************************************/
 
 #ifndef USER_MOTORES_H
