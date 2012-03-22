@@ -16,6 +16,9 @@ byte  cantTicksW    = 50;
 byte  keepAlive    = TRUE;
 byte  timeOutTicksWatchdog;
 
+/*TODO review this time, the micro is running @20MHZ with a pipeline of 4steps => 20000000/4 = 5000000 instructions per second */
+#define PNP_DETECTION_TIME 10000
+
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
 
 /** D E C L A R A T I O N S **************************************************/
@@ -31,6 +34,16 @@ void Escribir_memoria_boot(void){
     Write_b_eep(ADDRESS_BOOT,BOOT_FLAG);
 }
 
+void hotplug_pnp(void){
+    byte i;
+    for(i=0;i<MAX_PORTS;i++){
+        //do detection
+        //open new connected modules with openPNP
+        //close disconnected modules with closePNP
+    }
+    registerT0eventInEvent(PNP_DETECTION_TIME, &hotplug_pnp);
+}
+
 void adminModuleInit(void){
 	//inicializacion del sistema
 	adminHandler=0; //hardcore, el admin siempre atiende el handler 0
@@ -41,6 +54,7 @@ void adminModuleInit(void){
 	//No hay funcion de pooling para modulo admin
 	//res = addPollingFunction(&ProcessIO);
 	sendBufferAdmin = getSharedBuffer(adminHandler);
+        registerT0event(PNP_DETECTION_TIME, &hotplug_pnp)
 }
 
 void goodByeCruelWorld(void){
@@ -52,6 +66,21 @@ void goodByeCruelWorld(void){
     Reset();
 }
 
+void openPnP(byte moduleId[8], byte inEp){
+    tableDirec = getUserTableDirection(moduleId);
+    dir = getModuleInitDirection(tableDirec);
+    if((byte)dir != ERROR){
+            handler = newHandlerTableEntry(inEp,tableDirec);
+            pUser = dir;
+            pUser(handler); //hago el init ;)
+            ((AM_PACKET*)sendBufferAdmin)->handlerNumber = handler;
+    }else{
+            ((AM_PACKET*)sendBufferAdmin)->handlerNumber = ERROR;
+    }
+    ((AM_PACKET*)sendBufferAdmin)->CMD = OPEN;
+    adminCounter=0x02; //1 byte para el campo CMD, otro para el handler
+
+}
 void adminReceived(byte* recBuffPtr,byte len){
 	byte adminCounter;
 	byte endIn = nullEP, endOut = nullEP;
@@ -68,26 +97,20 @@ void adminReceived(byte* recBuffPtr,byte len){
 	/* Abre un user module, y retorna el handler asignado en el sistema*/
 	case OPEN:
 		tableDirec = getUserTableDirection(((AM_PACKET*)recBuffPtr)->moduleId);
-		//Si el modulo esta abierto devuelvo error
-		//if(!existsTableEntry(tableDirec)){ fue sacada esta restriccion temporalmente dado a problemas en la comunicación que hacian que se perdiera referencia al handler y quedara inutilizada la placa, seria conveniente buscar otra solucion al problema, andres 27/7/2010
-			dir = getModuleInitDirection(tableDirec);
-			//Si dir vale error es que no se encontro un modulo con nombre moduleId
-			if((byte)dir != ERROR){
-				endIn = ((AM_PACKET*)recBuffPtr)->inEp;
-				handler = newHandlerTableEntry(endIn,tableDirec);  
-				pUser = dir;
-				pUser(handler); //hago el init ;)
-				((AM_PACKET*)sendBufferAdmin)->handlerNumber = handler;
-			}else{
-				((AM_PACKET*)sendBufferAdmin)->handlerNumber = ERROR;
-			}
-		//}else{
-		//	((AM_PACKET*)sendBufferAdmin)->handlerNumber = ERROR;
-		//}		
+                dir = getModuleInitDirection(tableDirec);
+                if((byte)dir != ERROR){
+                        endIn = ((AM_PACKET*)recBuffPtr)->inEp;
+                        handler = newHandlerTableEntry(endIn,tableDirec);
+                        pUser = dir;
+                        pUser(handler); //hago el init ;)
+                        ((AM_PACKET*)sendBufferAdmin)->handlerNumber = handler;
+                }else{
+                        ((AM_PACKET*)sendBufferAdmin)->handlerNumber = ERROR;
+                }
               	((AM_PACKET*)sendBufferAdmin)->CMD = OPEN;
 		adminCounter=0x02; //1 byte para el campo CMD, otro para el handler 	
 	break;
-	
+
 	/* Cierra un user module */
 	case CLOSE:
 		handler  = ((AM_PACKET*)recBuffPtr)->handlerNumber;

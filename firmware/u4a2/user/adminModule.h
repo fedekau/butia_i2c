@@ -93,6 +93,11 @@ typedef union _AM_PACKET {
 	};		
 } AM_PACKET;
 
+typedef struct port_descriptor{
+    byte* data_pin; /*pic pin of data where the device is connected*/
+    byte* detection_pin;
+};
+
 /** P U B L I C  P R O T O T Y P E S *****************************************/
 void adminModuleInit(void);
 void adminReceived(byte* recBuffPtr,byte len);

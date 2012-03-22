@@ -43,7 +43,6 @@
 #include "system/usb/usb.h"                         // Required
 #include "io_cfg.h"                                 // Required
 
-
 #include "system/usb/usb_compile_time_validation.h" // Optional
 #include "user/dynamicPolling.h"                    // Modifiable
 #include "usb4all/dynamicISR/dynamicISR.h"          // Modifiable

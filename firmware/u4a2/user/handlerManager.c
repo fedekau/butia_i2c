@@ -71,12 +71,8 @@ void USBGenRead2(void){
 		//antes de copiar el dato en el buffer tengo que mirar de que 
 		//handler es y pedir el buffer de receive del modulo de usuario
 		dph = (HM_DATA_PACKET_HEADER*)EPBUFFEROUT(ep);
-		//TODO chequear que el handler number sea valido, sino hacer algo tipo error
-		//buffer=HandlerReceiveBuffer[dph->handlerNumber];
-	    //aviso al modulo de usuario respectivo que tengo datos
-		//hmi = epHandlerMap[dph->handlerNumber];
-		//ep = hmi.ep.EPNum;
-		handlerReceivedFuncion[dph->handlerNumber](EPBUFFEROUT(ep)+SIZE__HM_DATA_PACKET_HEADER,len-SIZE__HM_DATA_PACKET_HEADER);
+                port_dsc = newPortDescriptor(dph->handlerNumber); /*add more data to create the port descriptor*/
+		handlerReceivedFuncion[dph->handlerNumber](EPBUFFEROUT(ep)+SIZE__HM_DATA_PACKET_HEADER,len-SIZE__HM_DATA_PACKET_HEADER, port_descriptor* port_dsc);
 		/*
 	         * Prepare dual-ram buffer for next OUT transaction
 	         */
