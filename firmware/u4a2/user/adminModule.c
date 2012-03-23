@@ -16,11 +16,24 @@ byte  cantTicksW    = 50;
 byte  keepAlive    = TRUE;
 byte  timeOutTicksWatchdog;
 
+/*mapping between idPort and the port descriptor*/
+port_descriptor* board_ports[MAX_PORTS];
+
+
+/*mapping between module name and an device type id used for optimization
+ 0 dist
+ 1 grises
+ 2 boton
+ 3 luz
+ ....*/
+byte* device_type_module_name_map[MAX_DEVICES];
+
+
 /*TODO review this time, the micro is running @20MHZ with a pipeline of 4steps => 20000000/4 = 5000000 instructions per second */
 #define PNP_DETECTION_TIME 10000
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-
+void openPnP(byte moduleId[8], byte inEp);
 /** D E C L A R A T I O N S **************************************************/
 #pragma code sys
 
@@ -35,8 +48,20 @@ void Escribir_memoria_boot(void){
 }
 
 void hotplug_pnp(void){
-    byte i;
-    for(i=0;i<MAX_PORTS;i++){
+    byte port, device_type;
+    for(port=1;port<=MAX_PORTS;port++){
+        device_type = get_device_type(board_ports[port]->detection_pin);
+        if(device_type!=board_ports[port]){
+            if(device_type==DISCONECTED){
+                //CALL a close command
+            }else{
+                //CALL a open comand
+                openPnP(device_type_module_name_map[device_type],port);
+
+            }
+            board_ports[port]->detected_device_type_id = device_type;
+        }
+        
         //do detection
         //open new connected modules with openPNP
         //close disconnected modules with closePNP
@@ -44,17 +69,26 @@ void hotplug_pnp(void){
     registerT0eventInEvent(PNP_DETECTION_TIME, &hotplug_pnp);
 }
 
+void board_ports_popullate(void){
+    byte port;
+    for(port=1;port<=MAX_PORTS;port++){
+        board_ports[port]=getBoardPortDescriptor(port);
+    }
+}
+
+void device_type_module_name_map_popullate(void){
+
+}
+
 void adminModuleInit(void){
-	//inicializacion del sistema
-	adminHandler=0; //hardcore, el admin siempre atiende el handler 0
-	//agrego mi buffer en el handler module	
-	//setHandlerReceiveBuffer(adminHandler, (byte*)&adminDataPacket);
-	//agrego mi funcion de Receive en el handler module
+	/*system initialization*/
+	adminHandler=0; //hardcode, the admin module allways respond at handler 0
+        /*set the receive function for admin commands*/
 	setHandlerReceiveFunction(adminHandler,&adminReceived);
-	//No hay funcion de pooling para modulo admin
-	//res = addPollingFunction(&ProcessIO);
 	sendBufferAdmin = getSharedBuffer(adminHandler);
-        registerT0event(PNP_DETECTION_TIME, &hotplug_pnp)
+        board_ports_popullate();
+        device_type_module_name_map_popullate();
+        registerT0event(PNP_DETECTION_TIME, &hotplug_pnp);
 }
 
 void goodByeCruelWorld(void){
@@ -67,20 +101,19 @@ void goodByeCruelWorld(void){
 }
 
 void openPnP(byte moduleId[8], byte inEp){
+    byte handler;
+    void (*pUser)(byte);
+    pUserFunc dir;
+    rom near char* tableDirec;;
     tableDirec = getUserTableDirection(moduleId);
     dir = getModuleInitDirection(tableDirec);
     if((byte)dir != ERROR){
-            handler = newHandlerTableEntry(inEp,tableDirec);
+            handler = newHandlerTableEntryPNP(inEp,tableDirec);
             pUser = dir;
-            pUser(handler); //hago el init ;)
-            ((AM_PACKET*)sendBufferAdmin)->handlerNumber = handler;
-    }else{
-            ((AM_PACKET*)sendBufferAdmin)->handlerNumber = ERROR;
+            pUser(handler); //hago el init ;)            
     }
-    ((AM_PACKET*)sendBufferAdmin)->CMD = OPEN;
-    adminCounter=0x02; //1 byte para el campo CMD, otro para el handler
-
 }
+
 void adminReceived(byte* recBuffPtr,byte len){
 	byte adminCounter;
 	byte endIn = nullEP, endOut = nullEP;

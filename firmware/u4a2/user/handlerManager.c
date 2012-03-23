@@ -139,6 +139,18 @@ byte newHandlerTableEntry(byte endPIn, rom near char* uTableDirection){
 	return ERROR;
 } 			
 
+byte newHandlerTableEntryPNP(byte endPIn, rom near char* uTableDirection, byte port){
+    if (epHandlerMap[port].ep.empty == 1) {
+        epHandlerMap[port].ep.endPoint = endPIn;
+        epHandlerMap[port].ep.empty = 0;
+        epHandlerMap[port].uTableDirection = uTableDirection;
+        return port;
+    }else{
+        return ERROR;
+    }
+    
+}
+
 BOOL existsTableEntry(rom near char* uTableDirection){
 	byte i=0;
 	while (i<MAX_HANDLERS){

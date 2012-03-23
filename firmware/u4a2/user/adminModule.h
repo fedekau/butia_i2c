@@ -27,6 +27,9 @@
 #define ADDRESS_BOOT 0x09
 #define BOOT_FLAG 0x11
 
+#define MAX_PORTS 8
+#define MAX_DEVICES 9
+
 /** S T R U C T U R E S ******************************************************/
 
 typedef union _AM_PACKET {
@@ -93,9 +96,11 @@ typedef union _AM_PACKET {
 	};		
 } AM_PACKET;
 
+/*structure to describe a USB4butia port*/
 typedef struct port_descriptor{
     byte* data_pin; /*pic pin of data where the device is connected*/
-    byte* detection_pin;
+    byte* detection_pin; /*pic pin used to identify the connected device*/
+    byte* detected_device_type_id; /*the device_type_id of the device connected*/
 };
 
 /** P U B L I C  P R O T O T Y P E S *****************************************/
