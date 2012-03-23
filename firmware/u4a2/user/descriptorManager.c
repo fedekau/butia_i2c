@@ -22,5 +22,13 @@ endpoint getAdminEndpoint(void){
 	return adminEndpoint;
 }
 
+endpoint getPnPEndpoint(void){
+	endpoint PnPEndpoint;
+	PnPEndpoint.EPNum = 1;
+	PnPEndpoint.EPDir = 0;
+	PnPEndpoint.empty = 0;
+	return PnPEndpoint;
+}
+
 
 /** EOF descriptorManager.c ***************************************************************/

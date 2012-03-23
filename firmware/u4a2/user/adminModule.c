@@ -1,7 +1,8 @@
 /* Author               Date        Comment
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * Andres Aguirre	   27/03/07 	Original
- * Andres Aguirre 	   18/04/09     Se agrega el RESET
+ * Andres Aguirre 	   18/04/09     adding RESET
+ * Andres Aguirre          22/03/12     Adding PnP support
  ********************************************************************/
 
 #include "user/adminModule.h"
@@ -51,9 +52,12 @@ void hotplug_pnp(void){
     byte port, device_type;
     for(port=1;port<=MAX_PORTS;port++){
         device_type = get_device_type(board_ports[port]->detection_pin);
-        if(device_type!=board_ports[port]){
+        if(device_type!=board_ports[port]->detected_device_type_id){
             if(device_type==DISCONECTED){
+                board_ports[port]->change_port_direction(IN);
                 //CALL a close command
+                closePnP(port);
+                
             }else{
                 //CALL a open comand
                 openPnP(device_type_module_name_map[device_type],port);
@@ -69,6 +73,43 @@ void hotplug_pnp(void){
     registerT0eventInEvent(PNP_DETECTION_TIME, &hotplug_pnp);
 }
 
+getBoardPortDescriptor(byte port){
+    port_descriptor new_port_dsc;
+    switch(port){
+        CASE 1:
+            /*FIXME only an example, put the correct pines according to the scematic*/
+            new_port_dsc.data_pin = PORTDbits.RD0;
+            new_port_dsc.detection_pin = PORTDbits.RD1;
+            new_port_dsc.detected_device_type_id = DISCONECTED;
+            new_port_dsc.change_port_direction = &function; //FIXME
+
+        break;
+        CASE 2:
+        
+        
+        break;
+        CASE 3:
+        
+        
+        break;
+        CASE 4:
+        
+        
+        break;
+        CASE 5:
+        
+        
+        break;
+        CASE 6:
+        
+        
+        
+        break;
+        
+        
+        
+    }
+}
 void board_ports_popullate(void){
     byte port;
     for(port=1;port<=MAX_PORTS;port++){
@@ -76,8 +117,17 @@ void board_ports_popullate(void){
     }
 }
 
+/*the device_type_module_name_map asociates for each string representing a module name an internal index
+ for optimization propurses. Also this structure parses dynamically the name of the modules using rom data user*/
 void device_type_module_name_map_popullate(void){
-
+    byte userTableSize = 0;
+    byte lineNumber;
+    char lineName[8];
+    userTableSize = getUserTableSize();
+    for(lineNumber=0;lineNumber<userTableSize;lineNumber++){
+        getModuleName(lineNumber, (char*)lineName);
+        device_type_module_name_map[lineNumber]=lineName;
+    }
 }
 
 void adminModuleInit(void){
@@ -108,7 +158,7 @@ void openPnP(byte moduleId[8], byte inEp){
     tableDirec = getUserTableDirection(moduleId);
     dir = getModuleInitDirection(tableDirec);
     if((byte)dir != ERROR){
-            handler = newHandlerTableEntryPNP(inEp,tableDirec);
+            handler = newHandlerTableEntryPNP(getPnPEndpoint().endPoint,tableDirec);
             pUser = dir;
             pUser(handler); //hago el init ;)            
     }
