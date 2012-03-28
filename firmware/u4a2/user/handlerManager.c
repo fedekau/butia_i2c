@@ -22,7 +22,7 @@ unsigned char ram_max_ep_number;
 epHandlerMapItem epHandlerMap[MAX_HANDLERS];
 HM_DATA_PACKET_HEADER hmDataPacketHeader;
 byte* HandlerReceiveBuffer[MAX_HANDLERS];
-void (*handlerReceivedFuncion[MAX_HANDLERS]) (byte*,byte); //arreglo de punteros a las funcioens received de los modulos
+void (*handlerReceivedFuncion[MAX_HANDLERS]) (byte*,byte, port_descriptor*); //arreglo de punteros a las funcioens received de los modulos
 
 HANDLER_OPTYPE hn_opType;
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
@@ -56,7 +56,8 @@ void USBGenRead2(void){
 	byte len; 
 	epHandlerMapItem hmi;
 	byte ep;
-	//byte* buffer; 
+	//byte* buffer;
+        port_descriptor port_dsc; //Defino el port descriptotr Agregado: John
 	HM_DATA_PACKET_HEADER* dph;
 	if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND==1)) return;
 	len = PACKET_MTU-1;
@@ -72,7 +73,7 @@ void USBGenRead2(void){
 		//handler es y pedir el buffer de receive del modulo de usuario
 		dph = (HM_DATA_PACKET_HEADER*)EPBUFFEROUT(ep);
                 port_dsc = newPortDescriptor(dph->handlerNumber); /*add more data to create the port descriptor*/
-		handlerReceivedFuncion[dph->handlerNumber](EPBUFFEROUT(ep)+SIZE__HM_DATA_PACKET_HEADER,len-SIZE__HM_DATA_PACKET_HEADER, port_descriptor* port_dsc);
+		handlerReceivedFuncion[dph->handlerNumber](EPBUFFEROUT(ep)+SIZE__HM_DATA_PACKET_HEADER,len-SIZE__HM_DATA_PACKET_HEADER,  port_dsc); //Sutituir port_descriptor* port_dsc, del ultimo parametro por port_desc y agregue el parametro de la funcion donde esta definida: John
 		/*
 	         * Prepare dual-ram buffer for next OUT transaction
 	         */

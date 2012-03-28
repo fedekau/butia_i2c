@@ -98,12 +98,12 @@ typedef union _AM_PACKET {
 } AM_PACKET;
 
 /*structure to describe a USB4butia port*/
-typedef struct port_descriptor{
+typedef struct _port_descriptor{
     byte data_pin; /*pic pin of data where the device is connected*/
     byte detection_pin; /*pic pin used to identify the connected device*/
     byte detected_device_type_id; /*the device_type_id of the device connected*/
     void (*change_port_direction) (byte DIRECTION);/*callback function to change port direction*/
-};
+} port_descriptor;
 
 /** P U B L I C  P R O T O T Y P E S *****************************************/
 void adminModuleInit(void);

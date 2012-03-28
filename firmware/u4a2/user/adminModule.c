@@ -73,42 +73,40 @@ void hotplug_pnp(void){
     registerT0eventInEvent(PNP_DETECTION_TIME, &hotplug_pnp);
 }
 
-getBoardPortDescriptor(byte port){
+port_descriptor* getBoardPortDescriptor(byte port){
     port_descriptor new_port_dsc;
     switch(port){
-        CASE 1:
+        case 1:
             /*FIXME only an example, put the correct pines according to the scematic*/
             new_port_dsc.data_pin = PORTDbits.RD0;
             new_port_dsc.detection_pin = PORTDbits.RD1;
             new_port_dsc.detected_device_type_id = DISCONECTED;
-            new_port_dsc.change_port_direction = &function; //FIXME
+            //new_port_dsc.change_port_direction = &function; //FIXME
 
         break;
-        CASE 2:
+        case 2:
         
         
         break;
-        CASE 3:
+        case 3:
         
         
         break;
-        CASE 4:
+        case 4:
         
         
         break;
-        CASE 5:
+        case 5:
         
         
         break;
-        CASE 6:
+        case 6:
         
         
         
-        break;
-        
-        
-        
+        break;        
     }
+    return &new_port_dsc;
 }
 void board_ports_popullate(void){
     byte port;
@@ -122,11 +120,11 @@ void board_ports_popullate(void){
 void device_type_module_name_map_popullate(void){
     byte userTableSize = 0;
     byte lineNumber;
-    char lineName[8];
+    byte lineName[8]; //Se le cambio el tipo a byte, porque device_type_module_name_map es un arreglo de bytes
     userTableSize = getUserTableSize();
     for(lineNumber=0;lineNumber<userTableSize;lineNumber++){
         getModuleName(lineNumber, (char*)lineName);
-        device_type_module_name_map[lineNumber]=lineName;
+        device_type_module_name_map[lineNumber]= lineName; 
     }
 }
 
@@ -158,7 +156,7 @@ void openPnP(byte moduleId[8], byte inEp){
     tableDirec = getUserTableDirection(moduleId);
     dir = getModuleInitDirection(tableDirec);
     if((byte)dir != ERROR){
-            handler = newHandlerTableEntryPNP(getPnPEndpoint().endPoint,tableDirec);
+            //handler = newHandlerTableEntryPNP(getPnPEndpoint().endPoint,tableDirec);
             pUser = dir;
             pUser(handler); //hago el init ;)            
     }
