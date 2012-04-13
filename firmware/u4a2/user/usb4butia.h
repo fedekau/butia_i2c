@@ -11,7 +11,7 @@
 
 #define MAX_PORTS 6
 #define DISCONECTED 0
-
+#define MAX_TYPE_SENSORS 5
 typedef enum _direction {
     OUT = 0,
     IN = 1
@@ -30,6 +30,21 @@ typedef struct _port_descriptor{
 port_descriptor* board_ports[MAX_PORTS];
 
 /*******************************************************************************/
+/*Arry that contain ristence value matched to ID of type sensor*/
+typedef struct _sensorTable sensorTable[MAX_TYPE_SENSORS];
+
+sensorTable st;
+
+byte get_device_type(WORD resistValue){
+
+    byte i = 0;
+    whie ((st[i] <> resistValue) || i >= MAX_TYPE_SENSORS) i++;
+    if (i < MAX_TYPE_SENSORS)
+        return i;
+    else
+        return 255; //Mean Error
+}
+
 
 /****************************************/
 
