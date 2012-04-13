@@ -1,17 +1,17 @@
 /******************************************************************************/
-/*              */
 /*Autor:                                                          */
 /*Autor: 12/04/2012                                                           */
 /******************************************************************************/
 
+#ifndef USB4BUTIA_H
+#define USB4BUTIA_H
+
+#include <p18cxxx.h>
+
 #define MAX_PORTS 6
 #define DISCONECTED 0
 
-typedef enum _DIRECTION {
-    OUT = 0, 
-    IN  = 1
-} direction ;
-
+typedef enum _direction {hola, mundo} direction;
 
 /*structure to describe a USB4butia port*/
 typedef struct _port_descriptor{
@@ -38,8 +38,6 @@ byte getData1(){
 void setData1(byte data){
     PORTAbits.RA1 = data;
 }
-
-
 
 //Port 2
 void changeDirectionPort2(direction io){
@@ -170,9 +168,15 @@ port_descriptor* getBoardPortDescriptor(byte port){
     return &new_port_dsc;
 }
 
-void board_ports_popullate(void){
+void board_ports_popullate(){
     byte port;
     for(port=1;port<=MAX_PORTS;port++){
         board_ports[port]=getBoardPortDescriptor(port);
     }
 }
+
+port_descriptor* getPortDescriptor(byte handler_id){
+    return board_ports[handler_id];
+}
+
+#endif USB4BUTIA_H

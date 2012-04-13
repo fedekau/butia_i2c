@@ -11,6 +11,7 @@
 #include "system/typedefs.h"
 #include "user/defines.h"
 #include "user/descriptorManager.h"
+#include "user/usb4butia.h"
 
 /** D E F I N I T I O N S ****************************************************/
 #define PACKET_MTU 256
@@ -67,7 +68,7 @@ void USBGenRead2(void);
 void USBGenWrite2(byte handler /*,byte *buffer*/, byte len);
 void initHandlerBuffers(void);
 void setHandlerReceiveBuffer(byte handler, byte *rb);
-void setHandlerReceiveFunction(byte handler,void (*pf) (byte* recBuffPtr,byte));
+void setHandlerReceiveFunction(byte handler,void (*pf) (byte* recBuffPtr,byte,port_descriptor));
 byte newHandlerTableEntry(byte endPIn, rom near char* uTableDirection);
 BOOL existsTableEntry(rom near char* uTableDirection);
 void initHandlerTable();

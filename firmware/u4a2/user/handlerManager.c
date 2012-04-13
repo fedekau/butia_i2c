@@ -22,7 +22,7 @@ unsigned char ram_max_ep_number;
 epHandlerMapItem epHandlerMap[MAX_HANDLERS];
 HM_DATA_PACKET_HEADER hmDataPacketHeader;
 byte* HandlerReceiveBuffer[MAX_HANDLERS];
-void (*handlerReceivedFuncion[MAX_HANDLERS]) (byte*,byte, port_descriptor*); //arreglo de punteros a las funcioens received de los modulos
+void (*handlerReceivedFuncion[MAX_HANDLERS]) (byte*, byte,port_descriptor); //arreglo de punteros a las funcioens received de los modulos
 
 HANDLER_OPTYPE hn_opType;
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
@@ -39,7 +39,7 @@ void unsetHandlerReceiveBuffer(byte handler){
 	HandlerReceiveBuffer[handler] = 0; 
 }
 
-void setHandlerReceiveFunction(byte handler, void (*pf) (byte*,byte)){
+void setHandlerReceiveFunction(byte handler, void (*pf) (byte*,byte,port_descriptor)){
 	handlerReceivedFuncion[handler] = pf;
 }
 
@@ -57,7 +57,7 @@ void USBGenRead2(void){
 	epHandlerMapItem hmi;
 	byte ep;
 	//byte* buffer;
-        port_descriptor port_dsc; //Defino el port descriptotr Agregado: John
+        port_descriptor* port_dsc; //Defino el port descriptotr Agregado: John
 	HM_DATA_PACKET_HEADER* dph;
 	if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND==1)) return;
 	len = PACKET_MTU-1;
@@ -72,8 +72,8 @@ void USBGenRead2(void){
 		//antes de copiar el dato en el buffer tengo que mirar de que 
 		//handler es y pedir el buffer de receive del modulo de usuario
 		dph = (HM_DATA_PACKET_HEADER*)EPBUFFEROUT(ep);
-                port_dsc = newPortDescriptor(dph->handlerNumber); /*add more data to create the port descriptor*/
-		handlerReceivedFuncion[dph->handlerNumber](EPBUFFEROUT(ep)+SIZE__HM_DATA_PACKET_HEADER,len-SIZE__HM_DATA_PACKET_HEADER,  port_dsc); //Sutituir port_descriptor* port_dsc, del ultimo parametro por port_desc y agregue el parametro de la funcion donde esta definida: John
+                port_dsc = getPortDescriptor(dph->handlerNumber); /*add more data to create the port descriptor*/
+		handlerReceivedFuncion[dph->handlerNumber](EPBUFFEROUT(ep)+SIZE__HM_DATA_PACKET_HEADER,len-SIZE__HM_DATA_PACKET_HEADER, *port_dsc); //Sutituir port_descriptor* port_dsc, del ultimo parametro por port_desc y agregue el parametro de la funcion donde esta definida: John
 		/*
 	         * Prepare dual-ram buffer for next OUT transaction
 	         */
