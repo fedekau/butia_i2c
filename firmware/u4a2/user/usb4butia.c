@@ -7,6 +7,23 @@
 #include "user/usb4butia.h"
 
 
+void initSensorsTable(void){
+    LSB(st[0].resValue) = (2,5/255);/*2,5v esto es ...*/
+    MSB(st[0].resValue) = (2,5%255);/*2,5v esto es ...*/
+    st[0].analogic = 0; /*digital sensor*/
+}
+
+byte get_device_type(WORD resistValue){
+
+    byte i = 0;
+    while (((st[i].resValue.v[0] != resistValue.v[0]) && (st[i].resValue.v[1] != resistValue.v[1]))|| (i >= MAX_TYPE_SENSORS)) i++;
+    if (i < MAX_TYPE_SENSORS)
+        return i;
+    else
+        return 255; //Mean Error
+}
+
+
 /*------------ Port 1 ------------------*/
 void changeDirectionPort1(direction io){
     TRISAbits.RA1 = io;

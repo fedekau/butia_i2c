@@ -12,15 +12,18 @@
 #define MAX_PORTS 6
 #define DISCONECTED 0
 #define MAX_TYPE_SENSORS 5
+#define MAX_SENSOR_TABLE_ATRIBUTE 2
+
+
 typedef enum _direction {
-    OUT = 0,
-    IN = 1
+    _OUT = 0,
+    _IN = 1
 } direction;
 
 /*structure to describe a USB4butia port*/
 typedef struct _port_descriptor{
-    byte (*get_data) (void); /*get data of pin from a port*/
-    void (*set_data) (byte); /*set data of pin in a port*/
+    byte (*get_data) (void); /*get data of pin from a port, digital/analog*/
+    void (*set_data) (byte); /*set data of pin in a port, digital*/
     WORD (*get_val_detection_pin)(void); /*pic pin used to identify the connected device*/
     byte detected_device_type_id; /*the device_type_id of the device connected*/
     void (*change_port_direction) (direction);/*callback function to change port direction*/
@@ -30,20 +33,21 @@ typedef struct _port_descriptor{
 port_descriptor* board_ports[MAX_PORTS];
 
 /*******************************************************************************/
-/*Arry that contain ristence value matched to ID of type sensor*/
-typedef struct _sensorTable sensorTable[MAX_TYPE_SENSORS];
+/*Struct that contain Artibutes of sensors types*/
+typedef struct _sensorType{
+    byte analogic;
+    WORD resValue;
+} sensorType;
 
-sensorTable st;
+/*Array of sensorsTypes, here have alla information about sensors types matched to SensorType ID*/
+typedef sensorType sensorsTable[MAX_TYPE_SENSORS];
 
-byte get_device_type(WORD resistValue){
+/*Here we define the range of resistence*/
+sensorsTable st;
 
-    byte i = 0;
-    whie ((st[i] <> resistValue) || i >= MAX_TYPE_SENSORS) i++;
-    if (i < MAX_TYPE_SENSORS)
-        return i;
-    else
-        return 255; //Mean Error
-}
+void initSensorsTable(void);
+
+byte get_device_type(WORD resistValue);
 
 
 /****************************************/
