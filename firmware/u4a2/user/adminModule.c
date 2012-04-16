@@ -48,7 +48,7 @@ void Escribir_memoria_boot(void){
 void hotplug_pnp(void){
     byte port, device_type;
     for(port=1;port<=MAX_PORTS;port++){
-        device_type = get_device_type(board_ports[port]->detection_pin);
+        device_type = get_device_type(board_ports[port]->get_val_detection_pin());
         if(device_type!=board_ports[port]->detected_device_type_id){
             if(device_type==DISCONECTED){
                 board_ports[port]->change_port_direction(IN);
