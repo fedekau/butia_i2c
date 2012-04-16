@@ -53,6 +53,8 @@
 
 #include "user/handlerManager.h"                              // Modifiable
 
+#include "user/usb4butia.h"
+
 #pragma code sys
 
 /** Fuses configurarion ******************************************************/
@@ -352,6 +354,10 @@ static void InitializeSystem(void) {
 	initT0Service();         // Inicializa servicio T0 para manejar recurso de timmer
 	initPollingFunctions();  // inicializa el buffer con 0s (dynamicPolling.c)
 	initHandlerManager();    // inicializa el map de enpoints y crea el enpoint 0 (adminModule.c)
+
+
+        /*Initialze SensorTable (USB4Butia*/
+        initSensorsTable();
 	
 }//end InitializeSystem
 
