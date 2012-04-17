@@ -11,12 +11,12 @@
 
 #define MAX_PORTS 6
 #define DISCONECTED 0
-#define MAX_DEVICES 9 /*Max cant of senssor/actuator type*/
-#define MAX_TYPE_SENSORS 5
-#define MAX_SENSOR_TABLE_ATRIBUTE 2
+
+/*#define MAX_TYPE_SENSORS 5
+#define MAX_SENSOR_TABLE_ATRIBUTE 2*/
 
 
-typedef device_type_module_name_map_resValue[]
+
 
 
 typedef enum _direction {
@@ -26,7 +26,8 @@ typedef enum _direction {
 
 /*structure to describe a USB4butia port*/
 typedef struct _port_descriptor{
-    byte (*get_data) (void); /*get data of pin from a port, digital/analog*/
+    WORD (*get_data_analog) (void); /*get data of pin from a port, analog*/ /*NEED IMPLEMENTATION*/
+    byte (*get_data_digital) (void); /*get data of pin from a port, digital*/
     void (*set_data) (byte); /*set data of pin in a port, digital*/
     WORD (*get_val_detection_pin)(void); /*pic pin used to identify the connected device*/
     byte detected_device_type_id; /*the device_type_id of the device connected*/
