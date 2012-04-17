@@ -28,8 +28,9 @@
 #define ADDRESS_BOOT 0x09
 #define BOOT_FLAG 0x11
 
+/*That definitions now are in usb4butia*/
 //#define MAX_PORTS 6
-#define MAX_DEVICES 9
+//#define MAX_DEVICES 9
 //#define DISCONECTED 255
 
 /** S T R U C T U R E S ******************************************************/
