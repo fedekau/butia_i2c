@@ -119,6 +119,11 @@ void openPnP(byte moduleId[8], byte inEp){
     }
 }
 
+void closePnP(byte handler){
+    removeHandlerTableEntry(handler);
+}
+
+
 void adminReceived(byte* recBuffPtr,byte len){
 	byte adminCounter;
 	byte endIn = nullEP, endOut = nullEP;
