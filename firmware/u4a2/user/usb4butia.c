@@ -5,16 +5,13 @@
 
 
 #include "user/usb4butia.h"
-
+#include "user/pnp.h"
 
 byte get_device_type(WORD resistValue){
 
     byte i = 0;
-    while (((st[i].resValue.v[0] != resistValue.v[0]) && (st[i].resValue.v[1] != resistValue.v[1]))|| (i >= MAX_TYPE_SENSORS)) i++;
-    if (i < MAX_TYPE_SENSORS)
-        return i;
-    else
-        return 255; //Mean Error
+    while((resistValue != table_device_id_resistance_value[i]) && (i < MAX_DEVICES)) i++;/*Need FIX when when range be define, need it compare to a range*/
+    return i; /*if i = MAX_DEVICES that mean error happend*/
 }
 
 
