@@ -7,12 +7,6 @@
 #include "user/usb4butia.h"
 
 
-void initSensorsTable(void){
-    LSB(st[0].resValue) = (2,5/255);/*2,5v esto es ...*/
-    MSB(st[0].resValue) = (2,5%255);/*2,5v esto es ...*/
-    st[0].analogic = 0; /*digital sensor*/
-}
-
 byte get_device_type(WORD resistValue){
 
     byte i = 0;
