@@ -6,6 +6,7 @@
  ********************************************************************/
 
 #include "user/adminModule.h"
+#include "user/pnp.h"
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata
@@ -24,7 +25,7 @@ byte  timeOutTicksWatchdog;
  2 boton
  3 luz
  ....*/
-byte* device_type_module_name_map[MAX_DEVICES];
+/*byte* device_type_module_name_map[MAX_DEVICES];*/
 
 
 /*TODO review this time, the micro is running @20MHZ with a pipeline of 4steps => 20000000/4 = 5000000 instructions per second */
@@ -57,7 +58,7 @@ void hotplug_pnp(void){
                 
             }else{
                 //CALL a open comand
-                openPnP(device_type_module_name_map[device_type],port);
+                openPnP(table_device_id_resistance_value[device_type],port); /*in table_device_id_resistance_value are defined all device types with the resistance value*/
 
             }
             board_ports[port]->detected_device_type_id = device_type;
