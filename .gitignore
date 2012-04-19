@@ -8,3 +8,15 @@ $savepcb.brd
 *.lst
 *.map
 *.cod
+*~
+
+# Compilacion y linkeado
+firmware/u4a2/USB4all.X/build
+firmware/u4a2/USB4all.X/dist
+firmware/u4a2/USB4all.X/*.i
+
+#Makefiles autogenerados
+firmware/u4a2/USB4all.X/nbproject/Makefile-default.mk
+firmware/u4a2/USB4all.X/nbproject/Makefile-genesis.properties
+firmware/u4a2/USB4all.X/nbproject/Makefile-impl.mk
+firmware/u4a2/USB4all.X/nbproject/Makefile-variables.mk
