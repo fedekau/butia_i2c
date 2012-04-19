@@ -46,7 +46,7 @@ typedef struct _port_device_detected {
 extern byte detected_device_type_id[];
 
 /*Remember to change the old maping for that*/
-extern rom device_resistance table_device_id_resistance_value[MAX_DEVICES];
+extern rom device_resistance table_device_id_resistance[];
 
 
 #endif //PNP__H

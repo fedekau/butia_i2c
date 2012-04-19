@@ -6,7 +6,7 @@
 
 
 /** VARIABLES INITIALIZED, CONST ROM **/
-rom const device_resistance table_device_resistance[4] = {
+rom device_resistance table_device_id_resistance[4] = {
     { "boton"  , R_BOTON  },
     { "grises" , R_GRISES },
     { "dist"   , R_DIST   },
@@ -28,7 +28,7 @@ void initTableDetectedDevice(void){
 byte get_device_type(WORD resistValue){
 
     byte i = 0;
-    while(!((resistValue.v[0]== table_device_id_resistance_value[i].resValue.v[0]) && (resistValue.v[1]== table_device_id_resistance_value[i].resValue.v[1]) ) && (i < MAX_DEVICES)) i++ ;/*Need FIX when when range be define , need it compare to a range*/
+    while(!((resistValue.v[0]== table_device_id_resistance[i].resValue.v[0]) && (resistValue.v[1]== table_device_id_resistance[i].resValue.v[1]) ) && (i < MAX_DEVICES)) i++ ;/*Need FIX when when range be define , need it compare to a range*/
 
     return i; /*if i = MAX_DEVICES that mean error happend*/
 }
