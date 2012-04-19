@@ -7,21 +7,17 @@
       <itemPath>../usb4all/proxys/T0Service.h</itemPath>
       <itemPath>../user/adminModule.h</itemPath>
       <itemPath>../user/ax12.h</itemPath>
-      <itemPath>../user/defines.h</itemPath>
       <itemPath>../user/descriptorManager.h</itemPath>
       <itemPath>../usb4all/dynamicISR/dynamicISR.h</itemPath>
       <itemPath>../user/dynamicPolling.h</itemPath>
       <itemPath>../user/handlerManager.h</itemPath>
-      <itemPath>../io_cfg.h</itemPath>
       <itemPath>../user/loaderModule.h</itemPath>
-      <itemPath>../system/typedefs.h</itemPath>
+      <itemPath>../user/pnp.h</itemPath>
       <itemPath>../system/usb/usb.h</itemPath>
+      <itemPath>../user/usb4butia.h</itemPath>
       <itemPath>../autofiles/usbcfg.h</itemPath>
       <itemPath>../usb4all/usbconf/desc/usbdsc.h</itemPath>
       <itemPath>../usb4all/usbconf/usballoc/usbmmap.h</itemPath>
-      <itemPath>../user/usr_ax12.h</itemPath>
-      <itemPath>../user/pnp.h</itemPath>
-      <itemPath>../user/usb4butia.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LibraryFiles"
                    displayName="Library Files"
@@ -49,14 +45,13 @@
       <itemPath>../user/handlerManager.c</itemPath>
       <itemPath>../user/loaderModule.c</itemPath>
       <itemPath>../main.c</itemPath>
+      <itemPath>../user/pnp.c</itemPath>
+      <itemPath>../user/usb4butia.c</itemPath>
       <itemPath>../system/usb/usb9/usb9.c</itemPath>
       <itemPath>../system/usb/usbctrltrf/usbctrltrf.c</itemPath>
       <itemPath>../system/usb/usbdrv/usbdrv.c</itemPath>
       <itemPath>../usb4all/usbconf/desc/usbdsc.c</itemPath>
       <itemPath>../usb4all/usbconf/usballoc/usbmmap.c</itemPath>
-      <itemPath>../user/usr_ax12.c</itemPath>
-      <itemPath>../user/pnp.c</itemPath>
-      <itemPath>../user/usb4butia.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -89,64 +84,65 @@
         <makeCustomizationPostStep></makeCustomizationPostStep>
         <makeCustomizationAlternativeFileToLoadEnabled>false</makeCustomizationAlternativeFileToLoadEnabled>
         <makeCustomizationAlternativeFileToLoad></makeCustomizationAlternativeFileToLoad>
-        <makeCustomizationPutChecksumInUserID>false</makeCustomizationPutChecksumInUserID>
+        <makeCustomizationUseOfUserID>makeCustomizationUseOfUserID</makeCustomizationUseOfUserID>
+        <makeCustomizationUserID>makeCustomizationUserID</makeCustomizationUserID>
       </makeCustomizationType>
       <C18>
-        <property key="code-model" value="mS"/>
-        <property key="data-model" value="Oa-"/>
-        <property key="default-char-unsigned" value="false"/>
-        <property key="enable-all-optimizations" value="true"/>
-        <property key="enable-int-promotion" value="false"/>
-        <property key="enable-multi-bank-stack-model" value="false"/>
-        <property key="enable-ob" value="false"/>
-        <property key="enable-od" value="false"/>
-        <property key="enable-om" value="true"/>
-        <property key="enable-on" value="true"/>
-        <property key="enable-op" value="false"/>
+        <property key="storage-class" value="sca"/>
         <property key="enable-opa" value="false"/>
-        <property key="enable-or" value="false"/>
-        <property key="enable-os" value="true"/>
-        <property key="enable-ot" value="false"/>
-        <property key="enable-ou" value="false"/>
-        <property key="enable-ow" value="true"/>
+        <property key="enable-all-optimizations" value="true"/>
+        <property key="preprocessor-macros" value=""/>
+        <property key="default-char-unsigned" value="false"/>
+        <property key="optimization-master" value="Custom"/>
+        <property key="code-model" value="mS"/>
+        <property key="warning-level" value="2"/>
         <property key="extra-include-directories"
                   value="../user;../usb4all/proxys;../usb4all/dynamicISR;../usb4all/usbconf/usballoc;../usb4all/usbconf/desc;../system;../system/usb;../autofiles;.."/>
-        <property key="optimization-master" value="Custom"/>
-        <property key="preprocessor-macros" value=""/>
-        <property key="procedural-abstraction-passes" value="0"/>
-        <property key="storage-class" value="sca"/>
+        <property key="enable-ow" value="true"/>
         <property key="verbose" value="false"/>
-        <property key="warning-level" value="2"/>
+        <property key="enable-ou" value="false"/>
+        <property key="enable-ot" value="false"/>
+        <property key="enable-os" value="true"/>
+        <property key="data-model" value="Oa-"/>
+        <property key="enable-or" value="false"/>
+        <property key="enable-op" value="false"/>
+        <property key="enable-on" value="true"/>
+        <property key="enable-om" value="true"/>
+        <property key="procedural-abstraction-passes" value="0"/>
+        <property key="enable-multi-bank-stack-model" value="false"/>
+        <property key="enable-int-promotion" value="false"/>
+        <property key="enable-od" value="false"/>
+        <property key="enable-ob" value="false"/>
       </C18>
       <C18-AS>
-        <property key="cross.reference.file" value=""/>
         <property key="default.radix" value="HEX"/>
         <property key="enable.case.sensitivity" value="false"/>
         <property key="hex.output.format" value="INHX32"/>
         <property key="preprocessor.macros" value=""/>
         <property key="warning.level" value="0"/>
+        <property key="cross.reference.file" value=""/>
       </C18-AS>
       <C18-LD>
+        <property key="hex-output-format" value="INHX32"/>
         <property key="cod-file" value="false"/>
+        <property key="map-file" value=""/>
         <property key="extra-lib-directories"
                   value="/usr/local/microchip/mplabc18/v3.40/lib"/>
-        <property key="hex-output-format" value="INHX32"/>
-        <property key="map-file" value=""/>
       </C18-LD>
       <C18LanguageToolchain>
-        <property key="extended-mode" value="false"/>
+        <property key="stack-analysis-mplink" value="false"/>
         <property key="extended-mode-mcc18" value="false"/>
-        <property key="extended-mode-mpasm" value="false"/>
-        <property key="extended-mode-mplink" value="false"/>
         <property key="stack-analysis" value="false"/>
         <property key="stack-analysis-mcc18" value="false"/>
-        <property key="stack-analysis-mplink" value="false"/>
+        <property key="extended-mode" value="false"/>
+        <property key="extended-mode-mpasm" value="false"/>
+        <property key="extended-mode-mplink" value="false"/>
       </C18LanguageToolchain>
       <PICkit2PlatformTool>
+        <property key="pk2settings.userpgmexec" value="true"/>
+        <property key="pk2settings.setvddvoltage" value="${pk2settings.setvddvoltage}"/>
         <property key="pk2settings.3state" value="false"/>
         <property key="pk2settings.preserveee" value="false"/>
-        <property key="pk2settings.setvddvoltage" value="${pk2settings.setvddvoltage}"/>
-        <property key="pk2settings.userpgmexec" value="true"/>
         <property key="pk2settings.usetargetpower" value="false"/>
       </PICkit2PlatformTool>
     </conf>

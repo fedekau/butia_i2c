@@ -5,10 +5,83 @@
 
 
 #include "user/usb4butia.h"
-#include "user/pnp.h"
 
-#pragma udata
-port_descriptor board_ports[MAX_PORTS];
+
+
+/** PROTOTIPES **/
+/*------------ Port 1 ------------------*/
+void changeDirectionPort1(direction io);
+
+byte getDataD1();
+
+WORD getDataA1();
+
+void setData1(byte data);
+
+WORD getDetectionPinValue1(void);
+
+/*------------ Port 2 ------------------*/
+void changeDirectionPort2(direction io);
+
+byte getData2();
+
+void setData2(byte data);
+
+WORD getDetectionPinValue2(void);
+
+/*------------ Port 3 ------------------*/
+void changeDirectionPort3(direction io);
+
+byte getData3();
+
+void setData3(byte data);
+
+WORD getDetectionPinValue3(void);
+
+/*------------ Port 4 ------------------*/
+void changeDirectionPort4(direction io);
+
+byte getData4();
+
+void setData4(byte data);
+
+WORD getDetectionPinValue4(void);
+
+/*------------ Port 5 ------------------*/
+void changeDirectionPort5(direction io);
+
+byte getData5();
+
+void setData5(byte data);
+
+WORD getDetectionPinValue5(void);
+
+/*------------ Port 6 ------------------*/
+void changeDirectionPort6(direction io);
+
+byte getData6();
+
+void setData6(byte data);
+
+WORD getDetectionPinValue6(void);
+
+
+
+/** INITIALIZED DATA **/
+
+
+#pragma romdata
+port_descriptor board_ports[MAX_PORTS]=
+    {
+        { getDataD1 , getDataA1 , setData1, getDetectionPinValue1 , changeDirectionPort1 },
+        { getDataD1 , getDataA1 , setData1, getDetectionPinValue1 , changeDirectionPort1 },
+        { getDataD1 , getDataA1 , setData1, getDetectionPinValue1 , changeDirectionPort1 },
+        { getDataD1 , getDataA1 , setData1, getDetectionPinValue1 , changeDirectionPort1 },
+        { getDataD1 , getDataA1 , setData1, getDetectionPinValue1 , changeDirectionPort1 },
+        { getDataD1 , getDataA1 , setData1, getDetectionPinValue1 , changeDirectionPort1 }
+    };
+
+
 
 #pragma code module
 byte get_device_type(WORD resistValue){
@@ -24,8 +97,13 @@ void changeDirectionPort1(direction io){
     TRISAbits.RA1 = io;
 }
 
-byte getData1(){
+byte getDataD1(){
     return PORTAbits.RA1;
+}
+
+WORD getDataA1(){
+    WORD a;
+    return a; //TODO
 }
 
 void setData1(byte data){
@@ -237,7 +315,7 @@ WORD getDetectionPinValue6(void){
 /* CUANDO LA LECTURA DE UN SENSOR ES ANALOGICA                                */
 /******************************************************************************/
 
-port_descriptor* getBoardPortDescriptor(byte port){
+const port_descriptor * getBoardPortDescriptor(byte port){
     port_descriptor new_port_dsc;
 /*    // El puerto mas sercano a la para 1 del PIC es el puerto 1, luego a partir de este contando en sentido antihorario definimos los demas puertos ... 2, 3, 4 ...
     switch(port){
@@ -306,7 +384,7 @@ void board_ports_popullate(){
     }
 }
 
-port_descriptor* getPortDescriptor(byte handler_id){
+const port_descriptor * getPortDescriptor(byte handler_id){
     return 0;  //FIXME
     //return board_ports[handler_id];
 }

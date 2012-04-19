@@ -1,23 +1,39 @@
-
-
 #include "user/pnp.h"
+#include "usb4butia.h"
 
 
-/*
 
-void initTableDeviceIdResistance(void){
+/** ESTRUCTURES **/
 
-    table_device_id_resistance_value[0].nombre = {"boton"};
-    table_device_id_resistance_value[0].resValue = R_BOTON;
+typedef struct _device_resistance {
+    char name[8];/*name of the string*/
+    WORD resValue;/*5v = 1023*/
+}  device_resistance;
 
-    table_device_id_resistance_value[1].nombre = {"grises"};
-    table_device_id_resistance_value[1].resValue = R_GRISES;
+typedef struct _port_device_detected {
+    int a;
 
-    table_device_id_resistance_value[2].nombre = {"dist"};
-    table_device_id_resistance_value[2].resValue = R_DIST;
+} port_device_detected;
 
+/** VARIABLES INITIALIZED, CONST ROM **/
+rom const device_resistance table_device_resistance[4] = {
+    { "boton"  , R_BOTON  },
+    { "grises" , R_GRISES },
+    { "dist"   , R_DIST   },
+    { "TODO"   , R_DIST   }
+};
+
+/** VARIABLES UNINITIALIZED, RAM **/
+#pragma udata
+byte detected_device_type_id[MAX_PORTS]; /*the device_type_id of the device connected*/
+
+
+
+/* CODE */
+#pragma code
+
+void initTableDetectedDevice(void){
+    byte aux;
+    for (aux=0; aux < MAX_PORTS ; aux++) detected_device_type_id[aux]= DISCONECTED;
 }
 
- */
-
-device_resistance_value * stable_device_id_resistance_value = { {'a','b','c','d','e','c','d','e'} , R_BOTON };

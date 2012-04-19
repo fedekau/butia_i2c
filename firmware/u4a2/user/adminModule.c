@@ -49,7 +49,7 @@ void Escribir_memoria_boot(void){
 }
 
 void hotplug_pnp(void){
-    byte port, device_type;
+/*    byte port, device_type;
     for(port=1;port<=MAX_PORTS;port++){
         device_type = get_device_type(board_ports[port]->get_val_detection_pin());
         if(device_type!=board_ports[port]->detected_device_type_id){
@@ -60,7 +60,7 @@ void hotplug_pnp(void){
                 
             }else{
                 //CALL a open comand
- //               openPnP(table_device_id_resistance_value[device_type].nombre,port); /*in table_device_id_resistance_value are defined all device types with the resistance value*/
+ //               openPnP(table_device_id_resistance_value[device_type].name,port); //in table_device_id_resistance_value are defined all device types with the resistance value
 
             }
             board_ports[port]->detected_device_type_id = device_type;
@@ -71,6 +71,7 @@ void hotplug_pnp(void){
         //close disconnected modules with closePNP
     }
     registerT0eventInEvent(PNP_DETECTION_TIME, &hotplug_pnp);
+ */
 }
 
 
@@ -112,7 +113,7 @@ void openPnP(byte moduleId[8], byte inEp){
     byte handler;
     void (*pUser)(byte);
     pUserFunc dir;
-    rom near char* tableDirec;;
+    rom near char* tableDirec;
     tableDirec = getUserTableDirection(moduleId);
     dir = getModuleInitDirection(tableDirec);
     if((byte)dir != ERROR){

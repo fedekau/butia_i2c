@@ -1,6 +1,6 @@
 /*******************************************************************************/
-#ifndef PNP_H
-#define PNP_H
+#ifndef PNP__H
+#define PNP__H
 
 #include "typedefs.h"
 
@@ -31,10 +31,6 @@
 
 #define MAX_DEVICES 9 /*Max cant of senssor/actuator type*/
 
-typedef struct   {
-    char nombre[8];/*name of the string*/
-    WORD resValue;/*5v = 1023*/
-}  device_resistance_value;
 
 /*Remember to change the old maping for that*/
 //extern rom device_resistance_value table_device_id_resistance_value[MAX_DEVICES];
@@ -43,4 +39,4 @@ typedef struct   {
 
 
 
-#endif PNP_H
+#endif //PNP__H

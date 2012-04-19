@@ -18,7 +18,6 @@
 
 
 
-
 typedef enum _direction {
     _OUT = 0,
     _IN = 1
@@ -26,11 +25,10 @@ typedef enum _direction {
 
 /*structure to describe a USB4butia port*/
 typedef struct _port_descriptor{
-    WORD (*get_data_analog) (void); /*get data of pin from a port, analog*/ /*NEED IMPLEMENTATION*/
     byte (*get_data_digital) (void); /*get data of pin from a port, digital*/
+    WORD (*get_data_analog) (void); /*get data of pin from a port, analog*/ /*NEED IMPLEMENTATION*/
     void (*set_data) (byte); /*set data of pin in a port, digital*/
     WORD (*get_val_detection_pin)(void); /*pic pin used to identify the connected device*/
-    byte detected_device_type_id; /*the device_type_id of the device connected*/
     void (*change_port_direction) (direction);/*callback function to change port direction*/
 } port_descriptor;
 
@@ -119,10 +117,9 @@ WORD getDetectionPinValue6(void);
 /* CUANDO LA LECTURA DE UN SENSOR ES ANALOGICA                                */
 /******************************************************************************/
 
-port_descriptor* getBoardPortDescriptor(byte port);
+const port_descriptor * getBoardPortDescriptor(byte port);
 
-void board_ports_popullate();
 
-port_descriptor* getPortDescriptor(byte handler_id); 
+const port_descriptor * getPortDescriptor(byte handler_id);
 
-#endif USB4BUTIA_H
+#endif // USB4BUTIA_H
