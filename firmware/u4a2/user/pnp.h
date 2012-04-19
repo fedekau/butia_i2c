@@ -3,7 +3,7 @@
 #define PNP__H
 
 #include "typedefs.h"
-
+#include "user/usb4butia.h"
 /*******************************************************************************/
 
 
@@ -31,12 +31,22 @@
 
 #define MAX_DEVICES 9 /*Max cant of senssor/actuator type*/
 
+/** ESTRUCTURES **/
+
+typedef struct _device_resistance {
+    char name[8];/*name of the string*/
+    WORD resValue;/*5v = 1023*/
+}  device_resistance;
+
+typedef struct _port_device_detected {
+    int a;
+
+} port_device_detected;
+
+extern byte detected_device_type_id[];
 
 /*Remember to change the old maping for that*/
-//extern rom device_resistance_value table_device_id_resistance_value[MAX_DEVICES];
-
-
-
+extern rom device_resistance table_device_id_resistance_value[MAX_DEVICES];
 
 
 #endif //PNP__H

@@ -5,6 +5,7 @@
 
 
 #include "user/usb4butia.h"
+//#include "user/pnp.h"
 
 
 
@@ -94,13 +95,6 @@ port_descriptor board_ports[MAX_PORTS]=
 
 
 #pragma code module
-byte get_device_type(WORD resistValue){
-
-    byte i = 0;
-//    while((resistValue != table_device_id_resistance_value[i]) && (i < MAX_DEVICES)) i++;/*Need FIX when when range be define, need it compare to a range*/
-    return i; /*if i = MAX_DEVICES that mean error happend*/
-}
-
 
 /*------------ Port 1 ------------------*/
 void changeDirectionPort1(direction io){
