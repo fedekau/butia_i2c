@@ -7,10 +7,14 @@
 #include "user/usb4butia.h"
 #include "user/pnp.h"
 
+#pragma udata
+port_descriptor board_ports[MAX_PORTS];
+
+#pragma code module
 byte get_device_type(WORD resistValue){
 
     byte i = 0;
-    while((resistValue != table_device_id_resistance_value[i]) && (i < MAX_DEVICES)) i++;/*Need FIX when when range be define, need it compare to a range*/
+//    while((resistValue != table_device_id_resistance_value[i]) && (i < MAX_DEVICES)) i++;/*Need FIX when when range be define, need it compare to a range*/
     return i; /*if i = MAX_DEVICES that mean error happend*/
 }
 
@@ -235,12 +239,12 @@ WORD getDetectionPinValue6(void){
 
 port_descriptor* getBoardPortDescriptor(byte port){
     port_descriptor new_port_dsc;
-    // El puerto mas sercano a la para 1 del PIC es el puerto 1, luego a partir de este contando en sentido antihorario definimos los demas puertos ... 2, 3, 4 ...
+/*    // El puerto mas sercano a la para 1 del PIC es el puerto 1, luego a partir de este contando en sentido antihorario definimos los demas puertos ... 2, 3, 4 ...
     switch(port){
 
         case 1: //Puerto N1
            // new_port_dsc.data_pin = PORTAbits.RA1; // Pin 3, Analogica 1
-            new_port_dsc.get_data = &getData1;
+            new_port_dsc.get_data_digital = &getData1;
             new_port_dsc.set_data = &setData1;
             new_port_dsc.get_val_detection_pin = &getDetectionPinValue1; //Pin 2, Analogica 0
             new_port_dsc.detected_device_type_id = DISCONECTED; // Nothing conected at Start
@@ -248,7 +252,7 @@ port_descriptor* getBoardPortDescriptor(byte port){
 
         break;
         case 2: //Puerto N2
-            new_port_dsc.get_data = &getData2;
+            new_port_dsc.get_data_digital = &getData2;
             new_port_dsc.set_data = &setData2;
             //new_port_dsc.data_pin = PORTAbits.RA3; // Pin 5, Analogica 3
             new_port_dsc.get_val_detection_pin = &getDetectionPinValue2; //Pin 4, Analogica 2
@@ -256,7 +260,7 @@ port_descriptor* getBoardPortDescriptor(byte port){
             new_port_dsc.change_port_direction = &changeDirectionPort2; //
         break;
         case 3: //Puerto N3
-            new_port_dsc.get_data = &getData3;
+            new_port_dsc.get_data_digital = &getData3;
             new_port_dsc.set_data = &setData3;
             //new_port_dsc.data_pin = PORTEbits.RE1; // Pin 9, Analogica 6
             new_port_dsc.get_val_detection_pin = &getDetectionPinValue3; //Pin 10, Analogica 7
@@ -265,7 +269,7 @@ port_descriptor* getBoardPortDescriptor(byte port){
 
         break;
         case 4: //Puerto N4
-            new_port_dsc.get_data = &getData4;
+            new_port_dsc.get_data_digital = &getData4;
             new_port_dsc.set_data = &setData4;
             //new_port_dsc.data_pin = PORTAbits.RA5; // Pin 7, Analogica 4
             new_port_dsc.get_val_detection_pin = &getDetectionPinValue4; //Pin 8, Analogica 5
@@ -291,16 +295,18 @@ port_descriptor* getBoardPortDescriptor(byte port){
             new_port_dsc.change_port_direction = &changeDirectionPort6;
         break;
     }
+ * * */
     return &new_port_dsc;
 }
 
 void board_ports_popullate(){
     byte port;
     for(port=1;port<=MAX_PORTS;port++){
-        board_ports[port]=getBoardPortDescriptor(port);
+//        board_ports[port]=getBoardPortDescriptor(port);
     }
 }
 
 port_descriptor* getPortDescriptor(byte handler_id){
-    return board_ports[handler_id];
+    return 0;  //FIXME
+    //return board_ports[handler_id];
 }

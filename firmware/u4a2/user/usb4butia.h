@@ -35,7 +35,7 @@ typedef struct _port_descriptor{
 } port_descriptor;
 
 /*mapping between idPort and the port descriptor*/
-port_descriptor* board_ports[MAX_PORTS];
+extern port_descriptor board_ports[MAX_PORTS];
 
 /*******************************************************************************/
 /*Struct that contain Artibutes of sensors types*/

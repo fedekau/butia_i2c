@@ -7,6 +7,7 @@
 
 #include "user/adminModule.h"
 #include "user/pnp.h"
+#include "user/usb4butia.h"
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata
@@ -33,6 +34,7 @@ byte  timeOutTicksWatchdog;
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
 void openPnP(byte moduleId[8], byte inEp);
+void closePnP(byte handler);
 /** D E C L A R A T I O N S **************************************************/
 #pragma code sys
 
@@ -58,7 +60,7 @@ void hotplug_pnp(void){
                 
             }else{
                 //CALL a open comand
-                openPnP(table_device_id_resistance_value[device_type],port); /*in table_device_id_resistance_value are defined all device types with the resistance value*/
+ //               openPnP(table_device_id_resistance_value[device_type].nombre,port); /*in table_device_id_resistance_value are defined all device types with the resistance value*/
 
             }
             board_ports[port]->detected_device_type_id = device_type;
@@ -75,7 +77,7 @@ void hotplug_pnp(void){
 
 /*the device_type_module_name_map asociates for each string representing a module name an internal index
  for optimization propurses. Also this structure parses dynamically the name of the modules using rom data user*/
-void device_type_module_name_map_popullate(void){
+/*void device_type_module_name_map_popullate(void){
     byte userTableSize = 0;
     byte lineNumber;
     byte lineName[8]; //Se le cambio el tipo a byte, porque device_type_module_name_map es un arreglo de bytes
@@ -85,7 +87,7 @@ void device_type_module_name_map_popullate(void){
         device_type_module_name_map[lineNumber]= lineName; 
     }
 }
-
+*/
 void adminModuleInit(void){
 	/*system initialization*/
 	adminHandler=0; //hardcode, the admin module allways respond at handler 0
@@ -93,7 +95,7 @@ void adminModuleInit(void){
 	setHandlerReceiveFunction(adminHandler,&adminReceived);
 	sendBufferAdmin = getSharedBuffer(adminHandler);
         board_ports_popullate();
-        device_type_module_name_map_popullate();
+//        device_type_module_name_map_popullate();
         registerT0event(PNP_DETECTION_TIME, &hotplug_pnp);
 }
 
