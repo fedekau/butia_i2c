@@ -23,7 +23,9 @@ WORD getDetectionPinValue1(void);
 /*------------ Port 2 ------------------*/
 void changeDirectionPort2(direction io);
 
-byte getData2();
+byte getDataD2();
+
+WORD getDataA2();
 
 void setData2(byte data);
 
@@ -32,7 +34,9 @@ WORD getDetectionPinValue2(void);
 /*------------ Port 3 ------------------*/
 void changeDirectionPort3(direction io);
 
-byte getData3();
+byte getDataD3();
+
+WORD getDataA3();
 
 void setData3(byte data);
 
@@ -41,7 +45,9 @@ WORD getDetectionPinValue3(void);
 /*------------ Port 4 ------------------*/
 void changeDirectionPort4(direction io);
 
-byte getData4();
+byte getDataD4();
+
+WORD getDataA4();
 
 void setData4(byte data);
 
@@ -50,7 +56,9 @@ WORD getDetectionPinValue4(void);
 /*------------ Port 5 ------------------*/
 void changeDirectionPort5(direction io);
 
-byte getData5();
+byte getDataD5();
+
+WORD getDataA5();
 
 void setData5(byte data);
 
@@ -59,7 +67,9 @@ WORD getDetectionPinValue5(void);
 /*------------ Port 6 ------------------*/
 void changeDirectionPort6(direction io);
 
-byte getData6();
+byte getDataD6();
+
+WORD getDataA6();
 
 void setData6(byte data);
 
@@ -74,11 +84,11 @@ WORD getDetectionPinValue6(void);
 port_descriptor board_ports[MAX_PORTS]=
     {
         { getDataD1 , getDataA1 , setData1, getDetectionPinValue1 , changeDirectionPort1 },
-        { getDataD1 , getDataA1 , setData1, getDetectionPinValue1 , changeDirectionPort1 },
-        { getDataD1 , getDataA1 , setData1, getDetectionPinValue1 , changeDirectionPort1 },
-        { getDataD1 , getDataA1 , setData1, getDetectionPinValue1 , changeDirectionPort1 },
-        { getDataD1 , getDataA1 , setData1, getDetectionPinValue1 , changeDirectionPort1 },
-        { getDataD1 , getDataA1 , setData1, getDetectionPinValue1 , changeDirectionPort1 }
+        { getDataD2 , getDataA2 , setData2, getDetectionPinValue2 , changeDirectionPort2 },
+        { getDataD3 , getDataA3 , setData3, getDetectionPinValue3 , changeDirectionPort3 },
+        { getDataD4 , getDataA4 , setData4, getDetectionPinValue4 , changeDirectionPort4 },
+        { getDataD5 , getDataA5 , setData5, getDetectionPinValue5 , changeDirectionPort5 },
+        { getDataD6 , getDataA6 , setData6, getDetectionPinValue6 , changeDirectionPort6 }
     };
 
 
@@ -137,8 +147,13 @@ void changeDirectionPort2(direction io){
     TRISAbits.RA3 = io;
 }
 
-byte getData2(){
+byte getDataD2(){
     return PORTAbits.RA3;
+}
+
+WORD getDataA2(){
+    WORD a;
+    return a; //TODO
 }
 
 void setData2(byte data){
@@ -172,8 +187,13 @@ void changeDirectionPort3(direction io){
     TRISEbits.RE1 = io;
 }
 
-byte getData3(){
+byte getDataD3(){
     return PORTEbits.RE1;
+}
+
+WORD getDataA3(){
+    WORD a;
+    return a; //TODO
 }
 
 void setData3(byte data){
@@ -207,8 +227,13 @@ void changeDirectionPort4(direction io){
     TRISAbits.RA5 = io;
 }
 
-byte getData4(){
+byte getDataD4(){
     return PORTAbits.RA5;
+}
+
+WORD getDataA4(){
+    WORD a;
+    return a; //TODO
 }
 
 void setData4(byte data){
@@ -242,8 +267,13 @@ void changeDirectionPort5(direction io){
     TRISBbits.RB1 = io;
 }
 
-byte getData5(){
+byte getDataD5(){
     return PORTBbits.RB1;
+}
+
+WORD getDataA5(){
+    WORD a;
+    return a; //TODO
 }
 
 void setData5(byte data){
@@ -277,8 +307,13 @@ void changeDirectionPort6(direction io){
     TRISBbits.RB3 = io;
 }
 
-byte getData6(){
+byte getDataD6(){
     return PORTBbits.RB3;
+}
+
+WORD getDataA6(){
+    WORD a;
+    return a; //TODO
 }
 
 void setData6(byte data){
