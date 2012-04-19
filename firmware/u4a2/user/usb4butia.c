@@ -112,8 +112,24 @@ byte getDataD1(){
 }
 
 WORD getDataA1(){
-    WORD a;
-    return a; //TODO
+    
+    WORD res;
+    byte counter = 255;
+    /*Configure Analogic Chanel 1, AN1 _ PIN 3*/
+    ADCON0bits.CHS3 =  0;
+    ADCON0bits.CHS2 =  0;
+    ADCON0bits.CHS1 =  0;
+    ADCON0bits.CHS0 =  1;
+
+    ADCON0bits.ADON = 1;/*Enable Analogic*/
+
+    ADCON0bits.GO =  1; /*Start Reading Analogic pin*/
+    while(ADCON0bits.NOT_DONE && counter-->0);
+    LSB(res) = ADRESL;
+    MSB(res) = ADRESH;
+
+    ADCON0bits.ADON = 0;/*Disable Analogic*/
+    return res;
 }
 
 void setData1(byte data){
@@ -152,8 +168,24 @@ byte getDataD2(){
 }
 
 WORD getDataA2(){
-    WORD a;
-    return a; //TODO
+    
+    WORD res;
+    byte counter = 255;
+    /*Configure Analogic Chanel 3, AN3 _ PIN 5*/
+    ADCON0bits.CHS3 =  0;
+    ADCON0bits.CHS2 =  0;
+    ADCON0bits.CHS1 =  1;
+    ADCON0bits.CHS0 =  1;
+
+    ADCON0bits.ADON = 1;/*Enable Analogic*/
+
+    ADCON0bits.GO =  1; /*Start Reading Analogic pin*/
+    while(ADCON0bits.NOT_DONE && counter-->0);
+    LSB(res) = ADRESL;
+    MSB(res) = ADRESH;
+
+    ADCON0bits.ADON = 0;/*Disable Analogic*/
+    return res;
 }
 
 void setData2(byte data){
@@ -192,8 +224,24 @@ byte getDataD3(){
 }
 
 WORD getDataA3(){
-    WORD a;
-    return a; //TODO
+
+    WORD res;
+    byte counter = 255;
+    /*Configure Analogic Chanel 6, AN6 _ PIN 9*/
+    ADCON0bits.CHS3 =  0;
+    ADCON0bits.CHS2 =  1;
+    ADCON0bits.CHS1 =  1;
+    ADCON0bits.CHS0 =  0;
+
+    ADCON0bits.ADON = 1;/*Enable Analogic*/
+
+    ADCON0bits.GO =  1; /*Start Reading Analogic pin*/
+    while(ADCON0bits.NOT_DONE && counter-->0);
+    LSB(res) = ADRESL;
+    MSB(res) = ADRESH;
+
+    ADCON0bits.ADON = 0;/*Disable Analogic*/
+    return res;
 }
 
 void setData3(byte data){
@@ -232,8 +280,24 @@ byte getDataD4(){
 }
 
 WORD getDataA4(){
-    WORD a;
-    return a; //TODO
+
+    WORD res;
+    byte counter = 255;
+    /*Configure Analogic Chanel 4, AN4 _ PIN 7*/
+    ADCON0bits.CHS3 =  0;
+    ADCON0bits.CHS2 =  1;
+    ADCON0bits.CHS1 =  0;
+    ADCON0bits.CHS0 =  0;
+
+    ADCON0bits.ADON = 1;/*Enable Analogic*/
+
+    ADCON0bits.GO =  1; /*Start Reading Analogic pin*/
+    while(ADCON0bits.NOT_DONE && counter-->0);
+    LSB(res) = ADRESL;
+    MSB(res) = ADRESH;
+
+    ADCON0bits.ADON = 0;/*Disable Analogic*/
+    return res;
 }
 
 void setData4(byte data){
@@ -272,8 +336,24 @@ byte getDataD5(){
 }
 
 WORD getDataA5(){
-    WORD a;
-    return a; //TODO
+
+    WORD res;
+    byte counter = 255;
+    /*Configure Analogic Chanel 10, AN10 _ PIN 34*/
+    ADCON0bits.CHS3 =  1;
+    ADCON0bits.CHS2 =  0;
+    ADCON0bits.CHS1 =  1;
+    ADCON0bits.CHS0 =  0;
+
+    ADCON0bits.ADON = 1;/*Enable Analogic*/
+
+    ADCON0bits.GO =  1; /*Start Reading Analogic pin*/
+    while(ADCON0bits.NOT_DONE && counter-->0);
+    LSB(res) = ADRESL;
+    MSB(res) = ADRESH;
+
+    ADCON0bits.ADON = 0;/*Disable Analogic*/
+    return res;
 }
 
 void setData5(byte data){
@@ -312,8 +392,24 @@ byte getDataD6(){
 }
 
 WORD getDataA6(){
-    WORD a;
-    return a; //TODO
+
+    WORD res;
+    byte counter = 255;
+    /*Configure Analogic Chanel 9, AN9 _ PIN 36*/
+    ADCON0bits.CHS3 =  1;
+    ADCON0bits.CHS2 =  0;
+    ADCON0bits.CHS1 =  0;
+    ADCON0bits.CHS0 =  1;
+
+    ADCON0bits.ADON = 1;/*Enable Analogic*/
+
+    ADCON0bits.GO =  1; /*Start Reading Analogic pin*/
+    while(ADCON0bits.NOT_DONE && counter-->0);
+    LSB(res) = ADRESL;
+    MSB(res) = ADRESH;
+
+    ADCON0bits.ADON = 0;/*Disable Analogic*/
+    return res;
 }
 
 void setData6(byte data){
@@ -344,11 +440,6 @@ WORD getDetectionPinValue6(void){
 
 /******************************************************************************/
 
-
-/******************************************************************************/
-/* FALTA ARREGLAR LA DEFINICION DE PORT DESCRIPTOR Y SU CONFIGURACION PARA    */
-/* CUANDO LA LECTURA DE UN SENSOR ES ANALOGICA                                */
-/******************************************************************************/
 
 const port_descriptor * getBoardPortDescriptor(byte port){
     port_descriptor new_port_dsc;

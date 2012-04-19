@@ -112,11 +112,6 @@ WORD getDetectionPinValue6(void);
 /******************************************************************************/
 
 
-/******************************************************************************/
-/* FALTA ARREGLAR LA DEFINICION DE PORT DESCRIPTOR Y SU CONFIGURACION PARA    */
-/* CUANDO LA LECTURA DE UN SENSOR ES ANALOGICA                                */
-/******************************************************************************/
-
 const port_descriptor * getBoardPortDescriptor(byte port);
 
 
