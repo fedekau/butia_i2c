@@ -82,7 +82,7 @@ WORD getDetectionPinValue6(void);
 
 
 #pragma romdata
-port_descriptor board_ports[MAX_PORTS]=
+const port_descriptor board_ports[MAX_PORTS]=
     {
         { getDataD1 , getDataA1 , setData1, getDetectionPinValue1 , changeDirectionPort1 },
         { getDataD2 , getDataA2 , setData2, getDetectionPinValue2 , changeDirectionPort2 },
