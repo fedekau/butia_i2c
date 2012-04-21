@@ -2,7 +2,7 @@
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * Rafael Fernandez    10/03/07     Original.
  * Andres Aguirre      27/03/07 	
- ****************************q****************************************/
+ ********************************************************************/
 
 /** I N C L U D E S **********************************************************/
 #include <p18cxxx.h>
@@ -151,6 +151,7 @@ byte newHandlerTableEntryForcingHandler(byte endPIn, rom near char* uTableDirect
 
 BOOL existsTableEntry(rom near char* uTableDirection){
 	byte i=0;
+        /* it can be opimized A LOT! */
 	while (i<MAX_HANDLERS){
 		if (epHandlerMap[i].uTableDirection == uTableDirection) {
 			return TRUE;			
@@ -162,21 +163,32 @@ BOOL existsTableEntry(rom near char* uTableDirection){
 
 void initHandlerTable() {
 	byte i;
-	endpoint adminEndpoint;
-	adminEndpoint = getAdminEndpoint();
 	for(i=0;i<MAX_HANDLERS;i++){
 		epHandlerMap[i].ep.empty = 1;
-		epHandlerMap[i].uTableDirection = 0; 
+		epHandlerMap[i].uTableDirection = 0; /* is this nesesary?? */
 	}
-	epHandlerMap[0].ep = adminEndpoint;
 	//cargo el ROM_MAX_EP_NUMBER en ram
 	ram_max_ep_number = ROM_MAX_EP_NUMBER;
 }
 
 void initHandlerManager(void){
-	//initHandlerBuffers();
-	initHandlerTable();				//Inicializo tabla de mapeo de handler a endpoint en HandlerManager
-	adminModuleInit();				//Inicializo el Admin Module 
+    char adminmodule[8];  //FIXME!!!
+    //initHandlerBuffers();
+    initHandlerTable();      //Initialize table index(handler)=>endpoint
+
+    /* Staticaly Initialized modules */
+
+    /* Admin module; Handler=0 */
+    adminmodule[0]='a'; adminmodule[1]='d'; adminmodule[2]='m'; adminmodule[3]='i';
+    adminmodule[4]='n'; adminmodule[5]=0  ; adminmodule[6]=0  ; adminmodule[7]=0  ;
+    epHandlerMap[0].ep = getAdminEndpoint(); // Admin endpoint
+    epHandlerMap[0].uTableDirection = getUserTableDirection(adminmodule); // ModuleType=0;
+    adminModuleInit(0);
+
+    /* PNP module ; Handler=7 */
+    // device_type_module_name_map_popullate();
+    // registerT0event(PNP_DETECTION_TIME, &hotplug_pnp);
+    // pnpModuleInit(7); //Internaly initialize handlers 1..6
 }
 
 respType removeHandlerTableEntry(byte handler){

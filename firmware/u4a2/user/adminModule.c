@@ -20,6 +20,13 @@ byte  keepAlive    = TRUE;
 byte  timeOutTicksWatchdog;
 
 
+/** USER MODULE REFERENCE *************************************************/
+// Admin ModuleType=0,
+//#pragma romdata user=DIRECTION_TABLE       // THIS DONT WORK!!!
+#pragma romdata user
+uTab AdminModuleTable = {&adminModuleInit,&adminModuleRelease,&adminModuleConfigure,"admin"}; //modName must be less or equal 8 characters
+#pragma code
+
 /*mapping between module name and an device type id used for optimization
  0 dist
  1 grises
@@ -58,14 +65,22 @@ void Escribir_memoria_boot(void){
     }
 }
 */
-void adminModuleInit(void){
+void adminModuleInit(byte handler){
 	/*system initialization*/
 	adminHandler=0; //hardcode, the admin module allways respond at handler 0
         /*set the receive function for admin commands*/
-	setHandlerReceiveFunction(adminHandler,&adminReceived);
+        setHandlerReceiveFunction(adminHandler,&adminReceived);
 	sendBufferAdmin = getSharedBuffer(adminHandler);        
-//        device_type_module_name_map_popullate();
-       // registerT0event(PNP_DETECTION_TIME, &hotplug_pnp);
+}
+
+void adminModuleRelease(byte handler){
+    /*what? close admin? Are you crazy?*/
+    return;
+}
+
+void adminModuleConfigure(void){
+    // nothing to do...
+    return;
 }
 
 void goodByeCruelWorld(void){
@@ -93,7 +108,7 @@ void adminReceived(byte* recBuffPtr,byte len, byte admin_handler){
     
     switch(((AM_PACKET*)recBuffPtr)->CMD){
 	/* Abre un user module, y retorna el handler asignado en el sistema*/
-	case OPEN:
+        case OPEN:
                 tableDirec = getUserTableDirection(((AM_PACKET*)recBuffPtr)->moduleId);
                 dir = getModuleInitDirection(tableDirec);
                 if((byte)dir != ERROR){
@@ -186,11 +201,12 @@ void adminReceived(byte* recBuffPtr,byte len, byte admin_handler){
                     }
                     i++;
             }
+            adminCounter = 1 +  (2 * j) ; //1 byte for CMD, 2 * j for answer
         break;
 
 	case RESET:
-        goodByeCruelWorld();
-		adminCounter = 0x01; //1 byte para el campo CMD sensless ;)
+            goodByeCruelWorld();
+            adminCounter = 0x01; //1 byte para el campo CMD sensless ;)
 	break;
 	
 	default:
