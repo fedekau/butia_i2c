@@ -52,67 +52,8 @@ extern const port_descriptor board_ports[MAX_PORTS];
 
 byte get_device_type(WORD resistValue);
 
-
-/****************************************/
-
-/*------------ Port 1 ------------------*/
-void changeDirectionPort1(direction io);
-
-byte getData1();
-
-void setData1(byte data);
-
-WORD getDetectionPinValue1(void);
-
-/*------------ Port 2 ------------------*/
-void changeDirectionPort2(direction io);
-
-byte getData2();
-
-void setData2(byte data);
-
-WORD getDetectionPinValue2(void);
-
-/*------------ Port 3 ------------------*/
-void changeDirectionPort3(direction io);
-
-byte getData3();
-
-void setData3(byte data);
-
-WORD getDetectionPinValue3(void);
-
-/*------------ Port 4 ------------------*/
-void changeDirectionPort4(direction io);
-
-byte getData4();
-
-void setData4(byte data);
-
-WORD getDetectionPinValue4(void);
-
-/*------------ Port 5 ------------------*/
-void changeDirectionPort5(direction io);
-
-byte getData5();
-
-void setData5(byte data);
-
-WORD getDetectionPinValue5(void);
-
-/*------------ Port 6 ------------------*/
-void changeDirectionPort6(direction io);
-
-byte getData6();
-
-void setData6(byte data);
-
-WORD getDetectionPinValue6(void);
-
-/******************************************************************************/
-
 const void initPorts(void);
 
-const port_descriptor * getPortDescriptor(byte handler_id);
+const port_descriptor * getPortDescriptor(byte handler);
 
 #endif // USB4BUTIA_H

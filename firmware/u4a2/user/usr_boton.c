@@ -161,7 +161,7 @@ void UserBotonReceived(byte* recBuffPtr, byte len, port_descriptor port){
 
         case GET_PRESSED:
             ((BOTON_DATA_PACKET*)sendBufferUsrBoton)->_byte[0] = ((BOTON_DATA_PACKET*)recBuffPtr)->_byte[0];
-            ((BOTON_DATA_PACKET*)sendBufferUsrBoton)->_byte[1] = port.get_data();
+            ((BOTON_DATA_PACKET*)sendBufferUsrBoton)->_byte[1] = port.get_data_digital();
             userBotonCounter=0x02;
             break;
          
