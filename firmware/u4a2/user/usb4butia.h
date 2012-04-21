@@ -111,9 +111,7 @@ WORD getDetectionPinValue6(void);
 
 /******************************************************************************/
 
-
-const port_descriptor * getBoardPortDescriptor(byte port);
-
+const void initPorts(void);
 
 const port_descriptor * getPortDescriptor(byte handler_id);
 

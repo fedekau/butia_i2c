@@ -435,76 +435,15 @@ WORD getDetectionPinValue6(void){
 /******************************************************************************/
 
 
-const port_descriptor * getBoardPortDescriptor(byte port){
-    port_descriptor new_port_dsc;
-/*    // El puerto mas sercano a la para 1 del PIC es el puerto 1, luego a partir de este contando en sentido antihorario definimos los demas puertos ... 2, 3, 4 ...
-    switch(port){
-
-        case 1: //Puerto N1
-           // new_port_dsc.data_pin = PORTAbits.RA1; // Pin 3, Analogica 1
-            new_port_dsc.get_data_digital = &getData1;
-            new_port_dsc.set_data = &setData1;
-            new_port_dsc.get_val_detection_pin = &getDetectionPinValue1; //Pin 2, Analogica 0
-            new_port_dsc.detected_device_type_id = DISCONECTED; // Nothing conected at Start
-            new_port_dsc.change_port_direction = &changeDirectionPort1; //
-
-        break;
-        case 2: //Puerto N2
-            new_port_dsc.get_data_digital = &getData2;
-            new_port_dsc.set_data = &setData2;
-            //new_port_dsc.data_pin = PORTAbits.RA3; // Pin 5, Analogica 3
-            new_port_dsc.get_val_detection_pin = &getDetectionPinValue2; //Pin 4, Analogica 2
-            new_port_dsc.detected_device_type_id = DISCONECTED; // Nothing conected at Start
-            new_port_dsc.change_port_direction = &changeDirectionPort2; //
-        break;
-        case 3: //Puerto N3
-            new_port_dsc.get_data_digital = &getData3;
-            new_port_dsc.set_data = &setData3;
-            //new_port_dsc.data_pin = PORTEbits.RE1; // Pin 9, Analogica 6
-            new_port_dsc.get_val_detection_pin = &getDetectionPinValue3; //Pin 10, Analogica 7
-            new_port_dsc.detected_device_type_id = DISCONECTED; // Nothing conected at Start
-            new_port_dsc.change_port_direction = &changeDirectionPort3;
-
-        break;
-        case 4: //Puerto N4
-            new_port_dsc.get_data_digital = &getData4;
-            new_port_dsc.set_data = &setData4;
-            //new_port_dsc.data_pin = PORTAbits.RA5; // Pin 7, Analogica 4
-            new_port_dsc.get_val_detection_pin = &getDetectionPinValue4; //Pin 8, Analogica 5
-            new_port_dsc.detected_device_type_id = DISCONECTED; // Nothing conected at Start
-            new_port_dsc.change_port_direction = &changeDirectionPort4;
-
-        break;
-        case 5: //Puerto N5
-            new_port_dsc.get_data = &getData5;
-            new_port_dsc.set_data = &setData5;
-            //new_port_dsc.data_pin = PORTBbits.RB1; // Pin 34, Analogica 10
-            new_port_dsc.get_val_detection_pin = &getDetectionPinValue5; //Pin 33, Analogica 12
-            new_port_dsc.detected_device_type_id = DISCONECTED; // Nothing conected at Start
-            new_port_dsc.change_port_direction = &changeDirectionPort5;
-
-        break;
-        case 6: //Puerto N6
-            new_port_dsc.get_data = &getData6;
-            new_port_dsc.set_data = &setData6;
-            //new_port_dsc.data_pin = PORTBbits.RB3; // Pin 36, Analogica 9
-            new_port_dsc.get_val_detection_pin = &getDetectionPinValue6; //Pin 35, Analogica 8
-            new_port_dsc.detected_device_type_id = DISCONECTED; // Nothing conected at Start
-            new_port_dsc.change_port_direction = &changeDirectionPort6;
-        break;
-    }
- * * */
-    return &new_port_dsc;
+const void initPorts(void){
+    byte i;
+    for(i = 0; i < MAX_PORTS; i++)
+        board_ports[i].change_port_direction(_IN);
 }
 
-void board_ports_popullate(){
-    byte port;
-    for(port=1;port<=MAX_PORTS;port++){
-//        board_ports[port]=getBoardPortDescriptor(port);
-    }
-}
 
-const port_descriptor * getPortDescriptor(byte handler_id){
-    return 0;  //FIXME
+
+const port_descriptor * getPortDescriptor(byte handler){
+    return &board_ports[handler-1]; /*Internally ports are mapped 0..5*/
     //return board_ports[handler_id];
 }
