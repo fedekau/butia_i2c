@@ -60,7 +60,9 @@ typedef enum _opType {
 	SEND3   = 0x04, 
 	RT	= 0x05
 } opType;
-	
+
+extern epHandlerMapItem epHandlerMap[MAX_HANDLERS];
+
 /** P U B L I C  P R O T O T Y P E S *****************************************/
 
 void checkHandlerManagerIO(void);
@@ -70,6 +72,7 @@ void initHandlerBuffers(void);
 void setHandlerReceiveBuffer(byte handler, byte *rb);
 void setHandlerReceiveFunction(byte handler,void (*pf) (byte* recBuffPtr,byte, byte));
 byte newHandlerTableEntry(byte endPIn, rom near char* uTableDirection);
+byte newHandlerTableEntryForcingHandler(byte endPIn, rom near char* uTableDirection, byte handler);
 BOOL existsTableEntry(rom near char* uTableDirection);
 void initHandlerTable();
 void initHandlerManager(void);

@@ -29,12 +29,8 @@ byte  timeOutTicksWatchdog;
 /*byte* device_type_module_name_map[MAX_DEVICES];*/
 
 
-/*TODO review this time, the micro is running @20MHZ with a pipeline of 4steps => 20000000/4 = 5000000 instructions per second */
-#define PNP_DETECTION_TIME 10000
-
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void openPnP(byte moduleId[8], byte inEp);
-void closePnP(byte handler);
+
 /** D E C L A R A T I O N S **************************************************/
 #pragma code sys
 
@@ -47,35 +43,6 @@ void Escribir_memoria_boot(void){
     Busy_eep_non_block();
     Write_b_eep(ADDRESS_BOOT,BOOT_FLAG);
 }
-
-void hotplug_pnp(void){
-    byte port, device_type;
-    for(port=1;port<=MAX_PORTS;port++){
-//        device_type = get_device_type(board_ports[port].get_val_detection_pin());        
-//        if(device_type!=detected_device_type_id[port]){ /*Change that board_port[device_type].detected_device_id for detected_device_type_id[port]*/
-//            if(device_type==DISCONECTED){
-//                board_ports[port].change_port_direction(IN);
-                /*CALL a close command*/
-//                closePnP(port);
-
-//            }else{
-                /*CALL a open comand*/
-                /*openPnP(table_device_id_resistance_value[device_type].name,port); /*in table_device_id_resistance_value are defined all device types with the resistance value*/
-
-
-//            }
-   //         detected_device_type_id[port] = device_type; /*Change that board_port[device_type].detected_device_id for detected_device_type_id[port]*/
-
-//   }
-        
-        //do detection
-        //open new connected modules with openPNP
-        //close disconnected modules with closePNP
-    }
- //   registerT0eventInEvent(PNP_DETECTION_TIME, &hotplug_pnp);
- 
-}
-
 
 
 /*the device_type_module_name_map asociates for each string representing a module name an internal index
@@ -110,41 +77,24 @@ void goodByeCruelWorld(void){
     Reset();
 }
 
-void openPnP(byte moduleId[8], byte inEp){
-    byte handler;
-    void (*pUser)(byte);
-    pUserFunc dir;
-    rom near char* tableDirec;
-    tableDirec = getUserTableDirection(moduleId);
-    dir = getModuleInitDirection(tableDirec);
-    if((byte)dir != ERROR){
-            //handler = newHandlerTableEntryPNP(getPnPEndpoint().endPoint,tableDirec);
-            pUser = dir;
-            pUser(handler); //hago el init ;)            
-    }
-}
-
-void closePnP(byte handler){
-    removeHandlerTableEntry(handler);
-}
-
-
 void adminReceived(byte* recBuffPtr,byte len, byte admin_handler){
-	byte adminCounter;
-	byte endIn = nullEP, endOut = nullEP;
-	byte userTableSize = 0;
-	byte lineNumber = 0;
-	char lineName[8];
-	rom near char* tableDirec;
-	pUserFunc dir;	
-	void (*pUser)(byte);
-	byte handler, response;
-	byte j;
-	adminCounter = 0;
-	switch(((AM_PACKET*)recBuffPtr)->CMD){
+    byte adminCounter;
+    byte endIn = nullEP, endOut = nullEP;
+    byte userTableSize = 0;
+    byte lineNumber = 0;
+    char lineName[8];
+    rom near char* tableDirec;
+    pUserFunc dir;
+    void (*pUser)(byte);
+    byte handler, response;
+    byte i;
+    byte j;
+    adminCounter = 0;
+    
+    switch(((AM_PACKET*)recBuffPtr)->CMD){
 	/* Abre un user module, y retorna el handler asignado en el sistema*/
 	case OPEN:
-		tableDirec = getUserTableDirection(((AM_PACKET*)recBuffPtr)->moduleId);
+                tableDirec = getUserTableDirection(((AM_PACKET*)recBuffPtr)->moduleId);
                 dir = getModuleInitDirection(tableDirec);
                 if((byte)dir != ERROR){
                         endIn = ((AM_PACKET*)recBuffPtr)->inEp;
@@ -223,6 +173,20 @@ void adminReceived(byte* recBuffPtr,byte len, byte admin_handler){
 		goodByeCruelWorld();
 		adminCounter = 0x01; //;)
 	break;
+
+        case LISTI:
+            i=0;
+            j=0;
+            ((AM_PACKET*)sendBufferAdmin)->CMD = LISTI;
+            while (i<MAX_HANDLERS){
+                    if (epHandlerMap[i].ep.empty == 0) {
+                            ((AM_PACKET*)sendBufferAdmin)->LISTI_CMD_ITEM[j].handler = i;
+                            ((AM_PACKET*)sendBufferAdmin)->LISTI_CMD_ITEM[j].moduleType = getModuleType(epHandlerMap[i].uTableDirection);
+                            j++;
+                    }
+                    i++;
+            }
+        break;
 
 	case RESET:
         goodByeCruelWorld();

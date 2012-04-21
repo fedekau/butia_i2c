@@ -63,6 +63,11 @@ byte getUserTableSize(){
 	return size;	
 }
 
+byte getModuleType(rom near char* uTableDirection){
+        rom near char * moduleTableInitPos = (rom near char *)DIRECTION_TABLE;
+        return (uTableDirection-moduleTableInitPos)/TAM_U_TAB;
+}
+
 //Precondicion: Capas superiores se encargan de hacer el chequeo de que no se exceda del espacio de modulos
 void getModuleName(byte line, char* modName){
 	byte j;

@@ -4,6 +4,9 @@
  ********************************************************************/
 #ifndef ADMIN_MODULE_H
 #define ADMIN_MODULE_H
+
+#include "handlerManager.h"
+
 /** I N C L U D E S **********************************************************/
 #include "user/handlerManager.h"
 #include "user/defines.h"
@@ -48,7 +51,8 @@ typedef union _AM_PACKET {
 			GET_USER_MODULES_LINE  = 0x06,
 			INIT				   = 0x07,
 			CONFIGURE			   = 0x08,
-			BOOT				   = 0x09, 
+			BOOT				   = 0x09,
+                        LISTI                              = 0x0A,
 			RESET				   = 0xff
 		}CMD;
 		byte payload[HM_PACKET_PAYLOAD_SIZE];
@@ -96,7 +100,17 @@ typedef union _AM_PACKET {
 	};		
 	struct { //INIT, PLACA->PC
 		unsigned :8;
-	};		
+	};
+        struct { //LISTI, PC->PLACA
+                unsigned :8;
+	};
+        struct { //LISTI, PLACA->PC
+                unsigned :8;
+                struct{
+                    byte handler;
+                    byte moduleType;
+                }LISTI_CMD_ITEM[MAX_HANDLERS];
+	};
 } AM_PACKET;
 
 

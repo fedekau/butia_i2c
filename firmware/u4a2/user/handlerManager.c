@@ -12,7 +12,6 @@
 #include "user/defines.h"
 #include "user/loaderModule.h"
 #include "io_cfg.h"             // I/O pin mapping
-#include "user/adminModule.h"
 #include "user/handlerManager.h"
 
 
@@ -138,12 +137,12 @@ byte newHandlerTableEntry(byte endPIn, rom near char* uTableDirection){
 	return ERROR;
 } 			
 
-byte newHandlerTableEntryPNP(byte endPIn, rom near char* uTableDirection, byte port){
-    if (epHandlerMap[port].ep.empty == 1) {
-        epHandlerMap[port].ep.endPoint = endPIn;
-        epHandlerMap[port].ep.empty = 0;
-        epHandlerMap[port].uTableDirection = uTableDirection;
-        return port;
+byte newHandlerTableEntryForcingHandler(byte endPIn, rom near char* uTableDirection, byte handler){
+    if (epHandlerMap[handler].ep.empty == 1) {
+        epHandlerMap[handler].ep.endPoint = endPIn;
+        epHandlerMap[handler].ep.empty = 0;
+        epHandlerMap[handler].uTableDirection = uTableDirection;
+        return handler;
     }else{
         return ERROR;
     }
