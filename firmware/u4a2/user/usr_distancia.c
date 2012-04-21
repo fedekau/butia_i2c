@@ -6,24 +6,23 @@
 /** I N C L U D E S **********************************************************/
 #include <p18cxxx.h>
 #include <usart.h>
-#include "system\typedefs.h"
-#include "system\usb\usb.h"
-#include "user\usr_distancia.h"
+#include "system/typedefs.h"
+#include "system/usb/usb.h"
+#include "user/usr_distancia.h"
 #include "io_cfg.h"              /* I/O pin mapping*/
-#include "user\handlerManager.h"
+#include "user/handlerManager.h"
 #include "dynamicPolling.h"
 #include "user/usb4butia.h"     /**/
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata 
 
-byte  usrDistHandler;	 /* Handler number asigned to the module*/
 byte* sendBufferUsrDist; /* buffer to send data*/
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
 void UserDistProcessIO(void);
 void UserDistInit(byte i);
-void UserDistReceived(byte*, byte, port_descriptor);
+void UserDistReceived(byte*, byte, byte);
 void UserDistRelease(byte i);
 void UserDistConfigure(void);
 
@@ -53,17 +52,14 @@ uTab userDistModuleTable = {&UserDistInit,&UserDistRelease,&UserDistConfigure,"d
  *
  * Note:            None
  *****************************************************************************/
-void UserDistInit(byte i){
-    port_descriptor port;
-    usrDistHandler = i;
+void UserDistInit(byte usrDistHandler){
     /* add my receive function to the handler module, to be called automatically
      * when the pc sends data to the user module */
     setHandlerReceiveFunction(usrDistHandler,&UserDistReceived);
     /* initialize the send buffer, used to send data to the PC */
     sendBufferUsrDist = getSharedBuffer(usrDistHandler);
     /* get port where sensor/actuator is connected and set to IN mode*/
-    port = board_ports[usrDistHandler];
-    port.change_port_direction(IN);
+    getPortDescriptor(usrDistHandler)->change_port_direction(IN);
 }/*end UserDistInit*/
 
 /******************************************************************************
@@ -126,9 +122,9 @@ void UserDistProcessIO(void){
  *
  * Note:            None
  *****************************************************************************/
-void UserDistRelease(byte i){
-    unsetHandlerReceiveBuffer(i);
-    unsetHandlerReceiveFunction(i);
+void UserDistRelease(byte usrDistHandler){
+    unsetHandlerReceiveBuffer(usrDistHandler);
+    unsetHandlerReceiveFunction(usrDistHandler);
 }/*end UserDistRelease*/
 
 /******************************************************************************
@@ -146,23 +142,25 @@ void UserDistRelease(byte i){
  *
  * Note:            None
  *****************************************************************************/
-void UserDistReceived(byte* recBuffPtr, byte len, port_descriptor port){
+void UserDistReceived(byte* recBuffPtr, byte len, byte handler){
     byte j;
     WORD data;
     byte userDistCounter = 0;
+
     switch(((DIST_DATA_PACKET*)recBuffPtr)->CMD)
     {
-        case GET_DISTANCE:
-            ((DIST_DATA_PACKET*)sendBufferUsrDist)->_byte[0] = ((DIST_DATA_PACKET*)recBuffPtr)->_byte[0];
-            ((DIST_DATA_PACKET*)sendBufferUsrDist)->_byte[1] = port.get_data_analog().v[1];
-            ((DIST_DATA_PACKET*)sendBufferUsrDist)->_byte[2] = port.get_data_analog().v[0];
-            userDistCounter=0x03;
-            break;
-
         case READ_VERSION:
             ((DIST_DATA_PACKET*)sendBufferUsrDist)->_byte[0] = ((DIST_DATA_PACKET*)recBuffPtr)->_byte[0];
             ((DIST_DATA_PACKET*)sendBufferUsrDist)->_byte[1] = DIST_MINOR_VERSION;
             ((DIST_DATA_PACKET*)sendBufferUsrDist)->_byte[2] = DIST_MAJOR_VERSION;
+            userDistCounter=0x03;
+            break;
+
+        case GET_DISTANCE:
+            ((DIST_DATA_PACKET*)sendBufferUsrDist)->_byte[0] = ((DIST_DATA_PACKET*)recBuffPtr)->_byte[0];
+            data = getPortDescriptor(handler)->get_data_analog();
+            ((DIST_DATA_PACKET*)sendBufferUsrDist)->_byte[1] = LSB(data);
+            ((DIST_DATA_PACKET*)sendBufferUsrDist)->_byte[2] = MSB(data);
             userDistCounter=0x03;
             break;
 
@@ -177,9 +175,9 @@ void UserDistReceived(byte* recBuffPtr, byte len, port_descriptor port){
     if(userDistCounter != 0)
     {
         j = 255;
-        while(mUSBGenTxIsBusy() && j-->0); /* pruebo un máximo de 255 veces */
+        while(mUSBGenTxIsBusy() && j-->0); /* pruebo un mÃ¡ximo de 255 veces */
         if(!mUSBGenTxIsBusy())
-            USBGenWrite2(usrDistHandler, userDistCounter);
+            USBGenWrite2(handler, userDistCounter);
     }/*end if*/
 }/*end UserDistReceived*/
 

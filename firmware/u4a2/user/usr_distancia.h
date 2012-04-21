@@ -25,8 +25,8 @@ typedef union DIST_DATA_PACKET
     {
         enum
         { 
-            GET_DISTANCE    = 0x00,
-            READ_VERSION    = 0xFE,
+            READ_VERSION    = 0x00,
+            GET_DISTANCE    = 0x01,
             RESET           = 0xFF  /*backward compatibility*/
         }CMD;
         byte len;

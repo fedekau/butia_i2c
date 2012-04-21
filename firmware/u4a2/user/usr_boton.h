@@ -22,8 +22,8 @@ typedef union BOTON_DATA_PACKET
     {
         enum
         { 
-            GET_PRESSED     = 0x00, /* boton status: NOT_PRESSED=0,PRESSED=1 */
-            READ_VERSION    = 0xFE,
+            READ_VERSION    = 0x00,
+            GET_PRESSED     = 0x01,
             RESET           = 0xFF  /*backward compatibility*/
         }CMD;
         byte len;

@@ -7,9 +7,9 @@
 #define USER_GRISES_H
 
 /** I N C L U D E S **********************************************************/
-#include "system\typedefs.h"
-#include "user\adminModule.h"
-#include "user\loaderModule.h"
+#include "system/typedefs.h"
+#include "user/adminModule.h"
+#include "user/loaderModule.h"
 
 /** D E F I N I T I O N S ****************************************************/
 
@@ -25,8 +25,8 @@ typedef union GRISES_DATA_PACKET
     {
         enum
         {
-            GET_VALUE           = 0x00,
-            READ_VERSION        = 0xFE,
+            READ_VERSION        = 0x00,
+            GET_ANA_VALUE       = 0x01,
             RESET		= 0xFF /*backward compatibility*/
         }CMD;
         byte len;

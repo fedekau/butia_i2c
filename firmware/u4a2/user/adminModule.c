@@ -129,7 +129,7 @@ void closePnP(byte handler){
 }
 
 
-void adminReceived(byte* recBuffPtr,byte len){
+void adminReceived(byte* recBuffPtr,byte len, byte admin_handler){
 	byte adminCounter;
 	byte endIn = nullEP, endOut = nullEP;
 	byte userTableSize = 0;

@@ -15,13 +15,12 @@
 /** V A R I A B L E S ********************************************************/
 #pragma udata 
 
-byte  usrBotonHandler;	 /* Handler number asigned to the module*/
 byte* sendBufferUsrBoton; /* buffer to send data*/
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
 void UserBotonProcessIO(void);
 void UserBotonInit(byte i);
-void UserBotonReceived(byte*, byte);
+void UserBotonReceived(byte*, byte, byte);
 void UserBotonRelease(byte i);
 void UserBotonConfigure(void);
 
@@ -51,16 +50,12 @@ uTab userBotonModuleTable = {&UserBotonInit,&UserBotonRelease,&UserBotonConfigur
  * Note:            None
  *****************************************************************************/
 
-void UserBotonInit(byte i){
-    port_descriptor port = board_ports[i];
-    BOOL res;
-    int j = 0;
-    usrBotonHandler = i;
+void UserBotonInit(byte handler){
     /* add my receive function to the handler module, to be called automatically when the pc sends data to the user module*/
-    setHandlerReceiveFunction(usrBotonHandler,&UserBotonReceived);
+    setHandlerReceiveFunction(handler,&UserBotonReceived);
     /* initialize the send buffer, used to send data to the PC*/
-    sendBufferUsrBoton = getSharedBuffer(usrBotonHandler);
-    port.change_port_direction(IN);
+    sendBufferUsrBoton = getSharedBuffer(handler);
+    getPortDescriptor(handler)->change_port_direction(IN);
 }/*end UserBotonInit*/
 
 /******************************************************************************
@@ -145,11 +140,12 @@ void UserBotonRelease(byte i){
  * Note:            None
  *****************************************************************************/
 
-void UserBotonReceived(byte* recBuffPtr, byte len, port_descriptor port){
+void UserBotonReceived(byte* recBuffPtr, byte len, byte handler){
     byte index;
     byte j;
     byte userBotonCounter = 0;
     byte boton_status = 0;
+
     switch(((BOTON_DATA_PACKET*)recBuffPtr)->CMD)
     {
         case READ_VERSION:
@@ -161,7 +157,7 @@ void UserBotonReceived(byte* recBuffPtr, byte len, port_descriptor port){
 
         case GET_PRESSED:
             ((BOTON_DATA_PACKET*)sendBufferUsrBoton)->_byte[0] = ((BOTON_DATA_PACKET*)recBuffPtr)->_byte[0];
-            ((BOTON_DATA_PACKET*)sendBufferUsrBoton)->_byte[1] = port.get_data_digital();
+            ((BOTON_DATA_PACKET*)sendBufferUsrBoton)->_byte[1] = getPortDescriptor(handler)->get_data_digital();
             userBotonCounter=0x02;
             break;
          
@@ -175,9 +171,9 @@ void UserBotonReceived(byte* recBuffPtr, byte len, port_descriptor port){
       if(userBotonCounter != 0)
       {
        j = 255;
-       while(mUSBGenTxIsBusy() && j-->0); /* pruebo un m·ximo de 255 veces */
+       while(mUSBGenTxIsBusy() && j-->0); /* pruebo un m√°ximo de 255 veces */
        if(!mUSBGenTxIsBusy())
-              USBGenWrite2(usrBotonHandler, userBotonCounter);
+              USBGenWrite2(handler, userBotonCounter);
       }/*end if */
 
 }/*end UserBotonReceived*/

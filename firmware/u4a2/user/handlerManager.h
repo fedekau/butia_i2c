@@ -68,7 +68,7 @@ void USBGenRead2(void);
 void USBGenWrite2(byte handler /*,byte *buffer*/, byte len);
 void initHandlerBuffers(void);
 void setHandlerReceiveBuffer(byte handler, byte *rb);
-void setHandlerReceiveFunction(byte handler,void (*pf) (byte* recBuffPtr,byte,port_descriptor));
+void setHandlerReceiveFunction(byte handler,void (*pf) (byte* recBuffPtr,byte, byte));
 byte newHandlerTableEntry(byte endPIn, rom near char* uTableDirection);
 BOOL existsTableEntry(rom near char* uTableDirection);
 void initHandlerTable();

@@ -6,24 +6,23 @@
 /** I N C L U D E S **********************************************************/
 #include <p18cxxx.h>
 #include <usart.h>
-#include "system\typedefs.h"
-#include "system\usb\usb.h"
-#include "user\usr_grises.h"
+#include "system/typedefs.h"
+#include "system/usb/usb.h"
+#include "user/usr_grises.h"
 #include "io_cfg.h"              /* I/O pin mapping*/
-#include "user\handlerManager.h"
+#include "user/handlerManager.h"
 #include "dynamicPolling.h"
 #include "user/usb4butia.h"     /**/
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata 
 
-byte  usrGrisesHandler;	 /* Handler number asigned to the module*/
 byte* sendBufferUsrGrises; /* buffer to send data*/
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
 void UserGrisesProcessIO(void);
 void UserGrisesInit(byte i);
-void UserGrisesReceived(byte*, byte, port_descriptor);
+void UserGrisesReceived(byte*, byte, byte);
 void UserGrisesRelease(byte i);
 void UserGrisesConfigure(void);
 
@@ -53,17 +52,14 @@ uTab userGrisesModuleTable = {&UserGrisesInit,&UserGrisesRelease,&UserGrisesConf
  *
  * Note:            None
  *****************************************************************************/
-void UserGrisesInit(byte i){
-    port_descriptor port;
-    usrGrisesHandler = i;
+void UserGrisesInit(byte usrGrisesHandler){
     /* add my receive function to the handler module, to be called automatically
      * when the pc sends data to the user module */
     setHandlerReceiveFunction(usrGrisesHandler,&UserGrisesReceived);
     /* initialize the send buffer, used to send data to the PC */
     sendBufferUsrGrises = getSharedBuffer(usrGrisesHandler);
     /* get port where sensor/actuator is connected and set to IN/OUT mode*/
-    port = board_ports[usrGrisesHandler];
-    port.change_port_direction(IN);
+    getPortDescriptor(usrGrisesHandler)->change_port_direction(IN);
 }/*end UserGrisesInit*/
 
 /******************************************************************************
@@ -146,24 +142,24 @@ void UserGrisesRelease(byte i){
  *
  * Note:            None
  *****************************************************************************/
-void UserGrisesReceived(byte* recBuffPtr, byte len, port_descriptor port){
+void UserGrisesReceived(byte* recBuffPtr, byte len, byte handler){
     byte j;
     WORD data;
-    char mens[9] = "User Grises is alive";
     byte userGrisesCounter = 0;
     switch(((GRISES_DATA_PACKET*)recBuffPtr)->CMD)
     {
-        case GET_VALUE:
-            ((GRISES_DATA_PACKET*)sendBufferUsrDist)->_byte[0] = ((GRISES_DATA_PACKET*)recBuffPtr)->_byte[0];
-            ((GRISES_DATA_PACKET*)sendBufferUsrGrises)->_byte[1] = port.get_data_analog().v[1];
-            ((GRISES_DATA_PACKET*)sendBufferUsrGrises)->_byte[2] = port.get_data_analog().v[0];
-            userGrisesCounter=0x03;
-            break;
-
         case READ_VERSION:
             ((GRISES_DATA_PACKET*)sendBufferUsrGrises)->_byte[0] = ((GRISES_DATA_PACKET*)recBuffPtr)->_byte[0];
             ((GRISES_DATA_PACKET*)sendBufferUsrGrises)->_byte[1] = GRISES_MINOR_VERSION;
             ((GRISES_DATA_PACKET*)sendBufferUsrGrises)->_byte[2] = GRISES_MAJOR_VERSION;
+            userGrisesCounter=0x03;
+            break;
+
+        case GET_ANA_VALUE:
+            ((GRISES_DATA_PACKET*)sendBufferUsrGrises)->_byte[0] = ((GRISES_DATA_PACKET*)recBuffPtr)->_byte[0];
+            data = getPortDescriptor(handler)->get_data_analog();
+            ((GRISES_DATA_PACKET*)sendBufferUsrGrises)->_byte[1] = LSB(data);
+            ((GRISES_DATA_PACKET*)sendBufferUsrGrises)->_byte[2] = MSB(data);
             userGrisesCounter=0x03;
             break;
 
@@ -178,9 +174,9 @@ void UserGrisesReceived(byte* recBuffPtr, byte len, port_descriptor port){
     if(userGrisesCounter != 0)
     {
         j = 255;
-        while(mUSBGenTxIsBusy() && j-->0); /* pruebo un máximo de 255 veces */
+        while(mUSBGenTxIsBusy() && j-->0); /* pruebo un mÃ¡ximo de 255 veces */
         if(!mUSBGenTxIsBusy())
-            USBGenWrite2(usrGrisesHandler, userGrisesCounter);
+            USBGenWrite2(handler, userGrisesCounter);
     }/*end if*/
 }/*end UserGrisesReceived*/
 
