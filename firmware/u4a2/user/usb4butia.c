@@ -84,12 +84,12 @@ WORD getDetectionPinValue6(void);
 #pragma romdata
 const port_descriptor board_ports[MAX_PORTS]=
     {
-        { getDataD1 , getDataA1 , setData1, getDetectionPinValue1 , changeDirectionPort1 },
-        { getDataD2 , getDataA2 , setData2, getDetectionPinValue2 , changeDirectionPort2 },
-        { getDataD3 , getDataA3 , setData3, getDetectionPinValue3 , changeDirectionPort3 },
-        { getDataD4 , getDataA4 , setData4, getDetectionPinValue4 , changeDirectionPort4 },
-        { getDataD5 , getDataA5 , setData5, getDetectionPinValue5 , changeDirectionPort5 },
-        { getDataD6 , getDataA6 , setData6, getDetectionPinValue6 , changeDirectionPort6 }
+        { &getDataD1 , &getDataA1 , &setData1, &getDetectionPinValue1 , &changeDirectionPort1 },
+        { &getDataD2 , &getDataA2 , &setData2, &getDetectionPinValue2 , &changeDirectionPort2 },
+        { &getDataD3 , &getDataA3 , &setData3, &getDetectionPinValue3 , &changeDirectionPort3 },
+        { &getDataD4 , &getDataA4 , &setData4, &getDetectionPinValue4 , &changeDirectionPort4 },
+        { &getDataD5 , &getDataA5 , &setData5, &getDetectionPinValue5 , &changeDirectionPort5 },
+        { &getDataD6 , &getDataA6 , &setData6, &getDetectionPinValue6 , &changeDirectionPort6 }
     };
 
 
