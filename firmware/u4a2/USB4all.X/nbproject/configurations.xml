@@ -84,8 +84,7 @@
         <makeCustomizationPostStep></makeCustomizationPostStep>
         <makeCustomizationAlternativeFileToLoadEnabled>false</makeCustomizationAlternativeFileToLoadEnabled>
         <makeCustomizationAlternativeFileToLoad></makeCustomizationAlternativeFileToLoad>
-        <makeCustomizationUseOfUserID>makeCustomizationUseOfUserID</makeCustomizationUseOfUserID>
-        <makeCustomizationUserID>makeCustomizationUserID</makeCustomizationUserID>
+        <makeCustomizationPutChecksumInUserID>false</makeCustomizationPutChecksumInUserID>
       </makeCustomizationType>
       <C18>
         <property key="storage-class" value="sca"/>
