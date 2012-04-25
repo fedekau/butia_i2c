@@ -437,6 +437,17 @@ WORD getDetectionPinValue6(void){
 
 const void initPorts(void){
     byte i;
+
+    /*Confiugures things for read anaogic*/
+    ADCON1bits.VCFG = 0; /*Voltage reference higth 5v = Vss and low 0v = Vdd*/
+    ADCON1bits.PCFG = 0x00;
+
+    /*ADCON register configuration*/
+    ADCON2bits.ADFM = 0x00; /*Left justified*/
+    ADCON2bits.ACQT = 0x07; /*Acquisition Time Select*/
+    ADCON2bits.ADCS = 0x04; /*Acquisition Time Select Fosc/4*/
+
+
     for(i = 0; i < MAX_PORTS; i++)
         board_ports[i].change_port_direction(_IN);
 }
