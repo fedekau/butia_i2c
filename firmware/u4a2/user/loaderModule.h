@@ -13,6 +13,7 @@
 #define DIRECTION_TABLE 0x33AB
 #define MEM_VACIO 0xFFFF
 #define TAM_U_TAB 14             
+#define NULLTYPE 0xFF
 
 /** S T R U C T U R E S ******************************************************/
 
