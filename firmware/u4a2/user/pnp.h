@@ -8,25 +8,29 @@
 
 
 /*Sensors*/
-#define R_BOTON 700
-#define R_GRISES 700
-#define R_DIST 700
-#define R_LUZ 700
-#define R_ACCELEROMETER 700
+#define R_BOTON_MIN 922
+#define R_BOTON_MAX 939
+#define R_GRISES_MIN 878
+#define R_GRISES_MAX 901
+#define R_DIST_MIN 824
+#define R_DIST_MAX 854
+
+#define R_LUZ 9999
+#define R_ACCELEROMETER 9999
 #define R_PRECION
-#define R_TEMPERATURE 700
-#define R_MAGNETIC 700
-#define R_MICROPHONE 700
-#define R_TILT 700
-#define R_VIBRATION 700
-#define R_POTENTIOMETER 700
-#define R_CAMERA 700
-#define R_MOTION 700
+#define R_TEMPERATURE 9999
+#define R_MAGNETIC 9999
+#define R_MICROPHONE 9999
+#define R_TILT 9999
+#define R_VIBRATION 9999
+#define R_POTENTIOMETER 9999
+#define R_CAMERA 9999
+#define R_MOTION 9999
 /*Actuators*/
-#define R_DCMOTOR 700
-#define R_RELAY 700
-#define R_LED 700
-#define R_BUZZER 700
+#define R_DCMOTOR 9999
+#define R_RELAY 9999
+#define R_LED 9999
+#define R_BUZZER 9999
 
 
 #define MAX_DEVICES 9 /*Max cant of senssor/actuator type*/
@@ -38,7 +42,8 @@
 
 typedef struct _device_resistance {
     char name[8];/*name of the string*/
-    WORD resValue;/*5v = 1023*/
+    WORD resValue_min;/*5v = 1023*/
+    WORD resValue_max;/*5v = 1023*/
 }  device_resistance;
 
 typedef struct _port_device_detected {
