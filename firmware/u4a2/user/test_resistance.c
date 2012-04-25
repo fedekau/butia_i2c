@@ -155,8 +155,8 @@ void UserTestResReceived(byte* recBuffPtr, byte len, byte handler){
         case GET_RES:
               ((TEST_RESISTANCE_DATA_PACKET*)sendBufferUsrTestRes)->_byte[0] = ((TEST_RESISTANCE_DATA_PACKET*)recBuffPtr)->_byte[0];
               aux = port.get_val_detection_pin();
-              ((TEST_RESISTANCE_DATA_PACKET*)sendBufferUsrTestRes)->_byte[1] = aux.byte1;
-              ((TEST_RESISTANCE_DATA_PACKET*)sendBufferUsrTestRes)->_byte[1] = aux.byte0;
+              ((TEST_RESISTANCE_DATA_PACKET*)sendBufferUsrTestRes)->_byte[1] = LSB(aux);
+              ((TEST_RESISTANCE_DATA_PACKET*)sendBufferUsrTestRes)->_byte[2] = MSB(aux);
 
               userTestResCounter = 0x03;
               break;       
