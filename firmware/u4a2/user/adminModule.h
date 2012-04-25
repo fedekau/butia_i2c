@@ -52,7 +52,8 @@ typedef union _AM_PACKET {
 			INIT				   = 0x07,
 			CONFIGURE			   = 0x08,
 			BOOT				   = 0x09,
-                        LISTI                              = 0x0A,
+                        GET_HANDLER_SIZE                   = 0x0A,
+                        GET_HANDLER_TYPE                   = 0x0B,
 			RESET				   = 0xff
 		}CMD;
 		byte payload[HM_PACKET_PAYLOAD_SIZE];
@@ -101,15 +102,20 @@ typedef union _AM_PACKET {
 	struct { //INIT, PLACA->PC
 		unsigned :8;
 	};
-        struct { //LISTI, PC->PLACA
+        struct { //GET_HANDLER_SIZE, PC->PLACA
                 unsigned :8;
 	};
-        struct { //LISTI, PLACA->PC
-                unsigned :8;
-                struct{
-                    byte handler;
-                    byte moduleType;
-                }LISTI_CMD_ITEM[MAX_HANDLERS];
+	struct { //GET_HANDLER_SIZE, PLACA->PC
+		unsigned :8;
+		byte size;
+	};
+	struct { //GET_HANDLER_TYPE, PC->PLACA
+		unsigned :8;
+		byte handlerNumber;
+	};
+	struct { //GET_HANDLER_TYPE, PLACA->PC
+		unsigned :8;
+		byte type;
 	};
 } AM_PACKET;
 

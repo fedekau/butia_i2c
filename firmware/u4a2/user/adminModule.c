@@ -189,19 +189,22 @@ void adminReceived(byte* recBuffPtr,byte len, byte admin_handler){
 		adminCounter = 0x01; //;)
 	break;
 
-        case LISTI:
-            i=0;
-            j=0;
-            ((AM_PACKET*)sendBufferAdmin)->CMD = LISTI;
-            while (i<MAX_HANDLERS){
-                    if (epHandlerMap[i].ep.empty == 0) {
-                            ((AM_PACKET*)sendBufferAdmin)->LISTI_CMD_ITEM[j].handler = i;
-                            ((AM_PACKET*)sendBufferAdmin)->LISTI_CMD_ITEM[j].moduleType = getModuleType(epHandlerMap[i].uTableDirection);
-                            j++;
-                    }
-                    i++;
-            }
-            adminCounter = 1 +  (2 * j) ; //1 byte for CMD, 2 * j for answer
+        case GET_HANDLER_SIZE:
+            ((AM_PACKET*)sendBufferAdmin)->CMD  = GET_HANDLER_SIZE;
+            ((AM_PACKET*)sendBufferAdmin)->size = MAX_HANDLERS;
+            adminCounter=0x02;
+        break;
+
+        case GET_HANDLER_TYPE:
+            ((AM_PACKET*)sendBufferAdmin)->CMD  = GET_HANDLER_TYPE;
+            handler = ((AM_PACKET*)recBuffPtr)->size;
+            handler = handler % MAX_HANDLERS; //sanity check
+            if (epHandlerMap[handler].ep.empty == 0) {
+                ((AM_PACKET*)sendBufferAdmin)->type = getModuleType(epHandlerMap[handler].uTableDirection);
+            } else {
+                ((AM_PACKET*)sendBufferAdmin)->type = NULLTYPE;
+            };
+            adminCounter=0x02;
         break;
 
 	case RESET:
@@ -215,7 +218,7 @@ void adminReceived(byte* recBuffPtr,byte len, byte admin_handler){
 	}//end switch()
       	if(adminCounter != 0){
 		j = 255;
-		while(mUSBGenTxIsBusy() && j-->0); // pruebo un mÃ¡ximo de 255 veces
+		while(mUSBGenTxIsBusy() && j-->0); // pruebo un máximo de 255 veces
 		if(!mUSBGenTxIsBusy())
 			USBGenWrite2(adminHandler, adminCounter);
 	}//end if
