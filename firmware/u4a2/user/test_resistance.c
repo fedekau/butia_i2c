@@ -67,6 +67,16 @@ void UserTestResInit(byte i) {
     //TODO return res value 
     //initT0Service();
     // se inicializa en el main mInitTestRes(); /*Inicializo el puerto del TestRes*/
+
+    /*Confiugures things for read anaogic*/
+    ADCON1bits.VCFG = 0; /*Voltage reference higth 5v = Vss and low 0v = Vdd*/
+    ADCON1bits.PCFG = 0x00;
+
+    /*ADCON register configuration*/
+    ADCON2bits.ADFM = 0x01; /*Left justified*/
+    ADCON2bits.ACQT = 0x07; /*Acquisition Time Select*/
+    ADCON2bits.ADCS = 0x04; /*Acquisition Time Select Fosc/4*/
+
 }//end UserLedAmarilloInit
 
 /******************************************************************************

@@ -4,10 +4,10 @@
 
 /** VARIABLES INITIALIZED, CONST ROM **/
 rom device_resistance table_device_id_resistance[4] = {
-    { "boton"  , R_BOTON  },
-    { "grises" , R_GRISES },
-    { "dist"   , R_DIST   },
-    { "TODO"   , R_DIST   }
+    { "boton"  , R_BOTON_MIN, R_BOTON_MAX  },
+    { "grises" , R_GRISES_MIN, R_GRISES_MAX},
+    { "dist"   , R_DIST_MIN, R_DIST_MAX    },
+    { "TODO"   , 0, 0                      }
 };
 
 /** VARIABLES UNINITIALIZED, RAM **/
@@ -25,8 +25,8 @@ void initTableDetectedDevice(void){
 byte get_device_type(WORD resistValue){
 
     byte i = 0;
-    while(!((resistValue.v[0]== table_device_id_resistance[i].resValue.v[0]) && (resistValue.v[1]== table_device_id_resistance[i].resValue.v[1]) ) && (i < MAX_DEVICES)) i++ ;/*Need FIX when when range be define , need it compare to a range*/
-
+    /*Search the read resistance valeun in resistance range of devices defined*/
+    while(!((table_device_id_resistance[i].resValue_max._word >= resistValue._word) && (resistValue._word >=  table_device_id_resistance[i].resValue_min._word)) && i++<MAX_DEVICES);
     return i; /*if i = MAX_DEVICES that mean error happend*/
 }
 
