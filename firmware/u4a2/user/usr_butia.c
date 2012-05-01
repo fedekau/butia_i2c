@@ -9,7 +9,7 @@
 #include "user/usr_butia.h"
 #include "user/handlerManager.h"
 #include "dynamicPolling.h"                              
-
+#include "ax12.h"
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata 
@@ -149,10 +149,13 @@ void UserButiaRelease(byte i){
  *****************************************************************************/
 
 void UserButiaReceived(byte* recBuffPtr, byte len){
-      byte index;
       char mens[9] = "User Skeleton is alive";
       byte j;	
       byte UserButiaCounter = 0;
+      byte id_motor, i;
+      byte data [2];
+      //int *id, *err, *data_received;
+      int id, err, data_received;
       switch(((BUTIA_DATA_PACKET*)recBuffPtr)->CMD)
       {
        case VERSION:
@@ -164,7 +167,16 @@ void UserButiaReceived(byte* recBuffPtr, byte len){
         case GET_VOLT:
                 //dataPacket._byte[1] is len
                 ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[0] = ((BUTIA_DATA_PACKET*)recBuffPtr)->_byte[0];
-                ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[1] = 0x0A;
+
+                id_motor = 0x01;//idmotorRuedas();
+                data[0] = 0x00;
+                data[1] = 0x01; /*length of data to read*/
+                ax12SendPacket (id_motor, 0x00, PING, data);
+                j= 0xFF;
+                while (j--);
+                i = ax12ReadPacket(&id, &err, &data_received);
+
+                ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[1] = i;
                 UserButiaCounter=0x02;
         break;
         case RESET:
