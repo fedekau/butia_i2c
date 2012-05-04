@@ -155,7 +155,7 @@ void UserButiaReceived(byte* recBuffPtr, byte len){
       byte id_motor, i;
       byte data [2];
       //int *id, *err, *data_received;
-      int id, err, data_received;
+      int id, err, data_received = 0;
       switch(((BUTIA_DATA_PACKET*)recBuffPtr)->CMD)
       {
        case VERSION:
@@ -169,11 +169,9 @@ void UserButiaReceived(byte* recBuffPtr, byte len){
                 ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[0] = ((BUTIA_DATA_PACKET*)recBuffPtr)->_byte[0];
 
                 id_motor = 0x01;//idmotorRuedas();
-                data[0] = READ_DATA;
+                data[0] = PRESENT_VOLTAGE;
                 data[1] = 0x01; /*length of data to read*/
-                ax12SendPacket (id_motor, 0x02, PRESENT_VOLTAGE, data);
-                j= 0xFF;
-                while (j--);
+                ax12SendPacket (id_motor, 0x02, READ_DATA , data);
                 i = ax12ReadPacket(&id, &err, &data_received);
                 ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[1] = data_received;
                 UserButiaCounter=0x02;

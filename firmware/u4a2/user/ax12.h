@@ -139,7 +139,7 @@
 
     //Funciones de control del Ax-12 
     byte ping ();
-    byte reset ();
+    byte reset (byte id);
     byte readData (byte id, byte regstart, byte reglength);
     byte writeData (byte id,byte regstart, byte reglength, byte *values);
     byte action ();
