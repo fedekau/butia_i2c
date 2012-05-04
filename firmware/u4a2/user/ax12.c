@@ -36,7 +36,7 @@
 
 #define FF 0xff
 #define MAX_MOTOR_ID 0Xfe
-#define TIMEOUT 15000
+#define TIMEOUT 45500
 #pragma udata
 /*****************************************************************************/ 
 /********************************   Variables   ******************************/
@@ -215,19 +215,28 @@ void ax12SendPacket (byte id, byte datalength, byte instruction, byte *data){
 }
 
 /***************************/
-byte readSerial(void){
+/*byte readSerial(void){
     int timeout = 0;
-    while((!PIR1bits.RCIF)) timeout++;                      //Mientras no este pronto el mensaje espero hasta recibirlo
+    byte prescaler = 0;
+    while((!PIR1bits.RCIF) && (timeout < TIMEOUT)){
+        timeout++;                      //Mientras no este pronto el mensaje espero hasta recibirlo
+    }
+    if (timeout >= TIMEOUT){
+        return -1;
+    }
+    else{
         PIR1bits.RCIF=0;
-    ///if (timeout >= TIMEOUT)
-    ///    return -1;
-    //else
         return RCREG;  // Retorno el mensaje recibido
-    
-}
+    }
+}*/
 
+byte readSerial(void){
+    while(!PIR1bits.RCIF);
+    PIR1bits.RCIF=0;
+    return RCREG;  // Retorno el mensaje recibido
+}
 /***************************/
-                                 			    // Retorna el c�digo
+     
 byte ax12ReadPacket(int* status_id, int* status_error, int* status_data){          
 
     byte error, status_length;
@@ -252,7 +261,6 @@ byte ax12ReadPacket(int* status_id, int* status_error, int* status_data){
                 *status_id = readSerial();
                 //checksum += *status_id;
                 if (*status_id <= MAX_MOTOR_ID)
-                //if (*status_id <= 0xFF)
                     estado++;
                 else
                     error++;
@@ -284,21 +292,20 @@ byte ax12ReadPacket(int* status_id, int* status_error, int* status_data){
   //checksum = checksum^0xff ;//~checksum;
   //if (checksum != ax_rx_buffer[ax_rx_Pointer-1]) error+=4;              // Test checksum
   //  if (~checksum !=checksum^0xff) error+=4;              // Test checksum
-///    if (error != 0)  {                           //Falta verificar el checksum
-///     *status_id = -1;
-///     *status_error = -1;
-///     *status_data = -1;
-///    }
-///    else{
+   if (error != 0)  {                           //Falta verificar el checksum
+        *status_id = -1;
+        *status_error = -1;
+        *status_data = -1;
+    }
+    else{
         *status_error = ax_rx_buffer[0];
         switch (status_length) { //TODO: Se esta asumiendo que no vienen mas de 2 parametros ...
                 case 3: *status_data = ax_rx_buffer[1]; break;
                 case 4: *status_data = makeInt (ax_rx_buffer[1], ax_rx_buffer[2]); break;
-                ///default: *status_data = -1;                                         //No hay datos
-///        }
+                default: *status_data = -1;   //No hay datos
+        }
     }
-    //return (1-error); // 1 mean all is ok
-    return status_length;
+    return (1-error); // 1 mean all is ok
 }
 
 /*****************************************************************************/ 
