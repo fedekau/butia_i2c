@@ -172,23 +172,25 @@ void initHandlerTable() {
 }
 
 void initHandlerManager(void){
-    char adminmodule[8];  //FIXME!!!
+    char modulename[8];  //FIXME!!!
     //initHandlerBuffers();
     initHandlerTable();      //Initialize table index(handler)=>endpoint
 
     /* Staticaly Initialized modules */
 
     /* Admin module; Handler=0 */
-    adminmodule[0]='a'; adminmodule[1]='d'; adminmodule[2]='m'; adminmodule[3]='i';
-    adminmodule[4]='n'; adminmodule[5]=0  ; adminmodule[6]=0  ; adminmodule[7]=0  ;
+    modulename[0]='a'; modulename[1]='d'; modulename[2]='m'; modulename[3]='i';
+    modulename[4]='n'; modulename[5]=0  ; modulename[6]=0  ; modulename[7]=0  ;
     epHandlerMap[0].ep = getAdminEndpoint(); // Admin endpoint
-    epHandlerMap[0].uTableDirection = getUserTableDirection(adminmodule); // ModuleType=0;
+    epHandlerMap[0].uTableDirection = getUserTableDirection(modulename); // ModuleType=0;
     adminModuleInit(0);
 
     /* PNP module ; Handler=7 */
-    // device_type_module_name_map_popullate();
-    // registerT0event(PNP_DETECTION_TIME, &hotplug_pnp);
-    // pnpModuleInit(7); //Internaly initialize handlers 1..6
+    modulename[0]='p'; modulename[1]='n'; modulename[2]='p'; modulename[3]=0;
+    modulename[4]=0; modulename[5]=0  ; modulename[6]=0  ; modulename[7]=0  ;
+    epHandlerMap[7].ep = getPnPEndpoint();
+    epHandlerMap[7].uTableDirection = getUserTableDirection(modulename);
+    PNPInit(7);
 }
 
 respType removeHandlerTableEntry(byte handler){
