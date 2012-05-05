@@ -4,6 +4,9 @@
 
 #include "typedefs.h"
 #include "user/usb4butia.h"
+#include "system/typedefs.h"
+#include "user/adminModule.h"
+#include "user/loaderModule.h"
 /*******************************************************************************/
 
 
@@ -55,6 +58,48 @@ extern byte detected_device_type_id[];
 
 /*Remember to change the old maping for that*/
 extern rom device_resistance table_device_id_resistance[];
+
+#define PNP_MINOR_VERSION 0xff //FIXME
+#define PNP_MAJOR_VERSION 0xff //FIXME
+
+
+typedef union PNP_PACKET
+{
+    byte _byte[USBGEN_EP_SIZE];  //For byte access
+    word _word[USBGEN_EP_SIZE/2];//For word access(USBGEN_EP_SIZE msut be even)
+    struct
+    {
+        enum
+        {
+            READ_VERSION    = 0x00,
+            GET_RES         = 0x01
+        } CMD;
+        byte len;
+    };
+    struct
+    {
+        unsigned :8;
+        byte ID;
+    };
+    struct
+    {
+        unsigned :8;
+        byte higth;
+        byte low;
+    };
+    struct
+    {
+        unsigned :8;
+        word word_data;
+    };
+} PNP_DATA_PACKET;
+
+
+/** FUNCTIONS ****/
+void PNPInit(byte handler);
+void hotplug_pnp(void);
+void openPnP(byte moduleId[8], byte handler);
+
 
 
 #endif //PNP__H

@@ -10,7 +10,7 @@
 #include <delays.h>
 #include "system/typedefs.h"
 #include "system/usb/usb.h"
-#include "user/test_resistance.h"
+#include "user/port.h"
 #include "io_cfg.h"              // I/O pin mapping
 #include "user/handlerManager.h"
 #include "dynamicPolling.h"   
@@ -20,19 +20,19 @@
 /** V A R I A B L E S ********************************************************/
 #pragma udata 
 
-byte  usrTestResHandler;     // Handler number asigned to the module
-byte* sendBufferUsrTestRes; // buffer to send data
+
+byte* sendBufferPort; // buffer to send data
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void UserTestResProcessIO(void);
-void UserTestResInit(byte i);
-void UserTestResReceived(byte*, byte, byte);
-void UserTestResRelease(byte i);
-void UserTestResConfigure(void);
+void PortProcessIO(void);
+void PortInit(byte i);
+void PortReceived(byte*, byte, byte);
+void PortRelease(byte i);
+void PortConfigure(void);
 
 // Table used by te framework to get a fixed reference point to the user module functions defined by the framework 
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
-uTab userTestResModuleTable = {&UserTestResInit,&UserTestResRelease,&UserTestResConfigure,"testres"}; //modName must be less or equal 8 characters
+uTab PortModuleTable = {&PortInit,&PortRelease,&PortConfigure,"port"}; //modName must be less or equal 8 characters
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
@@ -55,32 +55,18 @@ uTab userTestResModuleTable = {&UserTestResInit,&UserTestResRelease,&UserTestRes
  * Note:            None
  *****************************************************************************/
 
-void UserTestResInit(byte i) {
-    BOOL res;
-    usrTestResHandler = i;
+void PortInit(byte i) { 
     // add my receive function to the handler module, to be called automatically when the pc sends data to the user module
-    setHandlerReceiveFunction(usrTestResHandler,&UserTestResReceived);
+    setHandlerReceiveFunction(i,&PortReceived);
     // add my receive pooling function to the dynamic pooling module, to be called periodically 
-    /* andres res = addPollingFunction(&UserTestResProcessIO);*/
+    /* andres res = addPollingFunction(&PortProcessIO);*/
     // initialize the send buffer, used to send data to the PC
-    sendBufferUsrTestRes = getSharedBuffer(usrTestResHandler);
-    //TODO return res value 
-    //initT0Service();
-    // se inicializa en el main mInitTestRes(); /*Inicializo el puerto del TestRes*/
-
-    /*Confiugures things for read anaogic*/
-    ADCON1bits.VCFG = 0; /*Voltage reference higth 5v = Vss and low 0v = Vdd*/
-    ADCON1bits.PCFG = 0x00;
-
-    /*ADCON register configuration*/
-    ADCON2bits.ADFM = 0x01; /*Left justified*/
-    ADCON2bits.ACQT = 0x07; /*Acquisition Time Select*/
-    ADCON2bits.ADCS = 0x04; /*Acquisition Time Select Fosc/4*/
+    sendBufferPort = getSharedBuffer(i);
 
 }//end UserLedAmarilloInit
 
 /******************************************************************************
-/* Function:        UserTestResConfigure(void)
+/* Function:        PortConfigure(void)
  *
  * PreCondition:    None
  *
@@ -95,16 +81,16 @@ void UserTestResInit(byte i) {
  *
  * Note:            None
  *****************************************************************************/
-void UserTestResConfigure(void){
+void PortConfigure(void){
 // Do the configuration
 }
 
-void UserTestResProcessIO(void){
+void PortProcessIO(void){
 
 }//end ProcessIO
 
 /******************************************************************************
- * Function:        UserTestResRelease(byte i)
+ * Function:        PortRelease(byte i)
  *
  * PreCondition:    None
  *
@@ -120,15 +106,15 @@ void UserTestResProcessIO(void){
  * Note:            None
  *****************************************************************************/
 
-void UserTestResRelease(byte i) {
+void PortRelease(byte i) {
     unsetHandlerReceiveBuffer(i);
     unsetHandlerReceiveFunction(i); 
-    removePoolingFunction(&UserTestResProcessIO);
+    removePoolingFunction(&PortProcessIO);
 }
 
 
 /******************************************************************************
- * Function:        UserTestResReceived(byte* recBuffPtr, byte len)
+ * Function:        PortReceived(byte* recBuffPtr, byte len)
  *
  * PreCondition:    None
  *
@@ -143,44 +129,44 @@ void UserTestResRelease(byte i) {
  * Note:            None
  *****************************************************************************/
 
-void UserTestResReceived(byte* recBuffPtr, byte len, byte handler){
+void PortReceived(byte* recBuffPtr, byte len, byte handler){
       byte index;
       byte j;  
-      byte userTestResCounter = 0;
+      byte PortCounter = 0;
       byte tiempo;
       WORD aux;
       port_descriptor port;
       port = board_ports[0]; //it's harcode to port 1
 
-      switch(((TEST_RESISTANCE_DATA_PACKET*)recBuffPtr)->CMD){
+      switch(((PORT_DATA_PACKET*)recBuffPtr)->CMD){
         case READ_VERSION:
               //dataPacket._byte[1] is len
-              ((TEST_RESISTANCE_DATA_PACKET*)sendBufferUsrTestRes)->_byte[0] = ((TEST_RESISTANCE_DATA_PACKET*)recBuffPtr)->_byte[0];
-              ((TEST_RESISTANCE_DATA_PACKET*)sendBufferUsrTestRes)->_byte[1] = ((TEST_RESISTANCE_DATA_PACKET*)recBuffPtr)->_byte[1];
-              ((TEST_RESISTANCE_DATA_PACKET*)sendBufferUsrTestRes)->_byte[2] = TEST_RESISTANCE_MINOR_VERSION;
-              ((TEST_RESISTANCE_DATA_PACKET*)sendBufferUsrTestRes)->_byte[3] = TEST_RESISTANCE_MAJOR_VERSION;
-              userTestResCounter = 0x04;
+              ((PORT_DATA_PACKET*)sendBufferPort)->_byte[0] = ((PORT_DATA_PACKET*)recBuffPtr)->_byte[0];
+              ((PORT_DATA_PACKET*)sendBufferPort)->_byte[1] = ((PORT_DATA_PACKET*)recBuffPtr)->_byte[1];
+              ((PORT_DATA_PACKET*)sendBufferPort)->_byte[2] = PORT_MINOR_VERSION;
+              ((PORT_DATA_PACKET*)sendBufferPort)->_byte[3] = PORT_MAJOR_VERSION;
+              PortCounter = 0x04;
               break;  
               
         case GET_RES:
-              ((TEST_RESISTANCE_DATA_PACKET*)sendBufferUsrTestRes)->_byte[0] = ((TEST_RESISTANCE_DATA_PACKET*)recBuffPtr)->_byte[0];
+              ((PORT_DATA_PACKET*)sendBufferPort)->_byte[0] = ((PORT_DATA_PACKET*)recBuffPtr)->_byte[0];
               aux = port.get_val_detection_pin();
-              ((TEST_RESISTANCE_DATA_PACKET*)sendBufferUsrTestRes)->_byte[1] = LSB(aux);
-              ((TEST_RESISTANCE_DATA_PACKET*)sendBufferUsrTestRes)->_byte[2] = MSB(aux);
+              ((PORT_DATA_PACKET*)sendBufferPort)->_byte[1] = LSB(aux);
+              ((PORT_DATA_PACKET*)sendBufferPort)->_byte[2] = MSB(aux);
 
-              userTestResCounter = 0x03;
+              PortCounter = 0x03;
               break;       
         
      
          default:
               break;
       }//end switch(s)
-      if(userTestResCounter != 0){
+      if(PortCounter != 0){
             j = 255;
             while(mUSBGenTxIsBusy() && j-->0); // pruebo un máximo de 255 veces
                 if(!mUSBGenTxIsBusy())
-                    USBGenWrite2(usrTestResHandler, userTestResCounter);
+                    USBGenWrite2(handler, PortCounter);
       }//end if            
-}//end UserTestResReceived
+}//end PortReceived
 
 /** EOF usr_TestRes.c ***************************************************************/

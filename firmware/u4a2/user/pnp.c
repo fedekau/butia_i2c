@@ -18,21 +18,21 @@ byte* sendBufferPNP; // buffer to send data
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
 void PNPProcessIO(void);
 void PNPInit(byte i);
-void PNPReceived(byte*, byte);
+void PNPReceived(byte*, byte, byte);
 void PNPRelease(byte i);
 void PNPConfigure(void);
 
 // Table used by te framework to get a fixed reference point to the user module functions defined by the framework
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
-uTab userPNPModuleTable = {&PNPInit,&PNPRelease,&PNPConfigure,pnp"}; //modName must be less or equal 8 characters
+uTab PNPModuleTable = {&PNPInit,&PNPRelease,&PNPConfigure,"pnp"}; //modName must be less or equal 8 characters
 #pragma code
 
 
 /** VARIABLES UNINITIALIZED, RAM **/
 #pragma udata
 byte detected_device_type_id[MAX_PORTS]; /*the device_type_id of the device connected*/
-
+endpoint pnpEndpoint;
 /* CODE */
 #pragma code module
 
@@ -43,20 +43,20 @@ void initTableDetectedDevice(void){
 
 
 void PNPInit(byte i){
-    char modulename[8];
+    byte modulename[8];
     BOOL res;
 
     PNPHandler = i;
     // add my receive function to the handler module, to be called automatically when the pc sends data to the user module
-    setHandlerReceiveFunction(PNPHandler,&UserPNPReceived);
+    setHandlerReceiveFunction(PNPHandler,&PNPReceived);
     // add my receive pooling function to the dynamic pooling module, to be called periodically
     //res = addPollingFunction(&UserPNPProcessIO);
     // initialize the send buffer, used to send data to the PC
     sendBufferPNP = getSharedBuffer(PNPHandler);
-
+    pnpEndpoint= getPnPEndpoint();
 
     //register the detection mecanism in the timmer interrupt
-    registerT0event(PNP_DETECTION_TIME, &hotplugEvent);
+    registerT0event(PNP_DETECTION_TIME, &hotplug_pnp);
 
     initPorts(); //USB4butia init port
     initTableDetectedDevice(); //All Disconected
@@ -84,7 +84,7 @@ void PNPRelease(byte i){
 }
 
 
-void UserPNPConfigure(void){
+void PNPConfigure(void){
 // Do the configuration
 }
 
@@ -103,8 +103,9 @@ void openPnP(byte moduleId[8], byte handler){
     rom near char* tableDirec;
     tableDirec = getUserTableDirection(moduleId);
     dir = getModuleInitDirection(tableDirec);
+
     if((byte)dir != ERROR){
-            handler = newHandlerTableEntryForcingHandler(getPnPEndpoint(), tableDirec, handler);
+            handler = newHandlerTableEntryForcingHandler( pnpEndpoint.endPoint, tableDirec, handler);
             pUser = dir;
             pUser(handler); //hago el init ;)
     }
@@ -144,42 +145,26 @@ void hotplug_pnp(void){
 
 }
 
+
 //This is a internal module model as a user module, so this command are for testing purpouse only
 void PNPReceived(byte* recBuffPtr, byte len, byte handler){
-      byte index;
-//      byte port_id = 0;
+       byte index;
       byte userPNPCounter = 0;
-/*      switch(((PNP_DATA_PACKET*)recBuffPtr)->CMD){
+      switch(((PNP_DATA_PACKET*)recBuffPtr)->CMD){
         case READ_VERSION:
               //dataPacket._byte[1] is len
-            ((PNP_DATA_PACKET*)sendBufferUsrPNP)->_byte[0] = ((PNP_DATA_PACKET*)recBuffPtr)->_byte[0];
-	        ((PNP_DATA_PACKET*)sendBufferUsrPNP)->_byte[1] = ((PNP_DATA_PACKET*)recBuffPtr)->_byte[1];
-            ((PNP_DATA_PACKET*)sendBufferUsrPNP)->_byte[2] = PNP_MINOR_VERSION;
-            ((PNP_DATA_PACKET*)sendBufferUsrPNP)->_byte[3] = PNP_MAJOR_VERSION;
+            ((PNP_DATA_PACKET*)sendBufferPNP)->_byte[0] = ((PNP_DATA_PACKET*)recBuffPtr)->_byte[0];
+	        ((PNP_DATA_PACKET*)sendBufferPNP)->_byte[1] = ((PNP_DATA_PACKET*)recBuffPtr)->_byte[1];
+            ((PNP_DATA_PACKET*)sendBufferPNP)->_byte[2] = PNP_MINOR_VERSION;
+            ((PNP_DATA_PACKET*)sendBufferPNP)->_byte[3] = PNP_MAJOR_VERSION;
             userPNPCounter = 0x04;
         break;
-
-        case ASK_ID:
-            ((PNP_DATA_PACKET*)sendBufferUsrPNP)->_byte[0] = ((PNP_DATA_PACKET*)recBuffPtr)->_byte[0];
-            port_id = ((PNP_DATA_PACKET*)recBuffPtr)->_byte[1];
-            set_mux(port_id);
-            ADCON0bits.GO = 1;              // Start AD conversion
-            while(ADCON0bits.NOT_DONE);     // Wait for conversion
-            ((PNP_DATA_PACKET*)sendBufferUsrPNP)->_byte[1] = ADRESH;
-            ((PNP_DATA_PACKET*)sendBufferUsrPNP)->_byte[2] = ADRESL;
-            userPNPCounter = 0x03;
-        break;
-
-	  case RESET:
-              Reset();
-			  break;
-
-		 default:
-              break;
-      }//end switch(s)  */
+      }
       if(userPNPCounter != 0)
       {
           if(!mUSBGenTxIsBusy())
               USBGenWrite2(PNPHandler, userPNPCounter);
       }//end if
-}//end UserPNPReceived
+}//end PNPReceived
+
+
