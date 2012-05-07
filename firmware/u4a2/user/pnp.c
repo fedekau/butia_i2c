@@ -54,7 +54,7 @@ void PNPInit(byte i){
     // initialize the send buffer, used to send data to the PC
     sendBufferPNP = getSharedBuffer(PNPHandler);
     pnpEndpoint= getPnPEndpoint();
-/*
+
     initPorts(); //USB4butia init port
     initTableDetectedDevice(); //All Disconected
 
@@ -70,7 +70,7 @@ void PNPInit(byte i){
 
     //register the detection mecanism in the timmer interrupt
     registerT0event(PNP_DETECTION_TIME, &hotplug_pnp);
-*/
+
 }//end PNPInit
 
 
@@ -117,13 +117,24 @@ void closePnP(byte handler){
 
 void hotplug_pnp(void){
     byte port, device_type;
+    char modulename[8];
     /*do detection*/
     for(port=0;port<MAX_PORTS;port++){
         device_type = get_device_type(board_ports[port].get_val_detection_pin());
         if(device_type!=detected_device_type_id[port]){
             // Change that board_port[device_type].detected_device_id for detected_device_type_id[port]
             closePnP(port+1);
-            openPnP(table_device_id_resistance[device_type].name, port+1); /*in table_device_id_resistance_value are defined all device types with the resistance value*/
+
+            modulename[0]=table_device_id_resistance[device_type].name[0];
+            modulename[1]=table_device_id_resistance[device_type].name[1];
+            modulename[2]=table_device_id_resistance[device_type].name[2];
+            modulename[3]=table_device_id_resistance[device_type].name[3];
+            modulename[4]=table_device_id_resistance[device_type].name[4];
+            modulename[5]=table_device_id_resistance[device_type].name[5];
+            modulename[6]=table_device_id_resistance[device_type].name[6];
+            modulename[7]=table_device_id_resistance[device_type].name[7];
+
+            openPnP(modulename, port+1); /*in table_device_id_resistance_value are defined all device types with the resistance value*/
             detected_device_type_id[port] = device_type;
         }
     }

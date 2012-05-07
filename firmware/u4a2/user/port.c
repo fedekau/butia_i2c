@@ -63,7 +63,7 @@ void PortInit(byte i) {
     // initialize the send buffer, used to send data to the PC
     sendBufferPort = getSharedBuffer(i);
 
-    board_ports[i].change_port_direction(IN);
+    board_ports[i-1].change_port_direction(IN);
     
 }//end UserLedAmarilloInit
 
