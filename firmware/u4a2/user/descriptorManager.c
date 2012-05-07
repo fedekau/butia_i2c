@@ -14,6 +14,14 @@
 /** D E C L A R A T I O N S **************************************************/
 #pragma code sys
 
+endpoint getDefaultEndpoint(void){
+	endpoint adminEndpoint;
+	adminEndpoint.EPNum = 1;
+	adminEndpoint.EPDir = 0;
+	adminEndpoint.empty = 0;
+	return adminEndpoint;
+}
+
 endpoint getAdminEndpoint(void){
 	endpoint adminEndpoint;
 	adminEndpoint.EPNum = 1;
@@ -22,5 +30,12 @@ endpoint getAdminEndpoint(void){
 	return adminEndpoint;
 }
 
+endpoint getPnPEndpoint(void){
+	endpoint PnPEndpoint;
+	PnPEndpoint.EPNum = 1;
+	PnPEndpoint.EPDir = 0;
+	PnPEndpoint.empty = 0;
+	return PnPEndpoint;
+}
 
 /** EOF descriptorManager.c ***************************************************************/

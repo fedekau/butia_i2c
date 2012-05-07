@@ -6,13 +6,13 @@
 #include <p18cxxx.h>
 #include <usart.h>
 #include <delays.h>
-#include "system\typedefs.h"
-#include "system\usb\usb.h"
-#include "user\usr_ax12.h"
+#include "system/typedefs.h"
+#include "system/usb/usb.h"
+#include "user/usr_ax12.h"
 #include "io_cfg.h"              // I/O pin mapping
-#include "user\handlerManager.h"
+#include "user/handlerManager.h"
 #include "dynamicPolling.h"   
-#include "usb4all\proxys\T0Service.h"                           
+#include "usb4all/proxys/T0Service.h"
 
   
 /** V A R I A B L E S ********************************************************/
@@ -71,7 +71,7 @@ void UserAX12Init(byte i) {
     /* andres res = addPollingFunction(&UserAX12ProcessIO);*/
     // initialize the send buffer, used to send data to the PC
     sendBufferUsrAX12 = getSharedBuffer(usrAX12Handler);
-    init(); /*serial configuration for ax12*/
+    init_serial(); /*serial configuration for ax12*/
     resWriteInfo = writeInfo(BRODCAST, LED, 1);
    
 }
@@ -187,24 +187,6 @@ void UserAX12Received(byte* recBuffPtr, byte len){
               ((AX12_DATA_PACKET*)sendBufferUsrAX12)->_byte[1] = resWriteInfo; 
               userAX12Counter = 0x02;
               break;    
-        case SETVEL2MTR:
-              ((AX12_DATA_PACKET*)sendBufferUsrAX12)->_byte[0] = ((AX12_DATA_PACKET*)recBuffPtr)->_byte[0]; 
-               //{[1]={rname="sentido", rtype="int"},[2]={rname="vel", rtype="int"},[3]={rname="sentido", rtype="int"},[4]={rname="vel", rtype="int"}} 
-              sentidoIzq = (byte)(((AX12_DATA_PACKET*)recBuffPtr)->_byte[1]);
-              velIzq = (byte)(((AX12_DATA_PACKET*)recBuffPtr)->_byte[2]);
-              sentidoDer = (byte)(((AX12_DATA_PACKET*)recBuffPtr)->_byte[3]);
-              velDer = (byte)(((AX12_DATA_PACKET*)recBuffPtr)->_byte[4]);
-              //aca tengo un problema porque tengo que determinar cual es el motor
-              resWriteInfo = writeInfo(izquierdo, CW_ANGLELIMIT_L, 0);
-              resWriteInfo = writeInfo(derecho, CW_ANGLELIMIT_L, 0);
-              resWriteInfo = writeInfo(izquierdo, CCW_ANGLELIMIT_L, 0);
-              resWriteInfo = writeInfo(derecho, CCW_ANGLELIMIT_L, 0);
-              resWriteInfo = writeInfo(izquierdo, MOVING_SPEED_L, velIzq);
-              if(resWriteInfo==OK){
-                  resWriteInfo = writeInfo(derecho, MOVING_SPEED_L, velDer);
-                  ((AX12_DATA_PACKET*)sendBufferUsrAX12)->_byte[1] = resWriteInfo; 
-              }
-              userAX12Counter = 0x02;
         case RESET:
               Reset();
               break;

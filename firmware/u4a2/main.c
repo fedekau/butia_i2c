@@ -43,7 +43,6 @@
 #include "system/usb/usb.h"                         // Required
 #include "io_cfg.h"                                 // Required
 
-
 #include "system/usb/usb_compile_time_validation.h" // Optional
 #include "user/dynamicPolling.h"                    // Modifiable
 #include "usb4all/dynamicISR/dynamicISR.h"          // Modifiable
@@ -53,6 +52,8 @@
 #include "user/usr_buzzer.h"
 
 #include "user/handlerManager.h"                              // Modifiable
+
+#include "user/usb4butia.h"
 
 #pragma code sys
 
@@ -68,7 +69,7 @@
 #pragma config USBDIV = 2
 
 /* Oscillator Selection bits */
-#pragma config FOSC = HS
+#pragma config FOSC = HS       /*needed for reach 1MBps in serial */
 //#pragma config FOSC = HSPLL_HS
 
 /* Fail Safe Clock Monitor */

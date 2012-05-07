@@ -13,6 +13,7 @@
 #define DIRECTION_TABLE 0x33AB
 #define MEM_VACIO 0xFFFF
 #define TAM_U_TAB 14             
+#define NULLTYPE 0xFF
 
 /** S T R U C T U R E S ******************************************************/
 
@@ -39,4 +40,5 @@ void getModuleName(byte line, char* modName);
 pUserFunc getModuleInitDirection(rom near char* direction);
 pUserFunc getModuleReleaseDirection(rom near char* direction);
 pUserFunc getModuleConfigureDirection(rom near char* direction);
+byte getModuleType(rom near char* uTableDirection);
 #endif //LOADER_MODULE_H

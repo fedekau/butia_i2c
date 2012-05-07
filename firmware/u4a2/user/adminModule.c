@@ -1,10 +1,13 @@
 /* Author               Date        Comment
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * Andres Aguirre	   27/03/07 	Original
- * Andres Aguirre 	   18/04/09     Se agrega el RESET
+ * Andres Aguirre 	   18/04/09     adding RESET
+ * Andres Aguirre          22/03/12     Adding PnP support
  ********************************************************************/
 
 #include "user/adminModule.h"
+#include "user/pnp.h"
+#include "user/usb4butia.h"
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata
@@ -15,6 +18,23 @@ word counter_big;
 byte  cantTicksW    = 50;  
 byte  keepAlive    = TRUE;
 byte  timeOutTicksWatchdog;
+
+
+/** USER MODULE REFERENCE *************************************************/
+// Admin ModuleType=0,
+//#pragma romdata user=DIRECTION_TABLE       // THIS DONT WORK!!!
+#pragma romdata user
+uTab AdminModuleTable = {&adminModuleInit,&adminModuleRelease,&adminModuleConfigure,"admin"}; //modName must be less or equal 8 characters
+#pragma code
+
+/*mapping between module name and an device type id used for optimization
+ 0 dist
+ 1 grises
+ 2 boton
+ 3 luz
+ ....*/
+/*byte* device_type_module_name_map[MAX_DEVICES];*/
+
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
 
@@ -31,16 +51,36 @@ void Escribir_memoria_boot(void){
     Write_b_eep(ADDRESS_BOOT,BOOT_FLAG);
 }
 
-void adminModuleInit(void){
-	//inicializacion del sistema
-	adminHandler=0; //hardcore, el admin siempre atiende el handler 0
-	//agrego mi buffer en el handler module	
-	//setHandlerReceiveBuffer(adminHandler, (byte*)&adminDataPacket);
-	//agrego mi funcion de Receive en el handler module
-	setHandlerReceiveFunction(adminHandler,&adminReceived);
-	//No hay funcion de pooling para modulo admin
-	//res = addPollingFunction(&ProcessIO);
-	sendBufferAdmin = getSharedBuffer(adminHandler);
+
+/*the device_type_module_name_map asociates for each string representing a module name an internal index
+ for optimization propurses. Also this structure parses dynamically the name of the modules using rom data user*/
+/*void device_type_module_name_map_popullate(void){
+    byte userTableSize = 0;
+    byte lineNumber;
+    byte lineName[8]; //Se le cambio el tipo a byte, porque device_type_module_name_map es un arreglo de bytes
+    userTableSize = getUserTableSize();
+    for(lineNumber=0;lineNumber<userTableSize;lineNumber++){
+        getModuleName(lineNumber, (char*)lineName);
+        device_type_module_name_map[lineNumber]= lineName; 
+    }
+}
+*/
+void adminModuleInit(byte handler){
+	/*system initialization*/
+	adminHandler=handler; //hardcode, the admin module allways respond at handler 0
+        /*set the receive function for admin commands*/
+        setHandlerReceiveFunction(adminHandler,&adminReceived);
+	sendBufferAdmin = getSharedBuffer(adminHandler);        
+}
+
+void adminModuleRelease(byte handler){
+    /*what? close admin? Are you crazy?*/
+    return;
+}
+
+void adminModuleConfigure(void){
+    // nothing to do...
+    return;
 }
 
 void goodByeCruelWorld(void){
@@ -52,42 +92,37 @@ void goodByeCruelWorld(void){
     Reset();
 }
 
-void adminReceived(byte* recBuffPtr,byte len){
-	byte adminCounter;
-	byte endIn = nullEP, endOut = nullEP;
-	byte userTableSize = 0;
-	byte lineNumber = 0;
-	char lineName[8];
-	rom near char* tableDirec;
-	pUserFunc dir;	
-	void (*pUser)(byte);
-	byte handler, response;
-	byte j;
-	adminCounter = 0;
-	switch(((AM_PACKET*)recBuffPtr)->CMD){
+void adminReceived(byte* recBuffPtr,byte len, byte admin_handler){
+    byte adminCounter;
+    byte endIn = nullEP, endOut = nullEP;
+    byte userTableSize = 0;
+    byte lineNumber = 0;
+    char lineName[8];
+    rom near char* tableDirec;
+    pUserFunc dir;
+    void (*pUser)(byte);
+    byte handler, response;
+    byte i;
+    byte j;
+    adminCounter = 0;
+    
+    switch(((AM_PACKET*)recBuffPtr)->CMD){
 	/* Abre un user module, y retorna el handler asignado en el sistema*/
-	case OPEN:
-		tableDirec = getUserTableDirection(((AM_PACKET*)recBuffPtr)->moduleId);
-		//Si el modulo esta abierto devuelvo error
-		//if(!existsTableEntry(tableDirec)){ fue sacada esta restriccion temporalmente dado a problemas en la comunicación que hacian que se perdiera referencia al handler y quedara inutilizada la placa, seria conveniente buscar otra solucion al problema, andres 27/7/2010
-			dir = getModuleInitDirection(tableDirec);
-			//Si dir vale error es que no se encontro un modulo con nombre moduleId
-			if((byte)dir != ERROR){
-				endIn = ((AM_PACKET*)recBuffPtr)->inEp;
-				handler = newHandlerTableEntry(endIn,tableDirec);  
-				pUser = dir;
-				pUser(handler); //hago el init ;)
-				((AM_PACKET*)sendBufferAdmin)->handlerNumber = handler;
-			}else{
-				((AM_PACKET*)sendBufferAdmin)->handlerNumber = ERROR;
-			}
-		//}else{
-		//	((AM_PACKET*)sendBufferAdmin)->handlerNumber = ERROR;
-		//}		
+        case OPEN:
+                tableDirec = getUserTableDirection(((AM_PACKET*)recBuffPtr)->moduleId);
+                if( tableDirec != (rom near char*)ERROR){
+                        endIn = ((AM_PACKET*)recBuffPtr)->inEp;
+                        handler = newHandlerTableEntry(endIn,tableDirec);
+                        pUser = getModuleInitDirection(tableDirec);
+                        pUser(handler); //hago el init ;)
+                        ((AM_PACKET*)sendBufferAdmin)->handlerNumber = handler;
+                }else{
+                        ((AM_PACKET*)sendBufferAdmin)->handlerNumber = ERROR;
+                }
               	((AM_PACKET*)sendBufferAdmin)->CMD = OPEN;
 		adminCounter=0x02; //1 byte para el campo CMD, otro para el handler 	
 	break;
-	
+
 	/* Cierra un user module */
 	case CLOSE:
 		handler  = ((AM_PACKET*)recBuffPtr)->handlerNumber;
@@ -99,7 +134,7 @@ void adminReceived(byte* recBuffPtr,byte len){
 	
 	/* Cierra todos los modulos */
 	case INIT:
-		removeAllOpenModules();
+		//removeAllOpenModules(); called by bobot, at start, dont work whit autodetection!!!
 		((AM_PACKET*)sendBufferAdmin)->CMD = INIT; 
 		adminCounter = 0x01; //1 byte para el campo CMD
 	break;
@@ -153,9 +188,27 @@ void adminReceived(byte* recBuffPtr,byte len){
 		adminCounter = 0x01; //;)
 	break;
 
+        case GET_HANDLER_SIZE:
+            ((AM_PACKET*)sendBufferAdmin)->CMD  = GET_HANDLER_SIZE;
+            ((AM_PACKET*)sendBufferAdmin)->size = MAX_HANDLERS;
+            adminCounter=0x02;
+        break;
+
+        case GET_HANDLER_TYPE:
+            ((AM_PACKET*)sendBufferAdmin)->CMD  = GET_HANDLER_TYPE;
+            handler = ((AM_PACKET*)recBuffPtr)->size;
+            handler = handler % MAX_HANDLERS; //sanity check
+            if (epHandlerMap[handler].ep.empty == 0) {
+                ((AM_PACKET*)sendBufferAdmin)->type = getModuleType(epHandlerMap[handler].uTableDirection);
+            } else {
+                ((AM_PACKET*)sendBufferAdmin)->type = NULLTYPE;
+            };
+            adminCounter=0x02;
+        break;
+
 	case RESET:
-        goodByeCruelWorld();
-		adminCounter = 0x01; //1 byte para el campo CMD sensless ;)
+            goodByeCruelWorld();
+            adminCounter = 0x01; //1 byte para el campo CMD sensless ;)
 	break;
 	
 	default:
@@ -164,7 +217,7 @@ void adminReceived(byte* recBuffPtr,byte len){
 	}//end switch()
       	if(adminCounter != 0){
 		j = 255;
-		while(mUSBGenTxIsBusy() && j-->0); // pruebo un máximo de 255 veces
+		while(mUSBGenTxIsBusy() && j-->0); // probing a max of 255 times
 		if(!mUSBGenTxIsBusy())
 			USBGenWrite2(adminHandler, adminCounter);
 	}//end if
