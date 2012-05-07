@@ -55,9 +55,6 @@ void PNPInit(byte i){
     sendBufferPNP = getSharedBuffer(PNPHandler);
     pnpEndpoint= getPnPEndpoint();
 
-    //register the detection mecanism in the timmer interrupt
-    registerT0event(PNP_DETECTION_TIME, &hotplug_pnp);
-
     initPorts(); //USB4butia init port
     initTableDetectedDevice(); //All Disconected
 
@@ -70,6 +67,9 @@ void PNPInit(byte i){
     openPnP(modulename,4);
     openPnP(modulename,5);
     openPnP(modulename,6);
+
+    //register the detection mecanism in the timmer interrupt
+    registerT0event(PNP_DETECTION_TIME, &hotplug_pnp);
 
 }//end PNPInit
 
@@ -136,7 +136,6 @@ void hotplug_pnp(void){
 
             }
             detected_device_type_id[port] = device_type; /*Change that board_port[device_type].detected_device_id for detected_device_type_id[port]*/
-
         }
     }
     registerT0eventInEvent(PNP_DETECTION_TIME, &hotplug_pnp);
