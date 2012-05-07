@@ -57,7 +57,7 @@ typedef struct _port_device_detected {
 extern byte detected_device_type_id[];
 
 /*Remember to change the old maping for that*/
-extern rom device_resistance table_device_id_resistance[];
+extern rom const device_resistance table_device_id_resistance[];
 
 #define PNP_MINOR_VERSION 0xff //FIXME
 #define PNP_MAJOR_VERSION 0xff //FIXME

@@ -3,11 +3,11 @@
 #include "loaderModule.h"
 
 /** VARIABLES INITIALIZED, CONST ROM **/
-rom device_resistance table_device_id_resistance[4] = {
+rom const device_resistance table_device_id_resistance[4] = {
+    { "port"   , 0, 0                      },
     { "boton"  , R_BOTON_MIN, R_BOTON_MAX  },
     { "grises" , R_GRISES_MIN, R_GRISES_MAX},
-    { "dist"   , R_DIST_MIN, R_DIST_MAX    },
-    { "TODO"   , 0, 0                      }
+    { "dist"   , R_DIST_MIN, R_DIST_MAX    }
 };
 
 #pragma udata 
@@ -93,8 +93,9 @@ void PNPConfigure(void){
 byte get_device_type(WORD resistValue){
     byte i = 0;
     /*Search the read resistance valeun in resistance range of devices defined*/
-    while(!((table_device_id_resistance[i].resValue_max._word >= resistValue._word) && (resistValue._word >=  table_device_id_resistance[i].resValue_min._word)) && i++<MAX_DEVICES);
-    return i; /*if i = MAX_DEVICES that mean error happend*/
+    while(!((table_device_id_resistance[i].resValue_max._word >= resistValue._word) && (resistValue._word >=  table_device_id_resistance[i].resValue_min._word)) && ++i<MAX_DEVICES);
+    if (i != MAX_DEVICES) return i;
+    return DISCONECTED; // 0 = "port" device
 }
 
 void openPnP(byte moduleId[8], byte handler){
@@ -102,7 +103,7 @@ void openPnP(byte moduleId[8], byte handler){
     rom near char* tableDirec;
     tableDirec = getUserTableDirection(moduleId);
 
-    if(tableDirec != ERROR){
+    if(tableDirec != (rom near char*)ERROR){
             handler = newHandlerTableEntryForcingHandler( pnpEndpoint.endPoint, tableDirec, handler);
             pUser = getModuleInitDirection(tableDirec);
             pUser(handler); //hago el init ;)
@@ -117,23 +118,13 @@ void closePnP(byte handler){
 void hotplug_pnp(void){
     byte port, device_type;
     /*do detection*/
-    for(port=1;port<=MAX_PORTS;port++){
+    for(port=0;port<MAX_PORTS;port++){
         device_type = get_device_type(board_ports[port].get_val_detection_pin());
-        if(device_type!=detected_device_type_id[port]){ /*Change that board_port[device_type].detected_device_id for detected_device_type_id[port]*/
-            if(device_type==DISCONECTED){
-                board_ports[port].change_port_direction(IN);
-                /*close disconnected modules with closePNP*/
-                /*CALL a close command*/
-                closePnP(port);
-
-            }else{
-                /*open new connected modules with openPNP*/
-                /*CALL a open comand*/
-                openPnP(table_device_id_resistance[device_type].name,port); /*in table_device_id_resistance_value are defined all device types with the resistance value*/
-
-
-            }
-            detected_device_type_id[port] = device_type; /*Change that board_port[device_type].detected_device_id for detected_device_type_id[port]*/
+        if(device_type!=detected_device_type_id[port]){
+            // Change that board_port[device_type].detected_device_id for detected_device_type_id[port]
+            closePnP(port+1);
+            openPnP(table_device_id_resistance[device_type].name, port+1); /*in table_device_id_resistance_value are defined all device types with the resistance value*/
+            detected_device_type_id[port] = device_type;
         }
     }
     registerT0eventInEvent(PNP_DETECTION_TIME, &hotplug_pnp);
