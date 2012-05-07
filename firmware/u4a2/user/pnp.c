@@ -118,31 +118,28 @@ void closePnP(byte handler){
 
 void hotplug_pnp(void){
     byte port, device_type;
+    /*do detection*/
     for(port=1;port<=MAX_PORTS;port++){
-//        device_type = get_device_type(board_ports[port].get_val_detection_pin());
-//        if(device_type!=detected_device_type_id[port]){ /*Change that board_port[device_type].detected_device_id for detected_device_type_id[port]*/
-//            if(device_type==DISCONECTED){
-//                board_ports[port].change_port_direction(IN);
+        device_type = get_device_type(board_ports[port].get_val_detection_pin());
+        if(device_type!=detected_device_type_id[port]){ /*Change that board_port[device_type].detected_device_id for detected_device_type_id[port]*/
+            if(device_type==DISCONECTED){
+                board_ports[port].change_port_direction(IN);
+                /*close disconnected modules with closePNP*/
                 /*CALL a close command*/
-//                closePnP(port);
+                closePnP(port);
 
-//            }else{
+            }else{
+                /*open new connected modules with openPNP*/
                 /*CALL a open comand*/
-                /*openPnP(table_device_id_resistance_value[device_type].name,port); /*in table_device_id_resistance_value are defined all device types with the resistance value*/
+                openPnP(table_device_id_resistance[device_type].name,port); /*in table_device_id_resistance_value are defined all device types with the resistance value*/
 
 
-//            }
-   //         detected_device_type_id[port] = device_type; /*Change that board_port[device_type].detected_device_id for detected_device_type_id[port]*/
+            }
+            detected_device_type_id[port] = device_type; /*Change that board_port[device_type].detected_device_id for detected_device_type_id[port]*/
 
-//   }
-
-        //do detection
-        //open new connected modules with openPNP
-        //close disconnected modules with closePNP
+        }
     }
- //   registerT0eventInEvent(PNP_DETECTION_TIME, &hotplug_pnp);
-
-
+    registerT0eventInEvent(PNP_DETECTION_TIME, &hotplug_pnp);
 }
 
 
