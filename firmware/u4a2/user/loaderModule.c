@@ -50,7 +50,7 @@ rom near char* getUserTableDirection(byte moduleId[8]){
 		}
 		i = i + TAM_U_TAB;
 	}
-	return (rom char*)ERROR;	
+	return (rom near char*)ERROR;
 }
 
 byte getUserTableSize(){
