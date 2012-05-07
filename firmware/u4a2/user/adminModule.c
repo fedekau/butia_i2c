@@ -67,7 +67,7 @@ void Escribir_memoria_boot(void){
 */
 void adminModuleInit(byte handler){
 	/*system initialization*/
-	adminHandler=0; //hardcode, the admin module allways respond at handler 0
+	adminHandler=handler; //hardcode, the admin module allways respond at handler 0
         /*set the receive function for admin commands*/
         setHandlerReceiveFunction(adminHandler,&adminReceived);
 	sendBufferAdmin = getSharedBuffer(adminHandler);        
@@ -110,11 +110,10 @@ void adminReceived(byte* recBuffPtr,byte len, byte admin_handler){
 	/* Abre un user module, y retorna el handler asignado en el sistema*/
         case OPEN:
                 tableDirec = getUserTableDirection(((AM_PACKET*)recBuffPtr)->moduleId);
-                dir = getModuleInitDirection(tableDirec);
-                if((byte)dir != ERROR){
+                if( tableDirec != (rom near char*)ERROR){
                         endIn = ((AM_PACKET*)recBuffPtr)->inEp;
                         handler = newHandlerTableEntry(endIn,tableDirec);
-                        pUser = dir;
+                        pUser = getModuleInitDirection(tableDirec);
                         pUser(handler); //hago el init ;)
                         ((AM_PACKET*)sendBufferAdmin)->handlerNumber = handler;
                 }else{
@@ -135,7 +134,7 @@ void adminReceived(byte* recBuffPtr,byte len, byte admin_handler){
 	
 	/* Cierra todos los modulos */
 	case INIT:
-		removeAllOpenModules();
+		//removeAllOpenModules(); called by bobot, at start, dont work whit autodetection!!!
 		((AM_PACKET*)sendBufferAdmin)->CMD = INIT; 
 		adminCounter = 0x01; //1 byte para el campo CMD
 	break;
@@ -218,7 +217,7 @@ void adminReceived(byte* recBuffPtr,byte len, byte admin_handler){
 	}//end switch()
       	if(adminCounter != 0){
 		j = 255;
-		while(mUSBGenTxIsBusy() && j-->0); // pruebo un máximo de 255 veces
+		while(mUSBGenTxIsBusy() && j-->0); // probing a max of 255 times
 		if(!mUSBGenTxIsBusy())
 			USBGenWrite2(adminHandler, adminCounter);
 	}//end if

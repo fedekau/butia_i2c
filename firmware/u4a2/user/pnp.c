@@ -54,7 +54,7 @@ void PNPInit(byte i){
     // initialize the send buffer, used to send data to the PC
     sendBufferPNP = getSharedBuffer(PNPHandler);
     pnpEndpoint= getPnPEndpoint();
-
+/*
     initPorts(); //USB4butia init port
     initTableDetectedDevice(); //All Disconected
 
@@ -70,7 +70,7 @@ void PNPInit(byte i){
 
     //register the detection mecanism in the timmer interrupt
     registerT0event(PNP_DETECTION_TIME, &hotplug_pnp);
-
+*/
 }//end PNPInit
 
 

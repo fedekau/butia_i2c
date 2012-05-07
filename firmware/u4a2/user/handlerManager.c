@@ -6,6 +6,7 @@
 
 /** I N C L U D E S **********************************************************/
 #include <p18cxxx.h>
+#include "pnp.h"
 #include <usart.h>
 #include "system/typedefs.h"
 #include "system/usb/usb.h"
@@ -186,11 +187,12 @@ void initHandlerManager(void){
     adminModuleInit(0);
 
     /* PNP module ; Handler=7 */
-    modulename[0]='p'; modulename[1]='n'; modulename[2]='p'; modulename[3]=0;
+    modulename[0]='p'; modulename[1]='n'; modulename[2]='p'; modulename[3]=0 ;
     modulename[4]=0; modulename[5]=0  ; modulename[6]=0  ; modulename[7]=0  ;
     epHandlerMap[7].ep = getPnPEndpoint();
     epHandlerMap[7].uTableDirection = getUserTableDirection(modulename);
     PNPInit(7);
+
 }
 
 respType removeHandlerTableEntry(byte handler){
