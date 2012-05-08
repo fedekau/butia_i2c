@@ -159,8 +159,8 @@ void UserDistReceived(byte* recBuffPtr, byte len, byte handler){
         case GET_DISTANCE:
             ((DIST_DATA_PACKET*)sendBufferUsrDist)->_byte[0] = ((DIST_DATA_PACKET*)recBuffPtr)->_byte[0];
             data = getPortDescriptor(handler)->get_data_analog();
-            ((DIST_DATA_PACKET*)sendBufferUsrDist)->_byte[1] = LSB(data);
-            ((DIST_DATA_PACKET*)sendBufferUsrDist)->_byte[2] = MSB(data);
+            ((DIST_DATA_PACKET*)sendBufferUsrDist)->_byte[1] = MSB(data);
+            ((DIST_DATA_PACKET*)sendBufferUsrDist)->_byte[2] = LSB(data);
             userDistCounter=0x03;
             break;
 

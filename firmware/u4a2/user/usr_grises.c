@@ -158,8 +158,8 @@ void UserGrisesReceived(byte* recBuffPtr, byte len, byte handler){
         case GET_ANA_VALUE:
             ((GRISES_DATA_PACKET*)sendBufferUsrGrises)->_byte[0] = ((GRISES_DATA_PACKET*)recBuffPtr)->_byte[0];
             data = getPortDescriptor(handler)->get_data_analog();
-            ((GRISES_DATA_PACKET*)sendBufferUsrGrises)->_byte[1] = LSB(data);
-            ((GRISES_DATA_PACKET*)sendBufferUsrGrises)->_byte[2] = MSB(data);
+            ((GRISES_DATA_PACKET*)sendBufferUsrGrises)->_byte[1] = MSB(data);
+            ((GRISES_DATA_PACKET*)sendBufferUsrGrises)->_byte[2] = LSB(data);
             userGrisesCounter=0x03;
             break;
 
