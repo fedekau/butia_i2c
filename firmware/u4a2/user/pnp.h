@@ -18,8 +18,8 @@
 #define R_DIST_MIN 824
 #define R_DIST_MAX 854
 
-#define R_GPIO_MIN 1020
-#define R_GPIO_MAX 1023
+#define R_GPIO_MIN 65280
+#define R_GPIO_MAX 65535
 
 #define R_LUZ 9999
 #define R_ACCELEROMETER 9999
