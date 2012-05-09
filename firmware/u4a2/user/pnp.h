@@ -18,6 +18,9 @@
 #define R_DIST_MIN 824
 #define R_DIST_MAX 854
 
+#define R_GPIO_MIN 65280
+#define R_GPIO_MAX 65535
+
 #define R_LUZ 9999
 #define R_ACCELEROMETER 9999
 #define R_PRECION
@@ -36,7 +39,7 @@
 #define R_BUZZER 9999
 
 
-#define MAX_DEVICES 9 /*Max cant of senssor/actuator type*/
+#define MAX_DEVICES 5 /*Max cant of senssor/actuator type*/
 /*TODO review this time, the micro is running @20MHZ with a pipeline of 4steps => 20000000/4 = 5000000 instructions per second */
 #define PNP_DETECTION_TIME 10000
 

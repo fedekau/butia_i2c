@@ -3,11 +3,12 @@
 #include "loaderModule.h"
 
 /** VARIABLES INITIALIZED, CONST ROM **/
-rom const device_resistance table_device_id_resistance[4] = {
-    { "port"   , 0, 0                      },
-    { "boton"  , R_BOTON_MIN, R_BOTON_MAX  },
-    { "grises" , R_GRISES_MIN, R_GRISES_MAX},
-    { "dist"   , R_DIST_MIN, R_DIST_MAX    }
+rom const device_resistance table_device_id_resistance[MAX_DEVICES] = {
+    { "port"   , 0, 255     },
+    { "boton"  , 31207 ,34492 },
+    { "grises" , 59041, 60124 },
+    { "dist"   , 37491, 40654 },
+    { "gpio"   , R_GPIO_MIN, R_GPIO_MAX    }
 };
 
 #pragma udata 
@@ -92,9 +93,19 @@ void PNPConfigure(void){
 
 byte get_device_type(WORD resistValue){
     byte i = 0;
+    WORD MAX;
+    WORD MIN;
     /*Search the read resistance valeun in resistance range of devices defined*/
-    while(!((table_device_id_resistance[i].resValue_max._word >= resistValue._word) && (resistValue._word >=  table_device_id_resistance[i].resValue_min._word)) && ++i<MAX_DEVICES);
-    if (i != MAX_DEVICES) return i;
+
+//    while(!((table_device_id_resistance[i].resValue_max._word >= resistValue._word) && (resistValue._word >=  table_device_id_resistance[i].resValue_min._word)) && i<MAX_DEVICES) i++;
+//    if (i != MAX_DEVICES) return i;
+
+    for (i=0 ; i < MAX_DEVICES ; ++i) {
+        MAX = table_device_id_resistance[i].resValue_max;
+        MIN = table_device_id_resistance[i].resValue_min;
+        if ( (resistValue._word <= MAX._word) && (MIN._word <= resistValue._word) ) return i;
+    }
+
     return DISCONECTED; // 0 = "port" device
 }
 
