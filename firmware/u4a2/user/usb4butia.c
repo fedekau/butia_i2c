@@ -102,7 +102,12 @@ void changeDirectionPort1(direction io){
 }
 
 byte getDataD1(){
-    return PORTAbits.RA1;
+    WORD res;
+    res = getDataA1();
+    if (MSB(res) > 0)
+        return 0x01;
+    else
+        return 0x00;
 }
 
 WORD getDataA1(){
@@ -158,7 +163,12 @@ void changeDirectionPort2(direction io){
 }
 
 byte getDataD2(){
-    return PORTAbits.RA3;
+    WORD res;
+    res = getDataA2();
+    if (MSB(res) > 0)
+        return 0x01;
+    else
+        return 0x00;
 }
 
 WORD getDataA2(){
@@ -214,7 +224,12 @@ void changeDirectionPort3(direction io){
 }
 
 byte getDataD3(){
-    return PORTEbits.RE1;
+    WORD res;
+    res = getDataA3();
+    if (MSB(res) > 0)
+        return 0x01;
+    else
+        return 0x00;
 }
 
 WORD getDataA3(){
@@ -270,7 +285,12 @@ void changeDirectionPort4(direction io){
 }
 
 byte getDataD4(){
-    return PORTAbits.RA5;
+    WORD res;
+    res = getDataA4();
+    if (MSB(res) > 0)
+        return 0x01;
+    else
+        return 0x00;
 }
 
 WORD getDataA4(){
@@ -326,7 +346,12 @@ void changeDirectionPort5(direction io){
 }
 
 byte getDataD5(){
-    return PORTBbits.RB1;
+    WORD res;
+    res = getDataA5();
+    if (MSB(res) > 0)
+        return 0x01;
+    else
+        return 0x00;
 }
 
 WORD getDataA5(){
@@ -382,7 +407,12 @@ void changeDirectionPort6(direction io){
 }
 
 byte getDataD6(){
-    return PORTBbits.RB3;
+    WORD res;
+    res = getDataA6();
+    if (MSB(res) > 0)
+        return 0x01;
+    else
+        return 0x00;
 }
 
 WORD getDataA6(){
