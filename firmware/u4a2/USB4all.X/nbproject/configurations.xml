@@ -20,6 +20,10 @@
       <itemPath>../usb4all/usbconf/usballoc/usbmmap.h</itemPath>
       <itemPath>../user/test_resistance.h</itemPath>
       <itemPath>../user/port.h</itemPath>
+      <itemPath>../user/usr_boton.h</itemPath>
+      <itemPath>../user/usr_distancia.h</itemPath>
+      <itemPath>../user/usr_grises.h</itemPath>
+      <itemPath>../user/gpio.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LibraryFiles"
                    displayName="Library Files"
@@ -56,6 +60,10 @@
       <itemPath>../usb4all/usbconf/usballoc/usbmmap.c</itemPath>
       <itemPath>../user/test_resistance.c</itemPath>
       <itemPath>../user/port.c</itemPath>
+      <itemPath>../user/usr_boton.c</itemPath>
+      <itemPath>../user/usr_distancia.c</itemPath>
+      <itemPath>../user/usr_grises.c</itemPath>
+      <itemPath>../user/gpio.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
