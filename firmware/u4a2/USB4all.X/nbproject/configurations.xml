@@ -24,6 +24,8 @@
       <itemPath>../user/usr_distancia.h</itemPath>
       <itemPath>../user/usr_grises.h</itemPath>
       <itemPath>../user/gpio.h</itemPath>
+      <itemPath>../user/usr_ax12.h</itemPath>
+      <itemPath>../user/usr_motores.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LibraryFiles"
                    displayName="Library Files"
@@ -64,6 +66,8 @@
       <itemPath>../user/usr_distancia.c</itemPath>
       <itemPath>../user/usr_grises.c</itemPath>
       <itemPath>../user/gpio.c</itemPath>
+      <itemPath>../user/usr_butia.c</itemPath>
+      <itemPath>../user/usr_motores.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
