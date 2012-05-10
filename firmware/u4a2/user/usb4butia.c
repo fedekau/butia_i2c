@@ -104,10 +104,9 @@ void changeDirectionPort1(direction io){
 byte getDataD1(){
     WORD res;
     res = getDataA1();
-    if (MSB(res) > 0)
+    if (res.HighB.b7)
         return 0x01;
-    else
-        return 0x00;
+    return 0x00;
 }
 
 WORD getDataA1(){
@@ -225,10 +224,9 @@ void changeDirectionPort3(direction io){
 byte getDataD3(){
     WORD res;
     res = getDataA3();
-    if (MSB(res) > 0)
+    if (res.HighB.b7)
         return 0x01;
-    else
-        return 0x00;
+    return 0x00;
 }
 
 WORD getDataA3(){
@@ -286,10 +284,9 @@ void changeDirectionPort4(direction io){
 byte getDataD4(){
     WORD res;
     res = getDataA4();
-    if (MSB(res) > 0)
+    if (res.HighB.b7)
         return 0x01;
-    else
-        return 0x00;
+    return 0x00;
 }
 
 WORD getDataA4(){
@@ -347,10 +344,9 @@ void changeDirectionPort5(direction io){
 byte getDataD5(){
     WORD res;
     res = getDataA5();
-    if (MSB(res) > 0)
+    if (res.HighB.b7)
         return 0x01;
-    else
-        return 0x00;
+    return 0x00;
 }
 
 WORD getDataA5(){
@@ -408,10 +404,9 @@ void changeDirectionPort6(direction io){
 byte getDataD6(){
     WORD res;
     res = getDataA6();
-    if (MSB(res) > 0)
+    if (res.HighB.b7)
         return 0x01;
-    else
-        return 0x00;
+    return 0x00;
 }
 
 WORD getDataA6(){
