@@ -188,9 +188,10 @@ void setNone(void){                 // Modo RESET
     TXSTAbits.TXEN = 0;             // deshabilita la transmisi�n
 }
 
+
 byte ax12writeB(byte data){
-    while (!TXSTAbits.TRMT);        // espera que el micro est� pronto para TX
-    TXREG = data;                   // escribe el byte a trasmitir
+    while (!TXSTAbits.TRMT);        // wait until ready to send
+    TXREG = data;
     return data;
 }
 /*****************************************************************************/ 
@@ -366,7 +367,7 @@ byte writeInfo (byte id,byte regstart, int value) {
     if (reglength > 1) {data[2] = (value&0xFF00)>>8;}
     ax12SendPacket (id, reglength+1, WRITE_DATA, data);
     
-    return 1; //ax12ReadPacket(&status_id, &status_error, &status_data);
+    return ax12ReadPacket(&status_id, &status_error, &status_data);
 }
 
 
