@@ -165,10 +165,9 @@ void changeDirectionPort2(direction io){
 byte getDataD2(){
     WORD res;
     res = getDataA2();
-    if (MSB(res) > 0)
+    if (res.HighB.b7)
         return 0x01;
-    else
-        return 0x00;
+    return 0x00;
 }
 
 WORD getDataA2(){
