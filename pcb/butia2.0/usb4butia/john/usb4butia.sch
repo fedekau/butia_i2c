@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date jue 12 abr 2012 10:35:40 UYT
+EESchema Schematic File Version 2  date vie 20 abr 2012 20:55:54 UYT
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -36,7 +36,7 @@ $Descr A4 11700 8267
 encoding utf-8
 Sheet 1 1
 Title "USB4butia"
-Date "12 apr 2012"
+Date "20 apr 2012"
 Rev "1.0"
 Comp ""
 Comment1 ""
@@ -44,88 +44,24 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
-NoConn ~ 5300 1800
-Text GLabel 5100 1900 0    60   Input ~ 0
-VDD
-Text GLabel 5100 1700 0    60   Input ~ 0
-VSS
+Wire Wire Line
+	5300 4900 5050 4900
 Wire Wire Line
 	5100 1900 5300 1900
 Wire Wire Line
 	5100 1700 5300 1700
-$Comp
-L CONN_3 K3
-U 1 1 4F1D9A77
-P 5650 1800
-F 0 "K3" V 5600 1800 50  0000 C CNN
-F 1 "CONN_3" V 5700 1800 40  0000 C CNN
-	1    5650 1800
-	1    0    0    -1  
-$EndComp
-Text GLabel 4300 2200 2    60   Input ~ 0
-HK38
 Wire Wire Line
 	4300 2200 4150 2200
-$Comp
-L CONN_1 P7
-U 1 1 4F187057
-P 5700 2650
-F 0 "P7" H 5780 2650 40  0000 L CNN
-F 1 "CONN_1" H 5700 2705 30  0001 C CNN
-	1    5700 2650
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	5400 2650 5550 2650
-Text GLabel 5400 2650 0    60   Input ~ 0
-HK38
 Wire Wire Line
 	1900 4000 2050 4000
-Text GLabel 1900 4000 0    60   Input ~ 0
-HK17
-Text GLabel 5400 2800 0    60   Input ~ 0
-HK17
 Wire Wire Line
 	5400 2800 5550 2800
-$Comp
-L CONN_1 P8
-U 1 1 4F187034
-P 5700 2800
-F 0 "P8" H 5780 2800 40  0000 L CNN
-F 1 "CONN_1" H 5700 2855 30  0001 C CNN
-	1    5700 2800
-	1    0    0    -1  
-$EndComp
-$Comp
-L CONN_1 P6
-U 1 1 4F186E55
-P 5700 3000
-F 0 "P6" H 5780 3000 40  0000 L CNN
-F 1 "CONN_1" H 5700 3055 30  0001 C CNN
-	1    5700 3000
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	5400 3000 5550 3000
-Text GLabel 5400 3000 0    60   Input ~ 0
-HK6
-Text GLabel 1900 2500 0    60   Input ~ 0
-HK6
 Wire Wire Line
 	1900 2500 2050 2500
-$Comp
-L CONN_4 P5
-U 1 1 4F1868B4
-P 7850 4400
-F 0 "P5" V 7800 4400 50  0000 C CNN
-F 1 "CONN_4" V 7900 4400 50  0000 C CNN
-	1    7850 4400
-	1    0    0    -1  
-$EndComp
-Text GLabel 7350 4250 0    60   Input ~ 0
-HK29
-Text GLabel 7350 4350 0    60   Input ~ 0
-HK30
 Wire Wire Line
 	7350 4350 7500 4350
 Wire Wire Line
@@ -134,14 +70,6 @@ Wire Wire Line
 	7350 4450 7500 4450
 Wire Wire Line
 	7350 4550 7500 4550
-Text GLabel 7350 4550 0    60   Input ~ 0
-HK27
-Text GLabel 7350 4450 0    60   Input ~ 0
-HK28
-Text GLabel 4300 4000 2    60   Input ~ 0
-HK28
-Text GLabel 4300 4100 2    60   Input ~ 0
-HK27
 Wire Wire Line
 	4300 4100 4150 4100
 Wire Wire Line
@@ -150,56 +78,10 @@ Wire Wire Line
 	4300 3900 4150 3900
 Wire Wire Line
 	4300 3800 4150 3800
-Text GLabel 4300 3800 2    60   Input ~ 0
-HK30
-Text GLabel 4300 3900 2    60   Input ~ 0
-HK29
-Text GLabel 6100 2350 0    60   Input ~ 0
-idAN7
 Wire Wire Line
 	1800 2600 2050 2600
-Text GLabel 1800 2600 0    60   Input ~ 0
-AN4
 Wire Wire Line
 	2050 2800 1900 2800
-Text GLabel 1900 2800 0    60   Input ~ 0
-idAN5
-$Comp
-L RJ45 J7
-U 1 1 4F171600
-P 6700 5500
-F 0 "J7" H 6900 6000 60  0000 C CNN
-F 1 "RJ45" H 6550 6000 60  0000 C CNN
-	1    6700 5500
-	0    1    1    0   
-$EndComp
-$Comp
-L R R13
-U 1 1 4F1715FF
-P 7550 5800
-F 0 "R13" V 7450 5800 50  0000 C CNN
-F 1 "10K" V 7550 5800 50  0000 C CNN
-	1    7550 5800
-	-1   0    0    1   
-$EndComp
-Text GLabel 6000 5550 0    60   Input ~ 0
-GND
-Text GLabel 6800 6050 0    60   Input ~ 0
-GND
-NoConn ~ 6250 5150
-NoConn ~ 6250 5250
-NoConn ~ 6250 5750
-NoConn ~ 6250 5850
-Text GLabel 6000 5350 0    60   Input ~ 0
-VDD
-Text GLabel 6000 5450 0    60   Input ~ 0
-idAN5
-Text GLabel 6000 5650 0    60   Input ~ 0
-AN4
-Text GLabel 7700 5550 2    60   Input ~ 0
-idAN5
-Text Notes 9200 4200 0    60   ~ 0
-SENSOR6
 Wire Wire Line
 	7550 5550 7700 5550
 Connection ~ 7050 6050
@@ -213,10 +95,6 @@ Wire Wire Line
 	6000 5550 6250 5550
 Wire Wire Line
 	6000 5650 6250 5650
-Text GLabel 4300 4300 2    60   Input ~ 0
-HK21
-Text GLabel 4300 4200 2    60   Input ~ 0
-HK22
 Wire Wire Line
 	4300 4200 4150 4200
 Wire Wire Line
@@ -225,71 +103,14 @@ Wire Wire Line
 	4300 4400 4150 4400
 Wire Wire Line
 	4300 4500 4150 4500
-Text GLabel 4300 4500 2    60   Input ~ 0
-HK19
-Text GLabel 4300 4400 2    60   Input ~ 0
-HK20
-$Comp
-L CONN_2 P4
-U 1 1 4F170606
-P 6900 3700
-F 0 "P4" V 6850 3700 40  0000 C CNN
-F 1 "CONN_2" V 6950 3700 40  0000 C CNN
-	1    6900 3700
-	1    0    0    -1  
-$EndComp
-Text Notes 7100 3450 2    60   ~ 0
-Test Point x 2
-Text GLabel 6400 3600 0    60   Input ~ 0
-HK20
-Text GLabel 6400 3800 0    60   Input ~ 0
-HK19
 Wire Wire Line
 	6400 3800 6550 3800
 Wire Wire Line
 	6400 3600 6550 3600
 Wire Wire Line
 	1800 2900 2050 2900
-Text GLabel 1800 2900 0    60   Input ~ 0
-AN6
 Wire Wire Line
 	2050 3000 1800 3000
-Text GLabel 1800 3000 0    60   Input ~ 0
-idAN7
-$Comp
-L RJ45 J6
-U 1 1 4F15C817
-P 6800 2400
-F 0 "J6" H 7000 2900 60  0000 C CNN
-F 1 "RJ45" H 6650 2900 60  0000 C CNN
-	1    6800 2400
-	0    1    1    0   
-$EndComp
-$Comp
-L R R12
-U 1 1 4F15C816
-P 7650 2700
-F 0 "R12" V 7550 2700 50  0000 C CNN
-F 1 "10K" V 7650 2700 50  0000 C CNN
-	1    7650 2700
-	-1   0    0    1   
-$EndComp
-Text GLabel 6100 2550 0    60   Input ~ 0
-AN6
-Text GLabel 6100 2450 0    60   Input ~ 0
-GND
-Text GLabel 6900 2950 0    60   Input ~ 0
-GND
-NoConn ~ 6350 2050
-NoConn ~ 6350 2150
-NoConn ~ 6350 2650
-NoConn ~ 6350 2750
-Text GLabel 6100 2250 0    60   Input ~ 0
-VDD
-Text GLabel 7800 2450 2    60   Input ~ 0
-idAN7
-Text Notes 9150 5700 0    60   ~ 0
-SENSOR5
 Wire Wire Line
 	7800 2450 7650 2450
 Wire Wire Line
@@ -551,6 +372,204 @@ Wire Wire Line
 Connection ~ 3050 5150
 Wire Wire Line
 	4950 3800 5100 3800
+Wire Wire Line
+	4400 4900 4550 4900
+Text GLabel 5300 4900 2    60   Output ~ 0
+data
+Text GLabel 5000 4550 0    60   Output ~ 0
+data
+Text GLabel 4400 4900 0    60   Input ~ 0
+VDD
+$Comp
+L R R14
+U 1 1 4F91F453
+P 4800 4900
+F 0 "R14" V 4700 4900 50  0000 C CNN
+F 1 "1K" V 4800 4900 50  0000 C CNN
+	1    4800 4900
+	0    -1   -1   0   
+$EndComp
+NoConn ~ 5300 1800
+Text GLabel 5100 1900 0    60   Input ~ 0
+VDD
+Text GLabel 5100 1700 0    60   Input ~ 0
+VSS
+$Comp
+L CONN_3 K3
+U 1 1 4F1D9A77
+P 5650 1800
+F 0 "K3" V 5600 1800 50  0000 C CNN
+F 1 "CONN_3" V 5700 1800 40  0000 C CNN
+	1    5650 1800
+	1    0    0    -1  
+$EndComp
+Text GLabel 4300 2200 2    60   Input ~ 0
+HK38
+$Comp
+L CONN_1 P7
+U 1 1 4F187057
+P 5700 2650
+F 0 "P7" H 5780 2650 40  0000 L CNN
+F 1 "CONN_1" H 5700 2705 30  0001 C CNN
+	1    5700 2650
+	1    0    0    -1  
+$EndComp
+Text GLabel 5400 2650 0    60   Input ~ 0
+HK38
+Text GLabel 1900 4000 0    60   Input ~ 0
+HK17
+Text GLabel 5400 2800 0    60   Input ~ 0
+HK17
+$Comp
+L CONN_1 P8
+U 1 1 4F187034
+P 5700 2800
+F 0 "P8" H 5780 2800 40  0000 L CNN
+F 1 "CONN_1" H 5700 2855 30  0001 C CNN
+	1    5700 2800
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_1 P6
+U 1 1 4F186E55
+P 5700 3000
+F 0 "P6" H 5780 3000 40  0000 L CNN
+F 1 "CONN_1" H 5700 3055 30  0001 C CNN
+	1    5700 3000
+	1    0    0    -1  
+$EndComp
+Text GLabel 5400 3000 0    60   Input ~ 0
+HK6
+Text GLabel 1900 2500 0    60   Input ~ 0
+HK6
+$Comp
+L CONN_4 P5
+U 1 1 4F1868B4
+P 7850 4400
+F 0 "P5" V 7800 4400 50  0000 C CNN
+F 1 "CONN_4" V 7900 4400 50  0000 C CNN
+	1    7850 4400
+	1    0    0    -1  
+$EndComp
+Text GLabel 7350 4250 0    60   Input ~ 0
+HK29
+Text GLabel 7350 4350 0    60   Input ~ 0
+HK30
+Text GLabel 7350 4550 0    60   Input ~ 0
+HK27
+Text GLabel 7350 4450 0    60   Input ~ 0
+HK28
+Text GLabel 4300 4000 2    60   Input ~ 0
+HK28
+Text GLabel 4300 4100 2    60   Input ~ 0
+HK27
+Text GLabel 4300 3800 2    60   Input ~ 0
+HK30
+Text GLabel 4300 3900 2    60   Input ~ 0
+HK29
+Text GLabel 6100 2350 0    60   Input ~ 0
+idAN7
+Text GLabel 1800 2600 0    60   Input ~ 0
+AN4
+Text GLabel 1900 2800 0    60   Input ~ 0
+idAN5
+$Comp
+L RJ45 J7
+U 1 1 4F171600
+P 6700 5500
+F 0 "J7" H 6900 6000 60  0000 C CNN
+F 1 "RJ45" H 6550 6000 60  0000 C CNN
+	1    6700 5500
+	0    1    1    0   
+$EndComp
+$Comp
+L R R13
+U 1 1 4F1715FF
+P 7550 5800
+F 0 "R13" V 7450 5800 50  0000 C CNN
+F 1 "10K" V 7550 5800 50  0000 C CNN
+	1    7550 5800
+	-1   0    0    1   
+$EndComp
+Text GLabel 6000 5550 0    60   Input ~ 0
+GND
+Text GLabel 6800 6050 0    60   Input ~ 0
+GND
+NoConn ~ 6250 5150
+NoConn ~ 6250 5250
+NoConn ~ 6250 5750
+NoConn ~ 6250 5850
+Text GLabel 6000 5350 0    60   Input ~ 0
+VDD
+Text GLabel 6000 5450 0    60   Input ~ 0
+idAN5
+Text GLabel 6000 5650 0    60   Input ~ 0
+AN4
+Text GLabel 7700 5550 2    60   Input ~ 0
+idAN5
+Text Notes 9200 4200 0    60   ~ 0
+SENSOR6
+Text GLabel 4300 4300 2    60   Input ~ 0
+HK21
+Text GLabel 4300 4200 2    60   Input ~ 0
+HK22
+Text GLabel 4300 4500 2    60   Input ~ 0
+HK19
+Text GLabel 4300 4400 2    60   Input ~ 0
+HK20
+$Comp
+L CONN_2 P4
+U 1 1 4F170606
+P 6900 3700
+F 0 "P4" V 6850 3700 40  0000 C CNN
+F 1 "CONN_2" V 6950 3700 40  0000 C CNN
+	1    6900 3700
+	1    0    0    -1  
+$EndComp
+Text Notes 7100 3450 2    60   ~ 0
+Test Point x 2
+Text GLabel 6400 3600 0    60   Input ~ 0
+HK20
+Text GLabel 6400 3800 0    60   Input ~ 0
+HK19
+Text GLabel 1800 2900 0    60   Input ~ 0
+AN6
+Text GLabel 1800 3000 0    60   Input ~ 0
+idAN7
+$Comp
+L RJ45 J6
+U 1 1 4F15C817
+P 6800 2400
+F 0 "J6" H 7000 2900 60  0000 C CNN
+F 1 "RJ45" H 6650 2900 60  0000 C CNN
+	1    6800 2400
+	0    1    1    0   
+$EndComp
+$Comp
+L R R12
+U 1 1 4F15C816
+P 7650 2700
+F 0 "R12" V 7550 2700 50  0000 C CNN
+F 1 "10K" V 7650 2700 50  0000 C CNN
+	1    7650 2700
+	-1   0    0    1   
+$EndComp
+Text GLabel 6100 2550 0    60   Input ~ 0
+AN6
+Text GLabel 6100 2450 0    60   Input ~ 0
+GND
+Text GLabel 6900 2950 0    60   Input ~ 0
+GND
+NoConn ~ 6350 2050
+NoConn ~ 6350 2150
+NoConn ~ 6350 2650
+NoConn ~ 6350 2750
+Text GLabel 6100 2250 0    60   Input ~ 0
+VDD
+Text GLabel 7800 2450 2    60   Input ~ 0
+idAN7
+Text Notes 9150 5700 0    60   ~ 0
+SENSOR5
 Text GLabel 4950 3800 0    60   Input ~ 0
 HK22
 Text GLabel 4950 3600 0    60   Input ~ 0
@@ -605,8 +624,6 @@ Text Notes 9150 1250 0    60   ~ 0
 SENSOR1
 Text Notes 4800 4200 0    60   ~ 0
 SERVO AX-12
-Text GLabel 5000 4550 0    60   Output ~ 0
-data
 Text GLabel 1250 4500 0    60   Input ~ 0
 data
 $Comp
