@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date vie 20 abr 2012 20:16:39 UYT
+EESchema Schematic File Version 2  date mié 23 may 2012 10:33:15 UYT
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -29,13 +29,14 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
+LIBS:sharp-cache
 EELAYER 25  0
 EELAYER END
 $Descr A4 11700 8267
 encoding utf-8
 Sheet 1 1
 Title ""
-Date "20 apr 2012"
+Date "23 may 2012"
 Rev ""
 Comp ""
 Comment1 ""
@@ -50,8 +51,6 @@ Wire Wire Line
 Wire Wire Line
 	3900 2000 3900 1850
 Wire Wire Line
-	1650 2200 1650 2400
-Wire Wire Line
 	2200 1950 2200 2350
 Wire Wire Line
 	2300 1950 2300 2650
@@ -59,8 +58,6 @@ Wire Wire Line
 	2500 1950 2500 2650
 Wire Wire Line
 	2400 2150 2400 1950
-Wire Wire Line
-	1650 3100 1650 2900
 Wire Wire Line
 	3900 2500 3900 2650
 Wire Wire Line
@@ -80,10 +77,6 @@ Text GLabel 3250 3100 0    60   Input ~ 0
 GND
 Text GLabel 3200 3200 0    60   Input ~ 0
 AN
-Text GLabel 1650 3100 3    60   Input ~ 0
-AN
-Text GLabel 1650 2200 1    60   Input ~ 0
-VDD
 $Comp
 L R R2
 U 1 1 4FAC1BA4
@@ -91,15 +84,6 @@ P 3900 2250
 F 0 "R2" V 3980 2250 50  0000 C CNN
 F 1 "R" V 3900 2250 50  0000 C CNN
 	1    3900 2250
-	1    0    0    -1  
-$EndComp
-$Comp
-L R R1
-U 1 1 4FAC1B98
-P 1650 2650
-F 0 "R1" V 1730 2650 50  0000 C CNN
-F 1 "R" V 1650 2650 50  0000 C CNN
-	1    1650 2650
 	1    0    0    -1  
 $EndComp
 Text GLabel 2900 1150 2    60   Input ~ 0
