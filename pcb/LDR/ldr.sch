@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date mar 15 may 2012 10:41:56 UYT
+EESchema Schematic File Version 2  date mié 23 may 2012 12:39:40 UYT
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -29,13 +29,14 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
+LIBS:ldr-cache
 EELAYER 25  0
 EELAYER END
 $Descr A4 11700 8267
 encoding utf-8
 Sheet 1 1
 Title ""
-Date "15 may 2012"
+Date "23 may 2012"
 Rev ""
 Comp ""
 Comment1 ""
@@ -100,7 +101,7 @@ L R R3
 U 1 1 4FAC3460
 P 4300 1300
 F 0 "R3" V 4380 1300 50  0000 C CNN
-F 1 "R" V 4300 1300 50  0000 C CNN
+F 1 "180" V 4300 1300 50  0000 C CNN
 	1    4300 1300
 	1    0    0    -1  
 $EndComp
@@ -113,7 +114,7 @@ L R R2
 U 1 1 4FAC1BA4
 P 3900 2250
 F 0 "R2" V 3980 2250 50  0000 C CNN
-F 1 "R" V 3900 2250 50  0000 C CNN
+F 1 "1k" V 3900 2250 50  0000 C CNN
 	1    3900 2250
 	1    0    0    -1  
 $EndComp
@@ -122,7 +123,7 @@ L R R1
 U 1 1 4FAC1B98
 P 1650 2650
 F 0 "R1" V 1730 2650 50  0000 C CNN
-F 1 "R" V 1650 2650 50  0000 C CNN
+F 1 "22k" V 1650 2650 50  0000 C CNN
 	1    1650 2650
 	1    0    0    -1  
 $EndComp
