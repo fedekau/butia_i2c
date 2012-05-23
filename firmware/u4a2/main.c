@@ -344,9 +344,6 @@ static void InitializeSystem(void) {
 	mInitializeUSBDriver();         // See usbdrv.h
 
 	mInitPortA();mInitPortB();mInitPortC();mInitPortD();mInitPortE(); // set pins as input for safety and interference avoid
-        mInitAFE; 				 // Inicializacion de puertos para usar en el AFE, ver iocfg.h
-	//mInitReloj; 			 // Inicializacion de puertos para usar en el Reloj, ver iocfg.h
-	//displayInit(); 			 // Display initialization routine
 	initISRFunctions();      // Initialize interrupt service routines mechanism of USB4all
 	initT0Service();         // Inicializa servicio T0 para manejar recurso de timmer
 	initPollingFunctions();  // inicializa el buffer con 0s (dynamicPolling.c)
