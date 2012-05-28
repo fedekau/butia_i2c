@@ -13,22 +13,21 @@
 
 /** D E F I N I T I O N S ****************************************************/
 
-#define BUTIA_VERSION   0x14      //Butia Version 2.1
+#define  BUTIA_MINOR_VERSION   0x01      /*butia version FIXME*/
+#define  BUTIA_MAJOR_VERSION   0x00
 
 /** S T R U C T U R E S ******************************************************/
 typedef union BUTIA_DATA_PACKET
 {
-    byte _byte[USBGEN_EP_SIZE];  //For byte access
-    word _word[USBGEN_EP_SIZE/2];//For word access(USBGEN_EP_SIZE msut be even)
+    byte _byte[USBGEN_EP_SIZE];  /*For byte access*/
+    word _word[USBGEN_EP_SIZE/2];/*For word access(USBGEN_EP_SIZE msut be even)*/
     struct
     {
         enum
         { 
             READ_VERSION = 0x00,
-            VERSION      = 0x02,
-            GET_VOLT     = 0x03,
-            MESS	 = 0x05,
-            RESET	 = 0xFF //backward compatibility
+            GET_VOLT     = 0x01,
+            RESET	 = 0xFF
         }CMD;
         byte len;
     };
@@ -52,6 +51,4 @@ typedef union BUTIA_DATA_PACKET
 
 /** P U B L I C  P R O T O T Y P E S *****************************************/
 
-
-
-#endif //USER_BUTIA_H
+#endif /*USER_BUTIA_H*/

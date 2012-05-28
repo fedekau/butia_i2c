@@ -19,8 +19,8 @@
 /** V A R I A B L E S ********************************************************/
 #pragma udata
 
-byte  usrMotoresHandler;     // Handler number asigned to the module
-byte* sendBufferUsrMotores; // buffer to send data
+byte  usrMotorsHandler;     // Handler number asigned to the module
+byte* sendBufferUsrMotors; // buffer to send data
 
 #define FIRST_ON    0x01
 #define DELAY       0x02
@@ -33,16 +33,16 @@ byte* sendBufferUsrMotores; // buffer to send data
 #define RIGHT_MOTOR  0x02
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void UserMotoresProcessIO(void);
-void UserMotoresInit(byte i);
-void UserMotoresReceived(byte*, byte);
-void UserMotoresRelease(byte i);
-void UserMotoresConfigure(void);
+void UserMotorsProcessIO(void);
+void UserMotorsInit(byte i);
+void UserMotorsReceived(byte*, byte);
+void UserMotorsRelease(byte i);
+void UserMotorsConfigure(void);
 
 // Table used by the framework to get a fixed reference point to the user module functions defined by the framework
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
-uTab userMotoresModuleTable = {&UserMotoresInit,&UserMotoresRelease,&UserMotoresConfigure,"motores"}; //modName must be less or equal 8 characters
+uTab userMotorsModuleTable = {&UserMotorsInit,&UserMotorsRelease,&UserMotorsConfigure,"motors"}; //modName must be less or equal 8 characters
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
@@ -112,16 +112,16 @@ void sexyMotorMoveStart(){
     registerT0event(TIME_UNIT, &forwardLeft);
 }
 
-void UserMotoresInit(byte i) {
+void UserMotorsInit(byte i) {
     BOOL res;
     byte resWriteInfo;
-    usrMotoresHandler = i;
+    usrMotorsHandler = i;
     // add my receive function to the handler module, to be called automatically when the pc sends data to the user module
-    setHandlerReceiveFunction(usrMotoresHandler,&UserMotoresReceived);
+    setHandlerReceiveFunction(usrMotorsHandler,&UserMotorsReceived);
     // add my receive pooling function to the dynamic pooling module, to be called periodically
-    /* andres res = addPollingFunction(&UserMotoresProcessIO);*/
+    /* andres res = addPollingFunction(&UserMotorsProcessIO);*/
     // initialize the send buffer, used to send data to the PC
-    sendBufferUsrMotores = getSharedBuffer(usrMotoresHandler);
+    sendBufferUsrMotors = getSharedBuffer(usrMotorsHandler);
     ax12InitSerial();
     setEndlessTurnMode(LEFT_MOTOR, 1);
     setEndlessTurnMode(RIGHT_MOTOR, 1);
@@ -156,7 +156,7 @@ void UserMotoresInit(byte i) {
  *
  * Note:            None
  *****************************************************************************/
-void UserMotoresConfigure(void){
+void UserMotorsConfigure(void){
 // Do the configuration
 }
 
@@ -177,7 +177,7 @@ void UserMotoresConfigure(void){
  * Note:            None
  *****************************************************************************/
 
-void UserMotoresProcessIO(void){
+void UserMotorsProcessIO(void){
 
     if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND==1)) return;
 }//end ProcessIO
@@ -199,16 +199,16 @@ void UserMotoresProcessIO(void){
  * Note:            None
  *****************************************************************************/
 
-void UserMotoresRelease(byte i) {
+void UserMotorsRelease(byte i) {
     unsetHandlerReceiveBuffer(i);
     unsetHandlerReceiveFunction(i);
-    //unregisterT0event(&MotoresEvent);
-    //removePoolingFunction(&UserMotoresProcessIO);
+    //unregisterT0event(&MotorsEvent);
+    //removePoolingFunction(&UserMotorsProcessIO);
 }
 
 
 /******************************************************************************
- * Function:        UserMotoresReceived(byte* recBuffPtr, byte len)
+ * Function:        UserMotorsReceived(byte* recBuffPtr, byte len)
  *
  * PreCondition:    None
  *
@@ -223,39 +223,34 @@ void UserMotoresRelease(byte i) {
  * Note:            None
  *****************************************************************************/
 
-void UserMotoresReceived(byte* recBuffPtr, byte len){
-    byte index;
+void UserMotorsReceived(byte* recBuffPtr, byte len){
     byte j;
-    byte userMotoresCounter = 0;
-    byte id, regstart, resWriteInfo, valueH, valueL, sentidoIzq, velIzq, sentidoDer, velDer;
-    int value;
+    byte userMotorsCounter = 0;
     char direction1, direction2;
     byte lowVel1, lowVel2, highVel1, highVel2, res;
     word vel1, vel2;
-    switch(((MOTORES_DATA_PACKET*)recBuffPtr)->CMD){
+    switch(((MOTORS_DATA_PACKET*)recBuffPtr)->CMD){
 
         case READ_VERSION:
-              ((MOTORES_DATA_PACKET*)sendBufferUsrMotores)->_byte[0] = ((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[0];
-              ((MOTORES_DATA_PACKET*)sendBufferUsrMotores)->_byte[1] = ((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[1];
-              ((MOTORES_DATA_PACKET*)sendBufferUsrMotores)->_byte[2] = MOTORES_MINOR_VERSION;
-              ((MOTORES_DATA_PACKET*)sendBufferUsrMotores)->_byte[3] = MOTORES_MAJOR_VERSION;
-              userMotoresCounter = 0x04;
+              ((MOTORS_DATA_PACKET*)sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*)recBuffPtr)->_byte[0];
+              ((MOTORS_DATA_PACKET*)sendBufferUsrMotors)->_byte[1] = MOTORS_MINOR_VERSION;
+              ((MOTORS_DATA_PACKET*)sendBufferUsrMotors)->_byte[2] = MOTORS_MAJOR_VERSION;
+              userMotorsCounter = 0x03;
               break;
-        //byte writeInfo (byte id,byte regstart, int value) {
         case RESET:
               Reset();
         break;
         case SET_VEL_2MTR:
-            ((MOTORES_DATA_PACKET*)sendBufferUsrMotores)->_byte[0] = ((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[1];
-            ((MOTORES_DATA_PACKET*)sendBufferUsrMotores)->_byte[1] = ((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[4];
-            direction1 = ((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[1];
-            highVel1   = ((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[2];
-            lowVel1    = ((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[3];
+            ((MOTORS_DATA_PACKET*)sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*)recBuffPtr)->_byte[1];
+            ((MOTORS_DATA_PACKET*)sendBufferUsrMotors)->_byte[1] = ((MOTORS_DATA_PACKET*)recBuffPtr)->_byte[4];
+            direction1 = ((MOTORS_DATA_PACKET*)recBuffPtr)->_byte[1];
+            highVel1   = ((MOTORS_DATA_PACKET*)recBuffPtr)->_byte[2];
+            lowVel1    = ((MOTORS_DATA_PACKET*)recBuffPtr)->_byte[3];
             vel1 = highVel1;
             vel1 = vel1<<8|lowVel1;
-            direction2 = ((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[4];
-            highVel2   = ((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[5];
-            lowVel2    = ((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[6];
+            direction2 = ((MOTORS_DATA_PACKET*)recBuffPtr)->_byte[4];
+            highVel2   = ((MOTORS_DATA_PACKET*)recBuffPtr)->_byte[5];
+            lowVel2    = ((MOTORS_DATA_PACKET*)recBuffPtr)->_byte[6];
             vel2 = highVel2;
             vel2 = vel2<<8|lowVel2;
             if(direction1==0x01){
@@ -271,23 +266,23 @@ void UserMotoresReceived(byte* recBuffPtr, byte len){
             else
                 endlessTurn(RIGHT_MOTOR, -vel2, 1);
             //TODO return error code
-            userMotoresCounter = 0x02;
+            userMotorsCounter = 0x02;
         break;
 
-        case TEST_MOTORES:
+        case TEST_MOTORS:
             sexyMotorMoveStart();
-            ((MOTORES_DATA_PACKET*)sendBufferUsrMotores)->_byte[0] = ((MOTORES_DATA_PACKET*)recBuffPtr)->_byte[0];
-            userMotoresCounter = 0x01;
+            ((MOTORS_DATA_PACKET*)sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*)recBuffPtr)->_byte[0];
+            userMotorsCounter = 0x01;
         break;
         default:
               break;
-        }//end switch(s)
-        if(userMotoresCounter != 0){
+        }/*end switch(s)*/
+        if(userMotorsCounter != 0){
             j = 255;
-            while(mUSBGenTxIsBusy() && j-->0); // pruebo un máximo de 255 veces
+            while(mUSBGenTxIsBusy() && j-->0); /*pruebo un maximo de 255 veces*/
                 if(!mUSBGenTxIsBusy())
-                    USBGenWrite2(usrMotoresHandler, userMotoresCounter);
-        }//end if
-}//end UserMotoresReceived
+                    USBGenWrite2(usrMotorsHandler, userMotorsCounter);
+        }/*end if*/
+}/*end UserMotorsReceived*/
 
 /** EOF usr_Buzzer.c ***************************************************************/

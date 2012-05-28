@@ -51,15 +51,15 @@ uTab UserButiaModuleTable = {&UserButiaInit,&UserButiaRelease,&UserButiaConfigur
  *****************************************************************************/
 
 void UserButiaInit(byte i){
-	BOOL res;
-	usrButiaHandler = i;
-	// add my receive function to the handler module, to be called automatically when the pc sends data to the user module
-	setHandlerReceiveFunction(usrButiaHandler,&UserButiaReceived);
-	// add my receive pooling function to the dynamic pooling module, to be called periodically 
-	res = addPollingFunction(&UserButiaProcessIO);
-	// initialize the send buffer, used to send data to the PC
-	sendBufferusrButia = getSharedBuffer(usrButiaHandler);
-	//TODO return res value 
+    BOOL res;
+    usrButiaHandler = i;
+    // add my receive function to the handler module, to be called automatically when the pc sends data to the user module
+    setHandlerReceiveFunction(usrButiaHandler,&UserButiaReceived);
+    // add my receive pooling function to the dynamic pooling module, to be called periodically
+    res = addPollingFunction(&UserButiaProcessIO);
+    // initialize the send buffer, used to send data to the PC
+    sendBufferusrButia = getSharedBuffer(usrButiaHandler);
+    //TODO return res value
 }//end UserButiaInit
 
 /******************************************************************************
@@ -100,7 +100,6 @@ void UserButiaConfigure(void){
  *****************************************************************************/
 
 void UserButiaProcessIO(void){
-
     if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND==1)) return;
 	// here enter the code that want to be called periodically, per example interaction with buttons and leds
 	
@@ -126,9 +125,9 @@ void UserButiaProcessIO(void){
  *****************************************************************************/
 
 void UserButiaRelease(byte i){
-	unsetHandlerReceiveBuffer(i);
-	unsetHandlerReceiveFunction(i);
-	removePoolingFunction(&UserButiaProcessIO);
+    unsetHandlerReceiveBuffer(i);
+    unsetHandlerReceiveFunction(i);
+    removePoolingFunction(&UserButiaProcessIO);
 }
 
 
@@ -149,51 +148,42 @@ void UserButiaRelease(byte i){
  *****************************************************************************/
 
 void UserButiaReceived(byte* recBuffPtr, byte len){
-      char mens[9] = "User Skeleton is alive";
-      byte j;	
-      byte UserButiaCounter = 0;
-      byte id_motor, i;
-      byte data [2];
-      //int *id, *err, *data_received;
-      int id, err, data_received = 0;
-      switch(((BUTIA_DATA_PACKET*)recBuffPtr)->CMD)
-      {
-       case VERSION:
-                //dataPacket._byte[1] is len
-                ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[0] = ((BUTIA_DATA_PACKET*)recBuffPtr)->_byte[0];
-                ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[1] = BUTIA_VERSION;
-                UserButiaCounter=0x02;
+    byte i, j;
+    byte UserButiaCounter = 0;
+    byte data [2];
+    int id, err, data_received = 0;
+
+    switch(((BUTIA_DATA_PACKET*)recBuffPtr)->CMD)
+    {
+        case READ_VERSION:
+            ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[0] = ((BUTIA_DATA_PACKET*)recBuffPtr)->_byte[0];
+            ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[1] = BUTIA_MINOR_VERSION;
+            ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[1] = BUTIA_MAJOR_VERSION;
+            UserButiaCounter=0x03;
         break;
         case GET_VOLT:
-                //dataPacket._byte[1] is len
-                ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[0] = ((BUTIA_DATA_PACKET*)recBuffPtr)->_byte[0];
-
-                id_motor = 0x01;//idmotorRuedas();
-                data[0] = PRESENT_VOLTAGE;
-                data[1] = 0x01; /*length of data to read*/
-                ax12SendPacket (id_motor, 0x02, READ_DATA , data);
-                i = ax12ReadPacket(&id, &err, &data_received);
-                ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[1] = data_received;
-                UserButiaCounter=0x02;
+            ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[0] = ((BUTIA_DATA_PACKET*)recBuffPtr)->_byte[0];
+            data[0] = PRESENT_VOLTAGE;
+            data[1] = 0x01; /*length of data to read*/
+            ax12SendPacket (0x01, 0x02, READ_DATA , data);
+            i = ax12ReadPacket(&id, &err, &data_received);
+            ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[1] = data_received;
+            UserButiaCounter=0x02;
         break;
         case RESET:
-                Reset();
+            Reset();
         break;
-		  
-        case MESS:
-                sendMes(mens, sizeof(mens));
-        break;
-         
+
         default:
         break;
-        }//end switch(s)
-        if(UserButiaCounter != 0){
-            j = 255;
-            while(mUSBGenTxIsBusy() && j-->0); // pruebo un máximo de 255 veces
-                if(!mUSBGenTxIsBusy())
-                    USBGenWrite2(usrButiaHandler, UserButiaCounter);
-        }//end if
+    }/*end switch(s)*/
+    if(UserButiaCounter != 0){
+        j = 255;
+        while(mUSBGenTxIsBusy() && j-->0); // pruebo un maximo de 255 veces
+            if(!mUSBGenTxIsBusy())
+                USBGenWrite2(usrButiaHandler, UserButiaCounter);
+    }/*end if*/
 
-}//end UserButiaReceived
+}/*end UserButiaReceived*/
 
-/** EOF usr_skeleton.c ***************************************************************/
+/** EOF usr_butia.c ***************************************************************/

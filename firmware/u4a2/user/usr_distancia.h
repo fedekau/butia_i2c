@@ -13,7 +13,7 @@
 
 /** D E F I N I T I O N S ****************************************************/
 
-#define DIST_MINOR_VERSION    0x01
+#define DIST_MINOR_VERSION    0x01  /*distance version*/
 #define DIST_MAJOR_VERSION    0x00
 
 /** S T R U C T U R E S ******************************************************/

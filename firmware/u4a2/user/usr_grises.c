@@ -17,26 +17,26 @@
 /** V A R I A B L E S ********************************************************/
 #pragma udata 
 
-byte* sendBufferUsrGrises; /* buffer to send data*/
+byte* sendBufferUsrGrey; /* buffer to send data*/
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void UserGrisesProcessIO(void);
-void UserGrisesInit(byte i);
-void UserGrisesReceived(byte*, byte, byte);
-void UserGrisesRelease(byte i);
-void UserGrisesConfigure(void);
+void UserGreyProcessIO(void);
+void UserGreyInit(byte i);
+void UserGreyReceived(byte*, byte, byte);
+void UserGreyRelease(byte i);
+void UserGreyConfigure(void);
 
 /* Table used by te framework to get a fixed reference point to the user module functions defined by the framework */
 /** USER MODULE REFERENCE ****************************************************/
 #pragma romdata user
-uTab userGrisesModuleTable = {&UserGrisesInit,&UserGrisesRelease,&UserGrisesConfigure,"grises"}; /*modName must be less or equal 8 characters*/
+uTab userGreyModuleTable = {&UserGreyInit,&UserGreyRelease,&UserGreyConfigure,"grey"}; /*modName must be less or equal 8 characters*/
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
 #pragma code module
 
 /******************************************************************************
- * Function:        UserGrisesInit(void)
+ * Function:        UserGreyInit(void)
  *
  * PreCondition:    None
  *
@@ -52,18 +52,18 @@ uTab userGrisesModuleTable = {&UserGrisesInit,&UserGrisesRelease,&UserGrisesConf
  *
  * Note:            None
  *****************************************************************************/
-void UserGrisesInit(byte usrGrisesHandler){
+void UserGreyInit(byte usrGreyHandler){
     /* add my receive function to the handler module, to be called automatically
      * when the pc sends data to the user module */
-    setHandlerReceiveFunction(usrGrisesHandler,&UserGrisesReceived);
+    setHandlerReceiveFunction(usrGreyHandler,&UserGreyReceived);
     /* initialize the send buffer, used to send data to the PC */
-    sendBufferUsrGrises = getSharedBuffer(usrGrisesHandler);
+    sendBufferUsrGrey = getSharedBuffer(usrGreyHandler);
     /* get port where sensor/actuator is connected and set to IN/OUT mode*/
-    getPortDescriptor(usrGrisesHandler)->change_port_direction(IN);
-}/*end UserGrisesInit*/
+    getPortDescriptor(usrGreyHandler)->change_port_direction(IN);
+}/*end UserGreyInit*/
 
 /******************************************************************************
- * Function:        UserGrisesConfigure(void)
+ * Function:        UserGreyConfigure(void)
  *
  * PreCondition:    None
  *
@@ -78,12 +78,12 @@ void UserGrisesInit(byte usrGrisesHandler){
  *
  * Note:            None
  *****************************************************************************/
-void UserGrisesConfigure(void){
+void UserGreyConfigure(void){
     /* Do the configuration */
-}/*end UserGrisesConfigure*/
+}/*end UserGreyConfigure*/
 
 /******************************************************************************
- * Function:        UserGrisesProcessIO(void)
+ * Function:        UserGreyProcessIO(void)
  *
  * PreCondition:    None
  *
@@ -99,14 +99,14 @@ void UserGrisesConfigure(void){
  *
  * Note:            None
  *****************************************************************************/
-void UserGrisesProcessIO(void){
+void UserGreyProcessIO(void){
     if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND==1)) return;
 	/* here enter the code that want to be called periodically,
          * per example interaction with buttons and leds */
-}/*end UserGrisesProcessIO*/
+}/*end UserGreyProcessIO*/
 
 /******************************************************************************
- * Function:        UserGrisesRelease(byte i)
+ * Function:        UserGreyRelease(byte i)
  *
  * PreCondition:    None
  *
@@ -122,13 +122,13 @@ void UserGrisesProcessIO(void){
  *
  * Note:            None
  *****************************************************************************/
-void UserGrisesRelease(byte i){
+void UserGreyRelease(byte i){
     unsetHandlerReceiveBuffer(i);
     unsetHandlerReceiveFunction(i);
-}/*end UserGrisesRelease*/
+}/*end UserGreyRelease*/
 
 /******************************************************************************
- * Function:        UserGrisesReceived(byte* recBuffPtr, byte len)
+ * Function:        UserGreyReceived(byte* recBuffPtr, byte len)
  *
  * PreCondition:    None
  *
@@ -142,25 +142,25 @@ void UserGrisesRelease(byte i){
  *
  * Note:            None
  *****************************************************************************/
-void UserGrisesReceived(byte* recBuffPtr, byte len, byte handler){
+void UserGreyReceived(byte* recBuffPtr, byte len, byte handler){
     byte j;
     WORD data;
-    byte userGrisesCounter = 0;
-    switch(((GRISES_DATA_PACKET*)recBuffPtr)->CMD)
+    byte userGreyCounter = 0;
+    switch(((GREY_DATA_PACKET*)recBuffPtr)->CMD)
     {
         case READ_VERSION:
-            ((GRISES_DATA_PACKET*)sendBufferUsrGrises)->_byte[0] = ((GRISES_DATA_PACKET*)recBuffPtr)->_byte[0];
-            ((GRISES_DATA_PACKET*)sendBufferUsrGrises)->_byte[1] = GRISES_MINOR_VERSION;
-            ((GRISES_DATA_PACKET*)sendBufferUsrGrises)->_byte[2] = GRISES_MAJOR_VERSION;
-            userGrisesCounter=0x03;
+            ((GREY_DATA_PACKET*)sendBufferUsrGrey)->_byte[0] = ((GREY_DATA_PACKET*)recBuffPtr)->_byte[0];
+            ((GREY_DATA_PACKET*)sendBufferUsrGrey)->_byte[1] = GREY_MINOR_VERSION;
+            ((GREY_DATA_PACKET*)sendBufferUsrGrey)->_byte[2] = GREY_MAJOR_VERSION;
+            userGreyCounter=0x03;
             break;
 
-        case GET_ANA_VALUE:
-            ((GRISES_DATA_PACKET*)sendBufferUsrGrises)->_byte[0] = ((GRISES_DATA_PACKET*)recBuffPtr)->_byte[0];
+        case GET_VALUE:
+            ((GREY_DATA_PACKET*)sendBufferUsrGrey)->_byte[0] = ((GREY_DATA_PACKET*)recBuffPtr)->_byte[0];
             data = getPortDescriptor(handler)->get_data_analog();
-            ((GRISES_DATA_PACKET*)sendBufferUsrGrises)->_byte[1] = MSB(data);
-            ((GRISES_DATA_PACKET*)sendBufferUsrGrises)->_byte[2] = LSB(data);
-            userGrisesCounter=0x03;
+            ((GREY_DATA_PACKET*)sendBufferUsrGrey)->_byte[1] = LSB(data);
+            ((GREY_DATA_PACKET*)sendBufferUsrGrey)->_byte[2] = MSB(data);
+            userGreyCounter=0x03;
             break;
 
         case RESET:
@@ -171,13 +171,13 @@ void UserGrisesReceived(byte* recBuffPtr, byte len, byte handler){
             break;
     }/*end switch(s)*/
 
-    if(userGrisesCounter != 0)
+    if(userGreyCounter != 0)
     {
         j = 255;
         while(mUSBGenTxIsBusy() && j-->0); /* pruebo un mÃ¡ximo de 255 veces */
         if(!mUSBGenTxIsBusy())
-            USBGenWrite2(handler, userGrisesCounter);
+            USBGenWrite2(handler, userGreyCounter);
     }/*end if*/
-}/*end UserGrisesReceived*/
+}/*end UserGreyReceived*/
 
-/** EOF usr_grises.c ***************************************************************/
+/** EOF usr_grey.c ***************************************************************/

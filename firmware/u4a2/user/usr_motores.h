@@ -3,8 +3,8 @@
  * Andrew
  *****************************************************************************/
 
-#ifndef USER_MOTORES_H
-#define USER_MOTORES_H
+#ifndef USER_MOTORS_H
+#define USER_MOTORS_H
 
 /** I N C L U D E S **********************************************************/
 #include "system/typedefs.h"
@@ -14,20 +14,20 @@
 
 /** D E F I N I T I O N S ****************************************************/
 
-#define  MOTORES_MINOR_VERSION   0x01    //ax12 version 0.1
-#define  MOTORES_MAJOR_VERSION   0x00
+#define  MOTORS_MINOR_VERSION   0x01    /*motors version*/
+#define  MOTORS_MAJOR_VERSION   0x00
 
 /** S T R U C T U R E S ******************************************************/
-typedef union MOTORES_DATA_PACKET{
-    byte _byte[USBGEN_EP_SIZE];  //For byte access
-    word _word[USBGEN_EP_SIZE/2];//For word access(USBGEN_EP_SIZE msut be even)
+typedef union MOTORS_DATA_PACKET{
+    byte _byte[USBGEN_EP_SIZE];  /*For byte access*/
+    word _word[USBGEN_EP_SIZE/2];/*For word access(USBGEN_EP_SIZE msut be even)*/
     struct
     {
         enum
         {
-            SET_VEL_MTR = 0x00,
+            READ_VERSION = 0x00,
             SET_VEL_2MTR = 0x01,
-            TEST_MOTORES = 0x02
+            TEST_MOTORS  = 0x02
         } CMD;
         byte len;
     };
@@ -39,19 +39,18 @@ typedef union MOTORES_DATA_PACKET{
     struct
     {
         unsigned :8;
-        byte ax12_num;
-        byte ax12_status;
+        byte motors_num;
+        byte motors_status;
     };
     struct
     {
         unsigned :8;
         word word_data;
     };
-} MOTORES_DATA_PACKET;
+} MOTORS_DATA_PACKET;
 
 /** P U B L I C  P R O T O T Y P E S *****************************************/
 
 void sexyMotorMoveStart();
 
-#endif //USER_MOTORES_H
-
+#endif /*USER_MOTORS_H*/
