@@ -9,7 +9,7 @@
 #include <delays.h>
 #include "system/typedefs.h"
 #include "system/usb/usb.h"
-#include "user/usr_motores.h"
+#include "user/usr_motors.h"
 #include "io_cfg.h"              // I/O pin mapping
 #include "user/handlerManager.h"
 #include "dynamicPolling.h"

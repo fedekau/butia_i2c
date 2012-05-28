@@ -8,7 +8,7 @@
 #include <usart.h>
 #include "system/typedefs.h"
 #include "system/usb/usb.h"
-#include "user/usr_distancia.h"
+#include "user/usr_distance.h"
 #include "io_cfg.h"              /* I/O pin mapping*/
 #include "user/handlerManager.h"
 #include "dynamicPolling.h"
