@@ -1,4 +1,4 @@
-# EESchema Netlist Version 1.1 created  vie 20 abr 2012 20:47:22 UYT
+# EESchema Netlist Version 1.1 created  mié 06 jun 2012 23:04:49 UYT
 (
  ( /4C6EDA5F C1 C1 22pF
   ( 1 OSC1 )
@@ -9,7 +9,7 @@
   ( 2 GND )
  )
  ( /4C6EDA57 C1 C3 0,1uF
-  ( 1 N-000042 )
+  ( 1 N-000036 )
   ( 2 GND )
  )
  ( /4C6ED9F9 C1 C4 0,47uF
@@ -17,15 +17,15 @@
   ( 2 GND )
  )
  ( /4C6ED9FF C1 C5 22pF
-  ( 1 N-000034 )
+  ( 1 N-000040 )
   ( 2 GND )
  )
  ( /4C6EDA5A C1 C6 22pF
-  ( 1 N-000033 )
+  ( 1 N-000049 )
   ( 2 GND )
  )
  ( /4C6ED9FC C1 C7 0,1uF
-  ( 1 N-000032 )
+  ( 1 N-000041 )
   ( 2 GND )
  )
  ( /4C6ED9F4 C1 C8 0,1uF
@@ -41,15 +41,15 @@
   ( 2 GND )
  )
  ( /4C6EDC1C LEDV D1 LED
-  ( 1 N-000044 )
+  ( 1 N-000046 )
   ( 2 GND )
  )
  ( /4CA35CFE D5 D2 1N5819
-  ( 1 N-000040 )
+  ( 1 N-000044 )
   ( 2 VDD )
  )
  ( /4C6ED928 USB_B J1 USB_B
-  ( 1 N-000040 )
+  ( 1 N-000044 )
   ( 2 D- )
   ( 3 D+ )
   ( 4 GND )
@@ -145,9 +145,9 @@
   ( 5 RB6 )
  )
  ( /4C6EDE43 PIN_ARRAY_2X2 P2 CONN_2X2
-  ( 1 N-000034 )
+  ( 1 N-000040 )
   ( 2 RC0 )
-  ( 3 N-000033 )
+  ( 3 N-000049 )
   ( 4 RC1 )
  )
  ( /4F14716E PIN_ARRAY_2X1 P3 CONN_2
@@ -173,8 +173,28 @@
  ( /4F187034 PINTST P8 CONN_1
   ( 1 HK17 )
  )
+ ( /4FD00A52 R3 P9 BRIDGE
+  ( 1 GND )
+  ( 2 GND )
+ )
+ ( /4FD00BAA R3 P10 BRIDGE
+  ( 1 GND )
+  ( 2 GND )
+ )
+ ( /4FD00BFB R3 P11 BRIDGE
+  ( 1 VDD )
+  ( 2 VDD )
+ )
+ ( /4FD00B9E R3 P12 BRIDGE
+  ( 1 GND )
+  ( 2 GND )
+ )
+ ( /4FD00BA9 R3 P13 BRIDGE
+  ( 1 GND )
+  ( 2 GND )
+ )
  ( /4C6EDBDF R3 R1 1K
-  ( 1 N-000044 )
+  ( 1 N-000046 )
   ( 2 VDD )
  )
  ( /4C6EDBEC R3 R2 1M
@@ -182,19 +202,19 @@
   ( 2 OSC2 )
  )
  ( /4C6EDBE6 R3 R3 10K
-  ( 1 N-000042 )
+  ( 1 N-000036 )
   ( 2 VDD )
  )
  ( /4C6EDBE9 R3 R4 390R
   ( 1 Vpp )
-  ( 2 N-000042 )
+  ( 2 N-000036 )
  )
  ( /4C6EDBE4 R3 R5 390R
   ( 1 RB4 )
-  ( 2 N-000032 )
+  ( 2 N-000041 )
  )
  ( /4C6EDBE2 R3 R6 10K
-  ( 1 N-000032 )
+  ( 1 N-000041 )
   ( 2 VDD )
  )
  ( /4EFB2A54 R3 R7 10K
@@ -215,7 +235,7 @@
  )
  ( /4EFB5095 R3 R11 100R
   ( 1 data )
-  ( 2 N-000048 )
+  ( 2 N-000055 )
  )
  ( /4F15C816 R3 R12 10K
   ( 1 GND )
@@ -225,16 +245,16 @@
   ( 1 GND )
   ( 2 idAN5 )
  )
- ( /4F91F453 R3 R14 1K
+ ( /4F91F453 $noname$ R14 1K
   ( 1 VDD )
   ( 2 data )
  )
  ( /4C6ED95B SW_PUSH_SMALL SW1 RST
   ( 1 GND )
-  ( 2 N-000042 )
+  ( 2 N-000036 )
  )
  ( /4C6ED955 SW_PUSH_SMALL SW2 PROG
-  ( 1 N-000032 )
+  ( 1 N-000041 )
   ( 2 GND )
  )
  ( /4C6EE08D 40DIP-ELL600 U1 PIC18F4550
@@ -262,7 +282,7 @@
   ( 22 HK22 )
   ( 23 D- )
   ( 24 D+ )
-  ( 25 N-000048 )
+  ( 25 N-000055 )
   ( 26 data )
   ( 27 HK27 )
   ( 28 HK28 )
@@ -284,8 +304,8 @@
   ( 2 OSC1 )
  )
  ( /4C6EDDF7 PIN_ARRAY_2X1 X2 32.768KHz
-  ( 1 N-000034 )
-  ( 2 N-000033 )
+  ( 1 N-000040 )
+  ( 2 N-000049 )
  )
 )
 *

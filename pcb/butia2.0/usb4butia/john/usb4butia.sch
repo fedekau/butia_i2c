@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date vie 20 abr 2012 20:55:54 UYT
+EESchema Schematic File Version 2  date mié 06 jun 2012 23:04:25 UYT
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -36,7 +36,7 @@ $Descr A4 11700 8267
 encoding utf-8
 Sheet 1 1
 Title "USB4butia"
-Date "20 apr 2012"
+Date "7 jun 2012"
 Rev "1.0"
 Comp ""
 Comment1 ""
@@ -44,6 +44,76 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
+Text GLabel 6200 7300 0    60   Input ~ 0
+VDD
+Text GLabel 6200 7100 0    60   Input ~ 0
+VDD
+Wire Wire Line
+	6200 7300 6300 7300
+Wire Wire Line
+	6200 7100 6300 7100
+$Comp
+L CONN_2 P11
+U 1 1 4FD00BFB
+P 6650 7200
+F 0 "P11" V 6600 7200 40  0000 C CNN
+F 1 "BRIDGE" V 6700 7200 40  0000 C CNN
+	1    6650 7200
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_2 P10
+U 1 1 4FD00BAA
+P 6650 6800
+F 0 "P10" V 6600 6800 40  0000 C CNN
+F 1 "BRIDGE" V 6700 6800 40  0000 C CNN
+	1    6650 6800
+	1    0    0    -1  
+$EndComp
+Text GLabel 6200 6700 0    60   Input ~ 0
+GND
+Text GLabel 6200 6900 0    60   Input ~ 0
+GND
+Wire Wire Line
+	6200 6700 6300 6700
+Wire Wire Line
+	6200 6900 6300 6900
+Wire Wire Line
+	7150 6900 7250 6900
+Wire Wire Line
+	7150 6700 7250 6700
+Text GLabel 7150 6900 0    60   Input ~ 0
+GND
+Text GLabel 7150 6700 0    60   Input ~ 0
+GND
+$Comp
+L CONN_2 P13
+U 1 1 4FD00BA9
+P 7600 6800
+F 0 "P13" V 7550 6800 40  0000 C CNN
+F 1 "BRIDGE" V 7650 6800 40  0000 C CNN
+	1    7600 6800
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_2 P12
+U 1 1 4FD00B9E
+P 7600 6400
+F 0 "P12" V 7550 6400 40  0000 C CNN
+F 1 "BRIDGE" V 7650 6400 40  0000 C CNN
+	1    7600 6400
+	1    0    0    -1  
+$EndComp
+Text GLabel 7150 6300 0    60   Input ~ 0
+GND
+Text GLabel 7150 6500 0    60   Input ~ 0
+GND
+Wire Wire Line
+	7150 6300 7250 6300
+Wire Wire Line
+	7150 6500 7250 6500
+Wire Wire Line
+	6200 6500 6300 6500
 Wire Wire Line
 	5300 4900 5050 4900
 Wire Wire Line
@@ -374,6 +444,21 @@ Wire Wire Line
 	4950 3800 5100 3800
 Wire Wire Line
 	4400 4900 4550 4900
+Wire Wire Line
+	6200 6300 6300 6300
+Text GLabel 6200 6500 0    60   Input ~ 0
+GND
+Text GLabel 6200 6300 0    60   Input ~ 0
+GND
+$Comp
+L CONN_2 P9
+U 1 1 4FD00A52
+P 6650 6400
+F 0 "P9" V 6600 6400 40  0000 C CNN
+F 1 "BRIDGE" V 6700 6400 40  0000 C CNN
+	1    6650 6400
+	1    0    0    -1  
+$EndComp
 Text GLabel 5300 4900 2    60   Output ~ 0
 data
 Text GLabel 5000 4550 0    60   Output ~ 0
