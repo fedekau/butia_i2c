@@ -320,6 +320,10 @@ int main(int argc, char *argv[])
       exit(read_to_file(argv[2]));
     }
 
+    if(!strcmp(argv[1], "--bootloader")) {
+      exit(switch_bootloader());
+    }
+
     printf("Unknown option %s\n", argv[1]);
     show_usage();
     exit(1);

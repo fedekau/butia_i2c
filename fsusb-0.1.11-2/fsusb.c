@@ -28,6 +28,7 @@
 #include "bootload.h"
 #include "fsusb.h"
 
+#define SW_BOOT_MSG_SIZE 4
 
 const static int fsusb_vendorID=0x04d8; // Microchip, Inc
 const static int fsusb_productID=0x000b; // PICDEM-FS USB
@@ -386,3 +387,13 @@ picdem_handle *rjl_fsusb_open(void)
 
   return NULL;
 }
+
+void switch_bootloader(picdem_handle *d){
+    char switch_to_bootloader_cmd[SW_BOOT_MSG_SIZE];
+    switch_to_bootloader_cmd[0] = 0x00; /*send command to handler 0 (admin)*/
+    switch_to_bootloader_cmd[1] = 0x04; /*size*/
+    switch_to_bootloader_cmd[2] = 0x00; /*reserved*/
+    switch_to_bootloader_cmd[3] = 0x09; /*switch to bootloader command*/
+    usb_bulk_write(d, fsusb_endpoint, (char*)switch_to_bootloader_cmd, SW_BOOT_MSG_SIZE, fsusb_timeout);
+}    
+
