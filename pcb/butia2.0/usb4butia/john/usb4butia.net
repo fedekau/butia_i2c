@@ -1,4 +1,4 @@
-# EESchema Netlist Version 1.1 created  mié 06 jun 2012 23:04:49 UYT
+# EESchema Netlist Version 1.1 created  vie 08 jun 2012 09:26:19 UYT
 (
  ( /4C6EDA5F C1 C1 22pF
   ( 1 OSC1 )
@@ -17,15 +17,15 @@
   ( 2 GND )
  )
  ( /4C6ED9FF C1 C5 22pF
-  ( 1 N-000040 )
+  ( 1 N-000046 )
   ( 2 GND )
  )
  ( /4C6EDA5A C1 C6 22pF
-  ( 1 N-000049 )
+  ( 1 N-000038 )
   ( 2 GND )
  )
  ( /4C6ED9FC C1 C7 0,1uF
-  ( 1 N-000041 )
+  ( 1 N-000039 )
   ( 2 GND )
  )
  ( /4C6ED9F4 C1 C8 0,1uF
@@ -41,15 +41,15 @@
   ( 2 GND )
  )
  ( /4C6EDC1C LEDV D1 LED
-  ( 1 N-000046 )
+  ( 1 N-000044 )
   ( 2 GND )
  )
  ( /4CA35CFE D5 D2 1N5819
-  ( 1 N-000044 )
+  ( 1 N-000042 )
   ( 2 VDD )
  )
  ( /4C6ED928 USB_B J1 USB_B
-  ( 1 N-000044 )
+  ( 1 N-000042 )
   ( 2 D- )
   ( 3 D+ )
   ( 4 GND )
@@ -127,11 +127,6 @@
   ( 2 VDC10 )
   ( 3 data )
  )
- ( /4EFB535E bornier3 K2 V_5_10
-  ( 1 GND )
-  ( 2 VDD )
-  ( 3 VDC10 )
- )
  ( /4F1D9A77 PIN_ARRAY_3X1 K3 CONN_3
   ( 1 GND )
   ( 2 ? )
@@ -145,9 +140,9 @@
   ( 5 RB6 )
  )
  ( /4C6EDE43 PIN_ARRAY_2X2 P2 CONN_2X2
-  ( 1 N-000040 )
+  ( 1 N-000046 )
   ( 2 RC0 )
-  ( 3 N-000049 )
+  ( 3 N-000038 )
   ( 4 RC1 )
  )
  ( /4F14716E PIN_ARRAY_2X1 P3 CONN_2
@@ -193,8 +188,12 @@
   ( 1 GND )
   ( 2 GND )
  )
+ ( /4FD1ED3E JACK_ALIM P14 CONN_2
+  ( 1 VDC10 )
+  ( 2 GND )
+ )
  ( /4C6EDBDF R3 R1 1K
-  ( 1 N-000046 )
+  ( 1 N-000044 )
   ( 2 VDD )
  )
  ( /4C6EDBEC R3 R2 1M
@@ -211,10 +210,10 @@
  )
  ( /4C6EDBE4 R3 R5 390R
   ( 1 RB4 )
-  ( 2 N-000041 )
+  ( 2 N-000039 )
  )
  ( /4C6EDBE2 R3 R6 10K
-  ( 1 N-000041 )
+  ( 1 N-000039 )
   ( 2 VDD )
  )
  ( /4EFB2A54 R3 R7 10K
@@ -235,7 +234,7 @@
  )
  ( /4EFB5095 R3 R11 100R
   ( 1 data )
-  ( 2 N-000055 )
+  ( 2 N-000052 )
  )
  ( /4F15C816 R3 R12 10K
   ( 1 GND )
@@ -245,7 +244,7 @@
   ( 1 GND )
   ( 2 idAN5 )
  )
- ( /4F91F453 $noname$ R14 1K
+ ( /4F91F453 R3 R14 1K
   ( 1 VDD )
   ( 2 data )
  )
@@ -254,7 +253,7 @@
   ( 2 N-000036 )
  )
  ( /4C6ED955 SW_PUSH_SMALL SW2 PROG
-  ( 1 N-000041 )
+  ( 1 N-000039 )
   ( 2 GND )
  )
  ( /4C6EE08D 40DIP-ELL600 U1 PIC18F4550
@@ -282,7 +281,7 @@
   ( 22 HK22 )
   ( 23 D- )
   ( 24 D+ )
-  ( 25 N-000055 )
+  ( 25 N-000052 )
   ( 26 data )
   ( 27 HK27 )
   ( 28 HK28 )
@@ -304,8 +303,8 @@
   ( 2 OSC1 )
  )
  ( /4C6EDDF7 PIN_ARRAY_2X1 X2 32.768KHz
-  ( 1 N-000040 )
-  ( 2 N-000049 )
+  ( 1 N-000046 )
+  ( 2 N-000038 )
  )
 )
 *
