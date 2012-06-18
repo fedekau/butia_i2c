@@ -242,7 +242,6 @@ void UserMotorsReceived(byte* recBuffPtr, byte len){
         break;
         case SET_VEL_2MTR:
             ((MOTORS_DATA_PACKET*)sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*)recBuffPtr)->_byte[1];
-            ((MOTORS_DATA_PACKET*)sendBufferUsrMotors)->_byte[1] = ((MOTORS_DATA_PACKET*)recBuffPtr)->_byte[4];
             direction1 = ((MOTORS_DATA_PACKET*)recBuffPtr)->_byte[1];
             highVel1   = ((MOTORS_DATA_PACKET*)recBuffPtr)->_byte[2];
             lowVel1    = ((MOTORS_DATA_PACKET*)recBuffPtr)->_byte[3];
@@ -266,7 +265,7 @@ void UserMotorsReceived(byte* recBuffPtr, byte len){
             else
                 endlessTurn(RIGHT_MOTOR, -vel2, 1);
             //TODO return error code
-            userMotorsCounter = 0x02;
+            userMotorsCounter = 0x01;
         break;
 
         case TEST_MOTORS:
