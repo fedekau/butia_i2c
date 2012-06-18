@@ -1,12 +1,10 @@
 /******************************************************************************/
-/*Autor: Aylen Ricca, Andres Aguirre, John Pereira                            */
+/*Autor: Aylen Ricca, Andres Aguirre, John Pereira, Guillermo Reisch          */
 /*Autor: 12/04/2012                                                           */
 /******************************************************************************/
 
 
 #include "user/usb4butia.h"
-//#include "user/pnp.h"
-
 
 
 /** PROTOTIPES **/
@@ -462,7 +460,7 @@ WORD getDetectionPinValue6(void){
 const void initPorts(void){
     byte i;
 
-    /*Confiugures things for read anaogic*/
+    /*Confiugures pins to be analogic*/
     ADCON1bits.VCFG = 0; /*Voltage reference higth 5v = Vss and low 0v = Vdd*/
     ADCON1bits.PCFG = 0x00;
 

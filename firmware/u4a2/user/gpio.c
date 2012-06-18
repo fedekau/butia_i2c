@@ -110,7 +110,6 @@ void GpioProcessIO(void){
 void GpioRelease(byte i) {
     unsetHandlerReceiveBuffer(i);
     unsetHandlerReceiveFunction(i); 
-    removePoolingFunction(&GpioProcessIO);
 }
 
 

@@ -12,12 +12,6 @@
 #define MAX_PORTS 6
 #define DISCONECTED 0
 
-/*#define MAX_TYPE_SENSORS 5
-#define MAX_SENSOR_TABLE_ATRIBUTE 2*/
-
-
-
-
 typedef enum _direction {
     _OUT = 0,
     _IN = 1
@@ -34,19 +28,6 @@ typedef struct _port_descriptor{
 
 /*mapping between idPort and the port descriptor*/
 extern const port_descriptor board_ports[MAX_PORTS];
-
-/*******************************************************************************/
-/*Struct that contain Artibutes of sensors types*/
-/*typedef struct _sensorType{
-    byte analogic;
-    WORD resValue;
-} sensorType;
-
-/*Array of sensorsTypes, here have alla information about sensors types matched to SensorType ID*/
-/*typedef sensorType sensorsTable[MAX_TYPE_SENSORS];
-*/
-/*Here we define the range of resistence*/
-/*sensorsTable st;*/
 
 /*void initSensorsTable(void);*/
 

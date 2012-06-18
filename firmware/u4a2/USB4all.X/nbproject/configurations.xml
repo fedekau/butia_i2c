@@ -10,17 +10,18 @@
       <itemPath>../user/descriptorManager.h</itemPath>
       <itemPath>../usb4all/dynamicISR/dynamicISR.h</itemPath>
       <itemPath>../user/dynamicPolling.h</itemPath>
+      <itemPath>../user/gpio.h</itemPath>
       <itemPath>../user/handlerManager.h</itemPath>
+      <itemPath>../io_cfg.h</itemPath>
       <itemPath>../user/loaderModule.h</itemPath>
       <itemPath>../user/pnp.h</itemPath>
+      <itemPath>../user/port.h</itemPath>
       <itemPath>../system/usb/usb.h</itemPath>
       <itemPath>../user/usb4butia.h</itemPath>
       <itemPath>../autofiles/usbcfg.h</itemPath>
       <itemPath>../usb4all/usbconf/desc/usbdsc.h</itemPath>
       <itemPath>../usb4all/usbconf/usballoc/usbmmap.h</itemPath>
-      <itemPath>../user/test_resistance.h</itemPath>
-      <itemPath>../user/port.h</itemPath>
-      <itemPath>../user/gpio.h</itemPath>
+      <itemPath>../user/userLoopBack.h</itemPath>
       <itemPath>../user/usr_ax12.h</itemPath>
       <itemPath>../user/usr_butia.h</itemPath>
       <itemPath>../user/usr_button.h</itemPath>
@@ -51,19 +52,19 @@
       <itemPath>../user/descriptorManager.c</itemPath>
       <itemPath>../usb4all/dynamicISR/dynamicISR.c</itemPath>
       <itemPath>../user/dynamicPolling.c</itemPath>
+      <itemPath>../user/gpio.c</itemPath>
       <itemPath>../user/handlerManager.c</itemPath>
       <itemPath>../user/loaderModule.c</itemPath>
       <itemPath>../main.c</itemPath>
       <itemPath>../user/pnp.c</itemPath>
+      <itemPath>../user/port.c</itemPath>
       <itemPath>../user/usb4butia.c</itemPath>
       <itemPath>../system/usb/usb9/usb9.c</itemPath>
       <itemPath>../system/usb/usbctrltrf/usbctrltrf.c</itemPath>
       <itemPath>../system/usb/usbdrv/usbdrv.c</itemPath>
       <itemPath>../usb4all/usbconf/desc/usbdsc.c</itemPath>
       <itemPath>../usb4all/usbconf/usballoc/usbmmap.c</itemPath>
-      <itemPath>../user/test_resistance.c</itemPath>
-      <itemPath>../user/port.c</itemPath>
-      <itemPath>../user/gpio.c</itemPath>
+      <itemPath>../user/userLoopBack.c</itemPath>
       <itemPath>../user/usr_butia.c</itemPath>
       <itemPath>../user/usr_button.c</itemPath>
       <itemPath>../user/usr_distance.c</itemPath>
@@ -94,15 +95,6 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
-      <makeCustomizationType>
-        <makeCustomizationPreStepEnabled>false</makeCustomizationPreStepEnabled>
-        <makeCustomizationPreStep></makeCustomizationPreStep>
-        <makeCustomizationPostStepEnabled>false</makeCustomizationPostStepEnabled>
-        <makeCustomizationPostStep></makeCustomizationPostStep>
-        <makeCustomizationAlternativeFileToLoadEnabled>false</makeCustomizationAlternativeFileToLoadEnabled>
-        <makeCustomizationAlternativeFileToLoad></makeCustomizationAlternativeFileToLoad>
-        <makeCustomizationPutChecksumInUserID>false</makeCustomizationPutChecksumInUserID>
-      </makeCustomizationType>
       <C18>
         <property key="storage-class" value="sca"/>
         <property key="enable-opa" value="false"/>
@@ -132,8 +124,8 @@
       </C18>
       <C18-AS>
         <property key="default.radix" value="HEX"/>
-        <property key="hex.output.format" value="INHX32"/>
         <property key="enable.case.sensitivity" value="false"/>
+        <property key="hex.output.format" value="INHX32"/>
         <property key="preprocessor.macros" value=""/>
         <property key="warning.level" value="0"/>
         <property key="cross.reference.file" value=""/>
@@ -147,9 +139,9 @@
       </C18-LD>
       <C18LanguageToolchain>
         <property key="stack-analysis-mplink" value="false"/>
-        <property key="stack-analysis-mcc18" value="false"/>
-        <property key="stack-analysis" value="false"/>
         <property key="extended-mode-mcc18" value="false"/>
+        <property key="stack-analysis" value="false"/>
+        <property key="stack-analysis-mcc18" value="false"/>
         <property key="extended-mode" value="false"/>
         <property key="extended-mode-mpasm" value="false"/>
         <property key="extended-mode-mplink" value="false"/>

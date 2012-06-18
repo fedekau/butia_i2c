@@ -111,7 +111,6 @@ void PortProcessIO(void){
 void PortRelease(byte i) {
     unsetHandlerReceiveBuffer(i);
     unsetHandlerReceiveFunction(i); 
-    removePoolingFunction(&PortProcessIO);
 }
 
 

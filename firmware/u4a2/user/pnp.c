@@ -95,11 +95,7 @@ byte get_device_type(WORD resistValue){
     byte i = 0;
     WORD MAX;
     WORD MIN;
-    /*Search the read resistance valeun in resistance range of devices defined*/
-
-//    while(!((table_device_id_resistance[i].resValue_max._word >= resistValue._word) && (resistValue._word >=  table_device_id_resistance[i].resValue_min._word)) && i<MAX_DEVICES) i++;
-//    if (i != MAX_DEVICES) return i;
-
+    /*Search the read resistance value in the resistance range of devices defined*/
     for (i=0 ; i < MAX_DEVICES ; ++i) {
         MAX = table_device_id_resistance[i].resValue_max;
         MIN = table_device_id_resistance[i].resValue_min;

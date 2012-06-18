@@ -241,7 +241,6 @@ void sendMes(char* mensaje, byte len){
 
 void watchdogKeepAlive(void){
     keepAlive = TRUE;
-    mLED_3_On();
 }
 
 /***********************************************************************
@@ -253,7 +252,6 @@ void watchdogKeepAlive(void){
 void watchdogEvent(void) {    
 //    timeOutTicksWatchdog --;
 //    if(timeOutTicksWatchdog == 0){            
-        mLED_3_Off();
         if(keepAlive){
 //            timeOutTicksWatchdog = cantTicksW;
             keepAlive = FALSE;

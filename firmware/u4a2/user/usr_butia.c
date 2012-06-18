@@ -56,7 +56,7 @@ void UserButiaInit(byte i){
     // add my receive function to the handler module, to be called automatically when the pc sends data to the user module
     setHandlerReceiveFunction(usrButiaHandler,&UserButiaReceived);
     // add my receive pooling function to the dynamic pooling module, to be called periodically
-    res = addPollingFunction(&UserButiaProcessIO);
+    // res = addPollingFunction(&UserButiaProcessIO);
     // initialize the send buffer, used to send data to the PC
     sendBufferusrButia = getSharedBuffer(usrButiaHandler);
     //TODO return res value
@@ -127,7 +127,6 @@ void UserButiaProcessIO(void){
 void UserButiaRelease(byte i){
     unsetHandlerReceiveBuffer(i);
     unsetHandlerReceiveFunction(i);
-    removePoolingFunction(&UserButiaProcessIO);
 }
 
 
