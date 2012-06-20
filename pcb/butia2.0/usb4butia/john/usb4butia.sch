@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date lun 11 jun 2012 15:14:07 UYT
+EESchema Schematic File Version 2  date mié 20 jun 2012 10:02:24 UYT
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -36,7 +36,7 @@ $Descr A4 11700 8267
 encoding utf-8
 Sheet 1 1
 Title "USB4butia"
-Date "11 jun 2012"
+Date "20 jun 2012"
 Rev "1.0"
 Comp ""
 Comment1 ""
@@ -44,6 +44,40 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
+Wire Wire Line
+	5300 7450 5400 7450
+Wire Wire Line
+	5300 7650 5400 7650
+Text GLabel 5300 7650 0    60   Input ~ 0
+GND
+Text GLabel 5300 7450 0    60   Input ~ 0
+GND
+$Comp
+L CONN_2 P15
+U 1 1 4FE1C3F9
+P 5750 7550
+F 0 "P15" V 5700 7550 40  0000 C CNN
+F 1 "BRIDGE" V 5800 7550 40  0000 C CNN
+	1    5750 7550
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_2 P16
+U 1 1 4FE1C3E9
+P 6650 7550
+F 0 "P16" V 6600 7550 40  0000 C CNN
+F 1 "BRIDGE" V 6700 7550 40  0000 C CNN
+	1    6650 7550
+	1    0    0    -1  
+$EndComp
+Text GLabel 6200 7450 0    60   Input ~ 0
+GND
+Text GLabel 6200 7650 0    60   Input ~ 0
+GND
+Wire Wire Line
+	6200 7650 6300 7650
+Wire Wire Line
+	6200 7450 6300 7450
 Text GLabel 7850 7050 0    60   Input ~ 0
 VDC10
 Text GLabel 7850 6850 0    60   Input ~ 0
