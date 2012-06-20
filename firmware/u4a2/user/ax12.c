@@ -232,7 +232,9 @@ void ax12SendPacket (byte id, byte datalength, byte instruction, byte *data){
 }*/
 
 byte readSerial(void){
-    while(!PIR1bits.RCIF);
+//    while(!PIR1bits.RCIF);
+    int timeout = TIMEOUT;
+    while(!PIR1bits.RCIF && timeout--);
     PIR1bits.RCIF=0;
     return RCREG;  // Retorno el mensaje recibido
 }
