@@ -1,4 +1,4 @@
-PCBNEW-BOARD Version 1 date mié 20 jun 2012 11:44:15 UYT
+PCBNEW-BOARD Version 1 date mié 20 jun 2012 12:36:54 UYT
 
 # Created by Pcbnew(2011-05-25)-stable
 
@@ -524,7 +524,7 @@ Po 0 7783 23819 21713 23819 150
 De 28 0 900 0 0
 $EndDRAWSEGMENT
 $TEXTPCB
-Te "Modulo Sensor"
+Te "Modulo Button"
 nl "v1.0"
 Po 14657 22114 423 619 91 0
 De 0 0 0 Normal
