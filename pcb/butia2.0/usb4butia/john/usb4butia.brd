@@ -1,4 +1,4 @@
-PCBNEW-BOARD Version 1 date mié 20 jun 2012 10:02:15 UYT
+PCBNEW-BOARD Version 1 date mié 20 jun 2012 12:18:17 UYT
 
 # Created by Pcbnew(2011-05-25)-stable
 
@@ -10,7 +10,7 @@ EnabledLayers 1FFF8001
 Links 127
 NoConn 11
 Di 45829 24055 81849 67120
-Ndraw 12
+Ndraw 20
 Ntrack 558
 Nzone 0
 BoardThickness 630
@@ -60,7 +60,7 @@ PadDrill 320
 Pad2MaskClearance 100
 GridOrigin 46020 24131
 AuxiliaryAxisOrg 63850 23950
-PcbPlotParams (pcbplotparams (layerselection 2097152) (usegerberextensions true) (excludeedgelayer false) (linewidth 60) (plotframeref false) (viasonmask false) (mode 1) (useauxorigin false) (hpglpennumber 1) (hpglpenspeed 20) (hpglpendiameter 15) (hpglpenoverlay 0) (pscolor true) (psnegative false) (psa4output false) (plotreference true) (plotvalue true) (plotothertext true) (plotinvisibletext false) (padsonsilk false) (subtractmaskfromsilk false) (outputformat 2) (mirror false) (drillshape 1) (scaleselection 1) (outputdirectory ""))
+PcbPlotParams (pcbplotparams (layerselection 284196865) (usegerberextensions true) (excludeedgelayer false) (linewidth 60) (plotframeref false) (viasonmask false) (mode 1) (useauxorigin false) (hpglpennumber 1) (hpglpenspeed 20) (hpglpendiameter 15) (hpglpenoverlay 0) (pscolor true) (psnegative false) (psa4output false) (plotreference true) (plotvalue true) (plotothertext true) (plotinvisibletext false) (padsonsilk false) (subtractmaskfromsilk false) (outputformat 2) (mirror false) (drillshape 1) (scaleselection 1) (outputdirectory ""))
 $EndSETUP
 
 $EQUIPOT
@@ -3051,6 +3051,46 @@ Of 0.000000 0.000000 0.000000
 Ro 0.000000 0.000000 0.000000
 $EndSHAPE3D
 $EndMODULE  R4
+$TEXTPCB
+Te "USB"
+Po 74961 55706 600 800 120 0
+De 20 1 0 Normal
+$EndTEXTPCB
+$TEXTPCB
+Te "AX12"
+Po 79611 46005 600 800 120 900
+De 20 1 0 Normal
+$EndTEXTPCB
+$TEXTPCB
+Te "P3"
+Po 53878 53533 600 800 120 2700
+De 20 1 0 Normal
+$EndTEXTPCB
+$TEXTPCB
+Te "P2"
+Po 54221 40729 600 800 120 2700
+De 20 1 0 Normal
+$EndTEXTPCB
+$TEXTPCB
+Te "P4"
+Po 53914 61005 600 800 120 2700
+De 20 1 0 Normal
+$EndTEXTPCB
+$TEXTPCB
+Te "P6"
+Po 73583 32009 600 800 120 900
+De 20 1 0 Normal
+$EndTEXTPCB
+$TEXTPCB
+Te "P5"
+Po 73441 40371 600 800 120 900
+De 20 1 0 Normal
+$EndTEXTPCB
+$TEXTPCB
+Te "P1"
+Po 54351 32233 600 800 120 2700
+De 20 1 0 Normal
+$EndTEXTPCB
 $DRAWSEGMENT
 Po 0 81059 24131 46020 24131 150
 De 28 0 900 0 0
