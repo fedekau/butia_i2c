@@ -1,16 +1,6 @@
-update=lun 14 may 2012 10:08:47 UYT
+update=jue 21 jun 2012 15:52:54 UYT
 version=1
 last_client=pcbnew
-[cvpcb]
-version=1
-NetITyp=0
-NetIExt=.net
-PkgIExt=.pkg
-NetDir=
-LibDir=
-NetType=0
-[cvpcb/libraries]
-EquName1=devcms
 [eeschema]
 version=1
 LibDir=
@@ -77,6 +67,11 @@ LibName29=contrib
 LibName30=valves
 [general]
 version=1
+[cvpcb]
+version=1
+NetIExt=net
+[cvpcb/libraries]
+EquName1=devcms
 [pcbnew]
 version=1
 PadDrlX=320
@@ -107,3 +102,5 @@ LibName8=valves
 LibName9=led
 LibName10=dip_sockets
 LibName11=sharp
+LibName12=SW_5x5mm
+LibName13=SW5x5mm
