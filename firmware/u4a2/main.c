@@ -308,7 +308,7 @@ void main(void) {
 
 void initButiaMotors(){
     ax12InitSerial();
-    sexyMotorMoveStart();
+//    sexyMotorMoveStart();
 }
 /******************************************************************************
  * Function:        static void InitializeSystem(void)

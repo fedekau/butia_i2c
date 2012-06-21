@@ -91,6 +91,35 @@ void sexyMotorMoveStart(){
     registerT0event(TIME_UNIT, &forwardLeft);
 }
 
+/* 
+ * Function to auto-detect motors (robot wheels)
+ * the less id motor correspond to left wheel
+ * the other one to right wheel.
+ */
+void autoDetectWheels () {
+    byte num_motors = 2;
+    byte index = 0;
+    byte list_motors[2];
+    int _id, _error, _data;
+    byte i=0;
+    for (i ; i<255; i++){
+        ax12SendPacket (i, 0, PING, 0);
+        ax12ReadPacket (&_id, &_error, &_data);
+        if (_id==i) {
+            list_motors[index] = i;
+            index++;
+            if (index==num_motors) {
+                //Set found motors as Rigth/Left wheels
+                wheels.left.id = list_motors[0];
+                wheels.left.inverse = 0;
+                wheels.right.id = list_motors[1];
+                wheels.right.inverse = 1;
+                sexyMotorMoveStart();
+            }
+        }
+    }
+}
+
 /******************************************************************************
  * Function:        UseBuzzerInit(void)
  *
@@ -120,7 +149,7 @@ void UserMotorsInit(byte i) {
     setEndlessTurnMode(wheels.right.id, 1);
     // FIXME Add autodetection wheels
     wheels.left.id = 0x01;
-    wheels.right.id = 0x01;
+    wheels.right.id = 0x02;
     //Wheels ruedas;
     /*Implementar funcion de auto deteccion para que detecte los motores*/
     /*writeInfo (ruedas.left.id, CW_COMPLIANCE_MARGIN, 0);
