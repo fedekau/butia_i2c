@@ -50,7 +50,7 @@ typedef union MOTORS_DATA_PACKET{
 } MOTORS_DATA_PACKET;
 
 /** P U B L I C  P R O T O T Y P E S *****************************************/
-
-void sexyMotorMoveStart();
+void autoDetectWheels();
+//void sexyMotorMoveStart();
 
 #endif /*USER_MOTORS_H*/

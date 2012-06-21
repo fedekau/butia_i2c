@@ -308,6 +308,7 @@ void main(void) {
 
 void initButiaMotors(){
     ax12InitSerial();
+    autoDetectWheels();
 //    sexyMotorMoveStart();
 }
 /******************************************************************************

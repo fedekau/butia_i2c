@@ -96,7 +96,7 @@ void sexyMotorMoveStart(){
  * the less id motor correspond to left wheel
  * the other one to right wheel.
  */
-void autoDetectWheels () {
+void autoDetectWheels() {
     byte num_motors = 2;
     byte index = 0;
     byte list_motors[2];
@@ -115,6 +115,7 @@ void autoDetectWheels () {
                 wheels.right.id = list_motors[1];
                 wheels.right.inverse = 1;
                 sexyMotorMoveStart();
+                break;
             }
         }
     }
@@ -145,11 +146,11 @@ void UserMotorsInit(byte i) {
     // initialize the send buffer, used to send data to the PC
     sendBufferUsrMotors = getSharedBuffer(usrMotorsHandler);
     ax12InitSerial();
-    setEndlessTurnMode(wheels.left.id, 1);
-    setEndlessTurnMode(wheels.right.id, 1);
+//    setEndlessTurnMode(wheels.left.id, 1);
+//    setEndlessTurnMode(wheels.right.id, 1);
     // FIXME Add autodetection wheels
-    wheels.left.id = 0x01;
-    wheels.right.id = 0x02;
+//    wheels.left.id = 0x01;
+//    wheels.right.id = 0x02;
     //Wheels ruedas;
     /*Implementar funcion de auto deteccion para que detecte los motores*/
     /*writeInfo (ruedas.left.id, CW_COMPLIANCE_MARGIN, 0);
