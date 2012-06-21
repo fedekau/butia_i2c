@@ -15,7 +15,6 @@
 #include "dynamicPolling.h"
 #include "usb4all/proxys/T0Service.h"
 
-
 /** V A R I A B L E S ********************************************************/
 #pragma udata
 
@@ -29,8 +28,8 @@ byte* sendBufferUsrMotors; // buffer to send data
 
 #define TIME_UNIT        2000
 #define LONG_TIME_UNIT   5000
-#define LEFT_MOTOR   0x01
-#define RIGHT_MOTOR  0x02
+//#define LEFT_MOTOR   0x01
+//#define RIGHT_MOTOR  0x02
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
 void UserMotorsProcessIO(void);
@@ -48,6 +47,50 @@ uTab userMotorsModuleTable = {&UserMotorsInit,&UserMotorsRelease,&UserMotorsConf
 /** D E C L A R A T I O N S **************************************************/
 #pragma code module
 
+/* Structure to hold motors */
+typedef struct _MOTOR{
+    int id;
+    int inverse;
+} MOTOR;
+
+typedef struct _WHEELS{
+    MOTOR left;
+    MOTOR right;
+} WHEELS;
+
+/* robot wheels */
+WHEELS wheels;
+
+void stopRight(){
+    writeInfo (wheels.right.id, 32, 0);
+}
+void backwardRight(){
+    endlessTurn(wheels.right.id, -600, 1 );
+    registerT0eventInEvent(LONG_TIME_UNIT, &stopRight);
+}
+void forwardRight(){
+    endlessTurn(wheels.right.id, 600, 1);
+    registerT0eventInEvent(LONG_TIME_UNIT, &backwardRight);
+}
+void stopLeft(){
+    writeInfo (wheels.left.id, 32, 0);
+    registerT0eventInEvent(LONG_TIME_UNIT, &forwardRight);
+}
+void backwardLeft(){
+    endlessTurn(wheels.left.id, -600, 1);
+    registerT0eventInEvent(LONG_TIME_UNIT, &stopLeft);
+}
+void forwardLeft(){
+    endlessTurn(wheels.left.id, 600, 1);
+    registerT0eventInEvent(LONG_TIME_UNIT, &backwardLeft);
+}
+
+void sexyMotorMoveStart(){
+    setEndlessTurnMode(wheels.left.id, 1);
+    setEndlessTurnMode(wheels.right.id, 1);
+    registerT0event(TIME_UNIT, &forwardLeft);
+}
+
 /******************************************************************************
  * Function:        UseBuzzerInit(void)
  *
@@ -64,57 +107,7 @@ uTab userMotorsModuleTable = {&UserMotorsInit,&UserMotorsRelease,&UserMotorsConf
  *
  * Note:            None
  *****************************************************************************/
-typedef struct _Motor{
-    int id;
-    int inverse;    
-} Motor;
-
-
-typedef struct _Wheels{
-    Motor left;
-    Motor rigth;
-} Wheels;
-
-
-void stopRight(){
-    writeInfo (RIGHT_MOTOR, 32, 0);
-}
-
-void backwardRight(){
-    //writeInfo (LEFT_MOTOR, 32, -600);
-    endlessTurn(RIGHT_MOTOR, -600, 1 );
-    registerT0eventInEvent(LONG_TIME_UNIT, &stopRight);
-}
-void forwardRight(){
-    //writeInfo (RIGHT_MOTOR, 32, 600);
-    endlessTurn(RIGHT_MOTOR, 600, 1);
-    registerT0eventInEvent(LONG_TIME_UNIT, &backwardRight);
-}
-void stopLeft(){
-    writeInfo (LEFT_MOTOR, 32, 0);
-    registerT0eventInEvent(LONG_TIME_UNIT, &forwardRight);
-}
-
-void backwardLeft(){
-    //writeInfo (LEFT_MOTOR, 32, 0);
-    endlessTurn(LEFT_MOTOR, -600, 1);
-    registerT0eventInEvent(LONG_TIME_UNIT, &stopLeft);
-}
-
-
-void forwardLeft(){
-    endlessTurn(LEFT_MOTOR, 600, 1);
-    registerT0eventInEvent(LONG_TIME_UNIT, &backwardLeft);
-}
-void sexyMotorMoveStart(){
-    setEndlessTurnMode(LEFT_MOTOR, 1);
-    setEndlessTurnMode(RIGHT_MOTOR, 1);
-    registerT0event(TIME_UNIT, &forwardLeft);
-}
-
 void UserMotorsInit(byte i) {
-    BOOL res;
-    byte resWriteInfo;
     usrMotorsHandler = i;
     // add my receive function to the handler module, to be called automatically when the pc sends data to the user module
     setHandlerReceiveFunction(usrMotorsHandler,&UserMotorsReceived);
@@ -123,8 +116,11 @@ void UserMotorsInit(byte i) {
     // initialize the send buffer, used to send data to the PC
     sendBufferUsrMotors = getSharedBuffer(usrMotorsHandler);
     ax12InitSerial();
-    setEndlessTurnMode(LEFT_MOTOR, 1);
-    setEndlessTurnMode(RIGHT_MOTOR, 1);
+    setEndlessTurnMode(wheels.left.id, 1);
+    setEndlessTurnMode(wheels.right.id, 1);
+    // FIXME Add autodetection wheels
+    wheels.left.id = 0x01;
+    wheels.right.id = 0x01;
     //Wheels ruedas;
     /*Implementar funcion de auto deteccion para que detecte los motores*/
     /*writeInfo (ruedas.left.id, CW_COMPLIANCE_MARGIN, 0);
@@ -137,7 +133,6 @@ void UserMotorsInit(byte i) {
     writeInfo (DOWN_LIMIT_VOLTAGE, 60);
     writeInfo (DOWN_LIMIT_VOLTAGE, 190);
     writeInfo (RETURN_DELAY_TIME, 150);*/
-
 }
 
 /******************************************************************************
@@ -178,7 +173,6 @@ void UserMotorsConfigure(void){
  *****************************************************************************/
 
 void UserMotorsProcessIO(void){
-
     if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND==1)) return;
 }//end ProcessIO
 
@@ -205,7 +199,6 @@ void UserMotorsRelease(byte i) {
     //unregisterT0event(&MotorsEvent);
     //removePoolingFunction(&UserMotorsProcessIO);
 }
-
 
 /******************************************************************************
  * Function:        UserMotorsReceived(byte* recBuffPtr, byte len)
@@ -241,7 +234,7 @@ void UserMotorsReceived(byte* recBuffPtr, byte len){
               Reset();
         break;
         case SET_VEL_2MTR:
-            ((MOTORS_DATA_PACKET*)sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*)recBuffPtr)->_byte[1];
+            ((MOTORS_DATA_PACKET*)sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*)recBuffPtr)->_byte[0];
             direction1 = ((MOTORS_DATA_PACKET*)recBuffPtr)->_byte[1];
             highVel1   = ((MOTORS_DATA_PACKET*)recBuffPtr)->_byte[2];
             lowVel1    = ((MOTORS_DATA_PACKET*)recBuffPtr)->_byte[3];
@@ -253,17 +246,17 @@ void UserMotorsReceived(byte* recBuffPtr, byte len){
             vel2 = highVel2;
             vel2 = vel2<<8|lowVel2;
             if(direction1==0x01){
-                endlessTurn(LEFT_MOTOR, vel1, 0);
-                res = writeInfo(LEFT_MOTOR, LED, 0);
+                endlessTurn(wheels.left.id, vel1, 0);
+                res = writeInfo(wheels.left.id, LED, 0);
             }
             else{
-                endlessTurn(LEFT_MOTOR, -vel1, 0);
-                res = writeInfo(RIGHT_MOTOR, LED, 0);
+                endlessTurn(wheels.left.id, -vel1, 0);
+                res = writeInfo(wheels.right.id, LED, 0);
             }
             if(direction2==0x01)
-                endlessTurn(RIGHT_MOTOR, vel2, 1);
+                endlessTurn(wheels.right.id, vel2, 1);
             else
-                endlessTurn(RIGHT_MOTOR, -vel2, 1);
+                endlessTurn(wheels.right.id, -vel2, 1);
             //TODO return error code
             userMotorsCounter = 0x01;
         break;
