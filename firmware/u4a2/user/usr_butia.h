@@ -26,7 +26,7 @@ typedef union BUTIA_DATA_PACKET
         enum
         { 
             READ_VERSION = 0x00,
-            GET_VOLT     = 0x01,
+            GET_VOLT     = 0x03,
             RESET	 = 0xFF
         }CMD;
         byte len;
