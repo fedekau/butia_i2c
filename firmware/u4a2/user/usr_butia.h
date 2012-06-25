@@ -1,6 +1,6 @@
 /* Author             									  Date        Comment
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- * Andrés Aguirre, Rafael Fernandez, Carlos Grossy       20/05/07    Original.
+ * Andr?s Aguirre, Rafael Fernandez, Carlos Grossy       20/05/07    Original.
  *****************************************************************************/
 
 #ifndef USER_BUTIA_H
@@ -13,8 +13,7 @@
 
 /** D E F I N I T I O N S ****************************************************/
 
-#define  BUTIA_MINOR_VERSION   0x01      /*butia version FIXME*/
-#define  BUTIA_MAJOR_VERSION   0x00
+#define BUTIA_VERSION 0x15 //21
 
 /** S T R U C T U R E S ******************************************************/
 typedef union BUTIA_DATA_PACKET
@@ -25,7 +24,7 @@ typedef union BUTIA_DATA_PACKET
     {
         enum
         { 
-            READ_VERSION = 0x00,
+            READ_VERSION_BUTIA = 0x02,
             GET_VOLT     = 0x03,
             RESET	 = 0xFF
         }CMD;
