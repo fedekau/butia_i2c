@@ -1,4 +1,4 @@
-PCBNEW-BOARD Version 1 date vie 22 jun 2012 11:41:16 UYT
+PCBNEW-BOARD Version 1 date mar 26 jun 2012 10:18:46 UYT
 
 # Created by Pcbnew(2011-05-25)-stable
 
@@ -10,7 +10,7 @@ EnabledLayers 1FFF8001
 Links 127
 NoConn 10
 Di 44451 12738 80471 51789
-Ndraw 24
+Ndraw 25
 Ntrack 554
 Nzone 0
 BoardThickness 630
@@ -21,7 +21,7 @@ $EndGENERAL
 $SHEETDESCR
 Sheet A4 11700 8267
 Title "USBbutia"
-Date "22 jun 2012"
+Date "26 jun 2012"
 Rev "v1.0"
 Comp ""
 Comment1 ""
@@ -3051,6 +3051,11 @@ Of 0.000000 0.000000 0.000000
 Ro 0.000000 0.000000 0.000000
 $EndSHAPE3D
 $EndMODULE  R4
+$TEXTPCB
+Te "Fabricado por Eneka"
+Po 60685 20784 434 591 99 900
+De 0 0 0 Normal
+$EndTEXTPCB
 $DRAWSEGMENT
 Po 0 44623 51697 44630 51697 150
 De 28 0 900 0 0
