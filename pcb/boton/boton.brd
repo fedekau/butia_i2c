@@ -1,4 +1,4 @@
-PCBNEW-BOARD Version 1 date mar 26 jun 2012 09:21:12 UYT
+PCBNEW-BOARD Version 1 date mar 26 jun 2012 12:03:49 UYT
 
 # Created by Pcbnew(2011-05-25)-stable
 
@@ -568,7 +568,7 @@ Po 0 7783 23819 21713 23819 150
 De 28 0 900 0 0
 $EndDRAWSEGMENT
 $TEXTPCB
-Te "Modulo Botton"
+Te "Module BOTTON"
 nl "v1.1"
 Po 14657 22114 423 619 91 0
 De 0 0 0 Normal
