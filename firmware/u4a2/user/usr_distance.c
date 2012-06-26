@@ -29,7 +29,7 @@ void UserDistConfigure(void);
 /* Table used by te framework to get a fixed reference point to the user module functions defined by the framework */
 /** USER MODULE REFERENCE ****************************************************/
 #pragma romdata user
-uTab userDistModuleTable = {&UserDistInit,&UserDistRelease,&UserDistConfigure,"dist"};
+uTab userDistModuleTable = {&UserDistInit,&UserDistRelease,&UserDistConfigure,"distanc"};
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/

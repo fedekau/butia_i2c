@@ -7,7 +7,7 @@ rom const device_resistance table_device_id_resistance[MAX_DEVICES] = {
     { "port"   , 0, 255     },
     { "button"  , 31207 ,34492 },
     { "grey" , 59041, 60124 },
-    { "dist"   , 37491, 40654 },
+    { "distanc"   , 37491, 40654 },
     { "gpio"   , R_GPIO_MIN, R_GPIO_MAX    }
 };
 
