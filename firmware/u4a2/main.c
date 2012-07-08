@@ -103,7 +103,7 @@
 #pragma config LPT1OSC = OFF
 
 /* Port B A/D Enable */
-#pragma config PBADEN = OFF
+#pragma config PBADEN = ON
 
 /* CCP2 Mux bit*/
 #pragma config CCP2MX = ON
