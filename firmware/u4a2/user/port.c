@@ -1,7 +1,6 @@
 /* Author                                                   Date        Comment
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *Santiago Reyes                           03/07/09    Original.
- *Andres Aguirre                           30/07/10    Interaccion con timmer y debugeo
+ * John, Aylen, Guille, Andrew
  *****************************************************************************/
  
 /** I N C L U D E S **********************************************************/
@@ -62,7 +61,6 @@ void PortInit(byte i) {
     /* andres res = addPollingFunction(&PortProcessIO);*/
     // initialize the send buffer, used to send data to the PC
     sendBufferPort = getSharedBuffer(i);
-
     board_ports[i-1].change_port_direction(IN);
     
 }//end UserLedAmarilloInit

@@ -66,11 +66,11 @@ void Escribir_memoria_boot(void){
 }
 */
 void adminModuleInit(byte handler){
-	/*system initialization*/
-	adminHandler=handler; //hardcode, the admin module allways respond at handler 0
-        /*set the receive function for admin commands*/
-        setHandlerReceiveFunction(adminHandler,&adminReceived);
-	sendBufferAdmin = getSharedBuffer(adminHandler);        
+    /*system initialization*/
+    adminHandler=handler; //hardcode, the admin module allways respond at handler 0
+    /*set the receive function for admin commands*/
+    setHandlerReceiveFunction(adminHandler,&adminReceived);
+    sendBufferAdmin = getSharedBuffer(adminHandler);
 }
 
 void adminModuleRelease(byte handler){
@@ -190,7 +190,7 @@ void adminReceived(byte* recBuffPtr,byte len, byte admin_handler){
 
         case GET_HANDLER_SIZE:
             ((AM_PACKET*)sendBufferAdmin)->CMD  = GET_HANDLER_SIZE;
-            ((AM_PACKET*)sendBufferAdmin)->size = MAX_HANDLERS;
+            ((AM_PACKET*)sendBufferAdmin)->size = MAX_HANDLERS; //FIXME return the correct list of modules
             adminCounter=0x02;
         break;
 

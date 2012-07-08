@@ -16,7 +16,7 @@
 /** D E F I N I T I O N S ****************************************************/
 #define PACKET_MTU 256
 #define PACKET_DATA_SIZE (256-3)
-#define MAX_HANDLERS 0x10 //32 es el maximo de handlers;
+#define MAX_HANDLERS 0x10 //16 es el maximo de handlers;
 
 /** S T R U C T U R E S ******************************************************/
 

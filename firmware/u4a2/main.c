@@ -298,7 +298,7 @@ void setMensaje(char * m, int N) {
 void main(void) {
     byte mensaje[16];
     int cont=0;
-    InitializeSystem();      /* Esta funcion esta en este mismo archivo abajo */
+    InitializeSystem();      
     while(1) {
         USBTasks();         // USB Tasks
         polling();
@@ -332,25 +332,25 @@ void initButiaMotors(){
  * Note:            None
  *****************************************************************************/
 static void InitializeSystem(void) {
-	ADCON1 = ADCON1 & 0xF0;        /* Default all pins to analogic */
-        ADCON0bits.ADON = 1;            /* Enable Analogic */
-	
-	#if defined(USE_USB_BUS_SENSE_IO)
-	tris_usb_bus_sense = INPUT_PIN; // See io_cfg.h
-	#endif
-	
-	#if defined(USE_SELF_POWER_SENSE_IO)
-	tris_self_power = INPUT_PIN;
-	#endif
+    mInitPortA();mInitPortB();mInitPortC();mInitPortD();mInitPortE(); // set pins as input for safety and interference avoid
+    ADCON1 = ADCON1 & 0xF0;        /* Default all pins to analogic */
+    ADCON0bits.ADON = 1;            /* Enable Analogic */
 
-	mInitPortA();mInitPortB();mInitPortC();mInitPortD();mInitPortE(); // set pins as input for safety and interference avoid
-	mInitializeUSBDriver();         // See usbdrv.h
+    #if defined(USE_USB_BUS_SENSE_IO)
+    tris_usb_bus_sense = INPUT_PIN; // See io_cfg.h
+    #endif
 
-	initISRFunctions();      // Initialize interrupt service routines mechanism of USB4all
-	initT0Service();         // Inicializa servicio T0 para manejar recurso de timmer
-	initPollingFunctions();  // inicializa el buffer con 0s (dynamicPolling.c)
-	initHandlerManager();    // inicializa el map de enpoints y crea el enpoint 0 (adminModule.c)
-        initButiaMotors();
+    #if defined(USE_SELF_POWER_SENSE_IO)
+    tris_self_power = INPUT_PIN;
+    #endif
+
+    mInitializeUSBDriver();         // See usbdrv.h
+
+    initISRFunctions();      // Initialize interrupt service routines mechanism of USB4all
+    initT0Service();         // Inicializa servicio T0 para manejar recurso de timmer
+    initPollingFunctions();  // inicializa el buffer con 0s (dynamicPolling.c)
+    initHandlerManager();    // inicializa el map de enpoints y crea el enpoint 0 (adminModule.c)
+    initButiaMotors();
 	
 }//end InitializeSystem
 

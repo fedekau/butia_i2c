@@ -111,9 +111,9 @@ void openPnP(byte moduleId[8], byte handler){
     tableDirec = getUserTableDirection(moduleId);
 
     if(tableDirec != (rom near char*)ERROR){
-            handler = newHandlerTableEntryForcingHandler( pnpEndpoint.endPoint, tableDirec, handler);
-            pUser = getModuleInitDirection(tableDirec);
-            pUser(handler); //hago el init ;)
+        handler = newHandlerTableEntryForcingHandler(pnpEndpoint.endPoint, tableDirec, handler);
+        pUser = getModuleInitDirection(tableDirec);
+        pUser(handler); //hago el init ;)
     }
 }
 
@@ -131,7 +131,6 @@ void hotplug_pnp(void){
         if(device_type!=detected_device_type_id[port]){
             // Change that board_port[device_type].detected_device_id for detected_device_type_id[port]
             closePnP(port+1);
-
             modulename[0]=table_device_id_resistance[device_type].name[0];
             modulename[1]=table_device_id_resistance[device_type].name[1];
             modulename[2]=table_device_id_resistance[device_type].name[2];
