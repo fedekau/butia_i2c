@@ -32,6 +32,8 @@
 
 const static int fsusb_vendorID=0x04d8; // Microchip, Inc
 const static int fsusb_productID=0x000b; // PICDEM-FS USB
+const static int usb4all_vendorID=0x04d8; // Microchip, Inc
+const static int usb4all_productID=0x000c; // USB4all
 const static int fsusb_configuration=1; /* 1: bootloader
                                          * ### may change in future firmware versions
                                          */
@@ -319,7 +321,6 @@ picdem_handle *rjl_fsusb_open(void)
 {
   struct usb_device *device;
   struct usb_bus* bus;
-  unsigned char buf[2];
 
 
   if (geteuid()!=0) {
@@ -363,14 +364,14 @@ picdem_handle *rjl_fsusb_open(void)
                 "You may need to `rmmod hid` or patch your kernel's hid driver.\n");
           }
 
-          rjl_request_version(d, buf);
+          /*rjl_request_version(d, buf);
 
           printf("Communication established.  Onboard firmware version is %d.%d\n",
                  (int)buf[0],(int)buf[1]);
 
           if (buf[0]!=0x01u) {
             bad("This PICDEM's version is too new (only support version 1.x !)\n");
-          }
+          }*/
 
           return d;
         } else 
@@ -386,6 +387,83 @@ picdem_handle *rjl_fsusb_open(void)
       "you might try lsusb to see if it's actually there.");
 
   return NULL;
+}
+
+/* Find the first USB device with USB4all vendor and product.
+ *  Exits on errors, like if the device couldn't be found. -osl
+ *
+ * This function is heavily based upon Orion Sky Lawlor's
+ *  usb_pickit program, which was a very useful reference
+ *  for all the USB stuff.  Thanks!
+ */
+picdem_handle *rjl_usb4all_open(void)
+{
+  struct usb_device *device;
+  struct usb_bus* bus;
+
+  if (geteuid()!=0) {
+    bad("This program must be run as root, or made setuid root");
+  }
+
+#ifdef USB_DEBUG
+  usb_debug=4; 
+#endif
+
+  printf("Locating USB4all board (vendor 0x%04x/product 0x%04x)\n",
+  	usb4all_vendorID,usb4all_productID);
+  /* (libusb setup code stolen from John Fremlin's cool "usb-robot") -osl */
+  usb_init();
+  usb_find_busses();
+  usb_find_devices();
+
+  for (bus=usb_busses;bus!=NULL;bus=bus->next) {
+    struct usb_device* usb_devices = bus->devices;
+    for(device=usb_devices;device!=NULL;device=device->next) {
+
+
+      if (device->descriptor.idVendor == usb4all_vendorID
+          && device->descriptor.idProduct == usb4all_productID) {
+
+        usb_dev_handle *d;
+        printf( "Found USB4all as device '%s' on USB bus %s\n",
+                device->filename,
+                device->bus->dirname);
+        d=usb_open(device);
+
+
+        if (d) { /* This is our device-- claim it */
+          if (usb_set_configuration(d,fsusb_configuration)) {
+            bad("Error setting USB configuration.\n");
+          }
+
+          if (usb_claim_interface(d,fsusb_interface)) {
+            bad("Claim failed-- the USB4all is in use by another driver.\n"
+                "Do a `dmesg` to see which kernel driver has claimed it--\n"
+                "You may need to `rmmod hid` or patch your kernel's hid driver.\n");
+          }
+          return d;
+        } else 
+          bad("Open failed for USB device");
+      }
+
+
+      /* else some other vendor's device-- keep looking... -osl*/
+    }
+  }
+
+  bad("Could not find USB4alldevice--\n"
+      "you might try lsusb to see if it's actually there.");
+
+  return NULL;
+}
+
+// write on 64-byte boundaries only in blocks of 64 bytes
+void reset_board(picdem_handle *d)
+{
+  bl_packet p;
+  p.command=RESET;
+  p.len=1;
+  usb_bulk_write(d, fsusb_endpoint, (char*)&p, 2, fsusb_timeout);
 }
 
 void switch_bootloader(picdem_handle *d){

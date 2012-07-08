@@ -24,7 +24,7 @@
 #include "fsusb.h"
 #include <string.h>
 
-picdem_handle *usbdev;
+picdem_handle *usbdev = NULL;
 
 
 typedef int scan_callback_t(int,int,mi_byte_t*,char*);
@@ -151,6 +151,9 @@ void show_usage(void)
   printf("fsusb --program <file>   program board with <file> and verify\n");
   printf("fsusb --verify <file>    verify board against <file>\n");
   printf("fsusb --read <file>      read board, saving result in <file>\n");
+  printf("fsusb --bootloader       to switch the board to bootloader program being in usb4butia program\n");
+  printf("fsusb --reset            to switch the board to usb4butia program being in bootloader program\n");
+  printf("fsusb --force_program    to switch the board to bootloader mode, program with <file>, verify, and reboot the board to run the new programed firmware \n");
 }
 
 
@@ -214,8 +217,6 @@ int program_file(char *file)
   return retval;
 
 }
-
-
 
 int write_range(int base, int top, FILE *f)
 {
@@ -299,6 +300,23 @@ int read_to_file(char *file)
   return 0;
 }
 
+int switch_board_to_bootloader(){
+  picdem_handle *usb4allboard=rjl_usb4all_open();
+  switch_bootloader(usb4allboard);
+  return 0;
+}
+
+int reset(){
+  if (usbdev == NULL)
+    usbdev=rjl_fsusb_open();
+  reset_board(usbdev);
+  return 0;
+}
+
+int program_file_and_reset(char *file){
+  program_file(file);
+  reset(usbdev); 
+}
 
 int main(int argc, char *argv[])
 {
@@ -307,6 +325,14 @@ int main(int argc, char *argv[])
     exit(1);
   }
 
+  if(argc == 2) {
+    if(!strcmp(argv[1], "--bootloader")){ 
+      exit(switch_board_to_bootloader());
+    }
+    if(!strcmp(argv[1], "--reset")){ 
+      exit(reset());
+    }
+  }
   if(argc == 3) {
     if(!strcmp(argv[1], "--verify")) {
       exit(verify_file(argv[2]));
@@ -316,12 +342,15 @@ int main(int argc, char *argv[])
       exit(program_file(argv[2]));
     }
 
-    if(!strcmp(argv[1], "--read")) {
-      exit(read_to_file(argv[2]));
+    if(!strcmp(argv[1], "--force_program")) {
+      switch_board_to_bootloader();
+      sleep(2);
+      program_file(argv[2]);
+      exit(reset());
     }
 
-    if(!strcmp(argv[1], "--bootloader")) {
-      exit(switch_bootloader());
+    if(!strcmp(argv[1], "--read")) {
+      exit(read_to_file(argv[2]));
     }
 
     printf("Unknown option %s\n", argv[1]);
