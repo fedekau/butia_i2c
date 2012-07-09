@@ -29,9 +29,12 @@ void rjl_request_flash(picdem_handle *d, int offset, int len, bl_packet *pack);
 void rjl_request_version(picdem_handle *d, unsigned char *r);
 //void rjl_write_flash(picdem_handle *d, int offset, int len, byte *data, bl_packet *pack);
 //void rjl_wipe_flash(picdem_handle *d);
+picdem_handle *rjl_usb4all_open(void);
 picdem_handle *rjl_fsusb_open(void);
 void rjl_write_block(picdem_handle *d, int offset, byte *data);
 //void rjl_erase_block(picdem_handle *d, int offset);
 void rjl_write_config_block(picdem_handle *d, int offset, int len, byte *data);
+void switch_bootloader(picdem_handle *d);
+void reset_board(picdem_handle *d);
 
 #endif /* __FSUSB_H__ */
