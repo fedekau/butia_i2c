@@ -190,7 +190,6 @@ void adminReceived(byte* recBuffPtr,byte len, byte admin_handler){
 
         case GET_HANDLER_SIZE:
             ((AM_PACKET*)sendBufferAdmin)->CMD  = GET_HANDLER_SIZE;
-            //((AM_PACKET*)sendBufferAdmin)->size = MAX_HANDLERS; //FIXME return the correct list of modules
             ((AM_PACKET*)sendBufferAdmin)->size = getMaxHandler();
             adminCounter=0x02;
         break;
