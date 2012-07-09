@@ -222,19 +222,19 @@ respType configureHandlerTableEntry(byte handler){
 }
 
 byte removeAllOpenModules(void){
-	pUserFunc releaseFunction;
-	byte handler = 1;
-	while(handler < MAX_HANDLERS){
-		if (epHandlerMap[handler].ep.empty == 0){
-			epHandlerMap[handler].ep.empty = 1;
-		    releaseFunction = getModuleReleaseDirection(epHandlerMap[handler].uTableDirection);
-			releaseFunction(handler);
-			epHandlerMap[handler].uTableDirection = 0;
-			//return ACK; mal !!!! gracias jorge por darte cuenta
-		}
-		handler++;
-	}
-	return ACK;
+    pUserFunc releaseFunction;
+    byte handler = 1;
+    while(handler < MAX_HANDLERS){
+        if (epHandlerMap[handler].ep.empty == 0){
+            epHandlerMap[handler].ep.empty = 1;
+            releaseFunction = getModuleReleaseDirection(epHandlerMap[handler].uTableDirection);
+            releaseFunction(handler);
+            epHandlerMap[handler].uTableDirection = 0;
+            //return ACK; mal !!!! gracias jorge por darte cuenta
+        }
+            handler++;
+    }
+    return ACK;
 }
 
 byte* getSharedBuffer(byte handler){
@@ -260,6 +260,16 @@ byte getEPSizeOUT(byte ep){
 byte getEPSizeIN(byte ep){
 	// TODO deshardcodear el 64 !!
 	return 64;  
+}
+
+int getMaxHandler(void){
+    byte handler, max_handler = 0;
+    for(handler=0;handler<MAX_HANDLERS;handler++){
+        if (epHandlerMap[handler].ep.empty == 0){
+            max_handler = handler;
+        }
+    }
+    return (int)max_handler;
 }
 
 /** EOF handlerManager.c ***************************************************************/

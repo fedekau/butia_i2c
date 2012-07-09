@@ -296,8 +296,6 @@ void setMensaje(char * m, int N) {
 #define WAIT_SECONDS(s) {int i; for(i=0; i<10*(s); i++) Delay10KTCYx(250);}
 
 void main(void) {
-    byte mensaje[16];
-    int cont=0;
     InitializeSystem();      
     while(1) {
         USBTasks();         // USB Tasks
