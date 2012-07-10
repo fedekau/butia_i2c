@@ -1,0 +1,65 @@
+# EESchema Netlist Version 1.1 created  mar 15 may 2012 10:40:39 UYT
+(
+ ( /4FAC358A LED-5MM D1 LED
+  ( 1 N-000009 )
+  ( 2 GND )
+ )
+ ( /4F68816E RJ45_8 J1 RJ45
+  ( 1 ? )
+  ( 2 ? )
+  ( 3 VDD )
+  ( 4 idAN )
+  ( 5 GND )
+  ( 6 AN )
+  ( 7 ? )
+  ( 8 ? )
+  ( 9 GND )
+ )
+ ( /4FAC1B98 R3 R1 R
+  ( 1 VDD )
+  ( 2 AN )
+ )
+ ( /4FAC1BA4 R3 R2 R
+  ( 1 idAN )
+  ( 2 VDD )
+ )
+ ( /4FAC3460 R3 R3 R
+  ( 1 N-000009 )
+  ( 2 VDD )
+ )
+ ( /4FAC35A8 PIN_ARRAY_2X1 VR1 VR
+  ( 1 GND )
+  ( 2 AN )
+ )
+)
+*
+{ Allowed footprints by component:
+$component D1
+ LED-3MM
+ LED-5MM
+ LED-10MM
+ LED-0603
+ LED-0805
+ LED-1206
+ LEDV
+$endlist
+$component R1
+ R?
+ SM0603
+ SM0805
+ R?-*
+$endlist
+$component R2
+ R?
+ SM0603
+ SM0805
+ R?-*
+$endlist
+$component R3
+ R?
+ SM0603
+ SM0805
+ R?-*
+$endlist
+$endfootprintlist
+}

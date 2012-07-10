@@ -21,3 +21,7 @@ firmware/u4a2/USB4all.X/nbproject/Makefile-genesis.properties
 firmware/u4a2/USB4all.X/nbproject/Makefile-impl.mk
 firmware/u4a2/USB4all.X/nbproject/Makefile-variables.mk
 firmware/u4a2/USB4all.X/nbproject/Makefile-local-default.mk
+
+#fsusb flasher
+fsusb-0.1.11-2/fsusb
+

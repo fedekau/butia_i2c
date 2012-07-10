@@ -323,7 +323,7 @@ picdem_handle *rjl_fsusb_open(void)
   struct usb_bus* bus;
 
 #ifdef USB_DEBUG
-  usb_debug=4; 
+  usb_debug=4;
 #endif
 
   printf("Locating USB Microchip(tm) PICDEM-FS USB(tm) (vendor 0x%04x/product 0x%04x)\n",
@@ -369,7 +369,7 @@ picdem_handle *rjl_fsusb_open(void)
           }*/
 
           return d;
-        } else 
+        } else
           bad("Open failed for USB device");
       }
 
@@ -397,7 +397,7 @@ picdem_handle *rjl_usb4all_open(void)
   struct usb_bus* bus;
 
 #ifdef USB_DEBUG
-  usb_debug=4; 
+  usb_debug=4;
 #endif
 
   printf("Locating USB4all board (vendor 0x%04x/product 0x%04x)\n",
@@ -464,5 +464,5 @@ void switch_bootloader(picdem_handle *d){
     switch_to_bootloader_cmd[2] = 0x00; /*reserved*/
     switch_to_bootloader_cmd[3] = 0x09; /*switch to bootloader command*/
     usb_bulk_write(d, fsusb_endpoint, (char*)switch_to_bootloader_cmd, SW_BOOT_MSG_SIZE, fsusb_timeout);
-}    
+}
 

@@ -1,0 +1,483 @@
+# EESchema Netlist Version 1.1 created  lun 16 ene 2012 09:31:49 UYST
+(
+ ( /4F13950C $noname  R12 R {Lib=R}
+  (    1 N-000004 )
+  (    2 N-000042 )
+ )
+ ( /4F139502 R3  R11 R {Lib=R}
+  (    1 N-000041 )
+  (    2 N-000004 )
+ )
+ ( /4F1390AA $noname  K3 CONN_3 {Lib=CONN_3}
+  (    1 N-000042 )
+  (    2 N-000041 )
+  (    3 N-000005 )
+ )
+ ( /4F139099 $noname  K2 CONN_3 {Lib=CONN_3}
+  (    1 N-000042 )
+  (    2 N-000041 )
+  (    3 N-000006 )
+ )
+ ( /4F13879F bornier2  P2 CONN_2 {Lib=CONN_2}
+  (    1 N-000042 )
+  (    2 N-000041 )
+ )
+ ( /4F138789 $noname  K1 CONN_3 {Lib=CONN_3}
+  (    1 N-000042 )
+  (    2 N-000041 )
+  (    3 N-000007 )
+ )
+ ( /4F13861F C1  C10 10uF {Lib=CP}
+  (    1 N-000008 )
+  (    2 N-000042 )
+ )
+ ( /4F138614 C1  C9 0.1uF {Lib=C}
+  (    1 N-000008 )
+  (    2 N-000042 )
+ )
+ ( /4F13860D CP8  C8 0.1uF {Lib=C}
+  (    1 N-000008 )
+  (    2 N-000042 )
+ )
+ ( /4F13821E RJ45_8  J4 RJ45 {Lib=RJ45}
+  (    1 ? )
+  (    2 ? )
+  (    3 N-000008 )
+  (    4 N-000003 )
+  (    5 N-000042 )
+  (    6 N-000009 )
+  (    7 ? )
+  (    8 ? )
+  (    9 ? )
+ )
+ ( /4EC96E72 DIP-40__600_ELL  U1 PIC18F4550 {Lib=PIC18F4550}
+  (    1 N-000011 )
+  (    2 N-000038 )
+  (    3 N-000033 )
+  (    4 N-000039 )
+  (    5 N-000034 )
+  (    6 ? )
+  (    7 ? )
+  (    8 ? )
+  (    9 ? )
+  (   10 N-000004 )
+  (   11 N-000008 )
+  (   12 N-000042 )
+  (   13 N-000025 )
+  (   14 N-000019 )
+  (   15 ? )
+  (   16 ? )
+  (   17 ? )
+  (   18 N-000020 )
+  (   19 ? )
+  (   20 ? )
+  (   21 ? )
+  (   22 ? )
+  (   23 N-000023 )
+  (   24 N-000021 )
+  (   25 N-000007 )
+  (   26 ? )
+  (   27 ? )
+  (   28 ? )
+  (   29 N-000006 )
+  (   30 N-000005 )
+  (   31 N-000042 )
+  (   32 N-000008 )
+  (   33 N-000040 )
+  (   34 N-000035 )
+  (   35 N-000003 )
+  (   36 N-000009 )
+  (   37 N-000002 )
+  (   38 ? )
+  (   39 N-000036 )
+  (   40 N-000010 )
+ )
+ ( /4EBB3743 bornier5  P1 CONN_5 {Lib=CONN_5}
+  (    1 N-000011 )
+  (    2 N-000008 )
+  (    3 N-000042 )
+  (    4 N-000010 )
+  (    5 N-000036 )
+ )
+ ( /4EBB32BE R3  R10 R {Lib=R}
+  (    1 N-000042 )
+  (    2 N-000003 )
+ )
+ ( /4EBB32BA R3  R9 R {Lib=R}
+  (    1 N-000040 )
+  (    2 N-000042 )
+ )
+ ( /4EBB32AD R3  R8 R {Lib=R}
+  (    1 N-000039 )
+  (    2 N-000042 )
+ )
+ ( /4EBB32A1 R3  R7 R7 {Lib=R}
+  (    1 N-000038 )
+  (    2 N-000042 )
+ )
+ ( /4EBAC372 RJ45_8  J3 RJ45 {Lib=RJ45}
+  (    1 ? )
+  (    2 ? )
+  (    3 N-000008 )
+  (    4 N-000040 )
+  (    5 N-000042 )
+  (    6 N-000035 )
+  (    7 ? )
+  (    8 ? )
+  (    9 ? )
+ )
+ ( /4EBAC35D RJ45_8  J2 RJ45 {Lib=RJ45}
+  (    1 ? )
+  (    2 ? )
+  (    3 N-000008 )
+  (    4 N-000039 )
+  (    5 N-000042 )
+  (    6 N-000034 )
+  (    7 ? )
+  (    8 ? )
+  (    9 ? )
+ )
+ ( /4EBAC352 RJ45_8  J1 RJ45 {Lib=RJ45}
+  (    1 ? )
+  (    2 ? )
+  (    3 N-000008 )
+  (    4 N-000038 )
+  (    5 N-000042 )
+  (    6 N-000033 )
+  (    7 ? )
+  (    8 ? )
+  (    9 ? )
+ )
+ ( /4EBAB258 HC-18UV  X1 20Mhz {Lib=CRYSTAL}
+  (    1 N-000025 )
+  (    2 N-000019 )
+ )
+ ( /4EBAB250 R3  R2 1M {Lib=R}
+  (    1 N-000019 )
+  (    2 N-000025 )
+ )
+ ( /4EBAB24C C1  C2 22pF {Lib=C}
+  (    1 N-000019 )
+  (    2 N-000042 )
+ )
+ ( /4EBAB244 C1  C1 22pF {Lib=C}
+  (    1 N-000025 )
+  (    2 N-000042 )
+ )
+ ( /4EBAB018 SW_PUSH_SMALL  SW2 Prog {Lib=SW_PUSH}
+  (    1 N-000043 )
+  (    2 N-000042 )
+ )
+ ( /4EBAB013 C1  C7 0.1uF {Lib=C}
+  (    1 N-000043 )
+  (    2 N-000042 )
+ )
+ ( /4EBAB011 R3  R6 10K {Lib=R}
+  (    1 N-000043 )
+  (    2 N-000008 )
+ )
+ ( /4EBAB00C R3  R5 390R {Lib=R}
+  (    1 N-000002 )
+  (    2 N-000043 )
+ )
+ ( /4EBA9F42 C1  C4 0.47uF {Lib=C}
+  (    1 N-000020 )
+  (    2 N-000042 )
+ )
+ ( /4EBA9E98 LED-5MM  D1 LED {Lib=LED}
+  (    1 N-000024 )
+  (    2 N-000042 )
+ )
+ ( /4EBA9E82 R3  R1 1K {Lib=R}
+  (    1 N-000008 )
+  (    2 N-000024 )
+ )
+ ( /4EBA9DE2 D4  D2 1N5819 {Lib=DIODESCH}
+  (    1 N-000022 )
+  (    2 N-000008 )
+ )
+ ( /4EBA9D0F USB_B  J0 USB {Lib=USB}
+  (    1 N-000022 )
+  (    2 N-000023 )
+  (    3 N-000021 )
+  (    4 N-000042 )
+  (    5 N-000042 )
+  (    6 N-000042 )
+ )
+ ( /4EBA9B9C SW_PUSH_SMALL  SW1 Reset {Lib=SW_PUSH}
+  (    1 N-000008 )
+  (    2 N-000037 )
+ )
+ ( /4EBA9B83 C1  C3 0.1uF {Lib=C}
+  (    1 N-000037 )
+  (    2 N-000008 )
+ )
+ ( /4EBA9ACE R3  R4 390 {Lib=R}
+  (    1 N-000011 )
+  (    2 N-000037 )
+ )
+ ( /4EBA9AC2 R3  R3 10k {Lib=R}
+  (    1 N-000037 )
+  (    2 N-000042 )
+ )
+)
+*
+{ Allowed footprints by component:
+$component R12
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R11
+ R?
+ SM0603
+ SM0805
+$endlist
+$component C10
+ CP*
+ SM*
+$endlist
+$component C9
+ SM*
+ C?
+ C1-1
+$endlist
+$component C8
+ SM*
+ C?
+ C1-1
+$endlist
+$component R10
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R9
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R8
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R7
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R2
+ R?
+ SM0603
+ SM0805
+$endlist
+$component C2
+ SM*
+ C?
+ C1-1
+$endlist
+$component C1
+ SM*
+ C?
+ C1-1
+$endlist
+$component C7
+ SM*
+ C?
+ C1-1
+$endlist
+$component R6
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R5
+ R?
+ SM0603
+ SM0805
+$endlist
+$component C4
+ SM*
+ C?
+ C1-1
+$endlist
+$component D1
+ LED-3MM
+ LED-5MM
+ LED-10MM
+ LED-0603
+ LED-0805
+ LED-1206
+ LEDV
+$endlist
+$component R1
+ R?
+ SM0603
+ SM0805
+$endlist
+$component D2
+ D?
+ S*
+$endlist
+$component C3
+ SM*
+ C?
+ C1-1
+$endlist
+$component R4
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R3
+ R?
+ SM0603
+ SM0805
+$endlist
+$endfootprintlist
+}
+{ Pin List by Nets
+Net 2 "" ""
+ U1 37
+ R5 1
+Net 3 "" ""
+ J4 4
+ U1 35
+ R10 2
+Net 4 "" ""
+ R12 1
+ R11 2
+ U1 10
+Net 5 "" ""
+ K3 3
+ U1 30
+Net 6 "" ""
+ K2 3
+ U1 29
+Net 7 "" ""
+ K1 3
+ U1 25
+Net 8 "" ""
+ C10 1
+ C9 1
+ C8 1
+ J4 3
+ U1 32
+ U1 11
+ P1 2
+ J3 3
+ J2 3
+ J1 3
+ R6 2
+ R1 1
+ D2 2
+ SW1 1
+ C3 2
+Net 9 "" ""
+ J4 6
+ U1 36
+Net 10 "" ""
+ U1 40
+ P1 4
+Net 11 "" ""
+ U1 1
+ P1 1
+ R4 1
+Net 19 "" ""
+ U1 14
+ X1 2
+ R2 1
+ C2 1
+Net 20 "" ""
+ U1 18
+ C4 1
+Net 21 "" ""
+ U1 24
+ J0 3
+Net 22 "" ""
+ D2 1
+ J0 1
+Net 23 "" ""
+ U1 23
+ J0 2
+Net 24 "" ""
+ D1 1
+ R1 2
+Net 25 "" ""
+ U1 13
+ X1 1
+ R2 2
+ C1 1
+Net 33 "" ""
+ U1 3
+ J1 6
+Net 34 "" ""
+ U1 5
+ J2 6
+Net 35 "" ""
+ U1 34
+ J3 6
+Net 36 "" ""
+ U1 39
+ P1 5
+Net 37 "" ""
+ SW1 2
+ C3 1
+ R4 2
+ R3 1
+Net 38 "" ""
+ U1 2
+ R7 1
+ J1 4
+Net 39 "" ""
+ U1 4
+ R8 1
+ J2 4
+Net 40 "" ""
+ U1 33
+ R9 1
+ J3 4
+Net 41 "" ""
+ R11 1
+ K3 2
+ K2 2
+ P2 2
+ K1 2
+Net 42 "" ""
+ R12 2
+ K3 1
+ K2 1
+ P2 1
+ K1 1
+ C10 2
+ C9 2
+ C8 2
+ J4 5
+ U1 31
+ U1 12
+ P1 3
+ R10 1
+ R9 2
+ R8 2
+ R7 2
+ J3 5
+ J2 5
+ J1 5
+ C2 2
+ C1 2
+ SW2 2
+ C7 2
+ C4 2
+ D1 2
+ J0 5
+ J0 6
+ J0 4
+ R3 2
+Net 43 "" ""
+ SW2 1
+ C7 1
+ R6 1
+ R5 2
+}
+#End
