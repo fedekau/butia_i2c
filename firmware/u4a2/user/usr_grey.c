@@ -29,7 +29,7 @@ void UserGreyConfigure(void);
 /* Table used by te framework to get a fixed reference point to the user module functions defined by the framework */
 /** USER MODULE REFERENCE ****************************************************/
 #pragma romdata user
-uTab userGreyModuleTable = {&UserGreyInit,&UserGreyRelease,&UserGreyConfigure,"grey"}; /*modName must be less or equal 8 characters*/
+const uTab userGreyModuleTable = {&UserGreyInit,&UserGreyRelease,&UserGreyConfigure,"grey"}; /*modName must be less or equal 8 characters*/
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/

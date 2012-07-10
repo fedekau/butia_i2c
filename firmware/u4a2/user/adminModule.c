@@ -24,7 +24,7 @@ byte  timeOutTicksWatchdog;
 // Admin ModuleType=0,
 //#pragma romdata user=DIRECTION_TABLE       // THIS DONT WORK!!!
 #pragma romdata user
-uTab AdminModuleTable = {&adminModuleInit,&adminModuleRelease,&adminModuleConfigure,"admin"}; //modName must be less or equal 8 characters
+const uTab AdminModuleTable = {&adminModuleInit,&adminModuleRelease,&adminModuleConfigure,"admin"}; //modName must be less or equal 8 characters
 #pragma code
 
 /*mapping between module name and an device type id used for optimization
