@@ -99,16 +99,8 @@ void changeDirectionPort1(direction io){
     TRISAbits.RA1 = io;
 }
 
-byte getDataD1(){
-    WORD res;
-    res = getDataA1();
-    if (res.HighB.b7)
-        return 0x01;
-    return 0x00;
-}
-
 WORD getDataA1(){
-    
+
     WORD res = 0;
     byte counter = 255;
     /*Configure Analogic Chanel 1, AN1 _ PIN 3*/
@@ -124,6 +116,15 @@ WORD getDataA1(){
 
     return res;
 }
+
+byte getDataD1(){
+    WORD res;
+    res = getDataA1();
+    if (res.HighB.b7)
+        return 0x01;
+    return 0x00;
+}
+
 
 void setData1(byte data){
     PORTAbits.RA1 = data;
@@ -152,16 +153,8 @@ void changeDirectionPort2(direction io){
     TRISAbits.RA3 = io;
 }
 
-byte getDataD2(){
-    WORD res;
-    res = getDataA2();
-    if (res.HighB.b7)
-        return 0x01;
-    return 0x00;
-}
-
 WORD getDataA2(){
-    
+
     WORD res = 0;
     byte counter = 255;
     /*Configure Analogic Chanel 3, AN3 _ PIN 5*/
@@ -176,6 +169,14 @@ WORD getDataA2(){
     MSB(res) = ADRESH;
 
     return res;
+}
+
+byte getDataD2(){
+    WORD res;
+    res = getDataA2();
+    if (res.HighB.b7)
+        return 0x01;
+    return 0x00;
 }
 
 void setData2(byte data){
@@ -205,14 +206,6 @@ void changeDirectionPort3(direction io){
     TRISEbits.RE1 = io;
 }
 
-byte getDataD3(){
-    WORD res;
-    res = getDataA3();
-    if (res.HighB.b7)
-        return 0x01;
-    return 0x00;
-}
-
 WORD getDataA3(){
 
     WORD res = 0;
@@ -229,6 +222,14 @@ WORD getDataA3(){
     MSB(res) = ADRESH;
 
     return res;
+}
+
+byte getDataD3(){
+    WORD res;
+    res = getDataA3();
+    if (res.HighB.b7)
+        return 0x01;
+    return 0x00;
 }
 
 void setData3(byte data){
@@ -258,14 +259,6 @@ void changeDirectionPort4(direction io){
     TRISAbits.RA5 = io;
 }
 
-byte getDataD4(){
-    WORD res;
-    res = getDataA4();
-    if (res.HighB.b7)
-        return 0x01;
-    return 0x00;
-}
-
 WORD getDataA4(){
 
     WORD res = 0;
@@ -282,6 +275,14 @@ WORD getDataA4(){
     MSB(res) = ADRESH;
 
     return res;
+}
+
+byte getDataD4(){
+    WORD res;
+    res = getDataA4();
+    if (res.HighB.b7)
+        return 0x01;
+    return 0x00;
 }
 
 void setData4(byte data){
@@ -311,14 +312,6 @@ void changeDirectionPort5(direction io){
     TRISBbits.RB1 = io;
 }
 
-byte getDataD5(){
-    WORD res;
-    res = getDataA5();
-    if (res.HighB.b7)
-        return 0x01;
-    return 0x00;
-}
-
 WORD getDataA5(){
 
     WORD res = 0;
@@ -335,6 +328,14 @@ WORD getDataA5(){
     MSB(res) = ADRESH;
 
     return res;
+}
+
+byte getDataD5(){
+    WORD res;
+    res = getDataA5();
+    if (res.HighB.b7)
+        return 0x01;
+    return 0x00;
 }
 
 void setData5(byte data){
@@ -364,14 +365,6 @@ void changeDirectionPort6(direction io){
     TRISBbits.RB3 = io;
 }
 
-byte getDataD6(){
-    WORD res = 0;
-    res = getDataA6();
-    if (res.HighB.b7)
-        return 0x01;
-    return 0x00;
-}
-
 WORD getDataA6(){
 
     WORD res;
@@ -388,6 +381,14 @@ WORD getDataA6(){
     MSB(res) = ADRESH;
 
     return res;
+}
+
+byte getDataD6(){
+    WORD res = 0;
+    res = getDataA6();
+    if (res.HighB.b7)
+        return 0x01;
+    return 0x00;
 }
 
 void setData6(byte data){
