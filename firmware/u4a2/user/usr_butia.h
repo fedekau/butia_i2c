@@ -13,7 +13,7 @@
 
 /** D E F I N I T I O N S ****************************************************/
 
-#define BUTIA_VERSION 0x15 //21
+#define BUTIA_VERSION 0x16 //22 
 
 /** S T R U C T U R E S ******************************************************/
 typedef union BUTIA_DATA_PACKET
