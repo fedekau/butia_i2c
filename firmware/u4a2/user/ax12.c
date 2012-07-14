@@ -182,9 +182,7 @@ void setRX(void){                   // Modo RX
 }
 
 void setNone(void){                 // Modo RESET
-    PIE1bits.RCIE = 0;              // deshabilita la interrupci�n de recepci�n
     RCSTAbits.CREN = 0;             // deshabilita la recepci�n
-                                    // Desconfiguro la transmisi�n
     TXSTAbits.TXEN = 0;             // deshabilita la transmisi�n
 }
 
