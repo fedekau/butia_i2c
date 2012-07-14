@@ -36,7 +36,7 @@
 
 #define FF 0xff
 #define MAX_MOTOR_ID 0Xfe
-#define TIMEOUT 250
+#define TIMEOUT 15000
 #pragma udata
 /*****************************************************************************/ 
 /********************************   Variables   ******************************/
