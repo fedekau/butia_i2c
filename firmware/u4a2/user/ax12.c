@@ -36,7 +36,7 @@
 
 #define FF 0xff
 #define MAX_MOTOR_ID 0Xfe
-#define TIMEOUT 15000
+#define TIMEOUT 250
 #pragma udata
 /*****************************************************************************/ 
 /********************************   Variables   ******************************/
@@ -232,7 +232,6 @@ void ax12SendPacket (byte id, byte datalength, byte instruction, byte *data){
 }*/
 
 byte readSerial(void){
-//    while(!PIR1bits.RCIF);
     int timeout = TIMEOUT;
     while(!PIR1bits.RCIF && timeout--);
     PIR1bits.RCIF=0;
