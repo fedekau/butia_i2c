@@ -174,7 +174,6 @@ void initHandlerTable() {
 
 void initHandlerManager(void){
     char modulename[8];  //FIXME!!!
-    //initHandlerBuffers();
     initHandlerTable();      //Initialize table index(handler)=>endpoint
 
     /* Staticaly Initialized modules */
@@ -191,6 +190,7 @@ void initHandlerManager(void){
     modulename[4]=0; modulename[5]=0  ; modulename[6]=0  ; modulename[7]=0  ;
     epHandlerMap[7].ep = getPnPEndpoint();
     epHandlerMap[7].uTableDirection = getUserTableDirection(modulename);
+    autoDetectWheels();
     PNPInit(7);
 
 }

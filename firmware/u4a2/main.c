@@ -330,7 +330,7 @@ void initButiaMotors(){
  *****************************************************************************/
 static void InitializeSystem(void) {
     mInitPortA();mInitPortB();mInitPortC();mInitPortD();mInitPortE(); // set pins as input for safety and interference avoid
-    initButiaMotors();
+    ax12InitSerial();
     ADCON1 = ADCON1 & 0xF0;        /* Default all pins to analogic */
     ADCON0bits.ADON = 1;            /* Enable Analogic */
 
@@ -348,6 +348,7 @@ static void InitializeSystem(void) {
     initT0Service();         // Inicializa servicio T0 para manejar recurso de timmer
     initPollingFunctions();  // inicializa el buffer con 0s (dynamicPolling.c)
     initHandlerManager();    // inicializa el map de enpoints y crea el enpoint 0 (adminModule.c)
+    
 	
 }//end InitializeSystem
 
