@@ -39,7 +39,7 @@
 #define R_BUZZER 9999
 
 
-#define MAX_DEVICES 5 /*Max cant of senssor/actuator type*/
+#define MAX_DEVICES 6 /*Max cant of senssor/actuator type*/
 /*TODO review this time, the micro is running @20MHZ with a pipeline of 4steps => 20000000/4 = 5000000 instructions per second */
 #define PNP_DETECTION_TIME 20000
 
