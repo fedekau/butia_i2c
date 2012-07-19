@@ -28,6 +28,7 @@
       <itemPath>../user/usr_distance.h</itemPath>
       <itemPath>../user/usr_grey.h</itemPath>
       <itemPath>../user/usr_motors.h</itemPath>
+      <itemPath>../user/usr_light.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LibraryFiles"
                    displayName="Library Files"
@@ -70,6 +71,7 @@
       <itemPath>../user/usr_distance.c</itemPath>
       <itemPath>../user/usr_grey.c</itemPath>
       <itemPath>../user/usr_motors.c</itemPath>
+      <itemPath>../user/usr_light.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -95,6 +97,15 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <makeCustomizationType>
+        <makeCustomizationPreStepEnabled>false</makeCustomizationPreStepEnabled>
+        <makeCustomizationPreStep></makeCustomizationPreStep>
+        <makeCustomizationPostStepEnabled>false</makeCustomizationPostStepEnabled>
+        <makeCustomizationPostStep></makeCustomizationPostStep>
+        <makeCustomizationAlternativeFileToLoadEnabled>false</makeCustomizationAlternativeFileToLoadEnabled>
+        <makeCustomizationAlternativeFileToLoad></makeCustomizationAlternativeFileToLoad>
+        <makeCustomizationPutChecksumInUserID>false</makeCustomizationPutChecksumInUserID>
+      </makeCustomizationType>
       <C18>
         <property key="storage-class" value="sca"/>
         <property key="enable-opa" value="false"/>
