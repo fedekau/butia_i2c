@@ -277,17 +277,14 @@ void UserMotorsReceived(byte* recBuffPtr, byte len){
             vel2 = vel2<<8|lowVel2;
             if(direction1==0x01){
                 endlessTurn(wheels.left.id, vel1, 0);
-                res = writeInfo(wheels.left.id, LED, 0);
             }
             else{
                 endlessTurn(wheels.left.id, -vel1, 0);
-                res = writeInfo(wheels.right.id, LED, 0);
             }
             if(direction2==0x01)
                 endlessTurn(wheels.right.id, vel2, 1);
             else
                 endlessTurn(wheels.right.id, -vel2, 1);
-            //TODO return error code
             userMotorsCounter = 0x01;
         break;
 
