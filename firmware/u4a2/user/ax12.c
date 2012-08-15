@@ -68,7 +68,7 @@ char bin2sign (boolean var) {                         // var = 0 --> sign = -1
 }
 
 int makeInt (byte l, byte h) {
-    return (h << 8) | l;
+    return (h*256) + l;
 }
 
 byte highByte(int value){
