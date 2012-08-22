@@ -2,10 +2,11 @@
  * USB4all driver - 1.0
  *
  * Copyright (C) 2007 Andres Aguirre, Daniel Pedraja
+ * Copyright (C) 2001-2004 Greg Kroah-Hartman (greg@kroah.com)
  *
- *      This program is free software; you can redistribute it and/or
- *      modify it under the terms of the GNU General Public License as
- *      published by the Free Software Foundation, version 2.
+ *	This program is free software; you can redistribute it and/or
+ *	modify it under the terms of the GNU General Public License as
+ *	published by the Free Software Foundation, version 2.
  *
  */
 
@@ -13,11 +14,10 @@
 #include "usb4all.h"
 
 /* table of devices that work with this driver */
-static struct usb_device_id USB4all_table [] = {
+static const struct usb_device_id U4all_table [] = {
 	{ USB_DEVICE(USB4all_VENDOR_ID, USB4all_PRODUCT_ID) },
 	{ }					/* Terminating entry */
 };
-
 MODULE_DEVICE_TABLE (usb, USB4all_table);
 
 #define to_U4all_dev(d) container_of(d, struct usb_U4all, kref)
@@ -34,12 +34,12 @@ static int transferType = BULK;
 static void unicode_to_ascii            (char *string, __le16 *unicode, int unicode_size);
 
 static void U4all_delete(struct kref *kref)
-{	
+{
 	struct usb_U4all *dev = to_U4all_dev(kref);
 
 	usb_put_dev(dev->udev);
-	kfree (dev->in_buffer);
-	kfree (dev);
+	kfree(dev->in_buffer);
+	kfree(dev);
 }
 
 static int U4all_open(struct inode *inode, struct file *file)
@@ -53,8 +53,8 @@ static int U4all_open(struct inode *inode, struct file *file)
 
 	interface = usb_find_interface(&U4all_driver, subminor);
 	if (!interface) {
-		err ("%s - error, can't find device for minor %d",
-		     __FUNCTION__, subminor);
+		err("%s - error, can't find device for minor %d",
+		     __func__, subminor);
 		retval = -ENODEV;
 		goto exit;
 	}
@@ -68,8 +68,30 @@ static int U4all_open(struct inode *inode, struct file *file)
 	/* increment our usage count for the device */
 	kref_get(&dev->kref);
 
+	/* lock the device to allow correctly handling errors
+	 * in resumption */
+	mutex_lock(&dev->io_mutex);
+
+	if (!dev->open_count++) {
+		retval = usb_autopm_get_interface(interface);
+			if (retval) {
+				dev->open_count--;
+				mutex_unlock(&dev->io_mutex);
+				kref_put(&dev->kref, skel_delete);
+				goto exit;
+			}
+	} /* else { //uncomment this block if you want exclusive open
+		retval = -EBUSY;
+		dev->open_count--;
+		mutex_unlock(&dev->io_mutex);
+		kref_put(&dev->kref, skel_delete);
+		goto exit;
+	} */
+	/* prevent the device from being autosuspended */
+
 	/* save our object in the file's private structure */
 	file->private_data = dev;
+	mutex_unlock(&dev->io_mutex);
 
 exit:
 	return retval;
@@ -79,9 +101,15 @@ static int U4all_release(struct inode *inode, struct file *file)
 {
 	struct usb_U4all *dev;
 
-	dev = (struct usb_U4all *)file->private_data;
-	if(dev == NULL)
-        return -ENODEV;
+	dev = file->private_data;
+	if (dev == NULL)
+		return -ENODEV;
+
+	/* allow the device to be autosuspended */
+	mutex_lock(&dev->io_mutex);
+	if (!--dev->open_count && dev->interface)
+		usb_autopm_put_interface(dev->interface);
+	mutex_unlock(&dev->io_mutex);
 
 	/* decrement the count on our device */
 	kref_put(&dev->kref, U4all_delete);
@@ -371,7 +399,7 @@ static void U4all_write_bulk_callback(struct urb *urb, struct pt_regs *regs)
 {
 	struct usb_U4all *dev;
 
-	dev = (struct usb_U4all *)urb->context;
+	dev = urb->context;
 
 	/* sync/async unlink faults aren't errors */
 	if (urb->status && 
@@ -498,14 +526,14 @@ static ssize_t U4all_write(struct file *file, const char *user_buffer, size_t co
                     packets++;
 //     		err("%s - packets %d", __FUNCTION__,packets);
             	/* limit the number of URBs in flight to stop a user from using up all RAM */
-            	if (down_interruptible(&dev->limit_sem)) {
+            	if(down_interruptible(&dev->limit_sem)) {
             		retval = -ERESTARTSYS;
             		goto exit;
             	}
 
             	/* create a urb, and a buffer for it, and copy the data to the urb */
             	urb = usb_alloc_urb(0, GFP_KERNEL);
-            	if (!urb) {
+            	if(!urb) {
             		retval = -ENOMEM;
             		goto error;
             	}
@@ -750,15 +778,17 @@ static int usb4all_ioctl(struct inode *inode, struct file *file, unsigned int co
 	}
 }
 
-static struct file_operations U4all_fops = {
-        .owner =        THIS_MODULE,
-        .read =         U4all_read,
-        .write =        U4all_write,
-        .open =         U4all_open,
-	.release =      U4all_release,
-        .ioctl =        usb4all_ioctl,
-};
 
+
+static const struct file_operations U4all_fops = {
+	.owner =	THIS_MODULE,
+	.read =		U4all_read,
+	.write =	U4all_write,
+	.open =		U4all_open,
+	.release =	U4all_release,
+	.flush =	U4all_flush,
+	.llseek =static struct usb_device_id USB4all_table	U4all_llseek,
+};
 
 
 
@@ -882,11 +912,17 @@ static void U4all_disconnect(struct usb_interface *interface)
 
 
 static struct usb_driver U4all_driver = {
-        .name =         "USB4all baseboard",
-        .probe =        U4all_probe,
-        .disconnect =   U4all_disconnect,
-        .id_table =     USB4all_table,
+	.name =		"USB4all baseboard",
+	.probe =	U4all_probe,
+	.disconnect =	U4all_disconnect,
+	.suspend =	U4all_suspend,
+	.resume =	U4all_resume,
+	.pre_reset =	U4all_pre_reset,
+	.post_reset =	U4all_post_reset,
+	.id_table =	U4all_table,
+	.supports_autosuspend = 0,
 };
+
 
 
 static int __init usb_U4all_init(void)
