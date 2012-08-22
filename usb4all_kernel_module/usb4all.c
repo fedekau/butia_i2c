@@ -1,7 +1,9 @@
 /*
  * USB4all driver - 1.0
  *
- * Copyright (C) 2007 Andres Aguirre, Daniel Pedraja
+ * Copyright (C) 
+ *	2001-2004 Greg Kroah-Hartman (greg@kroah.com)
+ *	2007 Andres Aguirre, Daniel Pedraja
  *
  *      This program is free software; you can redistribute it and/or
  *      modify it under the terms of the GNU General Public License as
