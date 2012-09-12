@@ -52,5 +52,6 @@ typedef union MOTORS_DATA_PACKET{
 /** P U B L I C  P R O T O T Y P E S *****************************************/
 void autoDetectWheels();
 //void sexyMotorMoveStart();
+boolean getVoltage(int *data_received);
 
 #endif /*USER_MOTORS_H*/

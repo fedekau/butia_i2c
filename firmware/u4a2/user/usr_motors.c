@@ -91,6 +91,14 @@ void sexyMotorMoveStart(){
     registerT0event(TIME_UNIT, &forwardLeft);
 }
 
+boolean getVoltage(int *data_received){
+    byte data [2];
+    int id, err = 0;
+    data[0] = PRESENT_VOLTAGE;
+    data[1] = 0x01; /*length of data to read*/
+    ax12SendPacket (wheels.left.id, 0x02, READ_DATA , data);
+    return ax12ReadPacket(&id, &err, data_received);
+}
 /* 
  * Function to auto-detect motors (robot wheels)
  * the less id motor correspond to left wheel

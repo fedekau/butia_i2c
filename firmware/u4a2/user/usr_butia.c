@@ -10,6 +10,7 @@
 #include "user/handlerManager.h"
 #include "dynamicPolling.h"                              
 #include "ax12.h"
+#include "usr_motors.h"
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata 
@@ -149,8 +150,7 @@ void UserButiaRelease(byte i){
 void UserButiaReceived(byte* recBuffPtr, byte len){
     byte i, j;
     byte UserButiaCounter = 0;
-    byte data [2];
-    int id, err, data_received = 0;
+    int data_received = 3;
 
     switch(((BUTIA_DATA_PACKET*)recBuffPtr)->CMD)
     {
@@ -161,10 +161,7 @@ void UserButiaReceived(byte* recBuffPtr, byte len){
         break;
         case GET_VOLT:
             ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[0] = ((BUTIA_DATA_PACKET*)recBuffPtr)->_byte[0];
-            data[0] = PRESENT_VOLTAGE;
-            data[1] = 0x01; /*length of data to read*/
-            ax12SendPacket (0x01, 0x02, READ_DATA , data);
-            i = ax12ReadPacket(&id, &err, &data_received);
+            getVoltage(&data_received);     //controlar error
             ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[1] = data_received;
             UserButiaCounter=0x02;
         break;
