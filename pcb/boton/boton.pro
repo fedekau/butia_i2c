@@ -1,4 +1,4 @@
-update=jue 21 jun 2012 15:52:54 UYT
+update=jue 13 sep 2012 12:46:25 UYT
 version=1
 last_client=pcbnew
 [eeschema]
@@ -75,8 +75,8 @@ EquName1=devcms
 [pcbnew]
 version=1
 PadDrlX=320
-PadDimH=600
-PadDimV=600
+PadDimH=718
+PadDimV=718
 BoardThickness=630
 TxtPcbV=800
 TxtPcbH=600
