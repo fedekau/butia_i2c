@@ -1,6 +1,6 @@
-PCBNEW-BOARD Version 1 date jue 13 sep 2012 12:58:42 UYT
+PCBNEW-BOARD Version 1 date mié 19 sep 2012 13:32:37 UYT
 
-# Created by Pcbnew(2011-05-25)-stable
+# Created by Pcbnew(2012-apr-16-27)-stable
 
 $GENERAL
 encoding utf-8
@@ -9,7 +9,7 @@ Ly 1FFF8001
 EnabledLayers 1FFF8001
 Links 14
 NoConn 0
-Di 7707 7711 21789 25074
+Di 7632 7636 21864 25074
 Ndraw 7
 Ntrack 44
 Nzone 0
@@ -21,7 +21,7 @@ $EndGENERAL
 $SHEETDESCR
 Sheet A4 11700 8267
 Title ""
-Date "13 sep 2012"
+Date "19 sep 2012"
 Rev ""
 Comp ""
 Comment1 ""
@@ -59,7 +59,7 @@ PadSize 1969 1969
 PadDrill 1969
 Pad2MaskClearance 100
 AuxiliaryAxisOrg 0 0
-PcbPlotParams (pcbplotparams (layerselection 3178497) (usegerberextensions true) (excludeedgelayer true) (linewidth 60) (plotframeref false) (viasonmask false) (mode 1) (useauxorigin false) (hpglpennumber 1) (hpglpenspeed 20) (hpglpendiameter 15) (hpglpenoverlay 0) (pscolor true) (psnegative false) (psa4output false) (plotreference true) (plotvalue true) (plotothertext true) (plotinvisibletext false) (padsonsilk false) (subtractmaskfromsilk false) (outputformat 1) (mirror false) (drillshape 1) (scaleselection 1) (outputdirectory ""))
+PcbPlotParams (pcbplotparams (layerselection 1) (usegerberextensions true) (excludeedgelayer false) (linewidth 60) (plotframeref false) (viasonmask false) (mode 1) (useauxorigin false) (hpglpennumber 1) (hpglpenspeed 20) (hpglpendiameter 15) (hpglpenoverlay 0) (pscolor true) (psnegative false) (psa4output false) (plotreference true) (plotvalue true) (plotothertext true) (plotinvisibletext false) (padsonsilk false) (subtractmaskfromsilk false) (outputformat 2) (mirror false) (drillshape 1) (scaleselection 1) (outputdirectory ""))
 $EndSETUP
 
 $EQUIPOT
@@ -563,65 +563,49 @@ Po 0 7783 23819 21713 23819 150
 De 28 0 900 0 0
 $EndDRAWSEGMENT
 $TEXTPCB
-Te "Module BOTTON"
+Te "Module BUTTON"
 nl "v1.1"
 Po 14657 22114 423 619 91 0
-De 0 0 0 Normal
+De 0 0 0 Normal C
 $EndTEXTPCB
 $TRACK
-Po 0 16220 15669 15407 16482 316 -1
-De 0 0 1 0 400000
-Po 0 15407 16482 15407 17039 316 -1
-De 0 0 1 0 800000
-Po 0 15748 12618 15748 11811 316 -1
-De 0 0 1 0 800000
-Po 0 15748 11024 16067 11024 316 -1
-De 0 0 1 0 0
-Po 0 16067 11024 16264 10827 316 -1
-De 0 0 1 0 800000
-Po 0 16264 10827 17264 10827 316 -1
-De 0 0 1 0 C00000
-Po 0 15748 11024 15461 11024 316 -1
-De 0 0 1 0 0
-Po 0 15461 11024 15264 10827 316 -1
-De 0 0 1 0 800000
-Po 0 17200 14370 17200 14247 316 -1
-De 0 0 1 0 0
-Po 0 17200 14247 16339 13386 316 -1
-De 0 0 1 0 0
 Po 0 15748 12795 15748 12618 316 -1
 De 0 0 1 0 0
-Po 0 15748 12618 15748 11024 316 -1
+Po 0 16220 15669 15407 16482 316 -1
+De 0 0 1 0 400000
+Po 0 15407 16482 17200 14689 316 -1
 De 0 0 1 0 0
-Po 0 15748 11024 15748 9843 316 -1
-De 0 0 1 0 800000
-Po 0 16339 13386 15748 12795 316 -1
+Po 0 17200 14689 17200 14370 316 -1
 De 0 0 1 0 0
 Po 0 15407 17039 15407 16482 316 -1
 De 0 0 1 0 400000
-Po 0 17200 14689 17200 14370 316 -1
+Po 0 16339 13386 15748 12795 316 -1
 De 0 0 1 0 0
-Po 0 15407 16482 17200 14689 316 -1
+Po 0 15748 11024 15748 9843 316 -1
+De 0 0 1 0 800000
+Po 0 15748 12618 15748 11024 316 -1
 De 0 0 1 0 0
-Po 0 13780 11811 13780 11311 316 -1
-De 0 0 2 0 400000
-Po 0 13296 10827 13264 10827 316 -1
-De 0 0 2 0 800000
-Po 0 13780 11311 13296 10827 316 -1
-De 0 0 2 0 0
-Po 0 13264 10827 12264 10827 316 -1
-De 0 0 2 0 C00000
-Po 0 12264 10827 14264 10827 316 -1
-De 0 0 2 0 C00000
-Po 0 12200 14173 12200 13587 316 -1
-De 0 0 2 0 0
-Po 0 13780 12402 13780 9843 316 -1
-De 0 0 2 0 800000
-Po 0 13387 12795 13780 12402 316 -1
-De 0 0 2 0 0
-Po 0 12992 12795 13387 12795 316 -1
-De 0 0 2 0 0
+Po 0 17200 14247 16339 13386 316 -1
+De 0 0 1 0 0
+Po 0 17200 14370 17200 14247 316 -1
+De 0 0 1 0 0
+Po 0 15461 11024 15264 10827 316 -1
+De 0 0 1 0 800000
+Po 0 15748 11024 15461 11024 316 -1
+De 0 0 1 0 0
+Po 0 16264 10827 17264 10827 316 -1
+De 0 0 1 0 C00000
+Po 0 16067 11024 16264 10827 316 -1
+De 0 0 1 0 800000
+Po 0 15748 11024 16067 11024 316 -1
+De 0 0 1 0 0
+Po 0 15748 12618 15748 11811 316 -1
+De 0 0 1 0 800000
+Po 0 15407 16482 15407 17039 316 -1
+De 0 0 1 0 800000
 Po 0 12200 13587 12992 12795 316 -1
+De 0 0 2 0 0
+Po 0 12200 14173 12200 13587 316 -1
 De 0 0 2 0 0
 Po 0 14907 18039 14907 18393 316 -1
 De 0 0 2 0 400000
@@ -637,22 +621,38 @@ Po 0 13900 19400 12100 19400 316 -1
 De 0 0 2 0 0
 Po 0 14907 18393 13900 19400 316 -1
 De 0 0 2 0 0
-Po 0 13220 15669 13220 14303 316 -1
-De 0 0 3 0 C00000
+Po 0 13387 12795 13780 12402 316 -1
+De 0 0 2 0 0
+Po 0 13780 12402 13780 9843 316 -1
+De 0 0 2 0 800000
+Po 0 12264 10827 14264 10827 316 -1
+De 0 0 2 0 C00000
+Po 0 13264 10827 12264 10827 316 -1
+De 0 0 2 0 C00000
+Po 0 13780 11311 13296 10827 316 -1
+De 0 0 2 0 0
+Po 0 13296 10827 13264 10827 316 -1
+De 0 0 2 0 800000
+Po 0 13780 11811 13780 11311 316 -1
+De 0 0 2 0 400000
+Po 0 12992 12795 13387 12795 316 -1
+De 0 0 2 0 0
 Po 0 13907 18039 13907 18510 316 -1
 De 0 0 3 0 400000
-Po 0 13220 16011 13220 14303 316 -1
-De 0 0 3 0 800000
-Po 0 12130 17101 13220 16011 316 -1
-De 0 0 3 0 0
-Po 0 12130 18645 12130 17101 316 -1
-De 0 0 3 0 0
-Po 0 12303 18818 12130 18645 316 -1
+Po 0 13907 18510 13599 18818 316 -1
 De 0 0 3 0 0
 Po 0 13599 18818 12303 18818 316 -1
 De 0 0 3 0 0
-Po 0 13907 18510 13599 18818 316 -1
+Po 0 12303 18818 12130 18645 316 -1
 De 0 0 3 0 0
+Po 0 12130 18645 12130 17101 316 -1
+De 0 0 3 0 0
+Po 0 12130 17101 13220 16011 316 -1
+De 0 0 3 0 0
+Po 0 13220 16011 13220 14303 316 -1
+De 0 0 3 0 800000
+Po 0 13220 15669 13220 14303 316 -1
+De 0 0 3 0 C00000
 Po 0 14407 17039 14407 16116 316 -1
 De 0 0 4 0 400000
 Po 0 14407 16116 16220 14303 316 -1
