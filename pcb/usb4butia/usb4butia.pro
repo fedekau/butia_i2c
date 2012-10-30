@@ -1,4 +1,4 @@
-update=lun 16 ene 2012 18:05:57 UYST
+update=mar 30 oct 2012 18:36:38 UYST
 last_client=pcbnew
 [general]
 version=1
