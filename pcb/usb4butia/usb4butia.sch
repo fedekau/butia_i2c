@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date mié 20 jun 2012 10:02:24 UYT
+EESchema Schematic File Version 2  date mar 30 oct 2012 19:40:34 UYST
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -36,7 +36,7 @@ $Descr A4 11700 8267
 encoding utf-8
 Sheet 1 1
 Title "USB4butia"
-Date "20 jun 2012"
+Date "30 oct 2012"
 Rev "1.0"
 Comp ""
 Comment1 ""
@@ -44,40 +44,6 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
-Wire Wire Line
-	5300 7450 5400 7450
-Wire Wire Line
-	5300 7650 5400 7650
-Text GLabel 5300 7650 0    60   Input ~ 0
-GND
-Text GLabel 5300 7450 0    60   Input ~ 0
-GND
-$Comp
-L CONN_2 P15
-U 1 1 4FE1C3F9
-P 5750 7550
-F 0 "P15" V 5700 7550 40  0000 C CNN
-F 1 "BRIDGE" V 5800 7550 40  0000 C CNN
-	1    5750 7550
-	1    0    0    -1  
-$EndComp
-$Comp
-L CONN_2 P16
-U 1 1 4FE1C3E9
-P 6650 7550
-F 0 "P16" V 6600 7550 40  0000 C CNN
-F 1 "BRIDGE" V 6700 7550 40  0000 C CNN
-	1    6650 7550
-	1    0    0    -1  
-$EndComp
-Text GLabel 6200 7450 0    60   Input ~ 0
-GND
-Text GLabel 6200 7650 0    60   Input ~ 0
-GND
-Wire Wire Line
-	6200 7650 6300 7650
-Wire Wire Line
-	6200 7450 6300 7450
 Text GLabel 7850 7050 0    60   Input ~ 0
 VDC10
 Text GLabel 7850 6850 0    60   Input ~ 0
@@ -88,8 +54,6 @@ Wire Wire Line
 	3250 4800 2800 4800
 Wire Wire Line
 	2800 4800 2800 5350
-Wire Wire Line
-	6200 6300 6300 6300
 Wire Wire Line
 	4400 4900 4550 4900
 Wire Wire Line
@@ -417,23 +381,9 @@ Wire Wire Line
 Wire Wire Line
 	5300 4900 5050 4900
 Wire Wire Line
-	6200 6500 6300 6500
-Wire Wire Line
-	7150 6500 7250 6500
-Wire Wire Line
-	7150 6300 7250 6300
-Wire Wire Line
 	7850 6850 7950 6850
 Wire Wire Line
 	7850 7050 7950 7050
-Wire Wire Line
-	6200 6900 6300 6900
-Wire Wire Line
-	6200 6700 6300 6700
-Wire Wire Line
-	6200 7100 6300 7100
-Wire Wire Line
-	6200 7300 6300 7300
 $Comp
 L CONN_2 P14
 U 1 1 4FD1ED3E
@@ -443,32 +393,6 @@ F 1 "CONN_2" V 3350 5550 40  0000 C CNN
 	1    3300 5550
 	1    0    0    -1  
 $EndComp
-Text GLabel 6200 7300 0    60   Input ~ 0
-VDD
-Text GLabel 6200 7100 0    60   Input ~ 0
-VDD
-$Comp
-L CONN_2 P11
-U 1 1 4FD00BFB
-P 6650 7200
-F 0 "P11" V 6600 7200 40  0000 C CNN
-F 1 "BRIDGE" V 6700 7200 40  0000 C CNN
-	1    6650 7200
-	1    0    0    -1  
-$EndComp
-$Comp
-L CONN_2 P10
-U 1 1 4FD00BAA
-P 6650 6800
-F 0 "P10" V 6600 6800 40  0000 C CNN
-F 1 "BRIDGE" V 6700 6800 40  0000 C CNN
-	1    6650 6800
-	1    0    0    -1  
-$EndComp
-Text GLabel 6200 6700 0    60   Input ~ 0
-GND
-Text GLabel 6200 6900 0    60   Input ~ 0
-GND
 $Comp
 L CONN_2 P13
 U 1 1 4FD00BA9
@@ -476,32 +400,6 @@ P 8300 6950
 F 0 "P13" V 8250 6950 40  0000 C CNN
 F 1 "Bornier" V 8350 6950 40  0000 C CNN
 	1    8300 6950
-	1    0    0    -1  
-$EndComp
-$Comp
-L CONN_2 P12
-U 1 1 4FD00B9E
-P 7600 6400
-F 0 "P12" V 7550 6400 40  0000 C CNN
-F 1 "BRIDGE" V 7650 6400 40  0000 C CNN
-	1    7600 6400
-	1    0    0    -1  
-$EndComp
-Text GLabel 7150 6300 0    60   Input ~ 0
-GND
-Text GLabel 7150 6500 0    60   Input ~ 0
-GND
-Text GLabel 6200 6500 0    60   Input ~ 0
-GND
-Text GLabel 6200 6300 0    60   Input ~ 0
-GND
-$Comp
-L CONN_2 P9
-U 1 1 4FD00A52
-P 6650 6400
-F 0 "P9" V 6600 6400 40  0000 C CNN
-F 1 "BRIDGE" V 6700 6400 40  0000 C CNN
-	1    6650 6400
 	1    0    0    -1  
 $EndComp
 Text GLabel 5300 4900 2    60   Output ~ 0
