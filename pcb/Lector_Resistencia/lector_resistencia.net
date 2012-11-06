@@ -1,0 +1,61 @@
+# EESchema Netlist Version 1.1 created  mar 06 nov 2012 20:22:49 UYST
+(
+ ( /50998B85 D3 D1 1N4148
+  ( 1 AN )
+  ( 2 VDD )
+ )
+ ( /50998BA7 D3 D2 1N4148
+  ( 1 GND )
+  ( 2 AN )
+ )
+ ( /50814171 RJ45_8 J1 RJ45
+  ( 1 ? )
+  ( 2 ? )
+  ( 3 VDD )
+  ( 4 idAN )
+  ( 5 GND )
+  ( 6 AN )
+  ( 7 ? )
+  ( 8 ? )
+  ( 9 GND )
+ )
+ ( /50998707 jack_audio_35mm J2 JACK_5P
+  ( 1 GND )
+  ( 2 ? )
+  ( 3 AN )
+  ( 4 ? )
+  ( 5 ? )
+ )
+ ( /50814352 R5 R1 6K8
+  ( 1 VDD )
+  ( 2 AN )
+ )
+ ( /50814D04 R5 R2 R
+  ( 1 VDD )
+  ( 2 idAN )
+ )
+)
+*
+{ Allowed footprints by component:
+$component D1
+ D?
+ S*
+$endlist
+$component D2
+ D?
+ S*
+$endlist
+$component R1
+ R?
+ SM0603
+ SM0805
+ R?-*
+$endlist
+$component R2
+ R?
+ SM0603
+ SM0805
+ R?-*
+$endlist
+$endfootprintlist
+}

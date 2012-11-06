@@ -1,0 +1,45 @@
+Cmp-Mod V01 Created by CvPCB (2011-05-25)-stable date = mar 06 nov 2012 20:22:49 UYST
+
+BeginCmp
+TimeStamp = /50998B85;
+Reference = D1;
+ValeurCmp = 1N4148;
+IdModule  = D3;
+EndCmp
+
+BeginCmp
+TimeStamp = /50998BA7;
+Reference = D2;
+ValeurCmp = 1N4148;
+IdModule  = D3;
+EndCmp
+
+BeginCmp
+TimeStamp = /50814171;
+Reference = J1;
+ValeurCmp = RJ45;
+IdModule  = RJ45_8;
+EndCmp
+
+BeginCmp
+TimeStamp = /50998707;
+Reference = J2;
+ValeurCmp = JACK_5P;
+IdModule  = jack_audio_35mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /50814352;
+Reference = R1;
+ValeurCmp = 6K8;
+IdModule  = R5;
+EndCmp
+
+BeginCmp
+TimeStamp = /50814D04;
+Reference = R2;
+ValeurCmp = R;
+IdModule  = R5;
+EndCmp
+
+EndListe
