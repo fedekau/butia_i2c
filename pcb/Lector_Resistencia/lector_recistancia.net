@@ -1,4 +1,4 @@
-# EESchema Netlist Version 1.1 created  vie 19 oct 2012 11:17:33 UYST
+# EESchema Netlist Version 1.1 created  lun 05 nov 2012 17:42:51 UYST
 (
  ( /50814171 RJ45_8 J1 RJ45
   ( 1 ? )
@@ -11,16 +11,22 @@
   ( 8 ? )
   ( 9 GND )
  )
- ( /508142CB $noname$ J2 JACK_2P
+ ( /508142CB R1 J2 JACK_2P
   ( 1 AN )
   ( 2 ? )
   ( 3 GND )
  )
- ( /50814352 $noname$ R1 6K8
+ ( /50980327 jack_audio_35mm J3 STEREOJACK1
+  ( 1 ? )
+  ( 2 ? )
+  ( 3 ? )
+  ( 4 ? )
+ )
+ ( /50814352 R5 R1 6K8
   ( 1 VDD )
   ( 2 AN )
  )
- ( /50814D04 $noname$ R2 R
+ ( /50814D04 R5 R2 R
   ( 1 VDD )
   ( 2 idAN )
  )

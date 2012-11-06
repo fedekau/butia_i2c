@@ -1,6 +1,8 @@
-update=vie 19 oct 2012 10:02:18 UYST
+update=lun 05 nov 2012 17:44:21 UYST
 version=1
-last_client=kicad
+last_client=pcbnew
+[general]
+version=1
 [eeschema]
 version=1
 LibDir=
@@ -63,6 +65,7 @@ LibName27=opto
 LibName28=atmel
 LibName29=contrib
 LibName30=valves
+LibName31=jack_audio_35mm
 [cvpcb]
 version=1
 NetIExt=net
@@ -84,9 +87,9 @@ DrawLar=150
 EdgeLar=150
 TxtLar=120
 MSegLar=150
-LastNetListRead=
+LastNetListRead=lector_recistancia.net
 [pcbnew/libraries]
-LibDir=
+LibDir=../Lector_Resistencia
 LibName1=sockets
 LibName2=connect
 LibName3=discret
@@ -98,5 +101,3 @@ LibName8=led
 LibName9=dip_sockets
 LibName10=pga_sockets
 LibName11=valves
-[general]
-version=1
