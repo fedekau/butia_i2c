@@ -1,43 +1,41 @@
 /* Author             									  Date        Comment
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- * Andrés Aguirre, Rafael Fernandez, Carlos Grossy       16/10/07    Original.
+ * andrew
  *****************************************************************************/
 
 /** I N C L U D E S **********************************************************/
 #include <p18cxxx.h>
-#include <usart.h>
 #include "system/typedefs.h"
-#include "system/usb/usb.h"
-#include "user/userLoopBack.h"
-#include "io_cfg.h"              // I/O pin mapping
+#include "user/usr_butia.h"
 #include "user/handlerManager.h"
 #include "dynamicPolling.h"                              
-
+#include "ax12.h"
+#include "usr_motors.h"
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata 
 
-byte  usrLoopbackHandler;	 // Handler number asigned to the module
-byte* sendBufferUsrLoopback; // buffer to send data
+byte  usrButiaHandler;	 // Handler number asigned to the module
+byte* sendBufferusrButia; // buffer to send data
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void UserLoopBackProcessIO(void);
-void UserLoopBackInit(byte i);
-void UserLoopBackReceived(byte*, byte);
-void UserLoopBackRelease(byte i);
-void UserLoopBackConfigure(void);
+void UserButiaProcessIO(void);
+void UserButiaInit(byte i);
+void UserButiaReceived(byte*, byte);
+void UserButiaRelease(byte i);
+void UserButiaConfigure(void);
 
 // Table used by te framework to get a fixed reference point to the user module functions defined by the framework 
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
-const uTab UserLoopBackModuleTable = {&UserLoopBackInit,&UserLoopBackRelease,&UserLoopBackConfigure,"lback"}; //modName must be less or equal 8 characters
+const uTab UserButiaModuleTable = {&UserButiaInit,&UserButiaRelease,&UserButiaConfigure,"butia"}; //modName must be less or equal 8 characters
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
 #pragma code module
 
 /******************************************************************************
- * Function:        UserLoopBackInit(void)
+ * Function:        UserButiaInit(void)
  *
  * PreCondition:    None
  *
@@ -53,20 +51,20 @@ const uTab UserLoopBackModuleTable = {&UserLoopBackInit,&UserLoopBackRelease,&Us
  * Note:            None
  *****************************************************************************/
 
-void UserLoopBackInit(byte i){
-	BOOL res;
-	usrLoopbackHandler = i;
-	// add my receive function to the handler module, to be called automatically when the pc sends data to the user module
-	setHandlerReceiveFunction(usrLoopbackHandler,&UserLoopBackReceived);
-	// add my receive pooling function to the dynamic pooling module, to be called periodically 
-	res = addPollingFunction(&UserLoopBackProcessIO);
-	// initialize the send buffer, used to send data to the PC
-	sendBufferUsrLoopback = getSharedBuffer(usrLoopbackHandler);
-	//TODO return res value 
-}//end UserLoopBackInit
+void UserButiaInit(byte i){
+    BOOL res;
+    usrButiaHandler = i;
+    // add my receive function to the handler module, to be called automatically when the pc sends data to the user module
+    setHandlerReceiveFunction(usrButiaHandler,&UserButiaReceived);
+    // add my receive pooling function to the dynamic pooling module, to be called periodically
+    // res = addPollingFunction(&UserButiaProcessIO);
+    // initialize the send buffer, used to send data to the PC
+    sendBufferusrButia = getSharedBuffer(usrButiaHandler);
+    //TODO return res value
+}//end UserButiaInit
 
 /******************************************************************************
- * Function:        UserLoopBackConfigure(void)
+ * Function:        UserButiaConfigure(void)
  *
  * PreCondition:    None
  *
@@ -81,12 +79,12 @@ void UserLoopBackInit(byte i){
  *
  * Note:            None
  *****************************************************************************/
-void UserLoopBackConfigure(void){
+void UserButiaConfigure(void){
 // Do the configuration
 }
 
 /******************************************************************************
- * Function:        UserLoopBackProcessIO(void)
+ * Function:        UserButiaProcessIO(void)
  *
  * PreCondition:    None
  *
@@ -102,8 +100,7 @@ void UserLoopBackConfigure(void){
  * Note:            None
  *****************************************************************************/
 
-void UserLoopBackProcessIO(void){  
-
+void UserButiaProcessIO(void){
     if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND==1)) return;
 	// here enter the code that want to be called periodically, per example interaction with buttons and leds
 	
@@ -112,7 +109,7 @@ void UserLoopBackProcessIO(void){
 
 
 /******************************************************************************
- * Function:        UserLoopBackRelease(byte i)
+ * Function:        UserButiaRelease(byte i)
  *
  * PreCondition:    None
  *
@@ -128,15 +125,14 @@ void UserLoopBackProcessIO(void){
  * Note:            None
  *****************************************************************************/
 
-void UserLoopBackRelease(byte i){
-	unsetHandlerReceiveBuffer(i);
-	unsetHandlerReceiveFunction(i);
-	removePoolingFunction(&UserLoopBackProcessIO);
+void UserButiaRelease(byte i){
+    unsetHandlerReceiveBuffer(i);
+    unsetHandlerReceiveFunction(i);
 }
 
 
 /******************************************************************************
- * Function:        UserLoopBackReceived(byte* recBuffPtr, byte len)
+ * Function:        UserButiaReceived(byte* recBuffPtr, byte len)
  *
  * PreCondition:    None
  *
@@ -151,27 +147,38 @@ void UserLoopBackRelease(byte i){
  * Note:            None
  *****************************************************************************/
 
-void UserLoopBackReceived(byte* recBuffPtr, byte len){
-	  byte index;
-	  char mens[9] = "LBACK :)";	
-      byte UserLoopBackCounter = 0;
-	  for (UserLoopBackCounter=0 ; UserLoopBackCounter < len ; UserLoopBackCounter++){
-	  	*(sendBufferUsrLoopback+UserLoopBackCounter)= *(recBuffPtr+UserLoopBackCounter); // TODO pensar algo mas eficiente
-	  }
-	  UserLoopBackCounter=len; //por las dudas
-	  /*
-	  //para que devuelva el doble de lo que recibe
-	  for (UserLoopBackCounter=0 ; UserLoopBackCounter < len ; UserLoopBackCounter++){
-	  	*(sendBufferUsrLoopback+(UserLoopBackCounter+len))= *(recBuffPtr+UserLoopBackCounter); // TODO pensar algo mas eficiente
-	  }
-      UserLoopBackCounter=len*2; //por las dudas
-	  */
-	  
-      if(UserLoopBackCounter != 0)
-      {
-          if(!mUSBGenTxIsBusy())
-              USBGenWrite2(usrLoopbackHandler, UserLoopBackCounter);
-      }//end if  	  	
-}//end UserLoopBackReceived
+void UserButiaReceived(byte* recBuffPtr, byte len){
+    byte i, j;
+    byte UserButiaCounter = 0;
+    int data_received = 3;
 
-/** EOF usr_skeleton.c ***************************************************************/
+    switch(((BUTIA_DATA_PACKET*)recBuffPtr)->CMD)
+    {
+        case READ_VERSION_BUTIA:
+            ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[0] = ((BUTIA_DATA_PACKET*)recBuffPtr)->_byte[0];
+            ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[1] = BUTIA_VERSION;
+            UserButiaCounter=0x02;
+        break;
+        case GET_VOLT:
+            ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[0] = ((BUTIA_DATA_PACKET*)recBuffPtr)->_byte[0];
+            getVoltage(&data_received);     //controlar error
+            ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[1] = data_received;
+            UserButiaCounter=0x02;
+        break;
+        case RESET:
+            Reset();
+        break;
+
+        default:
+        break;
+    }/*end switch(s)*/
+    if(UserButiaCounter != 0){
+        j = 255;
+        while(mUSBGenTxIsBusy() && j-->0); // pruebo un maximo de 255 veces
+            if(!mUSBGenTxIsBusy())
+                USBGenWrite2(usrButiaHandler, UserButiaCounter);
+    }/*end if*/
+
+}/*end UserButiaReceived*/
+
+/** EOF usr_butia.c ***************************************************************/

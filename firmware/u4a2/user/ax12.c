@@ -30,10 +30,13 @@
 * Errores y sugerencias: 
 ******************************************************************************/ 
    
-    //Includes
-    #include "p18f4550.h"                                  
-    #include "ax12.h"
-    
+//Includes
+#include "p18f4550.h"                                  
+#include "ax12.h"
+
+#define FF 0xff
+#define MAX_MOTOR_ID 0Xfe
+#define TIMEOUT 15000
 #pragma udata
 /*****************************************************************************/ 
 /********************************   Variables   ******************************/
@@ -57,11 +60,15 @@ boolean sign2bin (int numero) {                        // numero > 0 --> true
 }
 
 char bin2sign (boolean var) {                         // var = 0 --> sign = -1
-    return 2*var - 1;                                 // var = 1 --> sign = 1
+    //return 2*var - 1;                                 // var = 1 --> sign = 1
+    if(var>0)
+        return 1;
+    else
+        return -1;
 }
 
 int makeInt (byte l, byte h) {
-    return (h << 8) | l;
+    return (h*256) + l;
 }
 
 byte highByte(int value){
@@ -85,34 +92,48 @@ byte highByte(int value){
 
 /*****************************************************************************/ 
 /*************************    Vector de Interrupci�n   ***********************/
-/***************************************************************************** 
-    #pragma code vector = 0x08
+/***************************************************************************** *
+#pragma code vector =  0x08
 void int_vector (void){
-    _asm 
+    _asm
         goto isr_RX
     _endasm
 }
-  #pragma code
+
+#pragma code
 
 /*****************************************************************************/ 
 /*************************    Rutina de Interrupci�n   ***********************/
-/***************************************************************************** 
-     #pragma interrupt isr_RX
+/***************************************************************************** *
+
+#pragma interrupt isr_RX
 void isr_RX(void){
     ax_rx_buffer[(ax_rx_Pointer++)] = RCREG;    //guarda el byte recibido en el 
                                                 //en el buffer
-}      
+}
+
+
+/****************************************************************************/
+
 
 /*****************************************************************************/ 
 /**********************   Configuraci�n de la USART   ************************/
 /***************   Asincr�nica | 8 bits | 1 stop | Sin paridad   *************/
 /*****************************************************************************/ 
-void init_serial(void){
+void ax12InitSerial(void){
+
+    /***************************************************************************
+    byte *data;
+    int _id, _error, _data;
+    /***********************************************************************/
+
+
+
     TXSTA = 0;                      // configuraci�n del registro TXSTA
     TXSTAbits.TX9 = 0;              // transmisi�n de 8 bits
     TXSTAbits.TXEN = 0;             // transmisi�n deshabilitada*
     TXSTAbits.SYNC = 0;             // modo asincr�nico
-    TXSTAbits.SENDB = 0;            // Break Character
+    TXSTAbits.SENDB = 0;            // Break Character //Send Sync Break on next transmission
     TXSTAbits.BRGH = 1;             // High Speed
     
     RCSTA = 0;                      // configuraci�n del registro RCSTA
@@ -131,8 +152,9 @@ void init_serial(void){
    
     TRISCbits.TRISC7 = 1;           // PORTC<7> como entrada
     
-    ax_rx_Pointer = 0;                                    
-    setRX();                        // MODO RX
+    //ax_rx_Pointer = 0;
+    //setRX();                        // MODO RX
+
 }
    
 
@@ -141,7 +163,7 @@ void init_serial(void){
 /***************************  Hardware Serial Level  *************************/
 /*****************************************************************************/ 
 void setTX(void){                   // Modo TX
-    PIE1bits.RCIE = 0;              // deshabilita la interrupci�n de recepci�n
+    //PIE1bits.RCIE = 0;              // deshabilita la interrupci�n de recepci�n
     RCSTAbits.CREN = 0;             // deshabilita la recepci�n
                                     // Configuro la transmisi�n
     TRISCbits.TRISC6 = 0;           // PORTC<6> como salida
@@ -155,20 +177,19 @@ void setRX(void){                   // Modo RX
     TXSTAbits.TXEN = 0;             // deshabilita la transmisi�n
 
     RCSTAbits.CREN = 1;             // habilita la recepci�n
-    PIE1bits.RCIE = 1;              // habilita la interrupci�n de recepci�n
+    //PIE1bits.RCIE = 1;              // habilita la interrupci�n de recepci�n
     ax_rx_Pointer = 0;              // resetea el puntero del buffer
 }
 
 void setNone(void){                 // Modo RESET
-    PIE1bits.RCIE = 0;              // deshabilita la interrupci�n de recepci�n
     RCSTAbits.CREN = 0;             // deshabilita la recepci�n
-                                    // Desconfiguro la transmisi�n
     TXSTAbits.TXEN = 0;             // deshabilita la transmisi�n
 }
 
+
 byte ax12writeB(byte data){
-    while (!TXSTAbits.TRMT);        // espera que el micro est� pronto para TX
-    TXREG = data;                   // escribe el byte a trasmitir
+    while (!TXSTAbits.TRMT);        // wait until ready to send
+    TXREG = data;
     return data;
 }
 /*****************************************************************************/ 
@@ -191,65 +212,102 @@ void ax12SendPacket (byte id, byte datalength, byte instruction, byte *data){
     while(!TXSTAbits.TRMT);                      // complete la transmisi�n
     setRX();                                     // Modo RX
 }
-                                 			    // Retorna el c�digo
-byte ax12ReadPacket(int* status_id, int* status_error, int* status_data){          
-    unsigned long ulCounter;
-    byte f;
-    byte timeout, error, status_length;
-    byte checksum, offset;
-    byte volatile bcount;
 
-    offset = 0;                                  // primero espera que 
-    timeout = 0;                                 // llegue toda la data
-    bcount = 0;
-    while(bcount < 13){                          // 10 es el largo m�ximo 
-        ulCounter = 0;                           // que puede tener un packet
-
-        while((bcount + offset) == ax_rx_Pointer){
-            if(ulCounter++ > 1000L){  // was 3000
-                timeout = 1;
-                break;
-            }
-        }
-        if (timeout) break;
-        if ((bcount == 0) && (ax_rx_buffer[offset] != 0xff)) offset++;
-        else bcount++;
+/***************************/
+/*byte readSerial(void){
+    int timeout = 0;
+    byte prescaler = 0;
+    while((!PIR1bits.RCIF) && (timeout < TIMEOUT)){
+        timeout++;                      //Mientras no este pronto el mensaje espero hasta recibirlo
     }
+    if (timeout >= TIMEOUT){
+        return -1;
+    }
+    else{
+        PIR1bits.RCIF=0;
+        return RCREG;  // Retorno el mensaje recibido
+    }
+}*/
+
+byte readSerial(void){
+    int timeout = TIMEOUT;
+    while(!PIR1bits.RCIF && timeout--);
+    PIR1bits.RCIF=0;
+    return RCREG;  // Retorno el mensaje recibido
+}
+/***************************/
+     
+byte ax12ReadPacket(int* status_id, int* status_error, int* status_data){          
+
+    byte error, status_length;
+    //byte checksum, i;
+    byte volatile bcount;      
+    byte ready;
+    byte estado = 1;
+
+    ready = 0; // Not ready yet
+    error = 0; // 0 mean not error
+    ax_rx_Pointer = 0;
+   // checksum = 0;
+    while (!ready && !error){
+        switch (estado){
+            case 1 : case 2: {          //Syncronizaion bytes
+                if (readSerial() == FF)
+                    estado++;
+                else
+                    error++;
+            } break;
+            case 3:{                    // Motor ID
+                *status_id = readSerial();
+                //checksum += *status_id;
+                if (*status_id <= MAX_MOTOR_ID)
+                    estado++;
+                else
+                    error++;
+            } break;
+
+            case 4:{                    // Length of packet
+                status_length = readSerial();
+                //checksum += status_length;
+                if(status_length < AX12_BUFFER_SIZE) //Check if the length is rigth
+                    estado++;
+                else
+                    error++;
+            } break;
+            case 5:{                                // Error code, Parameters and check sum
+                 ax_rx_buffer[ax_rx_Pointer] = readSerial();
+                 //checksum += ax_rx_buffer[ax_rx_Pointer];
+                 ax_rx_Pointer++;
+                 if (ax_rx_Pointer >= status_length)
+                     ready = 1; //The reading AX12 menssage is done
+            } break;
+            default: error = 1;
+        }//switch
+    }//while
+
     setNone();
-                                                 // decodifica el packet
-                                                 // correcci�n de cabecera
-    error = 0;                                   // c�digo interno de error
-    do {
-        error++;
-        offset++;
-        bcount--;
-    } while (ax_rx_buffer[offset] == 255);
-    if (error > 1) error =0;                     // prueba de cabecera
 
-
-    // offset = primer byte del mensaje (sin cabecera)
-    // bcount = largo del mensaje leido (sin cabecera)
-    status_length = 2 + ax_rx_buffer[offset+1]; // largo del mensaje decodificado
-    if (bcount != status_length) error+=2;      // prueba de coherencia de data
-    checksum = 0;                               // c�lculo de checksum
-    for (f=0; f<status_length; f++)
-        checksum += ax_rx_buffer[offset+f];
-    if (checksum != 255) error+=4;              // prueba de checksum
-    if (error == 0) {
-        *status_id = ax_rx_buffer[offset];
-        *status_error = ax_rx_buffer[offset+2];
-        switch (status_length) {
-            case 5: *status_data = ax_rx_buffer[offset+3]; break;
-            case 6: *status_data = makeInt (ax_rx_buffer[offset+3], ax_rx_buffer[offset+4]); break;
-            default: *status_data = offset+3;
-        }
-    } else {
+   // for (i = 0; i < ax_rx_Pointer-1; i++)
+  //      checksum += ax_rx_buffer[i];
+  //checksum = checksum^0xff ;//~checksum;
+  //if (checksum != ax_rx_buffer[ax_rx_Pointer-1]) error+=4;              // Test checksum
+  //  if (~checksum !=checksum^0xff) error+=4;              // Test checksum
+   if (error != 0)  {                           //Falta verificar el checksum
         *status_id = -1;
         *status_error = -1;
         *status_data = -1;
     }
-    return error;
+    else{
+        *status_error = ax_rx_buffer[0];
+        switch (status_length) { //TODO: Se esta asumiendo que no vienen mas de 2 parametros ...
+                case 3: *status_data = ax_rx_buffer[1]; break;
+                case 4: *status_data = makeInt (ax_rx_buffer[1], ax_rx_buffer[2]); break;
+                default: *status_data = -1;   //No hay datos
+        }
+    }
+    return (1-error); // 1 mean all is ok
 }
+
 /*****************************************************************************/ 
 /**********************   Funciones de control del Ax-12   *******************/
 /*******************************  Instruction Level  *************************/
@@ -274,6 +332,13 @@ byte readData(byte id, byte regstart, byte reglength){
     ax12SendPacket (id, 2, READ_DATA, data);
     return ax12ReadPacket(&status_id, &status_error, &status_data);
 }
+
+
+byte reset (byte id){
+//Changes the control table values of the Dynamixel actuator with id 'id' to the Factory Default Value settings
+   return writeInfo(id, RESET_AX12,  0);
+}
+
 /*****************************************************************************/ 
 /**********************   Funciones de control del Ax-12   *******************/
 /*********************************  Register Level  **************************/
@@ -300,6 +365,7 @@ byte writeInfo (byte id,byte regstart, int value) {
     data [1] = value&0xFF;
     if (reglength > 1) {data[2] = (value&0xFF00)>>8;}
     ax12SendPacket (id, reglength+1, WRITE_DATA, data);
+    
     return ax12ReadPacket(&status_id, &status_error, &status_data);
 }
 
@@ -312,11 +378,14 @@ void setEndlessTurnMode (byte id,boolean onoff) {
         writeInfo (id,CCW_ANGLELIMIT_L, 1023);
     }
 }
-	
-void endlessTurn (byte id,int velocidad) {
-    boolean direccion = sign2bin (velocidad);
-    writeInfo (id,MOVING_SPEED_L, abs(velocidad));
-//|((direccion^inverse)<<10)
+
+void endlessTurn (byte id,int velocidad, byte inverse) {
+    //boolean direccion = sign2bin (velocidad);
+    if(velocidad<0)
+        inverse^=1; //Cambio inverse si velocidad<0
+    velocidad=abs(velocidad);
+    velocidad|=inverse*1024;
+    writeInfo (id,MOVING_SPEED_L, velocidad);
 }
 
 byte presentPSL (boolean inverse, byte id, int* PSL) {                     // lee posicion, velocidad

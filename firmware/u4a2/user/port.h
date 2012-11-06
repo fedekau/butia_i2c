@@ -13,14 +13,14 @@
 
 /** D E F I N I T I O N S ****************************************************/
 
-#define PORT_MINOR_VERSION   0x02    //Skeleton Version 0.13
+#define PORT_MINOR_VERSION   0x01    /*port version*/
 #define PORT_MAJOR_VERSION   0x00
 
 /** S T R U C T U R E S ******************************************************/
 typedef union PORT_PACKET
 {
-    byte _byte[USBGEN_EP_SIZE];  //For byte access
-    word _word[USBGEN_EP_SIZE/2];//For word access(USBGEN_EP_SIZE msut be even)
+    byte _byte[USBGEN_EP_SIZE];  /*For byte access*/
+    word _word[USBGEN_EP_SIZE/2];/*For word access(USBGEN_EP_SIZE msut be even)*/
     struct
     {
         enum
@@ -48,5 +48,4 @@ typedef union PORT_PACKET
     };
 } PORT_DATA_PACKET;
 
-
-#endif //PORT_H
+#endif /*PORT_RESISTANCE_H*/

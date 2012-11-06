@@ -1,7 +1,6 @@
 /* Author                                                   Date        Comment
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *Santiago Reyes                           03/07/09    Original.
- *Andres Aguirre                           30/07/10    Interaccion con timmer y debugeo
+ * John, Aylen, Guille, Andrew
  *****************************************************************************/
  
 /** I N C L U D E S **********************************************************/
@@ -62,7 +61,6 @@ void PortInit(byte i) {
     /* andres res = addPollingFunction(&PortProcessIO);*/
     // initialize the send buffer, used to send data to the PC
     sendBufferPort = getSharedBuffer(i);
-
     board_ports[i-1].change_port_direction(IN);
     
 }//end UserLedAmarilloInit
@@ -111,7 +109,6 @@ void PortProcessIO(void){
 void PortRelease(byte i) {
     unsetHandlerReceiveBuffer(i);
     unsetHandlerReceiveFunction(i); 
-    removePoolingFunction(&PortProcessIO);
 }
 
 
@@ -132,10 +129,8 @@ void PortRelease(byte i) {
  *****************************************************************************/
 
 void PortReceived(byte* recBuffPtr, byte len, byte handler){
-      byte index;
       byte j;  
       byte PortCounter = 0;
-      byte tiempo;
       WORD aux;
       port_descriptor port;
       port = board_ports[0]; //it's harcode to port 1
@@ -144,10 +139,9 @@ void PortReceived(byte* recBuffPtr, byte len, byte handler){
         case READ_VERSION:
               //dataPacket._byte[1] is len
               ((PORT_DATA_PACKET*)sendBufferPort)->_byte[0] = ((PORT_DATA_PACKET*)recBuffPtr)->_byte[0];
-              ((PORT_DATA_PACKET*)sendBufferPort)->_byte[1] = ((PORT_DATA_PACKET*)recBuffPtr)->_byte[1];
-              ((PORT_DATA_PACKET*)sendBufferPort)->_byte[2] = PORT_MINOR_VERSION;
-              ((PORT_DATA_PACKET*)sendBufferPort)->_byte[3] = PORT_MAJOR_VERSION;
-              PortCounter = 0x04;
+              ((PORT_DATA_PACKET*)sendBufferPort)->_byte[1] = PORT_MINOR_VERSION;
+              ((PORT_DATA_PACKET*)sendBufferPort)->_byte[2] = PORT_MAJOR_VERSION;
+              PortCounter = 0x03;
               break;  
               
         case GET_RES:
@@ -155,11 +149,9 @@ void PortReceived(byte* recBuffPtr, byte len, byte handler){
               aux = port.get_val_detection_pin();
               ((PORT_DATA_PACKET*)sendBufferPort)->_byte[1] = LSB(aux);
               ((PORT_DATA_PACKET*)sendBufferPort)->_byte[2] = MSB(aux);
-
               PortCounter = 0x03;
               break;       
-        
-     
+
          default:
               break;
       }//end switch(s)
@@ -171,4 +163,4 @@ void PortReceived(byte* recBuffPtr, byte len, byte handler){
       }//end if            
 }//end PortReceived
 
-/** EOF usr_TestRes.c ***************************************************************/
+/** EOF port.c ***************************************************************/

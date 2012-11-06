@@ -24,7 +24,7 @@ byte  timeOutTicksWatchdog;
 // Admin ModuleType=0,
 //#pragma romdata user=DIRECTION_TABLE       // THIS DONT WORK!!!
 #pragma romdata user
-uTab AdminModuleTable = {&adminModuleInit,&adminModuleRelease,&adminModuleConfigure,"admin"}; //modName must be less or equal 8 characters
+const uTab AdminModuleTable = {&adminModuleInit,&adminModuleRelease,&adminModuleConfigure,"admin"}; //modName must be less or equal 8 characters
 #pragma code
 
 /*mapping between module name and an device type id used for optimization
@@ -66,11 +66,11 @@ void Escribir_memoria_boot(void){
 }
 */
 void adminModuleInit(byte handler){
-	/*system initialization*/
-	adminHandler=handler; //hardcode, the admin module allways respond at handler 0
-        /*set the receive function for admin commands*/
-        setHandlerReceiveFunction(adminHandler,&adminReceived);
-	sendBufferAdmin = getSharedBuffer(adminHandler);        
+    /*system initialization*/
+    adminHandler=handler; //hardcode, the admin module allways respond at handler 0
+    /*set the receive function for admin commands*/
+    setHandlerReceiveFunction(adminHandler,&adminReceived);
+    sendBufferAdmin = getSharedBuffer(adminHandler);
 }
 
 void adminModuleRelease(byte handler){
@@ -190,7 +190,7 @@ void adminReceived(byte* recBuffPtr,byte len, byte admin_handler){
 
         case GET_HANDLER_SIZE:
             ((AM_PACKET*)sendBufferAdmin)->CMD  = GET_HANDLER_SIZE;
-            ((AM_PACKET*)sendBufferAdmin)->size = MAX_HANDLERS;
+            ((AM_PACKET*)sendBufferAdmin)->size = getMaxHandler();
             adminCounter=0x02;
         break;
 
@@ -241,7 +241,6 @@ void sendMes(char* mensaje, byte len){
 
 void watchdogKeepAlive(void){
     keepAlive = TRUE;
-    mLED_3_On();
 }
 
 /***********************************************************************
@@ -253,7 +252,6 @@ void watchdogKeepAlive(void){
 void watchdogEvent(void) {    
 //    timeOutTicksWatchdog --;
 //    if(timeOutTicksWatchdog == 0){            
-        mLED_3_Off();
         if(keepAlive){
 //            timeOutTicksWatchdog = cantTicksW;
             keepAlive = FALSE;

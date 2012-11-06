@@ -12,12 +12,6 @@
 #define MAX_PORTS 6
 #define DISCONECTED 0
 
-/*#define MAX_TYPE_SENSORS 5
-#define MAX_SENSOR_TABLE_ATRIBUTE 2*/
-
-
-
-
 typedef enum _direction {
     _OUT = 0,
     _IN = 1
@@ -26,7 +20,7 @@ typedef enum _direction {
 /*structure to describe a USB4butia port*/
 typedef struct _port_descriptor{
     byte (*get_data_digital) (void); /*get data of pin from a port, digital*/
-    WORD (*get_data_analog) (void); /*get data of pin from a port, analog*/ /*NEED IMPLEMENTATION*/
+    WORD (*get_data_analog) (void); /*get data of pin from a port, analog*/ 
     void (*set_data) (byte); /*set data of pin in a port, digital*/
     WORD (*get_val_detection_pin)(void); /*pic pin used to identify the connected device*/
     void (*change_port_direction) (direction);/*callback function to change port direction*/
@@ -34,19 +28,6 @@ typedef struct _port_descriptor{
 
 /*mapping between idPort and the port descriptor*/
 extern const port_descriptor board_ports[MAX_PORTS];
-
-/*******************************************************************************/
-/*Struct that contain Artibutes of sensors types*/
-/*typedef struct _sensorType{
-    byte analogic;
-    WORD resValue;
-} sensorType;
-
-/*Array of sensorsTypes, here have alla information about sensors types matched to SensorType ID*/
-/*typedef sensorType sensorsTable[MAX_TYPE_SENSORS];
-*/
-/*Here we define the range of resistence*/
-/*sensorsTable st;*/
 
 /*void initSensorsTable(void);*/
 

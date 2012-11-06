@@ -6,7 +6,7 @@
 #include <usart.h>
 #include "system/typedefs.h"
 #include "system/usb/usb.h"
-#include "user/usr_boton.h"
+#include "user/usr_button.h"
 #include "io_cfg.h"              /* I/O pin mapping */
 #include "user/handlerManager.h"
 #include "dynamicPolling.h"                              
@@ -15,26 +15,26 @@
 /** V A R I A B L E S ********************************************************/
 #pragma udata 
 
-byte* sendBufferUsrBoton; /* buffer to send data*/
+byte* sendBufferUsrButton; /* buffer to send data*/
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void UserBotonProcessIO(void);
-void UserBotonInit(byte i);
-void UserBotonReceived(byte*, byte, byte);
-void UserBotonRelease(byte i);
-void UserBotonConfigure(void);
+void UserButtonProcessIO(void);
+void UserButtonInit(byte i);
+void UserButtonReceived(byte*, byte, byte);
+void UserButtonRelease(byte i);
+void UserButtonConfigure(void);
 
 /* Table used by te framework to get a fixed reference point to the user module functions defined by the framework */
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
-uTab userBotonModuleTable = {&UserBotonInit,&UserBotonRelease,&UserBotonConfigure,"boton"}; /*modName must be less or equal 8 characters*/
+const uTab userButtonModuleTable = {&UserButtonInit,&UserButtonRelease,&UserButtonConfigure,"button"}; /*modName must be less or equal 8 characters*/
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
 #pragma code module
 
 /******************************************************************************
- * Function:        UserBotonInit(byte)
+ * Function:        UserButtonInit(byte)
  *
  * PreCondition:    None
  *
@@ -50,16 +50,16 @@ uTab userBotonModuleTable = {&UserBotonInit,&UserBotonRelease,&UserBotonConfigur
  * Note:            None
  *****************************************************************************/
 
-void UserBotonInit(byte handler){
+void UserButtonInit(byte handler){
     /* add my receive function to the handler module, to be called automatically when the pc sends data to the user module*/
-    setHandlerReceiveFunction(handler,&UserBotonReceived);
+    setHandlerReceiveFunction(handler,&UserButtonReceived);
     /* initialize the send buffer, used to send data to the PC*/
-    sendBufferUsrBoton = getSharedBuffer(handler);
+    sendBufferUsrButton = getSharedBuffer(handler);
     getPortDescriptor(handler)->change_port_direction(IN);
-}/*end UserBotonInit*/
+}/*end UserButtonInit*/
 
 /******************************************************************************
- * Function:        UserBotonConfigure(void)
+ * Function:        UserButtonConfigure(void)
  *
  * PreCondition:    None
  *
@@ -75,12 +75,12 @@ void UserBotonInit(byte handler){
  * Note:            None
  *****************************************************************************/
 
-void UserBotonConfigure(void){
-    /*no configuration for boton module*/
+void UserButtonConfigure(void){
+    /*no configuration for button module*/
 }
 
 /******************************************************************************
- * Function:        UserBotonProcessIO(void)
+ * Function:        UserButtonProcessIO(void)
  *
  * PreCondition:    None
  *
@@ -96,14 +96,14 @@ void UserBotonConfigure(void){
  * Note:            None
  *****************************************************************************/
 
-void UserBotonProcessIO(void){
+void UserButtonProcessIO(void){
     if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND==1)) return;
-    /* here enter the code that want to be called periodically, per example interaction with botons and leds*/
+    /* here enter the code that want to be called periodically, per example interaction with buttons and leds*/
 	
 }/*end ProcessIO*/
 
 /******************************************************************************
- * Function:        UserBotonRelease(byte i)
+ * Function:        UserButtonRelease(byte i)
  *
  * PreCondition:    None
  *
@@ -119,13 +119,13 @@ void UserBotonProcessIO(void){
  * Note:            None
  *****************************************************************************/
 
-void UserBotonRelease(byte i){
+void UserButtonRelease(byte i){
     unsetHandlerReceiveBuffer(i);
     unsetHandlerReceiveFunction(i);
 }
 
 /******************************************************************************
- * Function:        UserBotonReceived(byte* recBuffPtr, byte len)
+ * Function:        UserButtonReceived(byte* recBuffPtr, byte len)
  *
  * PreCondition:    None
  *
@@ -140,25 +140,23 @@ void UserBotonRelease(byte i){
  * Note:            None
  *****************************************************************************/
 
-void UserBotonReceived(byte* recBuffPtr, byte len, byte handler){
-    byte index;
+void UserButtonReceived(byte* recBuffPtr, byte len, byte handler){
     byte j;
-    byte userBotonCounter = 0;
-    byte boton_status = 0;
+    byte userButtonCounter = 0;
 
-    switch(((BOTON_DATA_PACKET*)recBuffPtr)->CMD)
+    switch(((BUTTON_DATA_PACKET*)recBuffPtr)->CMD)
     {
         case READ_VERSION:
-            ((BOTON_DATA_PACKET*)sendBufferUsrBoton)->_byte[0] = ((BOTON_DATA_PACKET*)recBuffPtr)->_byte[0];
-            ((BOTON_DATA_PACKET*)sendBufferUsrBoton)->_byte[1] = BOTON_MINOR_VERSION;
-            ((BOTON_DATA_PACKET*)sendBufferUsrBoton)->_byte[2] = BOTON_MAJOR_VERSION;
-            userBotonCounter=0x03;
+            ((BUTTON_DATA_PACKET*)sendBufferUsrButton)->_byte[0] = ((BUTTON_DATA_PACKET*)recBuffPtr)->_byte[0];
+            ((BUTTON_DATA_PACKET*)sendBufferUsrButton)->_byte[1] = BUTTON_MINOR_VERSION;
+            ((BUTTON_DATA_PACKET*)sendBufferUsrButton)->_byte[2] = BUTTON_MAJOR_VERSION;
+            userButtonCounter=0x03;
             break;
 
-        case GET_PRESSED:
-            ((BOTON_DATA_PACKET*)sendBufferUsrBoton)->_byte[0] = ((BOTON_DATA_PACKET*)recBuffPtr)->_byte[0];
-            ((BOTON_DATA_PACKET*)sendBufferUsrBoton)->_byte[1] = getPortDescriptor(handler)->get_data_digital();
-            userBotonCounter=0x02;
+        case GET_VALUE:
+            ((BUTTON_DATA_PACKET*)sendBufferUsrButton)->_byte[0] = ((BUTTON_DATA_PACKET*)recBuffPtr)->_byte[0];
+            ((BUTTON_DATA_PACKET*)sendBufferUsrButton)->_byte[1] = getPortDescriptor(handler)->get_data_digital();
+            userButtonCounter=0x02;
             break;
          
         case RESET:
@@ -168,14 +166,14 @@ void UserBotonReceived(byte* recBuffPtr, byte len, byte handler){
         default:
             break;
       }/*end switch(s)*/
-      if(userBotonCounter != 0)
+      if(userButtonCounter != 0)
       {
        j = 255;
        while(mUSBGenTxIsBusy() && j-->0); /* pruebo un máximo de 255 veces */
        if(!mUSBGenTxIsBusy())
-              USBGenWrite2(handler, userBotonCounter);
+              USBGenWrite2(handler, userButtonCounter);
       }/*end if */
 
-}/*end UserBotonReceived*/
+}/*end UserButtonReceived*/
 
-/** EOF usr_boton.c ***************************************************************/
+/** EOF usr_button.c ***************************************************************/

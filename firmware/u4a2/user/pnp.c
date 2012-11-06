@@ -5,10 +5,11 @@
 /** VARIABLES INITIALIZED, CONST ROM **/
 rom const device_resistance table_device_id_resistance[MAX_DEVICES] = {
     { "port"   , 0, 255     },
-    { "boton"  , 31207 ,34492 },
-    { "grises" , 59041, 60124 },
-    { "dist"   , 37491, 40654 },
-    { "gpio"   , R_GPIO_MIN, R_GPIO_MAX    }
+    { "light" , 7728, 9204 },
+    { "button"  , 31207 ,34492 },
+    { "grey" , 59041, 60124 },
+    { "distanc"   , 37491, 40654 },
+    { "gpio"   , R_GPIO_MIN, R_GPIO_MAX }
 };
 
 #pragma udata 
@@ -95,11 +96,7 @@ byte get_device_type(WORD resistValue){
     byte i = 0;
     WORD MAX;
     WORD MIN;
-    /*Search the read resistance valeun in resistance range of devices defined*/
-
-//    while(!((table_device_id_resistance[i].resValue_max._word >= resistValue._word) && (resistValue._word >=  table_device_id_resistance[i].resValue_min._word)) && i<MAX_DEVICES) i++;
-//    if (i != MAX_DEVICES) return i;
-
+    /*Search the read resistance value in the resistance range of devices defined*/
     for (i=0 ; i < MAX_DEVICES ; ++i) {
         MAX = table_device_id_resistance[i].resValue_max;
         MIN = table_device_id_resistance[i].resValue_min;
@@ -115,9 +112,9 @@ void openPnP(byte moduleId[8], byte handler){
     tableDirec = getUserTableDirection(moduleId);
 
     if(tableDirec != (rom near char*)ERROR){
-            handler = newHandlerTableEntryForcingHandler( pnpEndpoint.endPoint, tableDirec, handler);
-            pUser = getModuleInitDirection(tableDirec);
-            pUser(handler); //hago el init ;)
+        handler = newHandlerTableEntryForcingHandler(pnpEndpoint.endPoint, tableDirec, handler);
+        pUser = getModuleInitDirection(tableDirec);
+        pUser(handler); //hago el init ;)
     }
 }
 
@@ -135,7 +132,6 @@ void hotplug_pnp(void){
         if(device_type!=detected_device_type_id[port]){
             // Change that board_port[device_type].detected_device_id for detected_device_type_id[port]
             closePnP(port+1);
-
             modulename[0]=table_device_id_resistance[device_type].name[0];
             modulename[1]=table_device_id_resistance[device_type].name[1];
             modulename[2]=table_device_id_resistance[device_type].name[2];

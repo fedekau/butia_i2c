@@ -37,11 +37,11 @@ BOOL isEqual(byte str1[8], byte str2[8]){
 
 rom near char* getUserTableDirection(byte moduleId[8]){
 	rom near char * i = (rom near char *)DIRECTION_TABLE;
-	uTab* tabla; 
+	const uTab * tabla;
 	byte dest[8];
 	byte j = 0;
 	while (*i != MEM_VACIO){
-		tabla = (uTab*) i;
+		tabla = (const uTab*) i;
 		for (j = 0; j < 8; j++){       // hacking para poder comparar strings
 			dest[j] = (tabla->id)[j];  // para poderse comparar ambos strings deben estar en igual espacio de memoria (RAM / ROM)
 		}
@@ -82,17 +82,17 @@ void getModuleName(byte line, char* modName){
 }
 
 pUserFunc getModuleInitDirection(rom near char* direction){
-	uTab* tabla = (uTab*) direction;
+	const uTab* tabla = (const *) direction;
 	return tabla->pfI;
 }
 
 pUserFunc getModuleReleaseDirection(rom near char* direction){
-	uTab* tabla = (uTab*) direction;
+	const uTab* tabla = (const uTab*) direction;
 	return tabla->pfR;
 }
 
 pUserFunc getModuleConfigureDirection(rom near char* direction){
-	uTab* tabla = (uTab*) direction;
+	const uTab* tabla = (const uTab*) direction;
 	return tabla->pfC;
 }
 

@@ -156,10 +156,9 @@ void UserTestResReceived(byte* recBuffPtr, byte len, byte handler){
         case READ_VERSION:
               //dataPacket._byte[1] is len
               ((TEST_RESISTANCE_DATA_PACKET*)sendBufferUsrTestRes)->_byte[0] = ((TEST_RESISTANCE_DATA_PACKET*)recBuffPtr)->_byte[0];
-              ((TEST_RESISTANCE_DATA_PACKET*)sendBufferUsrTestRes)->_byte[1] = ((TEST_RESISTANCE_DATA_PACKET*)recBuffPtr)->_byte[1];
-              ((TEST_RESISTANCE_DATA_PACKET*)sendBufferUsrTestRes)->_byte[2] = TEST_RESISTANCE_MINOR_VERSION;
-              ((TEST_RESISTANCE_DATA_PACKET*)sendBufferUsrTestRes)->_byte[3] = TEST_RESISTANCE_MAJOR_VERSION;
-              userTestResCounter = 0x04;
+              ((TEST_RESISTANCE_DATA_PACKET*)sendBufferUsrTestRes)->_byte[1] = TEST_RESISTANCE_MINOR_VERSION;
+              ((TEST_RESISTANCE_DATA_PACKET*)sendBufferUsrTestRes)->_byte[2] = TEST_RESISTANCE_MAJOR_VERSION;
+              userTestResCounter = 0x03;
               break;  
               
         case GET_RES:

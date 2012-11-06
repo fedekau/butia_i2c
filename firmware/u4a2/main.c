@@ -12,8 +12,8 @@
  * Software License Agreement
  *
  * The software supplied herewith by Microchip Technology Incorporated
- * (the �Company�) for its PICmicro� Microcontroller is intended and
- * supplied to you, the Company�s customer, for use solely and
+ * (the ?Company?) for its PICmicro? Microcontroller is intended and
+ * supplied to you, the Company?s customer, for use solely and
  * exclusively on Microchip PICmicro Microcontroller products. The
  * software is owned by the Company and/or its supplier, and is
  * protected under applicable copyright laws. All rights are reserved.
@@ -22,7 +22,7 @@
  * civil liability for the breach of the terms and conditions of this
  * license.
  *
- * THIS SOFTWARE IS PROVIDED IN AN �AS IS� CONDITION. NO WARRANTIES,
+ * THIS SOFTWARE IS PROVIDED IN AN ?AS IS? CONDITION. NO WARRANTIES,
  * WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT NOT LIMITED
  * TO, IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
  * PARTICULAR PURPOSE APPLY TO THIS SOFTWARE. THE COMPANY SHALL NOT,
@@ -52,6 +52,8 @@
 #include "user/usr_buzzer.h"
 
 #include "user/handlerManager.h"                              // Modifiable
+#include "user/usr_motors.h"
+#include "user/ax12.h"
 
 #include "user/usb4butia.h"
 
@@ -101,7 +103,7 @@
 #pragma config LPT1OSC = OFF
 
 /* Port B A/D Enable */
-#pragma config PBADEN = OFF
+#pragma config PBADEN = ON
 
 /* CCP2 Mux bit*/
 #pragma config CCP2MX = ON
@@ -293,26 +295,19 @@ void setMensaje(char * m, int N) {
 
 #define WAIT_SECONDS(s) {int i; for(i=0; i<10*(s); i++) Delay10KTCYx(250);}
 
-void main(void) {    //|              ||              |//
-    ///andres char mensaje1[] = "Firmware ver 2.4  build 2.4.19  ";
-    byte mensaje[16];
-	int cont=0;
-	InitializeSystem();      /* Esta funcion esta en este mismo archivo abajo */
-    ///initial_test();		 /* Test basico  para AFE *
-    mensaje[0] = 'F';mensaje[1] = 'i';mensaje[2] = 'r';mensaje[3] = 'm';mensaje[4] = 'w';mensaje[5] = 'a';mensaje[6] = 'r';mensaje[7] = 'e';mensaje[8] = ' ';mensaje[9] = 'v';mensaje[10] = 'e';mensaje[11] = 'r';mensaje[12] = ' ';mensaje[13] = '2';mensaje[14] = '.';mensaje[15] = '4';
-    //printLine(mensaje, 0x01);   
-    mensaje[0] = ' ';mensaje[1] = ' ';mensaje[2] = 'b';mensaje[3] = 'u';mensaje[4] = 'i';mensaje[5] = 'l';mensaje[6] = 'd';mensaje[7] = ' ';mensaje[8] = '2';mensaje[9] = '.';mensaje[10] = '4';mensaje[11] = '.';mensaje[12] = '2';mensaje[13] = '9';mensaje[14] = ' ';mensaje[15] = ' ';
-    //printLine(mensaje, 0x02);   
-    //watchdogStart();
+void main(void) {
+    InitializeSystem();      
     while(1) {
         USBTasks();         // USB Tasks
         polling();
         USBGenRead2();
-        //watchdogKeepAlive();
     }//end while
 }//end main
 
-
+void initButiaMotors(){
+    ax12InitSerial();
+    autoDetectWheels();
+}
 /******************************************************************************
  * Function:        static void InitializeSystem(void)
  *
@@ -334,26 +329,26 @@ void main(void) {    //|              ||              |//
  * Note:            None
  *****************************************************************************/
 static void InitializeSystem(void) {
-	ADCON1 |= 0x0F;                 // Default all pins to digital
-	
-	#if defined(USE_USB_BUS_SENSE_IO)
-	tris_usb_bus_sense = INPUT_PIN; // See io_cfg.h
-	#endif
-	
-	#if defined(USE_SELF_POWER_SENSE_IO)
-	tris_self_power = INPUT_PIN;
-	#endif
-	
-	mInitializeUSBDriver();         // See usbdrv.h
+    mInitPortA();mInitPortB();mInitPortC();mInitPortD();mInitPortE(); // set pins as input for safety and interference avoid
+    ax12InitSerial();
+    ADCON1 = ADCON1 & 0xF0;        /* Default all pins to analogic */
+    ADCON0bits.ADON = 1;            /* Enable Analogic */
 
-	mInitPortA();mInitPortB();mInitPortC();mInitPortD();mInitPortE(); // set pins as input for safety and interference avoid
-    mInitAFE; 				 // Inicializacion de puertos para usar en el AFE, ver iocfg.h
-	//mInitReloj; 			 // Inicializacion de puertos para usar en el Reloj, ver iocfg.h
-	//displayInit(); 			 // Display initialization routine
-	initISRFunctions();      // Initialize interrupt service routines mechanism of USB4all
-	initT0Service();         // Inicializa servicio T0 para manejar recurso de timmer
-	initPollingFunctions();  // inicializa el buffer con 0s (dynamicPolling.c)
-	initHandlerManager();    // inicializa el map de enpoints y crea el enpoint 0 (adminModule.c)
+    #if defined(USE_USB_BUS_SENSE_IO)
+    tris_usb_bus_sense = INPUT_PIN; // See io_cfg.h
+    #endif
+
+    #if defined(USE_SELF_POWER_SENSE_IO)
+    tris_self_power = INPUT_PIN;
+    #endif
+
+    mInitializeUSBDriver();         // See usbdrv.h
+
+    initISRFunctions();      // Initialize interrupt service routines mechanism of USB4all
+    initT0Service();         // Inicializa servicio T0 para manejar recurso de timmer
+    initPollingFunctions();  // inicializa el buffer con 0s (dynamicPolling.c)
+    initHandlerManager();    // inicializa el map de enpoints y crea el enpoint 0 (adminModule.c)
+    
 	
 }//end InitializeSystem
 

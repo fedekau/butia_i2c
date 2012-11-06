@@ -1,6 +1,6 @@
-/* Author                   Date        Comment
+/* Author                                           Date        Comment
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- * Aylen Ricca              16/04/2012  Original.
+ * Aylen Ricca                                      19/04/12    Original.
  *****************************************************************************/
 
 /** I N C L U D E S **********************************************************/
@@ -8,7 +8,7 @@
 #include <usart.h>
 #include "system/typedefs.h"
 #include "system/usb/usb.h"
-#include "user/usr_distancia.h"
+#include "user/usr_grey.h"
 #include "io_cfg.h"              /* I/O pin mapping*/
 #include "user/handlerManager.h"
 #include "dynamicPolling.h"
@@ -17,26 +17,26 @@
 /** V A R I A B L E S ********************************************************/
 #pragma udata 
 
-byte* sendBufferUsrDist; /* buffer to send data*/
+byte* sendBufferUsrGrey; /* buffer to send data*/
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void UserDistProcessIO(void);
-void UserDistInit(byte i);
-void UserDistReceived(byte*, byte, byte);
-void UserDistRelease(byte i);
-void UserDistConfigure(void);
+void UserGreyProcessIO(void);
+void UserGreyInit(byte i);
+void UserGreyReceived(byte*, byte, byte);
+void UserGreyRelease(byte i);
+void UserGreyConfigure(void);
 
 /* Table used by te framework to get a fixed reference point to the user module functions defined by the framework */
 /** USER MODULE REFERENCE ****************************************************/
 #pragma romdata user
-uTab userDistModuleTable = {&UserDistInit,&UserDistRelease,&UserDistConfigure,"dist"};
+const uTab userGreyModuleTable = {&UserGreyInit,&UserGreyRelease,&UserGreyConfigure,"grey"}; /*modName must be less or equal 8 characters*/
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
 #pragma code module
 
 /******************************************************************************
- * Function:        UserDistInit(void)
+ * Function:        UserGreyInit(void)
  *
  * PreCondition:    None
  *
@@ -52,18 +52,18 @@ uTab userDistModuleTable = {&UserDistInit,&UserDistRelease,&UserDistConfigure,"d
  *
  * Note:            None
  *****************************************************************************/
-void UserDistInit(byte usrDistHandler){
+void UserGreyInit(byte usrGreyHandler){
     /* add my receive function to the handler module, to be called automatically
      * when the pc sends data to the user module */
-    setHandlerReceiveFunction(usrDistHandler,&UserDistReceived);
+    setHandlerReceiveFunction(usrGreyHandler,&UserGreyReceived);
     /* initialize the send buffer, used to send data to the PC */
-    sendBufferUsrDist = getSharedBuffer(usrDistHandler);
-    /* get port where sensor/actuator is connected and set to IN mode*/
-    getPortDescriptor(usrDistHandler)->change_port_direction(IN);
-}/*end UserDistInit*/
+    sendBufferUsrGrey = getSharedBuffer(usrGreyHandler);
+    /* get port where sensor/actuator is connected and set to IN/OUT mode*/
+    getPortDescriptor(usrGreyHandler)->change_port_direction(IN);
+}/*end UserGreyInit*/
 
 /******************************************************************************
- * Function:        UserDistConfigure(void)
+ * Function:        UserGreyConfigure(void)
  *
  * PreCondition:    None
  *
@@ -78,12 +78,12 @@ void UserDistInit(byte usrDistHandler){
  *
  * Note:            None
  *****************************************************************************/
-void UserDistConfigure(void){
+void UserGreyConfigure(void){
     /* Do the configuration */
-}/*end UserDistConfigure*/
+}/*end UserGreyConfigure*/
 
 /******************************************************************************
- * Function:        UserDistProcessIO(void)
+ * Function:        UserGreyProcessIO(void)
  *
  * PreCondition:    None
  *
@@ -99,14 +99,14 @@ void UserDistConfigure(void){
  *
  * Note:            None
  *****************************************************************************/
-void UserDistProcessIO(void){
+void UserGreyProcessIO(void){
     if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND==1)) return;
 	/* here enter the code that want to be called periodically,
          * per example interaction with buttons and leds */
-}/*end UserDistProcessIO*/
+}/*end UserGreyProcessIO*/
 
 /******************************************************************************
- * Function:        UserDistRelease(byte i)
+ * Function:        UserGreyRelease(byte i)
  *
  * PreCondition:    None
  *
@@ -122,13 +122,13 @@ void UserDistProcessIO(void){
  *
  * Note:            None
  *****************************************************************************/
-void UserDistRelease(byte usrDistHandler){
-    unsetHandlerReceiveBuffer(usrDistHandler);
-    unsetHandlerReceiveFunction(usrDistHandler);
-}/*end UserDistRelease*/
+void UserGreyRelease(byte i){
+    unsetHandlerReceiveBuffer(i);
+    unsetHandlerReceiveFunction(i);
+}/*end UserGreyRelease*/
 
 /******************************************************************************
- * Function:        UserDistReceived(byte* recBuffPtr, byte len)
+ * Function:        UserGreyReceived(byte* recBuffPtr, byte len)
  *
  * PreCondition:    None
  *
@@ -142,26 +142,25 @@ void UserDistRelease(byte usrDistHandler){
  *
  * Note:            None
  *****************************************************************************/
-void UserDistReceived(byte* recBuffPtr, byte len, byte handler){
+void UserGreyReceived(byte* recBuffPtr, byte len, byte handler){
     byte j;
     WORD data;
-    byte userDistCounter = 0;
-
-    switch(((DIST_DATA_PACKET*)recBuffPtr)->CMD)
+    byte userGreyCounter = 0;
+    switch(((GREY_DATA_PACKET*)recBuffPtr)->CMD)
     {
         case READ_VERSION:
-            ((DIST_DATA_PACKET*)sendBufferUsrDist)->_byte[0] = ((DIST_DATA_PACKET*)recBuffPtr)->_byte[0];
-            ((DIST_DATA_PACKET*)sendBufferUsrDist)->_byte[1] = DIST_MINOR_VERSION;
-            ((DIST_DATA_PACKET*)sendBufferUsrDist)->_byte[2] = DIST_MAJOR_VERSION;
-            userDistCounter=0x03;
+            ((GREY_DATA_PACKET*)sendBufferUsrGrey)->_byte[0] = ((GREY_DATA_PACKET*)recBuffPtr)->_byte[0];
+            ((GREY_DATA_PACKET*)sendBufferUsrGrey)->_byte[1] = GREY_MINOR_VERSION;
+            ((GREY_DATA_PACKET*)sendBufferUsrGrey)->_byte[2] = GREY_MAJOR_VERSION;
+            userGreyCounter=0x03;
             break;
 
-        case GET_DISTANCE:
-            ((DIST_DATA_PACKET*)sendBufferUsrDist)->_byte[0] = ((DIST_DATA_PACKET*)recBuffPtr)->_byte[0];
+        case GET_VALUE:
+            ((GREY_DATA_PACKET*)sendBufferUsrGrey)->_byte[0] = ((GREY_DATA_PACKET*)recBuffPtr)->_byte[0];
             data = getPortDescriptor(handler)->get_data_analog();
-            ((DIST_DATA_PACKET*)sendBufferUsrDist)->_byte[1] = LSB(data);
-            ((DIST_DATA_PACKET*)sendBufferUsrDist)->_byte[2] = MSB(data);
-            userDistCounter=0x03;
+            ((GREY_DATA_PACKET*)sendBufferUsrGrey)->_byte[1] = LSB(data);
+            ((GREY_DATA_PACKET*)sendBufferUsrGrey)->_byte[2] = MSB(data);
+            userGreyCounter=0x03;
             break;
 
         case RESET:
@@ -172,13 +171,13 @@ void UserDistReceived(byte* recBuffPtr, byte len, byte handler){
             break;
     }/*end switch(s)*/
 
-    if(userDistCounter != 0)
+    if(userGreyCounter != 0)
     {
         j = 255;
         while(mUSBGenTxIsBusy() && j-->0); /* pruebo un mÃ¡ximo de 255 veces */
         if(!mUSBGenTxIsBusy())
-            USBGenWrite2(handler, userDistCounter);
+            USBGenWrite2(handler, userGreyCounter);
     }/*end if*/
-}/*end UserDistReceived*/
+}/*end UserGreyReceived*/
 
-/** EOF usr_distancia.c ***************************************************************/
+/** EOF usr_grey.c ***************************************************************/

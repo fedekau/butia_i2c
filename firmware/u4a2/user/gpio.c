@@ -32,7 +32,7 @@ void GpioConfigure(void);
 // Table used by te framework to get a fixed reference point to the user module functions defined by the framework 
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
-uTab GpioModuleTable = {&GpioInit,&GpioRelease,&GpioConfigure,"gpio"}; //modName must be less or equal 8 characters
+const uTab GpioModuleTable = {&GpioInit,&GpioRelease,&GpioConfigure,"gpio"}; //modName must be less or equal 8 characters
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
@@ -110,7 +110,6 @@ void GpioProcessIO(void){
 void GpioRelease(byte i) {
     unsetHandlerReceiveBuffer(i);
     unsetHandlerReceiveFunction(i); 
-    removePoolingFunction(&GpioProcessIO);
 }
 
 
@@ -131,22 +130,18 @@ void GpioRelease(byte i) {
  *****************************************************************************/
 
 void GpioReceived(byte* recBuffPtr, byte len, byte handler){
-      byte index;
       byte j;  
       byte GpioCounter = 0;
-      byte tiempo;
       WORD aux;
       port_descriptor port;
       port = board_ports[0]; //it's harcode to port 1
 
       switch(((GPIO_DATA_PACKET*)recBuffPtr)->CMD){
         case READ_VERSION:
-              //dataPacket._byte[1] is len
               ((GPIO_DATA_PACKET*)sendBufferGpio)->_byte[0] = ((GPIO_DATA_PACKET*)recBuffPtr)->_byte[0];
-              ((GPIO_DATA_PACKET*)sendBufferGpio)->_byte[1] = ((GPIO_DATA_PACKET*)recBuffPtr)->_byte[1];
-              ((GPIO_DATA_PACKET*)sendBufferGpio)->_byte[2] = GPIO_MINOR_VERSION;
-              ((GPIO_DATA_PACKET*)sendBufferGpio)->_byte[3] = GPIO_MAJOR_VERSION;
-              GpioCounter = 0x04;
+              ((GPIO_DATA_PACKET*)sendBufferGpio)->_byte[1] = GPIO_MINOR_VERSION;
+              ((GPIO_DATA_PACKET*)sendBufferGpio)->_byte[2] = GPIO_MAJOR_VERSION;
+              GpioCounter = 0x03;
               break;  
               
         case GET_RES:
@@ -154,20 +149,18 @@ void GpioReceived(byte* recBuffPtr, byte len, byte handler){
               aux = port.get_val_detection_pin();
               ((GPIO_DATA_PACKET*)sendBufferGpio)->_byte[1] = LSB(aux);
               ((GPIO_DATA_PACKET*)sendBufferGpio)->_byte[2] = MSB(aux);
-
               GpioCounter = 0x03;
-              break;       
-        
+              break;        
      
          default:
               break;
       }//end switch(s)
       if(GpioCounter != 0){
             j = 255;
-            while(mUSBGenTxIsBusy() && j-->0); // pruebo un máximo de 255 veces
+            while(mUSBGenTxIsBusy() && j-->0); // pruebo un maximo de 255 veces
                 if(!mUSBGenTxIsBusy())
                     USBGenWrite2(handler, GpioCounter);
       }//end if            
 }//end GpioReceived
 
-/** EOF usr_TestRes.c ***************************************************************/
+/** EOF gpio.c ***************************************************************/
