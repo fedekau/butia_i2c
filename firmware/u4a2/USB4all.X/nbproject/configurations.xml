@@ -29,6 +29,8 @@
       <itemPath>../user/usr_grey.h</itemPath>
       <itemPath>../user/usr_motors.h</itemPath>
       <itemPath>../user/usr_light.h</itemPath>
+      <itemPath>../user/usr_resistance.h</itemPath>
+      <itemPath>../user/usr_voltage.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LibraryFiles"
                    displayName="Library Files"
@@ -72,6 +74,8 @@
       <itemPath>../user/usr_grey.c</itemPath>
       <itemPath>../user/usr_motors.c</itemPath>
       <itemPath>../user/usr_light.c</itemPath>
+      <itemPath>../user/usr_resistance.c</itemPath>
+      <itemPath>../user/usr_voltage.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
