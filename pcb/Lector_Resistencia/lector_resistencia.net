@@ -1,4 +1,4 @@
-# EESchema Netlist Version 1.1 created  mar 06 nov 2012 20:22:49 UYST
+# EESchema Netlist Version 1.1 created  mié 07 nov 2012 19:45:15 UYST
 (
  ( /50998B85 D3 D1 1N4148
   ( 1 AN )
@@ -30,7 +30,7 @@
   ( 1 VDD )
   ( 2 AN )
  )
- ( /50814D04 R5 R2 R
+ ( /50814D04 R5 R2 22k
   ( 1 VDD )
   ( 2 idAN )
  )

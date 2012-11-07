@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by CvPCB (2011-05-25)-stable date = mar 06 nov 2012 20:22:49 UYST
+Cmp-Mod V01 Created by CvPCB (2011-05-25)-stable date = mié 07 nov 2012 19:45:15 UYST
 
 BeginCmp
 TimeStamp = /50998B85;
@@ -38,7 +38,7 @@ EndCmp
 BeginCmp
 TimeStamp = /50814D04;
 Reference = R2;
-ValeurCmp = R;
+ValeurCmp = 22k;
 IdModule  = R5;
 EndCmp
 

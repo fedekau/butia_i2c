@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date mar 06 nov 2012 20:37:46 UYST
+EESchema Schematic File Version 2  date mié 07 nov 2012 19:44:20 UYST
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -29,13 +29,14 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
+LIBS:lector_resistencia-cache
 EELAYER 25  0
 EELAYER END
 $Descr A4 11700 8267
 encoding utf-8
 Sheet 1 1
 Title "Módulo medidor de resistencia "
-Date "6 nov 2012"
+Date "7 nov 2012"
 Rev "1.1"
 Comp "Butiá"
 Comment1 ""
@@ -124,7 +125,7 @@ L R R2
 U 1 1 50814D04
 P 4300 3950
 F 0 "R2" V 4380 3950 50  0000 C CNN
-F 1 "R" V 4300 3950 50  0000 C CNN
+F 1 "22k" V 4300 3950 50  0000 C CNN
 	1    4300 3950
 	1    0    0    -1  
 $EndComp

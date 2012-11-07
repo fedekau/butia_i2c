@@ -1,4 +1,4 @@
-update=mar 06 nov 2012 20:57:27 UYST
+update=mié 07 nov 2012 19:47:58 UYST
 last_client=pcbnew
 [general]
 version=1
@@ -18,7 +18,7 @@ DrawLar=150
 EdgeLar=150
 TxtLar=120
 MSegLar=150
-LastNetListRead=
+LastNetListRead=lector_resistencia.net
 [pcbnew/libraries]
 LibDir=
 LibName1=sockets

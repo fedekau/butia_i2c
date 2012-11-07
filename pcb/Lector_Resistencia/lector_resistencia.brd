@@ -1,4 +1,4 @@
-PCBNEW-BOARD Version 1 date mar 06 nov 2012 21:10:40 UYST
+PCBNEW-BOARD Version 1 date mié 07 nov 2012 19:48:18 UYST
 
 # Created by Pcbnew(2011-05-25)-stable
 
@@ -21,7 +21,7 @@ $EndGENERAL
 $SHEETDESCR
 Sheet A4 11700 8267
 Title "Módulo lector de resistencia"
-Date "6 nov 2012"
+Date "7 nov 2012"
 Rev "1.1"
 Comp "Butiá"
 Comment1 ""
@@ -235,7 +235,7 @@ Sc 50998EC3
 AR /50814D04
 Op 0 A 0
 T0 60 -960 550 500 900 80 N V 21 N "R2"
-T1 0 0 550 500 900 80 N I 21 N "R"
+T1 0 0 550 500 900 80 N I 21 N "22k"
 DS -2500 0 -2100 0 120 21
 DS 2500 0 2100 0 120 21
 DS 2100 -500 2100 500 120 21
