@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date mié 07 nov 2012 19:44:20 UYST
+EESchema Schematic File Version 2  date jue 08 nov 2012 19:04:57 UYST
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -35,9 +35,9 @@ EELAYER END
 $Descr A4 11700 8267
 encoding utf-8
 Sheet 1 1
-Title "Módulo medidor de resistencia "
+Title "Módulo medidor de resistencias "
 Date "7 nov 2012"
-Rev "1.1"
+Rev "1.0"
 Comp "Butiá"
 Comment1 ""
 Comment2 ""
