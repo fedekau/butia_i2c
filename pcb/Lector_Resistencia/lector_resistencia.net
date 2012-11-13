@@ -1,55 +1,49 @@
-# EESchema Netlist Version 1.1 created  mié 07 nov 2012 19:45:15 UYST
+# EESchema Netlist Version 1.1 created  mar 13 nov 2012 18:20:55 UYST
 (
- ( /50998B85 D3 D1 1N4148
-  ( 1 AN )
-  ( 2 VDD )
+ ( /50998BA7 $noname  D2 1N4148 {Lib=DIODE}
+  (    1 GND )
+  (    2 AN )
  )
- ( /50998BA7 D3 D2 1N4148
-  ( 1 GND )
-  ( 2 AN )
+ ( /50998B85 $noname  D1 1N4148 {Lib=DIODE}
+  (    1 AN )
+  (    2 VDD )
  )
- ( /50814171 RJ45_8 J1 RJ45
-  ( 1 ? )
-  ( 2 ? )
-  ( 3 VDD )
-  ( 4 idAN )
-  ( 5 GND )
-  ( 6 AN )
-  ( 7 ? )
-  ( 8 ? )
-  ( 9 GND )
+ ( /50998707 $noname  J2 JACK_5P {Lib=JACK_5P}
+  (    1 GND )
+  (    2 ? )
+  (    3 ? )
+  (    4 ? )
+  (    5 AN )
  )
- ( /50998707 jack_audio_35mm J2 JACK_5P
-  ( 1 GND )
-  ( 2 ? )
-  ( 3 AN )
-  ( 4 ? )
-  ( 5 ? )
+ ( /50814D04 $noname  R2 22k {Lib=R}
+  (    1 VDD )
+  (    2 idAN )
  )
- ( /50814352 R5 R1 6K8
-  ( 1 VDD )
-  ( 2 AN )
+ ( /50814352 $noname  R1 6K8 {Lib=R}
+  (    1 VDD )
+  (    2 AN )
  )
- ( /50814D04 R5 R2 22k
-  ( 1 VDD )
-  ( 2 idAN )
+ ( /50814171 $noname  J1 RJ45 {Lib=RJ45}
+  (    1 ? )
+  (    2 ? )
+  (    3 VDD )
+  (    4 idAN )
+  (    5 GND )
+  (    6 AN )
+  (    7 ? )
+  (    8 ? )
+  (    9 GND )
  )
 )
 *
 { Allowed footprints by component:
-$component D1
- D?
- S*
-$endlist
 $component D2
  D?
  S*
 $endlist
-$component R1
- R?
- SM0603
- SM0805
- R?-*
+$component D1
+ D?
+ S*
 $endlist
 $component R2
  R?
@@ -57,5 +51,33 @@ $component R2
  SM0805
  R?-*
 $endlist
+$component R1
+ R?
+ SM0603
+ SM0805
+ R?-*
+$endlist
 $endfootprintlist
 }
+{ Pin List by Nets
+Net 5 "GND" "GND"
+ J1 5
+ D2 1
+ J1 9
+ J2 1
+Net 6 "idAN" "idAN"
+ J1 4
+ R2 2
+Net 7 "VDD" "VDD"
+ J1 3
+ D1 2
+ R2 1
+ R1 1
+Net 9 "AN" "AN"
+ D1 1
+ D2 2
+ J1 6
+ R1 2
+ J2 5
+}
+#End

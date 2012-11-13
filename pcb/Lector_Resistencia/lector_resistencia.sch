@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date jue 08 nov 2012 19:04:57 UYST
+EESchema Schematic File Version 2  date mar 13 nov 2012 18:56:21 UYST
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -36,7 +36,7 @@ $Descr A4 11700 8267
 encoding utf-8
 Sheet 1 1
 Title "Módulo medidor de resistencias "
-Date "7 nov 2012"
+Date "13 nov 2012"
 Rev "1.0"
 Comp "Butiá"
 Comment1 ""
@@ -44,6 +44,8 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
+NoConn ~ 7000 4550
+NoConn ~ 7000 4250
 Wire Wire Line
 	3350 4850 3350 5000
 Connection ~ 3350 4350
@@ -51,7 +53,7 @@ Connection ~ 3900 4350
 Wire Wire Line
 	3350 4350 3900 4350
 Wire Wire Line
-	7000 4550 7350 4550
+	7000 4650 7350 4650
 Wire Wire Line
 	4300 3350 4300 3700
 Wire Wire Line
@@ -99,8 +101,6 @@ F 1 "1N4148" H 3350 3950 40  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 NoConn ~ 7000 4350
-NoConn ~ 7000 4650
-NoConn ~ 7000 4250
 $Comp
 L JACK_5P J2
 U 1 1 50998707
@@ -114,7 +114,7 @@ NoConn ~ 5550 4000
 NoConn ~ 5450 4000
 NoConn ~ 4950 4000
 NoConn ~ 4850 4000
-Text GLabel 7350 4550 2    50   Input ~ 0
+Text GLabel 7350 4650 2    50   Input ~ 0
 AN
 Text GLabel 7300 4450 2    60   Input ~ 0
 GND
