@@ -24,12 +24,12 @@ void UserDistProcessIO(void);
 void UserDistInit(byte i);
 void UserDistReceived(byte*, byte, byte);
 void UserDistRelease(byte i);
-void UserDistConfigure(void);
+void UserDistConfigure(byte);
 
 /* Table used by te framework to get a fixed reference point to the user module functions defined by the framework */
 /** USER MODULE REFERENCE ****************************************************/
 #pragma romdata user
-const uTab userDistModuleTable = {&UserDistInit,&UserDistRelease,&UserDistConfigure,"distanc"};
+const uTab userDistModuleTable = {&UserDistInit, &UserDistRelease, &UserDistConfigure, "distanc"};
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
@@ -52,10 +52,10 @@ const uTab userDistModuleTable = {&UserDistInit,&UserDistRelease,&UserDistConfig
  *
  * Note:            None
  *****************************************************************************/
-void UserDistInit(byte usrDistHandler){
+void UserDistInit(byte usrDistHandler) {
     /* add my receive function to the handler module, to be called automatically
      * when the pc sends data to the user module */
-    setHandlerReceiveFunction(usrDistHandler,&UserDistReceived);
+    setHandlerReceiveFunction(usrDistHandler, &UserDistReceived);
     /* initialize the send buffer, used to send data to the PC */
     sendBufferUsrDist = getSharedBuffer(usrDistHandler);
     /* get port where sensor/actuator is connected and set to IN mode*/
@@ -78,7 +78,7 @@ void UserDistInit(byte usrDistHandler){
  *
  * Note:            None
  *****************************************************************************/
-void UserDistConfigure(void){
+void UserDistConfigure(byte handler) {
     /* Do the configuration */
 }/*end UserDistConfigure*/
 
@@ -99,10 +99,10 @@ void UserDistConfigure(void){
  *
  * Note:            None
  *****************************************************************************/
-void UserDistProcessIO(void){
-    if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND==1)) return;
-	/* here enter the code that want to be called periodically,
-         * per example interaction with buttons and leds */
+void UserDistProcessIO(void) {
+    if ((usb_device_state < CONFIGURED_STATE) || (UCONbits.SUSPND == 1)) return;
+    /* here enter the code that want to be called periodically,
+     * per example interaction with buttons and leds */
 }/*end UserDistProcessIO*/
 
 /******************************************************************************
@@ -122,7 +122,7 @@ void UserDistProcessIO(void){
  *
  * Note:            None
  *****************************************************************************/
-void UserDistRelease(byte usrDistHandler){
+void UserDistRelease(byte usrDistHandler) {
     unsetHandlerReceiveBuffer(usrDistHandler);
     unsetHandlerReceiveFunction(usrDistHandler);
 }/*end UserDistRelease*/
@@ -142,26 +142,25 @@ void UserDistRelease(byte usrDistHandler){
  *
  * Note:            None
  *****************************************************************************/
-void UserDistReceived(byte* recBuffPtr, byte len, byte handler){
+void UserDistReceived(byte* recBuffPtr, byte len, byte handler) {
     byte j;
     WORD data;
     byte userDistCounter = 0;
 
-    switch(((DIST_DATA_PACKET*)recBuffPtr)->CMD)
-    {
+    switch (((DIST_DATA_PACKET*) recBuffPtr)->CMD) {
         case READ_VERSION:
-            ((DIST_DATA_PACKET*)sendBufferUsrDist)->_byte[0] = ((DIST_DATA_PACKET*)recBuffPtr)->_byte[0];
-            ((DIST_DATA_PACKET*)sendBufferUsrDist)->_byte[1] = DIST_MINOR_VERSION;
-            ((DIST_DATA_PACKET*)sendBufferUsrDist)->_byte[2] = DIST_MAJOR_VERSION;
-            userDistCounter=0x03;
+            ((DIST_DATA_PACKET*) sendBufferUsrDist)->_byte[0] = ((DIST_DATA_PACKET*) recBuffPtr)->_byte[0];
+            ((DIST_DATA_PACKET*) sendBufferUsrDist)->_byte[1] = DIST_MINOR_VERSION;
+            ((DIST_DATA_PACKET*) sendBufferUsrDist)->_byte[2] = DIST_MAJOR_VERSION;
+            userDistCounter = 0x03;
             break;
 
         case GET_DISTANCE:
-            ((DIST_DATA_PACKET*)sendBufferUsrDist)->_byte[0] = ((DIST_DATA_PACKET*)recBuffPtr)->_byte[0];
+            ((DIST_DATA_PACKET*) sendBufferUsrDist)->_byte[0] = ((DIST_DATA_PACKET*) recBuffPtr)->_byte[0];
             data = getPortDescriptor(handler)->get_data_analog();
-            ((DIST_DATA_PACKET*)sendBufferUsrDist)->_byte[1] = LSB(data);
-            ((DIST_DATA_PACKET*)sendBufferUsrDist)->_byte[2] = MSB(data);
-            userDistCounter=0x03;
+            ((DIST_DATA_PACKET*) sendBufferUsrDist)->_byte[1] = LSB(data);
+            ((DIST_DATA_PACKET*) sendBufferUsrDist)->_byte[2] = MSB(data);
+            userDistCounter = 0x03;
             break;
 
         case RESET:
@@ -172,11 +171,10 @@ void UserDistReceived(byte* recBuffPtr, byte len, byte handler){
             break;
     }/*end switch(s)*/
 
-    if(userDistCounter != 0)
-    {
+    if (userDistCounter != 0) {
         j = 255;
-        while(mUSBGenTxIsBusy() && j-->0); /* pruebo un mÃ¡ximo de 255 veces */
-        if(!mUSBGenTxIsBusy())
+        while (mUSBGenTxIsBusy() && j-- > 0); /* pruebo un mÃ¡ximo de 255 veces */
+        if (!mUSBGenTxIsBusy())
             USBGenWrite2(handler, userDistCounter);
     }/*end if*/
 }/*end UserDistReceived*/

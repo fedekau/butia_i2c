@@ -15,15 +15,14 @@
 /** V A R I A B L E S ********************************************************/
 #pragma udata 
 
-byte  usrButiaHandler;	 // Handler number asigned to the module
 byte* sendBufferusrButia; // buffer to send data
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
 void UserButiaProcessIO(void);
 void UserButiaInit(byte i);
-void UserButiaReceived(byte*, byte);
+void UserButiaReceived(byte*, byte, byte);
 void UserButiaRelease(byte i);
-void UserButiaConfigure(void);
+void UserButiaConfigure(byte);
 
 // Table used by te framework to get a fixed reference point to the user module functions defined by the framework 
 /** USER MODULE REFERENCE*****************************************************/
@@ -51,9 +50,7 @@ const uTab UserButiaModuleTable = {&UserButiaInit,&UserButiaRelease,&UserButiaCo
  * Note:            None
  *****************************************************************************/
 
-void UserButiaInit(byte i){
-    BOOL res;
-    usrButiaHandler = i;
+void UserButiaInit(byte usrButiaHandler){
     // add my receive function to the handler module, to be called automatically when the pc sends data to the user module
     setHandlerReceiveFunction(usrButiaHandler,&UserButiaReceived);
     // add my receive pooling function to the dynamic pooling module, to be called periodically
@@ -79,7 +76,7 @@ void UserButiaInit(byte i){
  *
  * Note:            None
  *****************************************************************************/
-void UserButiaConfigure(void){
+void UserButiaConfigure(byte handler){
 // Do the configuration
 }
 
@@ -147,7 +144,7 @@ void UserButiaRelease(byte i){
  * Note:            None
  *****************************************************************************/
 
-void UserButiaReceived(byte* recBuffPtr, byte len){
+void UserButiaReceived(byte* recBuffPtr, byte len, byte handler){
     byte i, j;
     byte UserButiaCounter = 0;
     int data_received = 3;
@@ -176,7 +173,7 @@ void UserButiaReceived(byte* recBuffPtr, byte len){
         j = 255;
         while(mUSBGenTxIsBusy() && j-->0); // pruebo un maximo de 255 veces
             if(!mUSBGenTxIsBusy())
-                USBGenWrite2(usrButiaHandler, UserButiaCounter);
+                USBGenWrite2(handler, UserButiaCounter);
     }/*end if*/
 
 }/*end UserButiaReceived*/
