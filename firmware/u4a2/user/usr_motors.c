@@ -18,7 +18,6 @@
 /** V A R I A B L E S ********************************************************/
 #pragma udata
 
-byte  usrMotorsHandler;     // Handler number asigned to the module
 byte* sendBufferUsrMotors; // buffer to send data
 
 #define FIRST_ON    0x01
@@ -34,26 +33,27 @@ byte* sendBufferUsrMotors; // buffer to send data
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
 void UserMotorsProcessIO(void);
 void UserMotorsInit(byte i);
-void UserMotorsReceived(byte*, byte);
+void UserMotorsReceived(byte*, byte, byte);
 void UserMotorsRelease(byte i);
-void UserMotorsConfigure(void);
+void UserMotorsConfigure(byte);
+void sexyMotorMoveStart(void);
 
 // Table used by the framework to get a fixed reference point to the user module functions defined by the framework
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
-const uTab userMotorsModuleTable = {&UserMotorsInit,&UserMotorsRelease,&UserMotorsConfigure,"motors"}; //modName must be less or equal 8 characters
+const uTab userMotorsModuleTable = {&UserMotorsInit, &UserMotorsRelease, &UserMotorsConfigure, "motors"}; //modName must be less or equal 8 characters
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
 #pragma code module
 
 /* Structure to hold motors */
-typedef struct _MOTOR{
+typedef struct _MOTOR {
     int id;
     int inverse;
 } MOTOR;
 
-typedef struct _WHEELS{
+typedef struct _WHEELS {
     MOTOR left;
     MOTOR right;
 } WHEELS;
@@ -61,44 +61,50 @@ typedef struct _WHEELS{
 /* robot wheels */
 WHEELS wheels;
 
-void stopRight(){
-    writeInfo (wheels.right.id, 32, 0);
+void stopRight() {
+    writeInfo(wheels.right.id, 32, 0);
 }
-void backwardRight(){
-    endlessTurn(wheels.right.id, -600, 1 );
+
+void backwardRight() {
+    endlessTurn(wheels.right.id, -600, 1);
     registerT0eventInEvent(LONG_TIME_UNIT, &stopRight);
 }
-void forwardRight(){
+
+void forwardRight() {
     endlessTurn(wheels.right.id, 600, 1);
     registerT0eventInEvent(LONG_TIME_UNIT, &backwardRight);
 }
-void stopLeft(){
-    writeInfo (wheels.left.id, 32, 0);
+
+void stopLeft() {
+    writeInfo(wheels.left.id, 32, 0);
     registerT0eventInEvent(LONG_TIME_UNIT, &forwardRight);
 }
-void backwardLeft(){
+
+void backwardLeft() {
     endlessTurn(wheels.left.id, -600, 1);
     registerT0eventInEvent(LONG_TIME_UNIT, &stopLeft);
 }
-void forwardLeft(){
+
+void forwardLeft() {
     endlessTurn(wheels.left.id, 600, 1);
     registerT0eventInEvent(LONG_TIME_UNIT, &backwardLeft);
 }
 
-void sexyMotorMoveStart(){
+void sexyMotorMoveStart() {
     setEndlessTurnMode(wheels.left.id, 1);
     setEndlessTurnMode(wheels.right.id, 1);
     registerT0event(TIME_UNIT, &forwardLeft);
 }
 
-boolean getVoltage(int *data_received){
+boolean getVoltage(int *data_received) {
     byte data [2];
     int id, err = 0;
     data[0] = PRESENT_VOLTAGE;
     data[1] = 0x01; /*length of data to read*/
-    ax12SendPacket (wheels.left.id, 0x02, READ_DATA , data);
+    ax12SendPacket(wheels.left.id, 0x02, READ_DATA, data);
     return ax12ReadPacket(&id, &err, data_received);
 }
+
 /* 
  * Function to auto-detect motors (robot wheels)
  * the less id motor correspond to left wheel
@@ -109,14 +115,14 @@ void autoDetectWheels() {
     byte index = 0;
     byte list_motors[2];
     int _id, _error, _data;
-    byte i=0;
-    for (i ; i<255; i++){
-        ax12SendPacket (i, 0, PING, 0);
-        ax12ReadPacket (&_id, &_error, &_data);
-        if (_id==i) {
+    byte i = 0;
+    for (i; i < 255; i++) {
+        ax12SendPacket(i, 0, PING, 0);
+        ax12ReadPacket(&_id, &_error, &_data);
+        if (_id == i) {
             list_motors[index] = i;
             index++;
-            if (index==num_motors) {
+            if (index == num_motors) {
                 //Set found motors as Rigth/Left wheels
                 wheels.left.id = list_motors[0];
                 wheels.left.inverse = 0;
@@ -145,22 +151,16 @@ void autoDetectWheels() {
  *
  * Note:            None
  *****************************************************************************/
-void UserMotorsInit(byte i) {
-    usrMotorsHandler = i;
+void UserMotorsInit(byte usrMotorsHandler) {
     // add my receive function to the handler module, to be called automatically when the pc sends data to the user module
-    setHandlerReceiveFunction(usrMotorsHandler,&UserMotorsReceived);
+    setHandlerReceiveFunction(usrMotorsHandler, &UserMotorsReceived);
     // add my receive pooling function to the dynamic pooling module, to be called periodically
     /* andres res = addPollingFunction(&UserMotorsProcessIO);*/
     // initialize the send buffer, used to send data to the PC
     sendBufferUsrMotors = getSharedBuffer(usrMotorsHandler);
     ax12InitSerial();
-//    setEndlessTurnMode(wheels.left.id, 1);
-//    setEndlessTurnMode(wheels.right.id, 1);
-    // FIXME Add autodetection wheels
-//    wheels.left.id = 0x01;
-//    wheels.right.id = 0x02;
-    //Wheels ruedas;
-    /*Implementar funcion de auto deteccion para que detecte los motores*/
+    //    setEndlessTurnMode(wheels.left.id, 1);
+    //    setEndlessTurnMode(wheels.right.id, 1);
     /*writeInfo (ruedas.left.id, CW_COMPLIANCE_MARGIN, 0);
     writeInfo (ruedas.left.id, CCW_COMPLIANCE_MARGIN, 0);
     writeInfo (ruedas.left.id, CW_COMPLIANCE_SLOPE, 95);
@@ -189,8 +189,8 @@ void UserMotorsInit(byte i) {
  *
  * Note:            None
  *****************************************************************************/
-void UserMotorsConfigure(void){
-// Do the configuration
+void UserMotorsConfigure(byte handler) {
+    // Do the configuration
 }
 
 /******************************************************************************
@@ -210,8 +210,8 @@ void UserMotorsConfigure(void){
  * Note:            None
  *****************************************************************************/
 
-void UserMotorsProcessIO(void){
-    if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND==1)) return;
+void UserMotorsProcessIO(void) {
+    if ((usb_device_state < CONFIGURED_STATE) || (UCONbits.SUSPND == 1)) return;
 }//end ProcessIO
 
 /******************************************************************************
@@ -254,62 +254,61 @@ void UserMotorsRelease(byte i) {
  * Note:            None
  *****************************************************************************/
 
-void UserMotorsReceived(byte* recBuffPtr, byte len){
+void UserMotorsReceived(byte* recBuffPtr, byte len, byte handler) {
     byte j;
     byte userMotorsCounter = 0;
     char direction1, direction2;
     byte lowVel1, lowVel2, highVel1, highVel2, res;
     word vel1, vel2;
-    switch(((MOTORS_DATA_PACKET*)recBuffPtr)->CMD){
+    switch (((MOTORS_DATA_PACKET*) recBuffPtr)->CMD) {
 
         case READ_VERSION:
-              ((MOTORS_DATA_PACKET*)sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*)recBuffPtr)->_byte[0];
-              ((MOTORS_DATA_PACKET*)sendBufferUsrMotors)->_byte[1] = MOTORS_MINOR_VERSION;
-              ((MOTORS_DATA_PACKET*)sendBufferUsrMotors)->_byte[2] = MOTORS_MAJOR_VERSION;
-              userMotorsCounter = 0x03;
-              break;
+            ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[0];
+            ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[1] = MOTORS_MINOR_VERSION;
+            ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[2] = MOTORS_MAJOR_VERSION;
+            userMotorsCounter = 0x03;
+            break;
         case RESET:
-              Reset();
-        break;
+            Reset();
+            break;
         case SET_VEL_2MTR:
-            ((MOTORS_DATA_PACKET*)sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*)recBuffPtr)->_byte[0];
-            direction1 = ((MOTORS_DATA_PACKET*)recBuffPtr)->_byte[1];
-            highVel1   = ((MOTORS_DATA_PACKET*)recBuffPtr)->_byte[2];
-            lowVel1    = ((MOTORS_DATA_PACKET*)recBuffPtr)->_byte[3];
+            ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[0];
+            direction1 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[1];
+            highVel1 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[2];
+            lowVel1 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[3];
             vel1 = highVel1;
-            vel1 = vel1<<8|lowVel1;
-            direction2 = ((MOTORS_DATA_PACKET*)recBuffPtr)->_byte[4];
-            highVel2   = ((MOTORS_DATA_PACKET*)recBuffPtr)->_byte[5];
-            lowVel2    = ((MOTORS_DATA_PACKET*)recBuffPtr)->_byte[6];
+            vel1 = vel1 << 8 | lowVel1;
+            direction2 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[4];
+            highVel2 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[5];
+            lowVel2 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[6];
             vel2 = highVel2;
-            vel2 = vel2<<8|lowVel2;
-            if(direction1==0x01){
+            vel2 = vel2 << 8 | lowVel2;
+            if (direction1 == 0x01) {
                 endlessTurn(wheels.left.id, vel1, 0);
-            }
-            else{
+            } else {
                 endlessTurn(wheels.left.id, -vel1, 0);
             }
-            if(direction2==0x01)
+            if (direction2 == 0x01)
                 endlessTurn(wheels.right.id, vel2, 1);
             else
                 endlessTurn(wheels.right.id, -vel2, 1);
             userMotorsCounter = 0x01;
-        break;
+            break;
 
         case TEST_MOTORS:
             sexyMotorMoveStart();
-            ((MOTORS_DATA_PACKET*)sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*)recBuffPtr)->_byte[0];
+            ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[0];
             userMotorsCounter = 0x01;
-        break;
+            break;
         default:
-              break;
-        }/*end switch(s)*/
-        if(userMotorsCounter != 0){
-            j = 255;
-            while(mUSBGenTxIsBusy() && j-->0); /*pruebo un maximo de 255 veces*/
-                if(!mUSBGenTxIsBusy())
-                    USBGenWrite2(usrMotorsHandler, userMotorsCounter);
-        }/*end if*/
+            break;
+    }/*end switch(s)*/
+    if (userMotorsCounter != 0) {
+        j = 255;
+        while (mUSBGenTxIsBusy() && j-- > 0); /*pruebo un maximo de 255 veces*/
+        if (!mUSBGenTxIsBusy())
+            USBGenWrite2(handler, userMotorsCounter);
+    }/*end if*/
 }/*end UserMotorsReceived*/
 
 /** EOF usr_Buzzer.c ***************************************************************/
