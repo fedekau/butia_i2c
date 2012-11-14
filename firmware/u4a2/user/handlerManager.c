@@ -14,7 +14,7 @@
 #include "user/loaderModule.h"
 #include "io_cfg.h"             // I/O pin mapping
 #include "user/handlerManager.h"
-
+#include "usr_motors.h"
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata

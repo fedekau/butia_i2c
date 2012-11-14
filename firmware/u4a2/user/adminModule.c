@@ -8,6 +8,7 @@
 #include "user/adminModule.h"
 #include "user/pnp.h"
 #include "user/usb4butia.h"
+#include "handlerManager.h"
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata
@@ -78,7 +79,7 @@ void adminModuleRelease(byte handler){
     return;
 }
 
-void adminModuleConfigure(void){
+void adminModuleConfigure(byte handler){
     // nothing to do...
     return;
 }

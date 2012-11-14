@@ -22,7 +22,7 @@ void PNPProcessIO(void);
 void PNPInit(byte i);
 void PNPReceived(byte*, byte, byte);
 void PNPRelease(byte i);
-void PNPConfigure(void);
+void PNPConfigure(byte);
 
 // Table used by te framework to get a fixed reference point to the user module functions defined by the framework
 /** USER MODULE REFERENCE*****************************************************/
@@ -86,7 +86,7 @@ void PNPRelease(byte i){
 }
 
 
-void PNPConfigure(void){
+void PNPConfigure(byte handler){
 // Do the configuration
 }
 

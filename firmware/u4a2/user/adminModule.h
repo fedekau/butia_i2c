@@ -123,7 +123,7 @@ typedef union _AM_PACKET {
 /** P U B L I C  P R O T O T Y P E S *****************************************/
 void adminModuleInit(byte);
 void adminModuleRelease(byte);
-void adminModuleConfigure(void);
+void adminModuleConfigure(byte);
 void adminReceived(byte* recBuffPtr,byte len, byte);
 void sendMes(char* mensaje, byte len);
 void Escribir_memoria_boot(void);
