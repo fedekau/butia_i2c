@@ -1,5 +1,9 @@
-update=jue 10 may 2012 16:55:59 UYT
+update=mar 30 oct 2012 18:36:38 UYST
 last_client=pcbnew
+[general]
+version=1
+RootSch=usb4all_shield.sch
+BoardNm=usb4all_shield.brd
 [pcbnew]
 version=1
 PadDrlX=320
@@ -16,7 +20,7 @@ DrawLar=150
 EdgeLar=150
 TxtLar=120
 MSegLar=150
-LastNetListRead=Sensores 2.0.net
+LastNetListRead=usb4butia.net
 [pcbnew/libraries]
 LibDir=
 LibName1=sockets

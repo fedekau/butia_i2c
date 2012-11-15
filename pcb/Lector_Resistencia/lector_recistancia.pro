@@ -1,6 +1,6 @@
-update=jue 13 sep 2012 12:46:25 UYT
+update=vie 19 oct 2012 10:02:18 UYST
 version=1
-last_client=pcbnew
+last_client=kicad
 [eeschema]
 version=1
 LibDir=
@@ -31,8 +31,6 @@ offY_E=0
 RptD_X=0
 RptD_Y=100
 RptLab=1
-SimCmd=
-UseNetN=0
 LabSize=60
 [eeschema/libraries]
 LibName1=power
@@ -65,8 +63,6 @@ LibName27=opto
 LibName28=atmel
 LibName29=contrib
 LibName30=valves
-[general]
-version=1
 [cvpcb]
 version=1
 NetIExt=net
@@ -75,8 +71,8 @@ EquName1=devcms
 [pcbnew]
 version=1
 PadDrlX=320
-PadDimH=718
-PadDimV=718
+PadDimH=600
+PadDimV=600
 BoardThickness=630
 TxtPcbV=800
 TxtPcbH=600
@@ -88,7 +84,7 @@ DrawLar=150
 EdgeLar=150
 TxtLar=120
 MSegLar=150
-LastNetListRead=boton.net
+LastNetListRead=
 [pcbnew/libraries]
 LibDir=
 LibName1=sockets
@@ -98,9 +94,9 @@ LibName4=pin_array
 LibName5=divers
 LibName6=libcms
 LibName7=display
-LibName8=valves
-LibName9=led
-LibName10=dip_sockets
-LibName11=sharp
-LibName12=SW_5x5mm
-LibName13=SW5x5mm
+LibName8=led
+LibName9=dip_sockets
+LibName10=pga_sockets
+LibName11=valves
+[general]
+version=1

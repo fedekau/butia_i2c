@@ -1,0 +1,33 @@
+# EESchema Netlist Version 1.1 created  jue 24 may 2012 16:19:42 UYT
+(
+ ( /4F68816E RJ45_8 J1 RJ45
+  ( 1 ? )
+  ( 2 ? )
+  ( 3 VDD )
+  ( 4 idAN )
+  ( 5 GND )
+  ( 6 AN )
+  ( 7 ? )
+  ( 8 ? )
+  ( 9 GND )
+ )
+ ( /4F91ECE3 PIN_ARRAY_3X1 K1 CONN_3
+  ( 1 GND )
+  ( 2 AN )
+  ( 3 VDD )
+ )
+ ( /4FAC1BA4 R3 R2 R
+  ( 1 idAN )
+  ( 2 VDD )
+ )
+)
+*
+{ Allowed footprints by component:
+$component R2
+ R?
+ SM0603
+ SM0805
+ R?-*
+$endlist
+$endfootprintlist
+}

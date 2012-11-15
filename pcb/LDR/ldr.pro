@@ -1,4 +1,4 @@
-update=jue 10 may 2012 18:20:02 UYT
+update=mié 23 may 2012 12:39:12 UYT
 last_client=pcbnew
 [pcbnew]
 version=1
@@ -16,7 +16,7 @@ DrawLar=150
 EdgeLar=150
 TxtLar=120
 MSegLar=150
-LastNetListRead=../Sensores 2.0.net
+LastNetListRead=ldr.net
 [pcbnew/libraries]
 LibDir=
 LibName1=sockets

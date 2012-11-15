@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date mié 23 may 2012 12:39:40 UYT
+EESchema Schematic File Version 2  date mié 23 may 2012 10:33:15 UYT
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -29,7 +29,7 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
-LIBS:ldr-cache
+LIBS:sharp-cache
 EELAYER 25  0
 EELAYER END
 $Descr A4 11700 8267
@@ -45,86 +45,45 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 Wire Wire Line
-	3350 1450 3350 1300
+	3250 3300 3400 3300
 Wire Wire Line
-	3350 1950 3350 2100
-Wire Wire Line
-	4300 1050 4700 1050
-Wire Wire Line
-	3900 2500 3900 2650
-Wire Wire Line
-	1650 3100 1650 2900
-Wire Wire Line
-	2400 2150 2400 1950
-Wire Wire Line
-	2500 1950 2500 2650
-Wire Wire Line
-	2300 1950 2300 2650
-Wire Wire Line
-	2200 1950 2200 2350
-Wire Wire Line
-	1650 2200 1650 2400
+	3200 3200 3400 3200
 Wire Wire Line
 	3900 2000 3900 1850
 Wire Wire Line
-	5100 1050 5450 1050
+	2200 1950 2200 2350
 Wire Wire Line
-	4300 1750 4300 1550
-Text GLabel 5450 1050 2    60   Input ~ 0
-GND
-Text GLabel 4300 1750 3    60   Input ~ 0
+	2300 1950 2300 2650
+Wire Wire Line
+	2500 1950 2500 2650
+Wire Wire Line
+	2400 2150 2400 1950
+Wire Wire Line
+	3900 2500 3900 2650
+Wire Wire Line
+	3250 3100 3400 3100
+Text GLabel 3250 3300 0    60   Input ~ 0
 VDD
-Text GLabel 3350 1300 1    60   Input ~ 0
+$Comp
+L CONN_3 K1
+U 1 1 4F91ECE3
+P 3750 3200
+F 0 "K1" V 3700 3200 50  0000 C CNN
+F 1 "CONN_3" V 3800 3200 40  0000 C CNN
+	1    3750 3200
+	1    0    0    -1  
+$EndComp
+Text GLabel 3250 3100 0    60   Input ~ 0
 GND
-Text GLabel 3350 2100 3    60   Input ~ 0
+Text GLabel 3200 3200 0    60   Input ~ 0
 AN
-$Comp
-L VR VR1
-U 1 1 4FAC35A8
-P 3350 1700
-F 0 "VR1" V 3430 1700 50  0000 C CNN
-F 1 "VR" V 3350 1700 50  0000 C CNN
-	1    3350 1700
-	1    0    0    -1  
-$EndComp
-$Comp
-L LED D1
-U 1 1 4FAC358A
-P 4900 1050
-F 0 "D1" H 4900 1150 50  0000 C CNN
-F 1 "LED" H 4900 950 50  0000 C CNN
-	1    4900 1050
-	1    0    0    -1  
-$EndComp
-$Comp
-L R R3
-U 1 1 4FAC3460
-P 4300 1300
-F 0 "R3" V 4380 1300 50  0000 C CNN
-F 1 "180" V 4300 1300 50  0000 C CNN
-	1    4300 1300
-	1    0    0    -1  
-$EndComp
-Text GLabel 1650 3100 3    60   Input ~ 0
-AN
-Text GLabel 1650 2200 1    60   Input ~ 0
-VDD
 $Comp
 L R R2
 U 1 1 4FAC1BA4
 P 3900 2250
 F 0 "R2" V 3980 2250 50  0000 C CNN
-F 1 "1k" V 3900 2250 50  0000 C CNN
+F 1 "R" V 3900 2250 50  0000 C CNN
 	1    3900 2250
-	1    0    0    -1  
-$EndComp
-$Comp
-L R R1
-U 1 1 4FAC1B98
-P 1650 2650
-F 0 "R1" V 1730 2650 50  0000 C CNN
-F 1 "22k" V 1650 2650 50  0000 C CNN
-	1    1650 2650
 	1    0    0    -1  
 $EndComp
 Text GLabel 2900 1150 2    60   Input ~ 0

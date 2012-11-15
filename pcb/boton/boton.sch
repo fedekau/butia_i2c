@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date lun 14 may 2012 12:02:10 UYT
+EESchema Schematic File Version 2  date jue 21 jun 2012 16:05:26 UYT
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -36,7 +36,7 @@ $Descr A4 11700 8267
 encoding utf-8
 Sheet 1 1
 Title ""
-Date "14 may 2012"
+Date "21 jun 2012"
 Rev ""
 Comp ""
 Comment1 ""
@@ -45,9 +45,13 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 Wire Wire Line
-	3550 2050 3300 2050
+	3300 2600 3550 2600
 Wire Wire Line
-	3300 1850 3550 1850
+	3300 2400 3550 2400
+Wire Wire Line
+	3550 2100 3300 2100
+Wire Wire Line
+	3300 1900 3550 1900
 Wire Wire Line
 	4550 1950 4550 1800
 Wire Wire Line
@@ -65,33 +69,54 @@ Wire Wire Line
 Wire Wire Line
 	4550 2450 4550 2600
 Wire Wire Line
-	3250 1550 3550 1550
+	3250 1600 3550 1600
 Wire Wire Line
-	3250 1650 3550 1650
+	3250 1700 3550 1700
 Wire Wire Line
-	3250 1750 3550 1750
+	3250 1800 3550 1800
 Wire Wire Line
-	3550 1950 3300 1950
-Text GLabel 3300 2050 0    60   Input ~ 0
-GND
-Text GLabel 3300 1950 0    60   Input ~ 0
-GND
-Text GLabel 3250 1750 0    60   Input ~ 0
+	3550 2000 3300 2000
+Wire Wire Line
+	3300 2300 3550 2300
+Wire Wire Line
+	3300 2500 3550 2500
+Text GLabel 3300 2600 0    60   Input ~ 0
 AN
-Text GLabel 3250 1650 0    60   Input ~ 0
+Text GLabel 3300 2400 0    60   Input ~ 0
 AN
-Text GLabel 3250 1550 0    60   Input ~ 0
+Text GLabel 3300 2500 0    60   Input ~ 0
+GND
+Text GLabel 3300 2300 0    60   Input ~ 0
+GND
+$Comp
+L CONN_4 P3
+U 1 1 4FE36678
+P 3900 2450
+F 0 "P3" V 3850 2450 50  0000 C CNN
+F 1 "CONN_4" V 3950 2450 50  0000 C CNN
+	1    3900 2450
+	1    0    0    -1  
+$EndComp
+Text GLabel 3300 2100 0    60   Input ~ 0
+GND
+Text GLabel 3300 2000 0    60   Input ~ 0
+GND
+Text GLabel 3250 1800 0    60   Input ~ 0
+AN
+Text GLabel 3250 1700 0    60   Input ~ 0
+AN
+Text GLabel 3250 1600 0    60   Input ~ 0
 AN
 $Comp
 L CONN_6 P1
 U 1 1 4FB11C28
-P 3900 1800
-F 0 "P1" V 3850 1800 60  0000 C CNN
-F 1 "CONN_6" V 3950 1800 60  0000 C CNN
-	1    3900 1800
+P 3900 1850
+F 0 "P1" V 3850 1850 60  0000 C CNN
+F 1 "CONN_6" V 3950 1850 60  0000 C CNN
+	1    3900 1850
 	1    0    0    -1  
 $EndComp
-Text GLabel 3300 1850 0    60   Input ~ 0
+Text GLabel 3300 1900 0    60   Input ~ 0
 GND
 Text GLabel 1650 3100 3    60   Input ~ 0
 AN
