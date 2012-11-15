@@ -24,7 +24,7 @@ void UserResistanceProcessIO(void);
 void UserResistanceInit(byte i);
 void UserResistanceReceived(byte*, byte, byte);
 void UserResistanceRelease(byte i);
-void UserResistanceConfigure(void);
+void UserResistanceConfigure(byte);
 
 /* Table used by te framework to get a fixed reference point to the user module functions defined by the framework */
 /** USER MODULE REFERENCE ****************************************************/
@@ -79,7 +79,7 @@ void UserResistanceInit(byte usrResistanceHandler){
  *
  * Note:            None
  *****************************************************************************/
-void UserResistanceConfigure(void){
+void UserResistanceConfigure(byte handler){
     /* Do the configuration needed */
 }/* end UserResistanceConfigure */
 
