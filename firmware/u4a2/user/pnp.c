@@ -89,7 +89,7 @@ void PNPRelease(byte i) {
 }
 
 void PNPConfigure(byte handler){
-    // Do the configuration
+// Do the configuration
 }
 
 byte get_device_type(WORD resistValue) {

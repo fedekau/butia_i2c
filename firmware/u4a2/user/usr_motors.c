@@ -27,8 +27,6 @@ byte* sendBufferUsrMotors; // buffer to send data
 
 #define TIME_UNIT        2000
 #define LONG_TIME_UNIT   5000
-//#define LEFT_MOTOR   0x01
-//#define RIGHT_MOTOR  0x02
 
 #define C_ID_MOTORS 253
 #define C_TRIES 2
@@ -113,20 +111,18 @@ boolean getVoltage(int *data_received) {
     return ax12ReadPacket(&id, &err, data_received);
 }
 
-/* 
+/*
  * Function to auto-detect motors (robot wheels)
  * the less id motor correspond to left wheel
  * the other one to right wheel.
  */
-
 void TryAutoDetect() {
     int _id, _error, _data, i;
     for (i = 0; i < C_TRIES; i++) {
         ax12SendPacket(current_id, 0, PING, 0);
         ax12ReadPacket(&_id, &_error, &_data);
         if (_id == current_id++) {
-            list_motors[index] = _id;
-            index++;
+            list_motors[index++] = _id;
             break;
         }
     }
@@ -139,7 +135,9 @@ void TryAutoDetect() {
         sexyMotorMoveStart();
         return;
     }
-    if (index == C_ID_MOTORS)
+    if (index == C_ID_MOTORS){
+        return;
+    }
     registerT0eventInEvent(LONG_TIME_UNIT, &TryAutoDetect);
 }
 

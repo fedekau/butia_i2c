@@ -31,11 +31,6 @@
 #define ADDRESS_BOOT 0x09
 #define BOOT_FLAG 0x11
 
-/*That definitions now are in usb4butia*/
-//#define MAX_PORTS 6
-//#define MAX_DEVICES 9
-//#define DISCONECTED 255
-
 #define FIRMWARE_VERSION 0x01   /* This value can be return as firmware version */
 
 /** S T R U C T U R E S ******************************************************/
