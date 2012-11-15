@@ -24,12 +24,12 @@ void UserLightProcessIO(void);
 void UserLightInit(byte i);
 void UserLightReceived(byte*, byte, byte);
 void UserLightRelease(byte i);
-void UserLightConfigure(void);
+void UserLightConfigure(byte);
 
 /* Table used by te framework to get a fixed reference point to the user module functions defined by the framework */
 /** USER MODULE REFERENCE ****************************************************/
 #pragma romdata user
-const uTab userLightModuleTable = {&UserLightInit,&UserLightRelease,&UserLightConfigure,"light"}; /*modName must be less or equal 8 characters*/
+const uTab userLightModuleTable = {&UserLightInit, &UserLightRelease, &UserLightConfigure, "light"}; /*modName must be less or equal 8 characters*/
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
@@ -52,10 +52,10 @@ const uTab userLightModuleTable = {&UserLightInit,&UserLightRelease,&UserLightCo
  *
  * Note:            None
  *****************************************************************************/
-void UserLightInit(byte usrLightHandler){
+void UserLightInit(byte usrLightHandler) {
     /* add my receive function to the handler module, to be called automatically
      * when the pc sends data to the user module */
-    setHandlerReceiveFunction(usrLightHandler,&UserLightReceived);
+    setHandlerReceiveFunction(usrLightHandler, &UserLightReceived);
     /* initialize the send buffer, used to send data to the PC */
     sendBufferUsrLight = getSharedBuffer(usrLightHandler);
     /* get port where sensor/actuator is connected and set to IN/OUT mode*/
@@ -78,7 +78,7 @@ void UserLightInit(byte usrLightHandler){
  *
  * Note:            None
  *****************************************************************************/
-void UserLightConfigure(void){
+void UserLightConfigure(byte handler) {
     /* Do the configuration */
 }/*end UserLightConfigure*/
 
@@ -99,10 +99,10 @@ void UserLightConfigure(void){
  *
  * Note:            None
  *****************************************************************************/
-void UserLightProcessIO(void){
-    if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND==1)) return;
-	/* here enter the code that want to be called periodically,
-         * per example interaction with buttons and leds */
+void UserLightProcessIO(void) {
+    if ((usb_device_state < CONFIGURED_STATE) || (UCONbits.SUSPND == 1)) return;
+    /* here enter the code that want to be called periodically,
+     * per example interaction with buttons and leds */
 }/*end UserLightProcessIO*/
 
 /******************************************************************************
@@ -122,7 +122,7 @@ void UserLightProcessIO(void){
  *
  * Note:            None
  *****************************************************************************/
-void UserLightRelease(byte i){
+void UserLightRelease(byte i) {
     unsetHandlerReceiveBuffer(i);
     unsetHandlerReceiveFunction(i);
 }/*end UserLightRelease*/
@@ -142,25 +142,24 @@ void UserLightRelease(byte i){
  *
  * Note:            None
  *****************************************************************************/
-void UserLightReceived(byte* recBuffPtr, byte len, byte handler){
+void UserLightReceived(byte* recBuffPtr, byte len, byte handler) {
     byte j;
     WORD data;
     byte userLightCounter = 0;
-    switch(((LIGHT_DATA_PACKET*)recBuffPtr)->CMD)
-    {
+    switch (((LIGHT_DATA_PACKET*) recBuffPtr)->CMD) {
         case READ_VERSION:
-            ((LIGHT_DATA_PACKET*)sendBufferUsrLight)->_byte[0] = ((LIGHT_DATA_PACKET*)recBuffPtr)->_byte[0];
-            ((LIGHT_DATA_PACKET*)sendBufferUsrLight)->_byte[1] = LIGHT_MINOR_VERSION;
-            ((LIGHT_DATA_PACKET*)sendBufferUsrLight)->_byte[2] = LIGHT_MAJOR_VERSION;
-            userLightCounter=0x03;
+            ((LIGHT_DATA_PACKET*) sendBufferUsrLight)->_byte[0] = ((LIGHT_DATA_PACKET*) recBuffPtr)->_byte[0];
+            ((LIGHT_DATA_PACKET*) sendBufferUsrLight)->_byte[1] = LIGHT_MINOR_VERSION;
+            ((LIGHT_DATA_PACKET*) sendBufferUsrLight)->_byte[2] = LIGHT_MAJOR_VERSION;
+            userLightCounter = 0x03;
             break;
 
         case GET_VALUE:
-            ((LIGHT_DATA_PACKET*)sendBufferUsrLight)->_byte[0] = ((LIGHT_DATA_PACKET*)recBuffPtr)->_byte[0];
+            ((LIGHT_DATA_PACKET*) sendBufferUsrLight)->_byte[0] = ((LIGHT_DATA_PACKET*) recBuffPtr)->_byte[0];
             data = getPortDescriptor(handler)->get_data_analog();
-            ((LIGHT_DATA_PACKET*)sendBufferUsrLight)->_byte[1] = LSB(data);
-            ((LIGHT_DATA_PACKET*)sendBufferUsrLight)->_byte[2] = MSB(data);
-            userLightCounter=0x03;
+            ((LIGHT_DATA_PACKET*) sendBufferUsrLight)->_byte[1] = LSB(data);
+            ((LIGHT_DATA_PACKET*) sendBufferUsrLight)->_byte[2] = MSB(data);
+            userLightCounter = 0x03;
             break;
 
         case RESET:
@@ -171,11 +170,10 @@ void UserLightReceived(byte* recBuffPtr, byte len, byte handler){
             break;
     }/*end switch(s)*/
 
-    if(userLightCounter != 0)
-    {
+    if (userLightCounter != 0) {
         j = 255;
-        while(mUSBGenTxIsBusy() && j-->0); /* pruebo un mÃ¡ximo de 255 veces */
-        if(!mUSBGenTxIsBusy())
+        while (mUSBGenTxIsBusy() && j-- > 0); /* pruebo un mÃ¡ximo de 255 veces */
+        if (!mUSBGenTxIsBusy())
             USBGenWrite2(handler, userLightCounter);
     }/*end if*/
 }/*end UserLightReceived*/

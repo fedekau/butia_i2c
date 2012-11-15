@@ -10,7 +10,7 @@ rom const device_resistance table_device_id_resistance[MAX_DEVICES] = {
     { "grey", R_GREY_MIN, R_GREY_MAX},
     { "distanc", R_DIST_MIN, R_DIST_MAX},
     { "gpio", R_GPIO_MIN, R_GPIO_MAX},
-    { "voltage", R_VOLT_MIN, R_VOLT_MAX},
+    { "volt", R_VOLT_MIN, R_VOLT_MAX},
     { "res", R_RES_MIN, R_RES_MAX},
 };
 
@@ -24,7 +24,7 @@ void PNPProcessIO(void);
 void PNPInit(byte i);
 void PNPReceived(byte*, byte, byte);
 void PNPRelease(byte i);
-void PNPConfigure(void);
+void PNPConfigure(byte);
 
 // Table used by te framework to get a fixed reference point to the user module functions defined by the framework
 /** USER MODULE REFERENCE*****************************************************/
@@ -47,7 +47,6 @@ void initTableDetectedDevice(void) {
 
 void PNPInit(byte i) {
     byte modulename[8];
-    BOOL res;
 
     PNPHandler = i;
     // add my receive function to the handler module, to be called automatically when the pc sends data to the user module
@@ -89,7 +88,7 @@ void PNPRelease(byte i) {
     unregisterT0event(&hotplug_pnp);
 }
 
-void PNPConfigure(void) {
+void PNPConfigure(byte handler){
     // Do the configuration
 }
 

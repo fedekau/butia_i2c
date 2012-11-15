@@ -18,40 +18,39 @@
 #define  MOTORS_MAJOR_VERSION   0x00
 
 /** S T R U C T U R E S ******************************************************/
-typedef union MOTORS_DATA_PACKET{
-    byte _byte[USBGEN_EP_SIZE];  /*For byte access*/
-    word _word[USBGEN_EP_SIZE/2];/*For word access(USBGEN_EP_SIZE msut be even)*/
-    struct
-    {
-        enum
-        {
+typedef union MOTORS_DATA_PACKET {
+    byte _byte[USBGEN_EP_SIZE]; /*For byte access*/
+    word _word[USBGEN_EP_SIZE / 2]; /*For word access(USBGEN_EP_SIZE msut be even)*/
+
+    struct {
+
+        enum {
             READ_VERSION = 0x00,
             SET_VEL_2MTR = 0x01,
-            TEST_MOTORS  = 0x02
+            TEST_MOTORS = 0x02
         } CMD;
         byte len;
     };
-    struct
-    {
-        unsigned :8;
+
+    struct {
+        unsigned : 8;
         byte id;
     };
-    struct
-    {
-        unsigned :8;
+
+    struct {
+        unsigned : 8;
         byte motors_num;
         byte motors_status;
     };
-    struct
-    {
-        unsigned :8;
+
+    struct {
+        unsigned : 8;
         word word_data;
     };
 } MOTORS_DATA_PACKET;
 
 /** P U B L I C  P R O T O T Y P E S *****************************************/
-void autoDetectWheels();
-//void sexyMotorMoveStart();
+void autoDetectWheels(void);
 boolean getVoltage(int *data_received);
 
 #endif /*USER_MOTORS_H*/
