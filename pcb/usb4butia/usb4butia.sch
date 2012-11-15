@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date mar 30 oct 2012 19:40:34 UYST
+EESchema Schematic File Version 2  date jue 15 nov 2012 20:30:19 UYST
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -36,7 +36,7 @@ $Descr A4 11700 8267
 encoding utf-8
 Sheet 1 1
 Title "USB4butia"
-Date "30 oct 2012"
+Date "15 nov 2012"
 Rev "1.0"
 Comp ""
 Comment1 ""
@@ -44,9 +44,26 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
-Text GLabel 7850 7050 0    60   Input ~ 0
+Wire Wire Line
+	6300 7350 6400 7350
+Wire Wire Line
+	6300 7150 6400 7150
+Text GLabel 6300 7150 0    60   Input ~ 0
 VDC10
-Text GLabel 7850 6850 0    60   Input ~ 0
+Text GLabel 6300 7350 0    60   Input ~ 0
+VDC10_i
+$Comp
+L CONN_2 P9
+U 1 1 50A56724
+P 6750 7250
+F 0 "P9" V 6700 7250 40  0000 C CNN
+F 1 "CONN_2" V 6800 7250 40  0000 C CNN
+	1    6750 7250
+	1    0    0    -1  
+$EndComp
+Text GLabel 6750 6850 0    60   Input ~ 0
+VDC10_i
+Text GLabel 6750 6650 0    60   Input ~ 0
 VDC10
 Text GLabel 3250 4800 2    60   Input ~ 0
 VDD
@@ -381,9 +398,9 @@ Wire Wire Line
 Wire Wire Line
 	5300 4900 5050 4900
 Wire Wire Line
-	7850 6850 7950 6850
+	6750 6650 6850 6650
 Wire Wire Line
-	7850 7050 7950 7050
+	6750 6850 6850 6850
 $Comp
 L CONN_2 P14
 U 1 1 4FD1ED3E
@@ -396,10 +413,10 @@ $EndComp
 $Comp
 L CONN_2 P13
 U 1 1 4FD00BA9
-P 8300 6950
-F 0 "P13" V 8250 6950 40  0000 C CNN
-F 1 "Bornier" V 8350 6950 40  0000 C CNN
-	1    8300 6950
+P 7200 6750
+F 0 "P13" V 7150 6750 40  0000 C CNN
+F 1 "Bornier" V 7250 6750 40  0000 C CNN
+	1    7200 6750
 	1    0    0    -1  
 $EndComp
 Text GLabel 5300 4900 2    60   Output ~ 0
@@ -632,7 +649,7 @@ F 1 "PWR_FLAG" H 3050 5380 30  0000 C CNN
 	1    0    0    -1  
 $EndComp
 Text GLabel 3500 5150 2    60   Output ~ 0
-VDC10
+VDC10_i
 Text Notes 6700 1950 0    60   ~ 0
 SENSOR4
 Text Notes 6550 5050 0    60   ~ 0
