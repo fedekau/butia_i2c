@@ -27,8 +27,9 @@ byte* sendBufferUsrMotors; // buffer to send data
 
 #define TIME_UNIT        2000
 #define LONG_TIME_UNIT   5000
-//#define LEFT_MOTOR   0x01
-//#define RIGHT_MOTOR  0x02
+
+#define C_ID_MOTORS 253
+#define C_TRIES 2
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
 void UserMotorsProcessIO(void);
@@ -60,6 +61,11 @@ typedef struct _WHEELS {
 
 /* robot wheels */
 WHEELS wheels;
+
+/* Definitions to deal with autodetection motors */
+byte current_id = 0;
+byte index = 0;
+byte list_motors[2];
 
 void stopRight() {
     writeInfo(wheels.right.id, 32, 0);
@@ -105,34 +111,60 @@ boolean getVoltage(int *data_received) {
     return ax12ReadPacket(&id, &err, data_received);
 }
 
-/* 
+/*
  * Function to auto-detect motors (robot wheels)
  * the less id motor correspond to left wheel
  * the other one to right wheel.
  */
-void autoDetectWheels() {
-    byte num_motors = 2;
-    byte index = 0;
-    byte list_motors[2];
-    int _id, _error, _data;
-    byte i = 0;
-    for (i; i < 255; i++) {
-        ax12SendPacket(i, 0, PING, 0);
+void TryAutoDetect() {
+    int _id, _error, _data, i;
+    for (i = 0; i < C_TRIES; i++) {
+        ax12SendPacket(current_id, 0, PING, 0);
         ax12ReadPacket(&_id, &_error, &_data);
-        if (_id == i) {
-            list_motors[index] = i;
-            index++;
-            if (index == num_motors) {
-                //Set found motors as Rigth/Left wheels
-                wheels.left.id = list_motors[0];
-                wheels.left.inverse = 0;
-                wheels.right.id = list_motors[1];
-                wheels.right.inverse = 1;
-                sexyMotorMoveStart();
-                break;
-            }
+        if (_id == current_id++) {
+            list_motors[index++] = _id;
+            break;
         }
     }
+    if (index == 2) {
+        //Set found motors as Rigth/Left wheels
+        wheels.left.id = list_motors[0];
+        wheels.left.inverse = 0;
+        wheels.right.id = list_motors[1];
+        wheels.right.inverse = 1;
+        sexyMotorMoveStart();
+        return;
+    }
+    if (index == C_ID_MOTORS){
+        return;
+    }
+    registerT0eventInEvent(LONG_TIME_UNIT, &TryAutoDetect);
+}
+
+void autoDetectWheels() {
+    registerT0event(TIME_UNIT, &TryAutoDetect);
+    //    byte num_motors = 2;
+    //    byte index = 0;
+    //    byte list_motors[2];
+    //    int _id, _error, _data;
+    //    byte i = 0;
+    //    for (i; i < 255; i++) {
+    //        ax12SendPacket(i, 0, PING, 0);
+    //        ax12ReadPacket(&_id, &_error, &_data);
+    //        if (_id == i) {
+    //            list_motors[index] = i;
+    //            index++;
+    //            if (index == num_motors) {
+    //                //Set found motors as Rigth/Left wheels
+    //                wheels.left.id = list_motors[0];
+    //                wheels.left.inverse = 0;
+    //                wheels.right.id = list_motors[1];
+    //                wheels.right.inverse = 1;
+    //                sexyMotorMoveStart();
+    //                break;
+    //            }
+    //        }
+    //    }
 }
 
 /******************************************************************************
