@@ -12,6 +12,7 @@ rom const device_resistance table_device_id_resistance[MAX_DEVICES] = {
     { "gpio", R_GPIO_MIN, R_GPIO_MAX},
     { "volt", R_VOLT_MIN, R_VOLT_MAX},
     { "res", R_RES_MIN, R_RES_MAX},
+    { "led", R_LED_MIN, R_LED_MAX}
 };
 
 #pragma udata 
@@ -139,6 +140,7 @@ void hotplug_pnp(void) {
             modulename[5] = table_device_id_resistance[device_type].name[5];
             modulename[6] = table_device_id_resistance[device_type].name[6];
             modulename[7] = table_device_id_resistance[device_type].name[7];
+            
 
             openPnP(modulename, port + 1); /*in table_device_id_resistance_value are defined all device types with the resistance value*/
             detected_device_type_id[port] = device_type;

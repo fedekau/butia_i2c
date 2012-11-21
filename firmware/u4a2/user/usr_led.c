@@ -1,6 +1,7 @@
 /* Author                   Date        Comment
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * Aylen Ricca              24/04/2012  Original.
+ * John Pereira
  *****************************************************************************/
 
 /** I N C L U D E S **********************************************************/
@@ -22,11 +23,11 @@
 byte* sendBufferUsrLed; /* buffer to send data */
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void UserLedProcessIO(void);
+void UserLedProcessIO(byte);
 void UserLedInit(byte i);
 void UserLedReceived(byte*, byte, byte);
 void UserLedRelease(byte i);
-void UserLedConfigure(void);
+void UserLedConfigure(byte);
 
 // Table used by te framework to get a fixed reference point to the user module functions defined by the framework 
 /** USER MODULE REFERENCE*****************************************************/
@@ -61,7 +62,7 @@ void UserLedInit(byte usrLedHandler){
     /* initialize the send buffer, used to send data to the PC */
     sendBufferUsrLed = getSharedBuffer(usrLedHandler);
     /* get port where sensor/actuator is connected and set to OUT mode*/
-    getPortDescriptor(usrLedHandler)->change_port_direction(OUT);
+    //getPortDescriptor(usrLedHandler)->change_port_direction(OUT);
 }/*end UserLedInit*/
 
 /******************************************************************************
@@ -80,7 +81,7 @@ void UserLedInit(byte usrLedHandler){
  *
  * Note:            None
  *****************************************************************************/
-void UserLedConfigure(void){
+void UserLedConfigure(byte i){
     /*no configuration for led module*/
 }
 
@@ -101,7 +102,7 @@ void UserLedConfigure(void){
  * Note:            None
  *****************************************************************************/
 
-void UserLedProcessIO(void){  
+void UserLedProcessIO(byte i){
 
     if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND==1)) return;
 	/* here enter the code that want to be called periodically,
@@ -126,9 +127,10 @@ void UserLedProcessIO(void){
  *****************************************************************************/
 
 void UserLedRelease(byte i){
-    unsetHandlerReceiveBuffer(i);
-    unsetHandlerReceiveFunction(i);
+    getPortDescriptor(i)->set_data(LED_OFF);
     getPortDescriptor(i)->change_port_direction(IN);
+    unsetHandlerReceiveBuffer(i);
+    unsetHandlerReceiveFunction(i);    
 }
 
 /******************************************************************************
@@ -159,16 +161,21 @@ void UserLedReceived(byte* recBuffPtr, byte len, byte handler){
             userLedCounter=0x04;
             break;
 
-        case SET_LED_ON:
+        case SET_LED_ON:            
             ((LED_DATA_PACKET*)sendBufferUsrLed)->_byte[0] = ((LED_DATA_PACKET*)recBuffPtr)->_byte[0];
+            ((LED_DATA_PACKET*)sendBufferUsrLed)->_byte[1] = LED_ON;
             getPortDescriptor(handler)->set_data(LED_ON);
-            userLedCounter=0x01;
+            getPortDescriptor(handler)->change_port_direction(OUT);
+            userLedCounter=0x02;
             break;
 
         case SET_LED_OFF:
+            changeDirectionPort1(0);
             ((LED_DATA_PACKET*)sendBufferUsrLed)->_byte[0] = ((LED_DATA_PACKET*)recBuffPtr)->_byte[0];
+            ((LED_DATA_PACKET*)sendBufferUsrLed)->_byte[1] = LED_OFF;
             getPortDescriptor(handler)->set_data(LED_OFF);
-            userLedCounter=0x01;
+            getPortDescriptor(handler)->change_port_direction(IN);
+            userLedCounter=0x02;
             break;
 
         case RESET:
