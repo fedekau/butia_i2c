@@ -26,14 +26,22 @@ typedef union HACK_POINTS_PACKET {
         enum {
             READ_VERSION = 0x00,
             SET_HIGH_PINS = 0x01,
-            SET_PIN27 = 0x02,
-            SET_PIN28 = 0x03,
-            SET_PIN29 = 0x04,
-            SET_PIN30 = 0x05,
-            GET_PIN27 = 0x06,
-            GET_PIN28 = 0x07,
-            GET_PIN29 = 0x08,
-            GET_PIN30 = 0x09
+            SET_PIN19 = 0x02,
+            SET_PIN20 = 0x03,
+            SET_PIN21 = 0x04,
+            SET_PIN22 = 0x05,
+            SET_PIN27 = 0x06,
+            SET_PIN28 = 0x07,
+            SET_PIN29 = 0x08,
+            SET_PIN30 = 0x09,
+            GET_PIN19 = 0x0A,
+            GET_PIN20 = 0x0B,
+            GET_PIN21 = 0x0C,
+            GET_PIN22 = 0x0D,
+            GET_PIN27 = 0x0E,
+            GET_PIN28 = 0x0F,
+            GET_PIN29 = 0x10,
+            GET_PIN30 = 0x11
         } CMD;
         byte len;
     };
