@@ -1,0 +1,243 @@
+EESchema Schematic File Version 2  date mié 28 nov 2012 20:40:50 UYST
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:special
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:puenteH-cache
+EELAYER 25  0
+EELAYER END
+$Descr A4 11700 8267
+encoding utf-8
+Sheet 1 1
+Title "Puente H para motores CC"
+Date "28 nov 2012"
+Rev "1.0"
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+Wire Wire Line
+	5900 4250 5900 3900
+Wire Wire Line
+	5300 3350 5300 3500
+Wire Wire Line
+	5300 3350 4750 3350
+Wire Wire Line
+	4600 3700 4250 3700
+Wire Wire Line
+	4250 4800 4250 4450
+Wire Wire Line
+	5900 4800 5900 4650
+Wire Wire Line
+	5900 4800 6450 4800
+Wire Wire Line
+	6600 4450 6950 4450
+Wire Wire Line
+	6600 3700 6950 3700
+Wire Wire Line
+	5100 4650 5300 4650
+Wire Wire Line
+	5900 4250 6200 4250
+Wire Wire Line
+	5000 3900 5300 3900
+Wire Wire Line
+	6100 3500 5900 3500
+Wire Wire Line
+	5300 3500 5100 3500
+Wire Wire Line
+	5900 3900 6200 3900
+Wire Wire Line
+	5000 4250 5300 4250
+Wire Wire Line
+	5900 4650 6100 4650
+Wire Wire Line
+	6950 3700 6950 3350
+Wire Wire Line
+	5900 3500 5900 3350
+Wire Wire Line
+	5900 3350 6450 3350
+Wire Wire Line
+	6950 4450 6950 4800
+Wire Wire Line
+	4750 4800 5300 4800
+Wire Wire Line
+	5300 4800 5300 4650
+Wire Wire Line
+	4250 4450 4600 4450
+Wire Wire Line
+	4250 3700 4250 3350
+Wire Wire Line
+	5300 4250 5300 3900
+$Comp
+L R R?
+U 1 1 50B6917D
+P 4500 4800
+F 0 "R?" V 4580 4800 50  0000 C CNN
+F 1 "10K" V 4500 4800 50  0000 C CNN
+	1    4500 4800
+	0    1    1    0   
+$EndComp
+$Comp
+L R R?
+U 1 1 50B69176
+P 4500 3350
+F 0 "R?" V 4580 3350 50  0000 C CNN
+F 1 "10K" V 4500 3350 50  0000 C CNN
+	1    4500 3350
+	0    1    1    0   
+$EndComp
+$Comp
+L R R?
+U 1 1 50B6915C
+P 6700 4800
+F 0 "R?" V 6780 4800 50  0000 C CNN
+F 1 "10K" V 6700 4800 50  0000 C CNN
+	1    6700 4800
+	0    1    1    0   
+$EndComp
+$Comp
+L R R?
+U 1 1 50B69138
+P 6700 3350
+F 0 "R?" V 6780 3350 50  0000 C CNN
+F 1 "10K" V 6700 3350 50  0000 C CNN
+	1    6700 3350
+	0    1    1    0   
+$EndComp
+$Comp
+L R R?
+U 1 1 50B6908A
+P 7200 4450
+F 0 "R?" V 7280 4450 50  0000 C CNN
+F 1 "1K" V 7200 4450 50  0000 C CNN
+	1    7200 4450
+	0    1    1    0   
+$EndComp
+$Comp
+L R R?
+U 1 1 50B69089
+P 7200 3700
+F 0 "R?" V 7280 3700 50  0000 C CNN
+F 1 "1K" V 7200 3700 50  0000 C CNN
+	1    7200 3700
+	0    1    1    0   
+$EndComp
+$Comp
+L R R?
+U 1 1 50B69053
+P 4000 3700
+F 0 "R?" V 4080 3700 50  0000 C CNN
+F 1 "1K" V 4000 3700 50  0000 C CNN
+	1    4000 3700
+	0    1    1    0   
+$EndComp
+$Comp
+L R R?
+U 1 1 50B69034
+P 4000 4450
+F 0 "R?" V 4080 4450 50  0000 C CNN
+F 1 "1K" V 4000 4450 50  0000 C CNN
+	1    4000 4450
+	0    1    1    0   
+$EndComp
+$Comp
+L DARL_P Q?
+U 1 1 50B68FD6
+P 6350 3650
+F 0 "Q?" H 6350 3900 50  0000 C CNN
+F 1 "DARL_P" H 6150 3550 50  0000 C CNN
+	1    6350 3650
+	-1   0    0    1   
+$EndComp
+$Comp
+L DARL_P Q?
+U 1 1 50B68FBD
+P 4850 3650
+F 0 "Q?" H 4850 3900 50  0000 C CNN
+F 1 "DARL_P" H 4650 3550 50  0000 C CNN
+	1    4850 3650
+	1    0    0    1   
+$EndComp
+$Comp
+L DARL_N Q?
+U 1 1 50B68A06
+P 6350 4500
+F 0 "Q?" H 6350 4750 50  0000 C CNN
+F 1 "DARL_N" H 6150 4400 50  0000 C CNN
+	1    6350 4500
+	-1   0    0    -1  
+$EndComp
+$Comp
+L DARL_N Q?
+U 1 1 50B689ED
+P 4850 4500
+F 0 "Q?" H 4850 4750 50  0000 C CNN
+F 1 "DARL_N" H 4650 4400 50  0000 C CNN
+	1    4850 4500
+	1    0    0    -1  
+$EndComp
+$Comp
+L DIODE D?
+U 1 1 50B53F36
+P 5300 4450
+F 0 "D?" H 5300 4550 40  0000 C CNN
+F 1 "DIODE" H 5300 4350 40  0000 C CNN
+	1    5300 4450
+	0    -1   -1   0   
+$EndComp
+$Comp
+L DIODE D?
+U 1 1 50B53F35
+P 5900 4450
+F 0 "D?" H 5900 4550 40  0000 C CNN
+F 1 "DIODE" H 5900 4350 40  0000 C CNN
+	1    5900 4450
+	0    -1   -1   0   
+$EndComp
+$Comp
+L DIODE D?
+U 1 1 50B53F1B
+P 5900 3700
+F 0 "D?" H 5900 3800 40  0000 C CNN
+F 1 "DIODE" H 5900 3600 40  0000 C CNN
+	1    5900 3700
+	0    -1   -1   0   
+$EndComp
+$Comp
+L DIODE D?
+U 1 1 50B53F09
+P 5300 3700
+F 0 "D?" H 5300 3800 40  0000 C CNN
+F 1 "DIODE" H 5300 3600 40  0000 C CNN
+	1    5300 3700
+	0    -1   -1   0   
+$EndComp
+$EndSCHEMATC
