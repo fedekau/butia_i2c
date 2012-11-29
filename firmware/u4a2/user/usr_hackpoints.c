@@ -133,11 +133,11 @@ void HackPointsReceived(byte* recBufferHackPoints, byte len, byte handler) {
             ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[2] = HACK_POINTS_MAJOR_VERSION;
             HackPointsCounter = 0x03;
             break;
-
-        case WRITE:
-            ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
-            HackPointsCounter = 0x01;
-            break;
+//
+//        case WRITE:
+//            ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
+//            HackPointsCounter = 0x01;
+//            break;
 
         case SET_HIGH_PINS:
             ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
