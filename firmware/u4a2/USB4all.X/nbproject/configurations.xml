@@ -29,10 +29,10 @@
       <itemPath>../user/usr_grey.h</itemPath>
       <itemPath>../user/usr_motors.h</itemPath>
       <itemPath>../user/usr_light.h</itemPath>
-      <itemPath>../user/hackpoints.h</itemPath>
       <itemPath>../user/usr_resistance.h</itemPath>
       <itemPath>../user/usr_voltage.h</itemPath>
       <itemPath>../user/usr_led.h</itemPath>
+      <itemPath>../user/usr_hackpoints.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LibraryFiles"
                    displayName="Library Files"
@@ -76,10 +76,10 @@
       <itemPath>../user/usr_grey.c</itemPath>
       <itemPath>../user/usr_motors.c</itemPath>
       <itemPath>../user/usr_light.c</itemPath>
-      <itemPath>../user/hackpoints.c</itemPath>
       <itemPath>../user/usr_resistance.c</itemPath>
       <itemPath>../user/usr_voltage.c</itemPath>
       <itemPath>../user/usr_led.c</itemPath>
+      <itemPath>../user/usr_hackpoints.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -116,7 +116,7 @@
       </makeCustomizationType>
       <C18>
         <property key="storage-class" value="sca"/>
-        <property key="enable-opa" value="false"/>
+        <property key="enable-opa" value="true"/>
         <property key="enable-all-optimizations" value="true"/>
         <property key="preprocessor-macros" value=""/>
         <property key="default-char-unsigned" value="false"/>
@@ -127,24 +127,24 @@
                   value="../user;../usb4all/proxys;../usb4all/dynamicISR;../usb4all/usbconf/usballoc;../usb4all/usbconf/desc;../system;../system/usb;../autofiles;.."/>
         <property key="enable-ow" value="true"/>
         <property key="verbose" value="false"/>
-        <property key="enable-ou" value="false"/>
-        <property key="enable-ot" value="false"/>
+        <property key="enable-ou" value="true"/>
+        <property key="enable-ot" value="true"/>
         <property key="enable-os" value="true"/>
         <property key="data-model" value="Oa-"/>
-        <property key="enable-or" value="false"/>
-        <property key="enable-op" value="false"/>
+        <property key="enable-or" value="true"/>
+        <property key="enable-op" value="true"/>
         <property key="enable-on" value="true"/>
         <property key="enable-om" value="true"/>
-        <property key="procedural-abstraction-passes" value="0"/>
+        <property key="procedural-abstraction-passes" value="9"/>
         <property key="enable-multi-bank-stack-model" value="false"/>
         <property key="enable-int-promotion" value="false"/>
-        <property key="enable-od" value="false"/>
-        <property key="enable-ob" value="false"/>
+        <property key="enable-od" value="true"/>
+        <property key="enable-ob" value="true"/>
       </C18>
       <C18-AS>
         <property key="default.radix" value="HEX"/>
-        <property key="enable.case.sensitivity" value="false"/>
         <property key="hex.output.format" value="INHX32"/>
+        <property key="enable.case.sensitivity" value="false"/>
         <property key="preprocessor.macros" value=""/>
         <property key="warning.level" value="0"/>
         <property key="cross.reference.file" value=""/>
@@ -158,9 +158,9 @@
       </C18-LD>
       <C18LanguageToolchain>
         <property key="stack-analysis-mplink" value="false"/>
-        <property key="extended-mode-mcc18" value="false"/>
-        <property key="stack-analysis" value="false"/>
         <property key="stack-analysis-mcc18" value="false"/>
+        <property key="stack-analysis" value="false"/>
+        <property key="extended-mode-mcc18" value="false"/>
         <property key="extended-mode" value="false"/>
         <property key="extended-mode-mpasm" value="false"/>
         <property key="extended-mode-mplink" value="false"/>

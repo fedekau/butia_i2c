@@ -209,17 +209,17 @@ respType removeHandlerTableEntry(byte handler){
 	}
 }
 
-respType configureHandlerTableEntry(byte handler){
-	pUserFunc configureFunction;
-	if (handler < MAX_HANDLERS && epHandlerMap[handler].ep.empty == 0){
-	    configureFunction = getModuleConfigureDirection(epHandlerMap[handler].uTableDirection);
-		configureFunction(handler);
-		return ACK;
-	}
-	else{
-		return NACK;
-	}
-}
+//respType configureHandlerTableEntry(byte handler){
+//	pUserFunc configureFunction;
+//	if (handler < MAX_HANDLERS && epHandlerMap[handler].ep.empty == 0){
+//	    configureFunction = getModuleConfigureDirection(epHandlerMap[handler].uTableDirection);
+//		configureFunction(handler);
+//		return ACK;
+//	}
+//	else{
+//		return NACK;
+//	}
+//}
 
 byte removeAllOpenModules(void){
     pUserFunc releaseFunction;

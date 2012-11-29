@@ -25,12 +25,11 @@ void PNPProcessIO(void);
 void PNPInit(byte i);
 void PNPReceived(byte*, byte, byte);
 void PNPRelease(byte i);
-void PNPConfigure(byte);
 
 // Table used by te framework to get a fixed reference point to the user module functions defined by the framework
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
-uTab PNPModuleTable = {&PNPInit, &PNPRelease, &PNPConfigure, "pnp"}; //modName must be less or equal 8 characters
+uTab PNPModuleTable = {&PNPInit, &PNPRelease, "pnp"};
 #pragma code
 
 
@@ -87,10 +86,6 @@ void PNPRelease(byte i) {
     unsetHandlerReceiveFunction(i);
     //removePoolingFunction(&UserPNPProcessIO);
     unregisterT0event(&hotplug_pnp);
-}
-
-void PNPConfigure(byte handler){
-// Do the configuration
 }
 
 byte get_device_type(WORD resistValue) {

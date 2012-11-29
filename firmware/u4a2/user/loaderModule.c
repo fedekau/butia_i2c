@@ -90,10 +90,10 @@ pUserFunc getModuleReleaseDirection(rom near char* direction){
 	const uTab* tabla = (const uTab*) direction;
 	return tabla->pfR;
 }
-
-pUserFunc getModuleConfigureDirection(rom near char* direction){
-	const uTab* tabla = (const uTab*) direction;
-	return tabla->pfC;
-}
+//
+//pUserFunc getModuleConfigureDirection(rom near char* direction){
+//	const uTab* tabla = (const uTab*) direction;
+//	return tabla->pfC;
+//}
 
 /** EOF loaderModule.c ***************************************************************/

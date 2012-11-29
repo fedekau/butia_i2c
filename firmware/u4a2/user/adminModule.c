@@ -25,7 +25,7 @@ byte timeOutTicksWatchdog;
 // Admin ModuleType=0,
 //#pragma romdata user=DIRECTION_TABLE       // THIS DONT WORK!!!
 #pragma romdata user
-const uTab AdminModuleTable = {&adminModuleInit, &adminModuleRelease, &adminModuleConfigure, "admin"}; //modName must be less or equal 8 characters
+const uTab AdminModuleTable = {&adminModuleInit, &adminModuleRelease, "admin"}; //modName must be less or equal 8 characters
 #pragma code
 
 /*mapping between module name and an device type id used for optimization
@@ -42,7 +42,7 @@ const uTab AdminModuleTable = {&adminModuleInit, &adminModuleRelease, &adminModu
 /** D E C L A R A T I O N S **************************************************/
 #pragma code sys
 
-void Busy_eep_non_block(void) {
+void Busy_eep_non_block() {
     byte j = 255;
     while (EECON1bits.WR && j-- > 0);
 }
@@ -77,11 +77,6 @@ void adminModuleInit(byte handler) {
 
 void adminModuleRelease(byte handler) {
     /*what? close admin? Are you crazy?*/
-    return;
-}
-
-void adminModuleConfigure(byte handler){
-    // nothing to do...
     return;
 }
 
@@ -182,13 +177,13 @@ void adminReceived(byte* recBuffPtr, byte len, byte admin_handler) {
             adminCounter = 0x09;
             break;
 
-        case CONFIGURE:
-            handler = ((AM_PACKET*) recBuffPtr)->handlerNumber;
-            response = configureHandlerTableEntry(handler);
-            ((AM_PACKET*) sendBufferAdmin)->response = response;
-            ((AM_PACKET*) sendBufferAdmin)->CMD = CONFIGURE;
-            adminCounter = 0x02; //1 byte para el campo CMD, otro para la respuesta
-            break;
+//        case CONFIGURE:
+//            handler = ((AM_PACKET*) recBuffPtr)->handlerNumber;
+//            response = configureHandlerTableEntry(handler);
+//            ((AM_PACKET*) sendBufferAdmin)->response = response;
+//            ((AM_PACKET*) sendBufferAdmin)->CMD = CONFIGURE;
+//            adminCounter = 0x02; //1 byte para el campo CMD, otro para la respuesta
+//            break;
 
         case BOOT:
             Escribir_memoria_boot();
@@ -232,6 +227,7 @@ void adminReceived(byte* recBuffPtr, byte len, byte admin_handler) {
 
 }//end adminReceived
 
+/* Not used*/
 void sendMes(char* mensaje, byte len) {
     byte adminCounter, j;
     ((AM_PACKET*) sendBufferAdmin)->CMD = MESSAGE;
