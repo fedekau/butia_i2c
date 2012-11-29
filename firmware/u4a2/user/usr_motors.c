@@ -15,40 +15,9 @@
 #include "dynamicPolling.h"
 #include "usb4all/proxys/T0Service.h"
 
-/** V A R I A B L E S ********************************************************/
-#pragma udata
-
-byte* sendBufferUsrMotors; // buffer to send data
-
-#define FIRST_ON    0x01
-#define DELAY       0x02
-#define SECOND_ON   0x03
-#define END         0x04
-
-#define TIME_UNIT        2000
-#define LONG_TIME_UNIT   5000
-
-#define C_ID_MOTORS 253
-#define C_TRIES 2
-
-/** P R I V A T E  P R O T O T Y P E S ***************************************/
-void UserMotorsProcessIO(void);
-void UserMotorsInit(byte i);
-void UserMotorsReceived(byte*, byte, byte);
-void UserMotorsRelease(byte i);
-void UserMotorsConfigure(byte);
-void sexyMotorMoveStart(void);
-
-// Table used by the framework to get a fixed reference point to the user module functions defined by the framework
-/** USER MODULE REFERENCE*****************************************************/
-#pragma romdata user
-const uTab userMotorsModuleTable = {&UserMotorsInit, &UserMotorsRelease, &UserMotorsConfigure, "motors"}; //modName must be less or equal 8 characters
-#pragma code
-
-/** D E C L A R A T I O N S **************************************************/
+/* Structures to hold motors */
 #pragma code module
 
-/* Structure to hold motors */
 typedef struct _MOTOR {
     int id;
     int inverse;
@@ -59,8 +28,28 @@ typedef struct _WHEELS {
     MOTOR right;
 } WHEELS;
 
+/** V A R I A B L E S ********************************************************/
+#pragma udata
+
 /* robot wheels */
 WHEELS wheels;
+byte* sendBufferUsrMotors; // buffer to send data
+
+/** P R I V A T E  P R O T O T Y P E S ***************************************/
+void UserMotorsProcessIO(void);
+void UserMotorsInit(byte i);
+void UserMotorsReceived(byte*, byte, byte);
+void UserMotorsRelease(byte i);
+void sexyMotorMoveStart(void);
+
+// Table used by the framework to get a fixed reference point to the user module functions defined by the framework
+/** USER MODULE REFERENCE*****************************************************/
+#pragma romdata user
+const uTab userMotorsModuleTable = {&UserMotorsInit, &UserMotorsRelease, "motors"};
+#pragma code
+
+/** D E C L A R A T I O N S **************************************************/
+#pragma code module
 
 /* Definitions to deal with autodetection motors */
 byte current_id = 0;
@@ -111,6 +100,20 @@ boolean getVoltage(int *data_received) {
     return ax12ReadPacket(&id, &err, data_received);
 }
 
+void ConfigWheels(byte id){
+/*    setEndlessTurnMode(id, 1);
+    writeInfo (id, CW_COMPLIANCE_MARGIN, 0);
+    writeInfo (id, CCW_COMPLIANCE_MARGIN, 0);
+    writeInfo (id, CW_COMPLIANCE_SLOPE, 95);
+    writeInfo (id, CCW_COMPLIANCE_SLOPE, 95);
+    writeInfo (id, PUNCH_L, 150);
+    writeInfo (id, MAX_TORQUE_L, 1023);
+    writeInfo (LIMIT_TEMPERATURE, 85);
+    writeInfo (DOWN_LIMIT_VOLTAGE, 60);
+    writeInfo (DOWN_LIMIT_VOLTAGE, 190);
+    writeInfo (RETURN_DELAY_TIME, 150);
+*/}
+
 /*
  * Function to auto-detect motors (robot wheels)
  * the less id motor correspond to left wheel
@@ -123,11 +126,12 @@ void TryAutoDetect() {
         ax12ReadPacket(&_id, &_error, &_data);
         if (_id == current_id++) {
             list_motors[index++] = _id;
+            /*FIXME config motor to be used as wheels*/
             break;
         }
     }
     if (index == 2) {
-        //Set found motors as Rigth/Left wheels
+        /*Set found motors as Rigth/Left wheels*/
         wheels.left.id = list_motors[0];
         wheels.left.inverse = 0;
         wheels.right.id = list_motors[1];
@@ -164,43 +168,8 @@ void autoDetectWheels() {
 void UserMotorsInit(byte usrMotorsHandler) {
     // add my receive function to the handler module, to be called automatically when the pc sends data to the user module
     setHandlerReceiveFunction(usrMotorsHandler, &UserMotorsReceived);
-    // add my receive pooling function to the dynamic pooling module, to be called periodically
-    /* andres res = addPollingFunction(&UserMotorsProcessIO);*/
     // initialize the send buffer, used to send data to the PC
     sendBufferUsrMotors = getSharedBuffer(usrMotorsHandler);
-    ax12InitSerial();
-    //    setEndlessTurnMode(wheels.left.id, 1);
-    //    setEndlessTurnMode(wheels.right.id, 1);
-    /*writeInfo (ruedas.left.id, CW_COMPLIANCE_MARGIN, 0);
-    writeInfo (ruedas.left.id, CCW_COMPLIANCE_MARGIN, 0);
-    writeInfo (ruedas.left.id, CW_COMPLIANCE_SLOPE, 95);
-    writeInfo (ruedas.left.id, CCW_COMPLIANCE_SLOPE, 95);
-    writeInfo (ruedas.left.id, PUNCH_L, 150);
-    writeInfo (ruedas.left.id, MAX_TORQUE_L, 1023);
-    writeInfo (LIMIT_TEMPERATURE, 85);
-    writeInfo (DOWN_LIMIT_VOLTAGE, 60);
-    writeInfo (DOWN_LIMIT_VOLTAGE, 190);
-    writeInfo (RETURN_DELAY_TIME, 150);*/
-}
-
-/******************************************************************************
-/* Function:        UserAX12Configure(void)
- *
- * PreCondition:    None
- *
- * Input:           None
- *
- * Output:          None
- *
- * Side Effects:    None
- *
- * Overview:        This function sets the specific configuration for the user module, it is called by the framework
- *
- *
- * Note:            None
- *****************************************************************************/
-void UserMotorsConfigure(byte handler) {
-    // Do the configuration
 }
 
 /******************************************************************************
@@ -222,7 +191,7 @@ void UserMotorsConfigure(byte handler) {
 
 void UserMotorsProcessIO(void) {
     if ((usb_device_state < CONFIGURED_STATE) || (UCONbits.SUSPND == 1)) return;
-}//end ProcessIO
+}/*end ProcessIO*/
 
 /******************************************************************************
  * Function:        UserAX12Release(byte i)
@@ -244,8 +213,7 @@ void UserMotorsProcessIO(void) {
 void UserMotorsRelease(byte i) {
     unsetHandlerReceiveBuffer(i);
     unsetHandlerReceiveFunction(i);
-    //unregisterT0event(&MotorsEvent);
-    //removePoolingFunction(&UserMotorsProcessIO);
+    unregisterT0event(&autoDetectWheels);
 }
 
 /******************************************************************************
@@ -321,4 +289,4 @@ void UserMotorsReceived(byte* recBuffPtr, byte len, byte handler) {
     }/*end if*/
 }/*end UserMotorsReceived*/
 
-/** EOF usr_Buzzer.c ***************************************************************/
+/** EOF usr_motors.c ***************************************************************/
