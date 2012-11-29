@@ -24,12 +24,11 @@ void UserDistProcessIO(void);
 void UserDistInit(byte i);
 void UserDistReceived(byte*, byte, byte);
 void UserDistRelease(byte i);
-void UserDistConfigure(byte);
 
 /* Table used by te framework to get a fixed reference point to the user module functions defined by the framework */
 /** USER MODULE REFERENCE ****************************************************/
 #pragma romdata user
-const uTab userDistModuleTable = {&UserDistInit, &UserDistRelease, &UserDistConfigure, "distanc"};
+const uTab userDistModuleTable = {&UserDistInit, &UserDistRelease, "distanc"};
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
@@ -61,26 +60,6 @@ void UserDistInit(byte usrDistHandler) {
     /* get port where sensor/actuator is connected and set to IN mode*/
     getPortDescriptor(usrDistHandler)->change_port_direction(IN);
 }/*end UserDistInit*/
-
-/******************************************************************************
- * Function:        UserDistConfigure(void)
- *
- * PreCondition:    None
- *
- * Input:           None
- *
- * Output:          None
- *
- * Side Effects:    None
- *
- * Overview:        This function sets the specific configuration for the user
- *                  module, it is called by the framework.
- *
- * Note:            None
- *****************************************************************************/
-void UserDistConfigure(byte handler) {
-    /* Do the configuration */
-}/*end UserDistConfigure*/
 
 /******************************************************************************
  * Function:        UserDistProcessIO(void)

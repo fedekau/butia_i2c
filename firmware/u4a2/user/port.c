@@ -26,12 +26,11 @@ void PortProcessIO(void);
 void PortInit(byte i);
 void PortReceived(byte*, byte, byte);
 void PortRelease(byte i);
-void PortConfigure(byte);
 
 // Table used by te framework to get a fixed reference point to the user module functions defined by the framework 
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
-uTab PortModuleTable = {&PortInit, &PortRelease, &PortConfigure, "port"}; //modName must be less or equal 8 characters
+uTab PortModuleTable = {&PortInit, &PortRelease, "port"};
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
@@ -57,33 +56,10 @@ uTab PortModuleTable = {&PortInit, &PortRelease, &PortConfigure, "port"}; //modN
 void PortInit(byte i) {
     // add my receive function to the handler module, to be called automatically when the pc sends data to the user module
     setHandlerReceiveFunction(i, &PortReceived);
-    // add my receive pooling function to the dynamic pooling module, to be called periodically 
-    /* andres res = addPollingFunction(&PortProcessIO);*/
     // initialize the send buffer, used to send data to the PC
     sendBufferPort = getSharedBuffer(i);
     board_ports[i - 1].change_port_direction(IN);
-
 }//end UserLedAmarilloInit
-
-/******************************************************************************
-/* Function:        PortConfigure(void)
- *
- * PreCondition:    None
- *
- * Input:           None
- *
- * Output:          None
- *
- * Side Effects:    None
- *
- * Overview:        This function sets the specific configuration for the user module, it is called by the framework 
- *                        
- *
- * Note:            None
- *****************************************************************************/
-void PortConfigure(byte handler) {
-    // Do the configuration
-}
 
 void PortProcessIO(void) {
 

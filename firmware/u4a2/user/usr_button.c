@@ -22,12 +22,11 @@ void UserButtonProcessIO(void);
 void UserButtonInit(byte i);
 void UserButtonReceived(byte*, byte, byte);
 void UserButtonRelease(byte i);
-void UserButtonConfigure(byte);
 
 /* Table used by te framework to get a fixed reference point to the user module functions defined by the framework */
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
-const uTab userButtonModuleTable = {&UserButtonInit, &UserButtonRelease, &UserButtonConfigure, "button"}; /*modName must be less or equal 8 characters*/
+const uTab userButtonModuleTable = {&UserButtonInit, &UserButtonRelease, "button"};
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
@@ -57,27 +56,6 @@ void UserButtonInit(byte handler) {
     sendBufferUsrButton = getSharedBuffer(handler);
     getPortDescriptor(handler)->change_port_direction(IN);
 }/*end UserButtonInit*/
-
-/******************************************************************************
- * Function:        UserButtonConfigure(void)
- *
- * PreCondition:    None
- *
- * Input:           None
- *
- * Output:          None
- *
- * Side Effects:    None
- *
- * Overview:        This function sets the specific configuration for the user module, it is called by the framework 
- *						
- *
- * Note:            None
- *****************************************************************************/
-
-void UserButtonConfigure(byte handler) {
-    /*no configuration for button module*/
-}
 
 /******************************************************************************
  * Function:        UserButtonProcessIO(void)

@@ -24,12 +24,11 @@ void UserResistanceProcessIO(void);
 void UserResistanceInit(byte i);
 void UserResistanceReceived(byte*, byte, byte);
 void UserResistanceRelease(byte i);
-void UserResistanceConfigure(byte);
 
 /* Table used by te framework to get a fixed reference point to the user module functions defined by the framework */
 /** USER MODULE REFERENCE ****************************************************/
 #pragma romdata user
-const uTab userResistanceModuleTable = {&UserResistanceInit,&UserResistanceRelease,&UserResistanceConfigure,"res"}; /* modName must be less 8 characters */
+const uTab userResistanceModuleTable = {&UserResistanceInit,&UserResistanceRelease,"res"};
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
@@ -62,26 +61,6 @@ void UserResistanceInit(byte usrResistanceHandler){
      * as an example, it is set to IN mode */
     getPortDescriptor(usrResistanceHandler)->change_port_direction(IN);
 }/* end UserResistanceInit */
-
-/******************************************************************************
- * Function:        UserResistanceConfigure(void)
- *
- * PreCondition:    None
- *
- * Input:           None
- *
- * Output:          None
- *
- * Side Effects:    None
- *
- * Overview:        This function sets the specific configuration for the user
- *                  module, it is called by the framework.
- *
- * Note:            None
- *****************************************************************************/
-void UserResistanceConfigure(byte handler){
-    /* Do the configuration needed */
-}/* end UserResistanceConfigure */
 
 /******************************************************************************
  * Function:        UserResistanceProcessIO(void)

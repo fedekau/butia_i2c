@@ -24,12 +24,11 @@ void UserLightProcessIO(void);
 void UserLightInit(byte i);
 void UserLightReceived(byte*, byte, byte);
 void UserLightRelease(byte i);
-void UserLightConfigure(byte);
 
 /* Table used by te framework to get a fixed reference point to the user module functions defined by the framework */
 /** USER MODULE REFERENCE ****************************************************/
 #pragma romdata user
-const uTab userLightModuleTable = {&UserLightInit, &UserLightRelease, &UserLightConfigure, "light"}; /*modName must be less or equal 8 characters*/
+const uTab userLightModuleTable = {&UserLightInit, &UserLightRelease, "light"};
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
@@ -61,26 +60,6 @@ void UserLightInit(byte usrLightHandler) {
     /* get port where sensor/actuator is connected and set to IN/OUT mode*/
     getPortDescriptor(usrLightHandler)->change_port_direction(IN);
 }/*end UserLightInit*/
-
-/******************************************************************************
- * Function:        UserLightConfigure(void)
- *
- * PreCondition:    None
- *
- * Input:           None
- *
- * Output:          None
- *
- * Side Effects:    None
- *
- * Overview:        This function sets the specific configuration for the user
- *                  module, it is called by the framework.
- *
- * Note:            None
- *****************************************************************************/
-void UserLightConfigure(byte handler) {
-    /* Do the configuration */
-}/*end UserLightConfigure*/
 
 /******************************************************************************
  * Function:        UserLightProcessIO(void)

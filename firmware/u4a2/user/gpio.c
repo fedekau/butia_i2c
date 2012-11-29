@@ -27,12 +27,11 @@ void GpioProcessIO(void);
 void GpioInit(byte i);
 void GpioReceived(byte*, byte, byte);
 void GpioRelease(byte i);
-void GpioConfigure(byte);
 
 // Table used by te framework to get a fixed reference point to the user module functions defined by the framework 
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
-const uTab GpioModuleTable = {&GpioInit, &GpioRelease, &GpioConfigure, "gpio"}; //modName must be less or equal 8 characters
+const uTab GpioModuleTable = {&GpioInit, &GpioRelease, "gpio"};
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
@@ -58,33 +57,9 @@ const uTab GpioModuleTable = {&GpioInit, &GpioRelease, &GpioConfigure, "gpio"}; 
 void GpioInit(byte i) {
     // add my receive function to the handler module, to be called automatically when the pc sends data to the user module
     setHandlerReceiveFunction(i, &GpioReceived);
-    // add my receive pooling function to the dynamic pooling module, to be called periodically 
-    /* andres res = addPollingFunction(&GpioProcessIO);*/
     // initialize the send buffer, used to send data to the PC
     sendBufferGpio = getSharedBuffer(i);
-
-
 }//end UserLedAmarilloInit
-
-/******************************************************************************
-/* Function:        GpioConfigure(void)
- *
- * PreCondition:    None
- *
- * Input:           None
- *
- * Output:          None
- *
- * Side Effects:    None
- *
- * Overview:        This function sets the specific configuration for the user module, it is called by the framework 
- *                        
- *
- * Note:            None
- *****************************************************************************/
-void GpioConfigure(byte handler) {
-    // Do the configuration
-}
 
 void GpioProcessIO(void) {
 

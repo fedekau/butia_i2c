@@ -17,7 +17,6 @@
 /** V A R I A B L E S ********************************************************/
 #pragma udata 
 
-byte usrLoopbackHandler; // Handler number asigned to the module
 byte* sendBufferUsrLoopback; // buffer to send data
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
@@ -25,12 +24,11 @@ void UserLoopBackProcessIO(void);
 void UserLoopBackInit(byte i);
 void UserLoopBackReceived(byte*, byte, byte);
 void UserLoopBackRelease(byte i);
-void UserLoopBackConfigure(byte);
 
 // Table used by te framework to get a fixed reference point to the user module functions defined by the framework 
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
-const uTab UserLoopBackModuleTable = {&UserLoopBackInit, &UserLoopBackRelease, &UserLoopBackConfigure, "lback"}; //modName must be less or equal 8 characters
+const uTab UserLoopBackModuleTable = {&UserLoopBackInit, &UserLoopBackRelease, "lback"};
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
@@ -61,28 +59,7 @@ void UserLoopBackInit(byte usrLoopbackHandler) {
     res = addPollingFunction(&UserLoopBackProcessIO);
     // initialize the send buffer, used to send data to the PC
     sendBufferUsrLoopback = getSharedBuffer(usrLoopbackHandler);
-    //TODO return res value
 }//end UserLoopBackInit
-
-/******************************************************************************
- * Function:        UserLoopBackConfigure(void)
- *
- * PreCondition:    None
- *
- * Input:           None
- *
- * Output:          None
- *
- * Side Effects:    None
- *
- * Overview:        This function sets the specific configuration for the user module, it is called by the framework 
- *						
- *
- * Note:            None
- *****************************************************************************/
-void UserLoopBackConfigure(byte handler) {
-    // Do the configuration
-}
 
 /******************************************************************************
  * Function:        UserLoopBackProcessIO(void)
@@ -163,7 +140,7 @@ UserLoopBackCounter=len*2; //por las dudas
 
     if (UserLoopBackCounter != 0) {
         if (!mUSBGenTxIsBusy())
-            USBGenWrite2(usrLoopbackHandler, UserLoopBackCounter);
+            USBGenWrite2(handler, UserLoopBackCounter);
     }//end if
 }//end UserLoopBackReceived
 

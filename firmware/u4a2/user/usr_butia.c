@@ -22,12 +22,11 @@ void UserButiaProcessIO(void);
 void UserButiaInit(byte i);
 void UserButiaReceived(byte*, byte, byte);
 void UserButiaRelease(byte i);
-void UserButiaConfigure(byte);
 
 // Table used by te framework to get a fixed reference point to the user module functions defined by the framework 
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
-const uTab UserButiaModuleTable = {&UserButiaInit,&UserButiaRelease,&UserButiaConfigure,"butia"}; //modName must be less or equal 8 characters
+const uTab UserButiaModuleTable = {&UserButiaInit,&UserButiaRelease,"butia"};
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
@@ -57,28 +56,7 @@ void UserButiaInit(byte usrButiaHandler){
     // res = addPollingFunction(&UserButiaProcessIO);
     // initialize the send buffer, used to send data to the PC
     sendBufferusrButia = getSharedBuffer(usrButiaHandler);
-    //TODO return res value
 }//end UserButiaInit
-
-/******************************************************************************
- * Function:        UserButiaConfigure(void)
- *
- * PreCondition:    None
- *
- * Input:           None
- *
- * Output:          None
- *
- * Side Effects:    None
- *
- * Overview:        This function sets the specific configuration for the user module, it is called by the framework 
- *						
- *
- * Note:            None
- *****************************************************************************/
-void UserButiaConfigure(byte handler){
-// Do the configuration
-}
 
 /******************************************************************************
  * Function:        UserButiaProcessIO(void)
@@ -103,8 +81,6 @@ void UserButiaProcessIO(void){
 	
 }//end ProcessIO
 
-
-
 /******************************************************************************
  * Function:        UserButiaRelease(byte i)
  *
@@ -126,7 +102,6 @@ void UserButiaRelease(byte i){
     unsetHandlerReceiveBuffer(i);
     unsetHandlerReceiveFunction(i);
 }
-
 
 /******************************************************************************
  * Function:        UserButiaReceived(byte* recBuffPtr, byte len)

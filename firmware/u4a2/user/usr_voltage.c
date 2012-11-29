@@ -24,12 +24,11 @@ void UserVoltageProcessIO(void);
 void UserVoltageInit(byte i);
 void UserVoltageReceived(byte*, byte, byte);
 void UserVoltageRelease(byte i);
-void UserVoltageConfigure(byte);
 
 /* Table used by te framework to get a fixed reference point to the user module functions defined by the framework */
 /** USER MODULE REFERENCE ****************************************************/
 #pragma romdata user
-const uTab userVoltageModuleTable = {&UserVoltageInit,&UserVoltageRelease,&UserVoltageConfigure,"volt"}; /* modName must be less 8 characters */
+const uTab userVoltageModuleTable = {&UserVoltageInit,&UserVoltageRelease,"volt"};
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
@@ -62,26 +61,6 @@ void UserVoltageInit(byte usrVoltageHandler){
      * as an example, it is set to IN mode */
     getPortDescriptor(usrVoltageHandler)->change_port_direction(IN);
 }/* end UserVoltageInit */
-
-/******************************************************************************
- * Function:        UserVoltageConfigure(void)
- *
- * PreCondition:    None
- *
- * Input:           None
- *
- * Output:          None
- *
- * Side Effects:    None
- *
- * Overview:        This function sets the specific configuration for the user
- *                  module, it is called by the framework.
- *
- * Note:            None
- *****************************************************************************/
-void UserVoltageConfigure(byte handler){
-    /* Do the configuration needed */
-}/* end UserVoltageConfigure */
 
 /******************************************************************************
  * Function:        UserVoltageProcessIO(void)

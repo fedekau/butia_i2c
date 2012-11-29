@@ -27,12 +27,11 @@ void UserLedProcessIO(byte);
 void UserLedInit(byte i);
 void UserLedReceived(byte*, byte, byte);
 void UserLedRelease(byte i);
-void UserLedConfigure(byte);
 
 // Table used by te framework to get a fixed reference point to the user module functions defined by the framework 
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
-uTab userLedModuleTable = {&UserLedInit,&UserLedRelease,&UserLedConfigure,"led"};
+uTab userLedModuleTable = {&UserLedInit,&UserLedRelease,"led"};
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
@@ -62,28 +61,8 @@ void UserLedInit(byte usrLedHandler){
     /* initialize the send buffer, used to send data to the PC */
     sendBufferUsrLed = getSharedBuffer(usrLedHandler);
     /* get port where sensor/actuator is connected and set to OUT mode*/
-    //getPortDescriptor(usrLedHandler)->change_port_direction(OUT);
+    getPortDescriptor(usrLedHandler)->change_port_direction(OUT);
 }/*end UserLedInit*/
-
-/******************************************************************************
- * Function:        UserLedConfigure(void)
- *
- * PreCondition:    None
- *
- * Input:           None
- *
- * Output:          None
- *
- * Side Effects:    None
- *
- * Overview:        This function sets the specific configuration for the user module, it is called by the framework 
- *						
- *
- * Note:            None
- *****************************************************************************/
-void UserLedConfigure(byte i){
-    /*no configuration for led module*/
-}
 
 /******************************************************************************
  * Function:        UserLedProcessIO(void)
@@ -170,11 +149,10 @@ void UserLedReceived(byte* recBuffPtr, byte len, byte handler){
             break;
 
         case SET_LED_OFF:
-            changeDirectionPort1(0);
             ((LED_DATA_PACKET*)sendBufferUsrLed)->_byte[0] = ((LED_DATA_PACKET*)recBuffPtr)->_byte[0];
             ((LED_DATA_PACKET*)sendBufferUsrLed)->_byte[1] = LED_OFF;
             getPortDescriptor(handler)->set_data(LED_OFF);
-            getPortDescriptor(handler)->change_port_direction(IN);
+            getPortDescriptor(handler)->change_port_direction(OUT);
             userLedCounter=0x02;
             break;
 
