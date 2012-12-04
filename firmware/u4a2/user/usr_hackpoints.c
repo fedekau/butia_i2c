@@ -15,7 +15,6 @@
 #include "dynamicPolling.h"   
 #include "usb4all/proxys/T0Proxy.h"
 
-
 /** V A R I A B L E S ********************************************************/
 #pragma udata 
 
@@ -58,19 +57,12 @@ void HackPointsInit(byte handler) {
     /* add my receive function to the handler module, to be called automatically
      * when the pc sends data to the user module */
     setHandlerReceiveFunction(handler, &HackPointsReceived);
-
     /* initialize the send buffer, used to send data to the PC */
     sendBufferHackPoints = getSharedBuffer(handler);
 
     /* setting pins to IN mode*/
-    PORTDbits.RD4 = OFF;
-    PORTDbits.RD5 = OFF;
-    PORTDbits.RD6 = OFF;
-    PORTDbits.RD7 = OFF;
-    TRISDbits.RD4 = IN;
-    TRISDbits.RD5 = IN;
-    TRISDbits.RD6 = IN;
-    TRISDbits.RD7 = IN;
+    PORTD = ZERO;
+    TRISD = INPUT;
 }/*end UserLedAmarilloInit*/
 
 void HackPointsProcessIO(void) {
@@ -96,14 +88,8 @@ void HackPointsProcessIO(void) {
 void HackPointsRelease(byte handler) {
     unsetHandlerReceiveBuffer(handler);
     unsetHandlerReceiveFunction(handler);
-    PORTDbits.RD4 = OFF;
-    PORTDbits.RD5 = OFF;
-    PORTDbits.RD6 = OFF;
-    PORTDbits.RD7 = OFF;
-    TRISDbits.RD4 = IN;
-    TRISDbits.RD5 = IN;
-    TRISDbits.RD6 = IN;
-    TRISDbits.RD7 = IN;
+    PORTD = ZERO;
+    TRISD = INPUT;
 }
 
 /******************************************************************************
@@ -125,6 +111,7 @@ void HackPointsRelease(byte handler) {
 void HackPointsReceived(byte* recBufferHackPoints, byte len, byte handler) {
     byte j;
     byte HackPointsCounter = 0;
+    int pin;
 
     switch (((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->CMD) {
         case READ_VERSION:
@@ -133,134 +120,63 @@ void HackPointsReceived(byte* recBufferHackPoints, byte len, byte handler) {
             ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[2] = HACK_POINTS_MAJOR_VERSION;
             HackPointsCounter = 0x03;
             break;
-//
-//        case WRITE:
-//            ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
-//            HackPointsCounter = 0x01;
-//            break;
 
-        case SET_HIGH_PINS:
+        case SET_MODE_OUT:
             ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
-            PORTDbits.RD6 = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[1];
-            PORTDbits.RD5 = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[2];
-            PORTDbits.RD4 = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[3];
-            PORTDbits.RD7 = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[4];
-            TRISDbits.RD6 = OUT;
-            TRISDbits.RD5 = OUT;
-            TRISDbits.RD4 = OUT;
-            TRISDbits.RD7 = OUT;
+            pin = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[1];
+            TRISD = TRISD & ~(byte) (MASK << pin);
             HackPointsCounter = 0x01;
             break;
 
-        case SET_PIN19:
+        case SET_MODE_IN:
             ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
-            PORTDbits.RD0 = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[1];
-            TRISDbits.RD0 = OUT;
+            pin = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[1];
+            TRISD = TRISD | (byte) (MASK << pin);
             HackPointsCounter = 0x01;
             break;
 
-        case SET_PIN20:
+        case SET_HIGH:
             ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
-            PORTDbits.RD1 = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[1];
-            TRISDbits.RD1 = OUT;
+            pin = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[1];
+            PORTD = PORTD | (byte) (MASK << pin);
+            TRISD = TRISD & ~(byte) (MASK << pin);
             HackPointsCounter = 0x01;
             break;
 
-        case SET_PIN21:
+        case SET_LOW:
             ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
-            PORTDbits.RD2 = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[1];
-            TRISDbits.RD2 = OUT;
+            pin = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[1];
+            PORTD = PORTD & ~(byte) (MASK << pin);
+            TRISD = TRISD & ~(byte) (MASK << pin);
             HackPointsCounter = 0x01;
             break;
 
-        case SET_PIN22:
+        case SET_PORT:
             ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
-            PORTDbits.RD3 = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[1];
-            TRISDbits.RD3 = OUT;
+            PORTD = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[1];
+            TRISD = OUTPUT;
             HackPointsCounter = 0x01;
             break;
 
-        case SET_PIN27:
+        case SET_PORT_IN:
             ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
-            PORTDbits.RD4 = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[1];
-            TRISDbits.RD4 = OUT;
+            PORTD = ZERO;
+            TRISD = INPUT;
             HackPointsCounter = 0x01;
             break;
 
-        case SET_PIN28:
+        case SET_PORT_OUT:
             ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
-            PORTDbits.RD5 = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[1];
-            TRISDbits.RD5 = OUT;
+            PORTD = ZERO;
+            TRISD = OUTPUT;
             HackPointsCounter = 0x01;
             break;
 
-        case SET_PIN29:
+        case READ:
             ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
-            PORTDbits.RD6 = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[1];
-            TRISDbits.RD6 = OUT;
-            HackPointsCounter = 0x01;
-            break;
-
-        case SET_PIN30:
-            ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
-            PORTDbits.RD7 = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[1];
-            TRISDbits.RD7 = OUT;
-            HackPointsCounter = 0x01;
-            break;
-
-        case GET_PIN19:
-            ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
-            TRISDbits.RD0 = OUT;
-            ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[1] = PORTDbits.RD0;
-            HackPointsCounter = 0x02;
-            break;
-
-        case GET_PIN20:
-            ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
-            TRISDbits.RD1 = IN;
-            ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[1] = PORTDbits.RD1;
-            HackPointsCounter = 0x02;
-            break;
-
-        case GET_PIN21:
-            ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
-            TRISDbits.RD2 = IN;
-            ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[1] = PORTDbits.RD2;
-            HackPointsCounter = 0x02;
-            break;
-
-        case GET_PIN22:
-            ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
-            TRISDbits.RD3 = IN;
-            ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[1] = PORTDbits.RD3;
-            HackPointsCounter = 0x02;
-            break;
-
-        case GET_PIN27:
-            ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
-            TRISDbits.RD4 = OUT;
-            ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[1] = PORTDbits.RD4;
-            HackPointsCounter = 0x02;
-            break;
-
-        case GET_PIN28:
-            ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
-            TRISDbits.RD5 = IN;
-            ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[1] = PORTDbits.RD5;
-            HackPointsCounter = 0x02;
-            break;
-
-        case GET_PIN29:
-            ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
-            TRISDbits.RD6 = IN;
-            ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[1] = PORTDbits.RD6;
-            HackPointsCounter = 0x02;
-            break;
-
-        case GET_PIN30:
-            ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
-            TRISDbits.RD7 = IN;
-            ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[1] = PORTDbits.RD7;
+            pin = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[1];
+            ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[1] = (PORTD & (MASK<<pin))>>pin;
+            TRISD = TRISD | (byte) (MASK << pin);
             HackPointsCounter = 0x02;
             break;
 

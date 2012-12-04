@@ -428,6 +428,8 @@ const void initPorts(void){
     ADCON2bits.ACQT = 0x07; /*Acquisition Time Select*/
     ADCON2bits.ADCS = 0x04; /*Acquisition Time Select Fosc/4*/
 
+    PORTD = 0x00;
+    TRISD = 0xFF;
     for(i = 0; i < MAX_PORTS; i++)
         board_ports[i].change_port_direction(_IN);
 }

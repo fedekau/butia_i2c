@@ -25,23 +25,14 @@ typedef union HACK_POINTS_PACKET {
 
         enum {
             READ_VERSION = 0x00,
-            SET_HIGH_PINS = 0x01,
-            SET_PIN19 = 0x02,
-            SET_PIN20 = 0x03,
-            SET_PIN21 = 0x04,
-            SET_PIN22 = 0x05,
-            SET_PIN27 = 0x06,
-            SET_PIN28 = 0x07,
-            SET_PIN29 = 0x08,
-            SET_PIN30 = 0x09,
-            GET_PIN19 = 0x0A,
-            GET_PIN20 = 0x0B,
-            GET_PIN21 = 0x0C,
-            GET_PIN22 = 0x0D,
-            GET_PIN27 = 0x0E,
-            GET_PIN28 = 0x0F,
-            GET_PIN29 = 0x10,
-            GET_PIN30 = 0x11
+            SET_MODE_IN = 0x01,
+            SET_MODE_OUT = 0x02,
+            READ = 0x03,
+            SET_LOW = 0x04,
+            SET_HIGH = 0x05,
+            SET_PORT = 0x06,
+            SET_PORT_IN = 0x07,
+            SET_PORT_OUT = 0x08
         } CMD;
         byte len;
     };
@@ -64,7 +55,9 @@ typedef union HACK_POINTS_PACKET {
 } HACK_POINTS_DATA_PACKET;
 
 /* Declarations */
-#define OFF 0
-#define ON  1
+#define ZERO 0x00
+#define INPUT  0xFF
+#define OUTPUT 0x00
+#define MASK 0x01
 
 #endif /*HACK_POINTS_H*/
