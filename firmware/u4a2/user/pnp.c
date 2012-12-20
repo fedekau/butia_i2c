@@ -16,7 +16,7 @@ rom const device_resistance table_device_id_resistance[MAX_DEVICES] = {
 };
 
 #pragma udata 
-byte PNPHandler;
+byte PNPHandler = 0;
 byte* sendBufferPNP; // buffer to send data
 
 
@@ -48,6 +48,7 @@ void initTableDetectedDevice(void) {
 void PNPInit(byte i) {
     byte modulename[8];
 
+    if (PNPHandler) return;
     PNPHandler = i;
     // add my receive function to the handler module, to be called automatically when the pc sends data to the user module
     setHandlerReceiveFunction(PNPHandler, &PNPReceived);
