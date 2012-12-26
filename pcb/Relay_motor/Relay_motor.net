@@ -1,0 +1,17 @@
+# EESchema Netlist Version 1.1 created  mié 26 dic 2012 16:04:20 UYST
+(
+ ( /50DB3B8E $noname  K1 RELAY_2RT {Lib=RELAY_2RT}
+  (    1 ? )
+  (    3 ? )
+  (    5 ? )
+  (    8 ? )
+  (    9 ? )
+  (   12 ? )
+  (   14 ? )
+  (   16 ? )
+ )
+)
+*
+{ Pin List by Nets
+}
+#End

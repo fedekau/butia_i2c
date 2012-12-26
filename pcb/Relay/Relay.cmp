@@ -1,0 +1,31 @@
+Cmp-Mod V01 Created by CvPcb (2012-apr-16-27)-stable date = mié 26 dic 2012 18:13:23 UYST
+
+BeginCmp
+TimeStamp = /50DB4BA2;
+Reference = J1;
+ValeurCmp = RJ45;
+IdModule  = RJ45_8;
+EndCmp
+
+BeginCmp
+TimeStamp = /50DB4B3E;
+Reference = K1;
+ValeurCmp = RELAY;
+IdModule  = ;
+EndCmp
+
+BeginCmp
+TimeStamp = /50DB4E3B;
+Reference = K2;
+ValeurCmp = CONN_3;
+IdModule  = bornier3;
+EndCmp
+
+BeginCmp
+TimeStamp = /50DB50DF;
+Reference = R1;
+ValeurCmp = R;
+IdModule  = R3;
+EndCmp
+
+EndListe
