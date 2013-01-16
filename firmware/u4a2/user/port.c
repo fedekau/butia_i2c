@@ -122,9 +122,9 @@ void PortReceived(byte* recBuffPtr, byte len, byte handler) {
         case GET_RES:
             ((PORT_DATA_PACKET*) sendBufferPort)->_byte[0] = ((PORT_DATA_PACKET*) recBuffPtr)->_byte[0];
             aux = port.get_val_detection_pin();
-            ((PORT_DATA_PACKET*) sendBufferPort)->_byte[1] = LSB(aux);
-            ((PORT_DATA_PACKET*) sendBufferPort)->_byte[2] = MSB(aux);
-            PortCounter = 0x03;
+            ((PORT_DATA_PACKET*) sendBufferPort)->_byte[1] = 255;
+            //((PORT_DATA_PACKET*) sendBufferPort)->_byte[2] = MSB(aux);
+            PortCounter = 0x02;
             break;
 
         default:
