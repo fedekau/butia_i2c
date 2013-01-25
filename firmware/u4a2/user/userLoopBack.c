@@ -1,6 +1,7 @@
 /* Author             									  Date        Comment
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * Andrés Aguirre, Rafael Fernandez, Carlos Grossy       16/10/07    Original.
+ * Ayle 25/01/13
  *****************************************************************************/
 
 /** I N C L U D E S **********************************************************/
@@ -126,10 +127,23 @@ void UserLoopBackRelease(byte i) {
 
 void UserLoopBackReceived(byte* recBuffPtr, byte len, byte handler) {
     byte UserLoopBackCounter = 0;
-    for (UserLoopBackCounter = 0; UserLoopBackCounter < len; UserLoopBackCounter++) {
-        *(sendBufferUsrLoopback + UserLoopBackCounter) = *(recBuffPtr + UserLoopBackCounter); // TODO pensar algo mas eficiente
+
+    switch (((LOOPBACK_DATA_PACKET*) recBuffPtr)->CMD) {
+        case LOOPBACK_VERSION:
+            ((LOOPBACK_DATA_PACKET*) sendBufferUsrLoopback)->_byte[0] = ((LOOPBACK_DATA_PACKET*) recBuffPtr)->_byte[0];
+            ((LOOPBACK_DATA_PACKET*) sendBufferUsrLoopback)->_byte[1] = LOOPBACK_MINOR_VERSION;
+            ((LOOPBACK_DATA_PACKET*) sendBufferUsrLoopback)->_byte[2] = LOOPBACK_MAJOR_VERSION;
+            UserLoopBackCounter = 0x03;
+            break;
+
+        case LOOPBACK_COMMAND:
+            for (UserLoopBackCounter = 0; UserLoopBackCounter < len; UserLoopBackCounter++) {
+                *(sendBufferUsrLoopback + UserLoopBackCounter) = *(recBuffPtr + UserLoopBackCounter); // TODO pensar algo mas eficiente
+            }
+            UserLoopBackCounter = len; //por las dudas
+            break;
     }
-    UserLoopBackCounter = len; //por las dudas
+    
     /*
     //para que devuelva el doble de lo que recibe
     for (UserLoopBackCounter=0 ; UserLoopBackCounter < len ; UserLoopBackCounter++){
