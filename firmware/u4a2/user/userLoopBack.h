@@ -28,7 +28,7 @@ typedef union LOOPBACK_DATA_PACKET
         enum
         { 
             LOOPBACK_VERSION = 0x00,
-            LOOPBACK_COMMAND = 0x01
+            SEND_DATA = 0x01
         }CMD;
         byte len;
     };
