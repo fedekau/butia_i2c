@@ -264,12 +264,12 @@ void UserMotorsReceived(byte* recBuffPtr, byte len, byte handler) {
             if (direction1 == 0x01) {
                 endlessTurn(wheels.left.id, vel1, 0);
             } else {
-                endlessTurn(wheels.left.id, -vel1, 0);
+                endlessTurn(wheels.left.id, 0-vel1, 0);
             }
             if (direction2 == 0x01)
                 endlessTurn(wheels.right.id, vel2, 1);
             else
-                endlessTurn(wheels.right.id, -vel2, 1);
+                endlessTurn(wheels.right.id, 0-vel2, 1);
             userMotorsCounter = 0x01;
             break;
 
