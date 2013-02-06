@@ -121,32 +121,28 @@ void HackPointsReceived(byte* recBufferHackPoints, byte len, byte handler) {
             HackPointsCounter = 0x03;
             break;
 
-        case SET_MODE_OUT:
+        case SET_MODE:
             ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
             pin = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[1];
-            TRISD = TRISD & ~(byte) (MASK << pin);
+            if (((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[2] == 0x01){
+                //salida
+                TRISD = TRISD & ~(byte) (MASK << pin);
+            } else {
+                //entrada
+                TRISD = TRISD | (byte) (MASK << pin);
+            }
             HackPointsCounter = 0x01;
             break;
 
-        case SET_MODE_IN:
+        case WRITE:
             ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
             pin = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[1];
-            TRISD = TRISD | (byte) (MASK << pin);
-            HackPointsCounter = 0x01;
-            break;
-
-        case SET_HIGH:
-            ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
-            pin = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[1];
-            PORTD = PORTD | (byte) (MASK << pin);
-            TRISD = TRISD & ~(byte) (MASK << pin);
-            HackPointsCounter = 0x01;
-            break;
-
-        case SET_LOW:
-            ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
-            pin = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[1];
-            PORTD = PORTD & ~(byte) (MASK << pin);
+            if (((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[2] == 0x01){
+                PORTD = PORTD | (byte) (MASK << pin);
+            } else {
+                PORTD = PORTD & ~(byte) (MASK << pin);
+            }
+            //seteo como salida siempre?
             TRISD = TRISD & ~(byte) (MASK << pin);
             HackPointsCounter = 0x01;
             break;
@@ -186,8 +182,8 @@ void HackPointsReceived(byte* recBufferHackPoints, byte len, byte handler) {
     if (HackPointsCounter != 0) {
         j = 255;
         while (mUSBGenTxIsBusy() && j-- > 0);
-        if (!mUSBGenTxIsBusy())
-            USBGenWrite2(handler, HackPointsCounter);
+            if (!mUSBGenTxIsBusy())
+                USBGenWrite2(handler, HackPointsCounter);
     }/*end if*/
 }/*end HACK_POINTSReceived*/
 

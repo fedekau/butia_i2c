@@ -25,14 +25,12 @@ typedef union HACK_POINTS_PACKET {
 
         enum {
             READ_VERSION = 0x00,
-            SET_MODE_IN = 0x01,
-            SET_MODE_OUT = 0x02,
-            READ = 0x03,
-            SET_LOW = 0x04,
-            SET_HIGH = 0x05,
-            SET_PORT = 0x06,
-            SET_PORT_IN = 0x07,
-            SET_PORT_OUT = 0x08
+            SET_MODE = 0x01,
+            READ = 0x02,
+            WRITE = 0x03,
+            SET_PORT = 0x04,
+            SET_PORT_IN = 0x05,
+            SET_PORT_OUT = 0x06
         } CMD;
         byte len;
     };
