@@ -152,9 +152,9 @@ void UserDistReceived(byte* recBuffPtr, byte len, byte handler) {
 
     if (userDistCounter != 0) {
         j = 255;
-        while (mUSBGenTxIsBusy() && j-- > 0); /* pruebo un mÃ¡ximo de 255 veces */
-        if (!mUSBGenTxIsBusy())
-            USBGenWrite2(handler, userDistCounter);
+        while (mUSBGenTxIsBusy() && j-- > 0); /* pruebo un maximo de 255 veces */
+            if (!mUSBGenTxIsBusy())
+                USBGenWrite2(handler, userDistCounter);
     }/*end if*/
 }/*end UserDistReceived*/
 

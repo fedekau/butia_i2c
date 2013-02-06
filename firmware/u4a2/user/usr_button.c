@@ -145,9 +145,9 @@ void UserButtonReceived(byte* recBuffPtr, byte len, byte handler) {
     }/*end switch(s)*/
     if (userButtonCounter != 0) {
         j = 255;
-        while (mUSBGenTxIsBusy() && j-- > 0); /* pruebo un máximo de 255 veces */
-        if (!mUSBGenTxIsBusy())
-            USBGenWrite2(handler, userButtonCounter);
+        while (mUSBGenTxIsBusy() && j-- > 0); /* pruebo un maximo de 255 veces */
+            if (!mUSBGenTxIsBusy())
+                USBGenWrite2(handler, userButtonCounter);
     }/*end if */
 
 }/*end UserButtonReceived*/

@@ -155,8 +155,8 @@ void UserVoltageReceived(byte* recBuffPtr, byte len, byte handler){
     {
         j = 255;
         while(mUSBGenTxIsBusy() && j-->0); /* try at last 255 tries */
-        if(!mUSBGenTxIsBusy())
-            USBGenWrite2(handler, userVoltageCounter);
+            if(!mUSBGenTxIsBusy())
+                USBGenWrite2(handler, userVoltageCounter);
     }/* end if */
 }/* end UserVoltageReceived */
 

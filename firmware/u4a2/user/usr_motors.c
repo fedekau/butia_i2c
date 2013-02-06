@@ -284,8 +284,8 @@ void UserMotorsReceived(byte* recBuffPtr, byte len, byte handler) {
     if (userMotorsCounter != 0) {
         j = 255;
         while (mUSBGenTxIsBusy() && j-- > 0); /*pruebo un maximo de 255 veces*/
-        if (!mUSBGenTxIsBusy())
-            USBGenWrite2(handler, userMotorsCounter);
+            if (!mUSBGenTxIsBusy())
+                USBGenWrite2(handler, userMotorsCounter);
     }/*end if*/
 }/*end UserMotorsReceived*/
 
