@@ -27,8 +27,7 @@ typedef union LED_DATA_PACKET
         enum
         { 
             READ_VERSION    = 0x00,
-            SET_LED_ON      = 0x01,
-            SET_LED_OFF     = 0x02,
+            TURN            = 0x01,
             RESET           = 0xFF
         }CMD;
         byte len;

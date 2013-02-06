@@ -140,19 +140,13 @@ void UserLedReceived(byte* recBuffPtr, byte len, byte handler){
             userLedCounter=0x04;
             break;
 
-        case SET_LED_ON:            
+        case TURN:
             ((LED_DATA_PACKET*)sendBufferUsrLed)->_byte[0] = ((LED_DATA_PACKET*)recBuffPtr)->_byte[0];
-            ((LED_DATA_PACKET*)sendBufferUsrLed)->_byte[1] = LED_ON;
-            getPortDescriptor(handler)->set_data(LED_ON);
-            getPortDescriptor(handler)->change_port_direction(OUT);
-            userLedCounter=0x02;
-            break;
-
-        case SET_LED_OFF:
-            ((LED_DATA_PACKET*)sendBufferUsrLed)->_byte[0] = ((LED_DATA_PACKET*)recBuffPtr)->_byte[0];
-            ((LED_DATA_PACKET*)sendBufferUsrLed)->_byte[1] = LED_OFF;
-            getPortDescriptor(handler)->set_data(LED_OFF);
-            getPortDescriptor(handler)->change_port_direction(OUT);
+            if (((LED_DATA_PACKET*)recBuffPtr)->_byte[1] == LED_ON) {
+                getPortDescriptor(handler)->set_data(LED_ON);
+            } else {
+                getPortDescriptor(handler)->set_data(LED_OFF);
+            }
             userLedCounter=0x02;
             break;
 
@@ -166,9 +160,9 @@ void UserLedReceived(byte* recBuffPtr, byte len, byte handler){
       if(userLedCounter != 0)
       {
        j = 255;
-       while(mUSBGenTxIsBusy() && j-->0); /* pruebo un máximo de 255 veces*/
-       if(!mUSBGenTxIsBusy())
-              USBGenWrite2(handler, userLedCounter);
+       while(mUSBGenTxIsBusy() && j-->0); /* pruebo un maximo de 255 veces*/
+           if(!mUSBGenTxIsBusy())
+                  USBGenWrite2(handler, userLedCounter);
       }/*end if*/
 
 }/*end UserLedReceived*/
