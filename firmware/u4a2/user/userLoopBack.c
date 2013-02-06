@@ -137,10 +137,11 @@ void UserLoopBackReceived(byte* recBuffPtr, byte len, byte handler) {
             break;
 
         case SEND_DATA:
-            for (UserLoopBackCounter = 0; UserLoopBackCounter < len-1; UserLoopBackCounter++) {
-                *(sendBufferUsrLoopback + UserLoopBackCounter) = *(recBuffPtr + UserLoopBackCounter+1); // TODO pensar algo mas eficiente
+            // we must return all: opcode + data
+            for (UserLoopBackCounter = 0; UserLoopBackCounter < len; UserLoopBackCounter++) {
+                *(sendBufferUsrLoopback + UserLoopBackCounter) = *(recBuffPtr + UserLoopBackCounter); // TODO pensar algo mas eficiente
             }
-            UserLoopBackCounter = len-1; //por las dudas
+            UserLoopBackCounter = len; //por las dudas
             break;
     }
     
