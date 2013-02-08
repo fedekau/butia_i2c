@@ -236,7 +236,7 @@ void UserMotorsReceived(byte* recBuffPtr, byte len, byte handler) {
     byte j;
     byte userMotorsCounter = 0;
     char direction1, direction2;
-    byte lowVel1, lowVel2, highVel1, highVel2, res;
+    byte lowVel1, lowVel2, highVel1, highVel2, res, idmotor;
     word vel1, vel2;
     switch (((MOTORS_DATA_PACKET*) recBuffPtr)->CMD) {
 
@@ -246,9 +246,35 @@ void UserMotorsReceived(byte* recBuffPtr, byte len, byte handler) {
             ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[2] = MOTORS_MAJOR_VERSION;
             userMotorsCounter = 0x03;
             break;
+            
         case RESET:
             Reset();
             break;
+
+        case SET_VEL_MTR:
+            ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[0];
+            idmotor = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[1];
+            direction1 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[2];
+            highVel1 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[3];
+            lowVel1 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[4];
+            vel1 = highVel1;
+            vel1 = vel1 << 8 | lowVel1;
+            if (idmotor == 0x00) {
+                if (direction1 == 0x01) {
+                    endlessTurn(wheels.left.id, vel1, 0);
+                } else {
+                    endlessTurn(wheels.left.id, 0-vel1, 0);
+                }
+            } else {
+                if (direction1 == 0x01) {
+                    endlessTurn(wheels.right.id, vel1, 0);
+                } else {
+                    endlessTurn(wheels.right.id, 0-vel1, 0);
+                }
+            }
+            userMotorsCounter = 0x01;
+            break;
+
         case SET_VEL_2MTR:
             ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[0];
             direction1 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[1];
