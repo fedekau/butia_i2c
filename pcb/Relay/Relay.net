@@ -1,0 +1,41 @@
+# EESchema Netlist Version 1.1 created  mié 26 dic 2012 18:13:23 UYST
+(
+ ( /50DB4BA2 RJ45_8 J1 RJ45
+  ( 1 ? )
+  ( 2 ? )
+  ( 3 VDD )
+  ( 4 id )
+  ( 5 GND )
+  ( 6 data )
+  ( 7 ? )
+  ( 8 ? )
+  ( 9 GND )
+ )
+ ( /50DB4B3E $noname$ K1 RELAY
+  ( 1 NA )
+  ( 3 NC )
+  ( 5 C )
+  ( 8 data )
+  ( 9 GND )
+ )
+ ( /50DB4E3B bornier3 K2 CONN_3
+  ( 1 NA )
+  ( 2 C )
+  ( 3 NC )
+ )
+ ( /50DB50DF R3 R1 R
+  ( 1 VDD )
+  ( 2 id )
+ )
+)
+*
+{ Allowed footprints by component:
+$component R1
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$endfootprintlist
+}
