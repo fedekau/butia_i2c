@@ -1,6 +1,7 @@
 /* Author                   Date        Comment
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * Aylen Ricca              24/04/2012  Original.
+ * John Pereira
  *****************************************************************************/
 
 /** I N C L U D E S **********************************************************/
@@ -22,16 +23,15 @@
 byte* sendBufferUsrLed; /* buffer to send data */
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void UserLedProcessIO(void);
+void UserLedProcessIO(byte);
 void UserLedInit(byte i);
 void UserLedReceived(byte*, byte, byte);
 void UserLedRelease(byte i);
-void UserLedConfigure(void);
 
 // Table used by te framework to get a fixed reference point to the user module functions defined by the framework 
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
-uTab userLedModuleTable = {&UserLedInit,&UserLedRelease,&UserLedConfigure,"led"};
+uTab userLedModuleTable = {&UserLedInit,&UserLedRelease,"led"};
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
@@ -65,26 +65,6 @@ void UserLedInit(byte usrLedHandler){
 }/*end UserLedInit*/
 
 /******************************************************************************
- * Function:        UserLedConfigure(void)
- *
- * PreCondition:    None
- *
- * Input:           None
- *
- * Output:          None
- *
- * Side Effects:    None
- *
- * Overview:        This function sets the specific configuration for the user module, it is called by the framework 
- *						
- *
- * Note:            None
- *****************************************************************************/
-void UserLedConfigure(void){
-    /*no configuration for led module*/
-}
-
-/******************************************************************************
  * Function:        UserLedProcessIO(void)
  *
  * PreCondition:    None
@@ -101,7 +81,7 @@ void UserLedConfigure(void){
  * Note:            None
  *****************************************************************************/
 
-void UserLedProcessIO(void){  
+void UserLedProcessIO(byte i){
 
     if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND==1)) return;
 	/* here enter the code that want to be called periodically,
@@ -126,9 +106,10 @@ void UserLedProcessIO(void){
  *****************************************************************************/
 
 void UserLedRelease(byte i){
-    unsetHandlerReceiveBuffer(i);
-    unsetHandlerReceiveFunction(i);
+    getPortDescriptor(i)->set_data(LED_OFF);
     getPortDescriptor(i)->change_port_direction(IN);
+    unsetHandlerReceiveBuffer(i);
+    unsetHandlerReceiveFunction(i);    
 }
 
 /******************************************************************************
@@ -159,16 +140,14 @@ void UserLedReceived(byte* recBuffPtr, byte len, byte handler){
             userLedCounter=0x04;
             break;
 
-        case SET_LED_ON:
+        case TURN:
             ((LED_DATA_PACKET*)sendBufferUsrLed)->_byte[0] = ((LED_DATA_PACKET*)recBuffPtr)->_byte[0];
-            getPortDescriptor(handler)->set_data(LED_ON);
-            userLedCounter=0x01;
-            break;
-
-        case SET_LED_OFF:
-            ((LED_DATA_PACKET*)sendBufferUsrLed)->_byte[0] = ((LED_DATA_PACKET*)recBuffPtr)->_byte[0];
-            getPortDescriptor(handler)->set_data(LED_OFF);
-            userLedCounter=0x01;
+            if (((LED_DATA_PACKET*)recBuffPtr)->_byte[1] == LED_ON) {
+                getPortDescriptor(handler)->set_data(LED_ON);
+            } else {
+                getPortDescriptor(handler)->set_data(LED_OFF);
+            }
+            userLedCounter=0x02;
             break;
 
         case RESET:
@@ -181,9 +160,9 @@ void UserLedReceived(byte* recBuffPtr, byte len, byte handler){
       if(userLedCounter != 0)
       {
        j = 255;
-       while(mUSBGenTxIsBusy() && j-->0); /* pruebo un máximo de 255 veces*/
-       if(!mUSBGenTxIsBusy())
-              USBGenWrite2(handler, userLedCounter);
+       while(mUSBGenTxIsBusy() && j-->0); /* pruebo un maximo de 255 veces*/
+           if(!mUSBGenTxIsBusy())
+                  USBGenWrite2(handler, userLedCounter);
       }/*end if*/
 
 }/*end UserLedReceived*/

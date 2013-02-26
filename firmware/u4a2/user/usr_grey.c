@@ -24,12 +24,11 @@ void UserGreyProcessIO(void);
 void UserGreyInit(byte i);
 void UserGreyReceived(byte*, byte, byte);
 void UserGreyRelease(byte i);
-void UserGreyConfigure(void);
 
 /* Table used by te framework to get a fixed reference point to the user module functions defined by the framework */
 /** USER MODULE REFERENCE ****************************************************/
 #pragma romdata user
-const uTab userGreyModuleTable = {&UserGreyInit,&UserGreyRelease,&UserGreyConfigure,"grey"}; /*modName must be less or equal 8 characters*/
+const uTab userGreyModuleTable = {&UserGreyInit, &UserGreyRelease, "grey"};
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
@@ -52,35 +51,15 @@ const uTab userGreyModuleTable = {&UserGreyInit,&UserGreyRelease,&UserGreyConfig
  *
  * Note:            None
  *****************************************************************************/
-void UserGreyInit(byte usrGreyHandler){
+void UserGreyInit(byte usrGreyHandler) {
     /* add my receive function to the handler module, to be called automatically
      * when the pc sends data to the user module */
-    setHandlerReceiveFunction(usrGreyHandler,&UserGreyReceived);
+    setHandlerReceiveFunction(usrGreyHandler, &UserGreyReceived);
     /* initialize the send buffer, used to send data to the PC */
     sendBufferUsrGrey = getSharedBuffer(usrGreyHandler);
     /* get port where sensor/actuator is connected and set to IN/OUT mode*/
     getPortDescriptor(usrGreyHandler)->change_port_direction(IN);
 }/*end UserGreyInit*/
-
-/******************************************************************************
- * Function:        UserGreyConfigure(void)
- *
- * PreCondition:    None
- *
- * Input:           None
- *
- * Output:          None
- *
- * Side Effects:    None
- *
- * Overview:        This function sets the specific configuration for the user
- *                  module, it is called by the framework.
- *
- * Note:            None
- *****************************************************************************/
-void UserGreyConfigure(void){
-    /* Do the configuration */
-}/*end UserGreyConfigure*/
 
 /******************************************************************************
  * Function:        UserGreyProcessIO(void)
@@ -99,10 +78,10 @@ void UserGreyConfigure(void){
  *
  * Note:            None
  *****************************************************************************/
-void UserGreyProcessIO(void){
-    if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND==1)) return;
-	/* here enter the code that want to be called periodically,
-         * per example interaction with buttons and leds */
+void UserGreyProcessIO(void) {
+    if ((usb_device_state < CONFIGURED_STATE) || (UCONbits.SUSPND == 1)) return;
+    /* here enter the code that want to be called periodically,
+     * per example interaction with buttons and leds */
 }/*end UserGreyProcessIO*/
 
 /******************************************************************************
@@ -122,7 +101,7 @@ void UserGreyProcessIO(void){
  *
  * Note:            None
  *****************************************************************************/
-void UserGreyRelease(byte i){
+void UserGreyRelease(byte i) {
     unsetHandlerReceiveBuffer(i);
     unsetHandlerReceiveFunction(i);
 }/*end UserGreyRelease*/
@@ -142,25 +121,24 @@ void UserGreyRelease(byte i){
  *
  * Note:            None
  *****************************************************************************/
-void UserGreyReceived(byte* recBuffPtr, byte len, byte handler){
+void UserGreyReceived(byte* recBuffPtr, byte len, byte handler) {
     byte j;
     WORD data;
     byte userGreyCounter = 0;
-    switch(((GREY_DATA_PACKET*)recBuffPtr)->CMD)
-    {
+    switch (((GREY_DATA_PACKET*) recBuffPtr)->CMD) {
         case READ_VERSION:
-            ((GREY_DATA_PACKET*)sendBufferUsrGrey)->_byte[0] = ((GREY_DATA_PACKET*)recBuffPtr)->_byte[0];
-            ((GREY_DATA_PACKET*)sendBufferUsrGrey)->_byte[1] = GREY_MINOR_VERSION;
-            ((GREY_DATA_PACKET*)sendBufferUsrGrey)->_byte[2] = GREY_MAJOR_VERSION;
-            userGreyCounter=0x03;
+            ((GREY_DATA_PACKET*) sendBufferUsrGrey)->_byte[0] = ((GREY_DATA_PACKET*) recBuffPtr)->_byte[0];
+            ((GREY_DATA_PACKET*) sendBufferUsrGrey)->_byte[1] = GREY_MINOR_VERSION;
+            ((GREY_DATA_PACKET*) sendBufferUsrGrey)->_byte[2] = GREY_MAJOR_VERSION;
+            userGreyCounter = 0x03;
             break;
 
         case GET_VALUE:
-            ((GREY_DATA_PACKET*)sendBufferUsrGrey)->_byte[0] = ((GREY_DATA_PACKET*)recBuffPtr)->_byte[0];
+            ((GREY_DATA_PACKET*) sendBufferUsrGrey)->_byte[0] = ((GREY_DATA_PACKET*) recBuffPtr)->_byte[0];
             data = getPortDescriptor(handler)->get_data_analog();
-            ((GREY_DATA_PACKET*)sendBufferUsrGrey)->_byte[1] = LSB(data);
-            ((GREY_DATA_PACKET*)sendBufferUsrGrey)->_byte[2] = MSB(data);
-            userGreyCounter=0x03;
+            ((GREY_DATA_PACKET*) sendBufferUsrGrey)->_byte[1] = LSB(data);
+            ((GREY_DATA_PACKET*) sendBufferUsrGrey)->_byte[2] = MSB(data);
+            userGreyCounter = 0x03;
             break;
 
         case RESET:
@@ -171,12 +149,11 @@ void UserGreyReceived(byte* recBuffPtr, byte len, byte handler){
             break;
     }/*end switch(s)*/
 
-    if(userGreyCounter != 0)
-    {
+    if (userGreyCounter != 0) {
         j = 255;
-        while(mUSBGenTxIsBusy() && j-->0); /* pruebo un mÃ¡ximo de 255 veces */
-        if(!mUSBGenTxIsBusy())
-            USBGenWrite2(handler, userGreyCounter);
+        while (mUSBGenTxIsBusy() && j-- > 0); /* pruebo un maximo de 255 veces */
+            if (!mUSBGenTxIsBusy())
+                USBGenWrite2(handler, userGreyCounter);
     }/*end if*/
 }/*end UserGreyReceived*/
 

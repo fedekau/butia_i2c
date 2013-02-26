@@ -304,10 +304,11 @@ void main(void) {
     }//end while
 }//end main
 
-void initButiaMotors(){
-    ax12InitSerial();
-    autoDetectWheels();
-}
+// not used:
+//void initButiaMotors(){
+//    ax12InitSerial();
+//    autoDetectWheels();
+//}
 /******************************************************************************
  * Function:        static void InitializeSystem(void)
  *

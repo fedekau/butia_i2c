@@ -3,7 +3,7 @@
  *Santiago Reyes                           03/07/09    Original.
  *Andres Aguirre                           30/07/10    Interaccion con timmer y debugeo
  *****************************************************************************/
- 
+
 /** I N C L U D E S **********************************************************/
 #include <p18cxxx.h>
 #include <usart.h>
@@ -16,7 +16,7 @@
 #include "dynamicPolling.h"   
 #include "usb4all/proxys/T0Proxy.h"
 
-  
+
 /** V A R I A B L E S ********************************************************/
 #pragma udata 
 
@@ -27,12 +27,11 @@ void GpioProcessIO(void);
 void GpioInit(byte i);
 void GpioReceived(byte*, byte, byte);
 void GpioRelease(byte i);
-void GpioConfigure(void);
 
 // Table used by te framework to get a fixed reference point to the user module functions defined by the framework 
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
-const uTab GpioModuleTable = {&GpioInit,&GpioRelease,&GpioConfigure,"gpio"}; //modName must be less or equal 8 characters
+const uTab GpioModuleTable = {&GpioInit, &GpioRelease, "gpio"};
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
@@ -57,36 +56,12 @@ const uTab GpioModuleTable = {&GpioInit,&GpioRelease,&GpioConfigure,"gpio"}; //m
 
 void GpioInit(byte i) {
     // add my receive function to the handler module, to be called automatically when the pc sends data to the user module
-    setHandlerReceiveFunction(i,&GpioReceived);
-    // add my receive pooling function to the dynamic pooling module, to be called periodically 
-    /* andres res = addPollingFunction(&GpioProcessIO);*/
+    setHandlerReceiveFunction(i, &GpioReceived);
     // initialize the send buffer, used to send data to the PC
     sendBufferGpio = getSharedBuffer(i);
-    
-    
 }//end UserLedAmarilloInit
 
-/******************************************************************************
-/* Function:        GpioConfigure(void)
- *
- * PreCondition:    None
- *
- * Input:           None
- *
- * Output:          None
- *
- * Side Effects:    None
- *
- * Overview:        This function sets the specific configuration for the user module, it is called by the framework 
- *                        
- *
- * Note:            None
- *****************************************************************************/
-void GpioConfigure(void){
-// Do the configuration
-}
-
-void GpioProcessIO(void){
+void GpioProcessIO(void) {
 
 }//end ProcessIO
 
@@ -109,9 +84,8 @@ void GpioProcessIO(void){
 
 void GpioRelease(byte i) {
     unsetHandlerReceiveBuffer(i);
-    unsetHandlerReceiveFunction(i); 
+    unsetHandlerReceiveFunction(i);
 }
-
 
 /******************************************************************************
  * Function:        GpioReceived(byte* recBuffPtr, byte len)
@@ -129,38 +103,38 @@ void GpioRelease(byte i) {
  * Note:            None
  *****************************************************************************/
 
-void GpioReceived(byte* recBuffPtr, byte len, byte handler){
-      byte j;  
-      byte GpioCounter = 0;
-      WORD aux;
-      port_descriptor port;
-      port = board_ports[0]; //it's harcode to port 1
+void GpioReceived(byte* recBuffPtr, byte len, byte handler) {
+    byte j;
+    byte GpioCounter = 0;
+    WORD aux;
+    port_descriptor port;
+    port = board_ports[0]; //it's harcode to port 1
 
-      switch(((GPIO_DATA_PACKET*)recBuffPtr)->CMD){
+    switch (((GPIO_DATA_PACKET*) recBuffPtr)->CMD) {
         case READ_VERSION:
-              ((GPIO_DATA_PACKET*)sendBufferGpio)->_byte[0] = ((GPIO_DATA_PACKET*)recBuffPtr)->_byte[0];
-              ((GPIO_DATA_PACKET*)sendBufferGpio)->_byte[1] = GPIO_MINOR_VERSION;
-              ((GPIO_DATA_PACKET*)sendBufferGpio)->_byte[2] = GPIO_MAJOR_VERSION;
-              GpioCounter = 0x03;
-              break;  
-              
+            ((GPIO_DATA_PACKET*) sendBufferGpio)->_byte[0] = ((GPIO_DATA_PACKET*) recBuffPtr)->_byte[0];
+            ((GPIO_DATA_PACKET*) sendBufferGpio)->_byte[1] = GPIO_MINOR_VERSION;
+            ((GPIO_DATA_PACKET*) sendBufferGpio)->_byte[2] = GPIO_MAJOR_VERSION;
+            GpioCounter = 0x03;
+            break;
+
         case GET_RES:
-              ((GPIO_DATA_PACKET*)sendBufferGpio)->_byte[0] = ((GPIO_DATA_PACKET*)recBuffPtr)->_byte[0];
-              aux = port.get_val_detection_pin();
-              ((GPIO_DATA_PACKET*)sendBufferGpio)->_byte[1] = LSB(aux);
-              ((GPIO_DATA_PACKET*)sendBufferGpio)->_byte[2] = MSB(aux);
-              GpioCounter = 0x03;
-              break;        
-     
-         default:
-              break;
-      }//end switch(s)
-      if(GpioCounter != 0){
-            j = 255;
-            while(mUSBGenTxIsBusy() && j-->0); // pruebo un maximo de 255 veces
-                if(!mUSBGenTxIsBusy())
-                    USBGenWrite2(handler, GpioCounter);
-      }//end if            
+            ((GPIO_DATA_PACKET*) sendBufferGpio)->_byte[0] = ((GPIO_DATA_PACKET*) recBuffPtr)->_byte[0];
+            aux = port.get_val_detection_pin();
+            ((GPIO_DATA_PACKET*) sendBufferGpio)->_byte[1] = LSB(aux);
+            ((GPIO_DATA_PACKET*) sendBufferGpio)->_byte[2] = MSB(aux);
+            GpioCounter = 0x03;
+            break;
+
+        default:
+            break;
+    }//end switch(s)
+    if (GpioCounter != 0) {
+        j = 255;
+        while (mUSBGenTxIsBusy() && j-- > 0); // pruebo un maximo de 255 veces
+        if (!mUSBGenTxIsBusy())
+            USBGenWrite2(handler, GpioCounter);
+    }//end if
 }//end GpioReceived
 
 /** EOF gpio.c ***************************************************************/

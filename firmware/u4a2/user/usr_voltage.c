@@ -1,6 +1,6 @@
 /* Author                                           Date        Comment
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- * Aylen Ricca                                      19/04/12    Original.
+ * Aylen Ricca                                      12/10/12    Original.
  *****************************************************************************/
 
 /** I N C L U D E S **********************************************************/
@@ -8,34 +8,34 @@
 #include <usart.h>
 #include "system/typedefs.h"
 #include "system/usb/usb.h"
-#include "user/usr_light.h"
-#include "io_cfg.h"              /* I/O pin mapping*/
-#include "user/handlerManager.h"
+#include "io_cfg.h"
 #include "dynamicPolling.h"
-#include "user/usb4butia.h"     /**/
+#include "user/usb4butia.h"
+#include "user/handlerManager.h"
+#include "user/usr_voltage.h"
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata 
 
-byte* sendBufferUsrLight; /* buffer to send data*/
+byte* sendBufferUsrVoltage; /* buffer to send data*/
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void UserLightProcessIO(void);
-void UserLightInit(byte i);
-void UserLightReceived(byte*, byte, byte);
-void UserLightRelease(byte i);
+void UserVoltageProcessIO(void);
+void UserVoltageInit(byte i);
+void UserVoltageReceived(byte*, byte, byte);
+void UserVoltageRelease(byte i);
 
 /* Table used by te framework to get a fixed reference point to the user module functions defined by the framework */
 /** USER MODULE REFERENCE ****************************************************/
 #pragma romdata user
-const uTab userLightModuleTable = {&UserLightInit, &UserLightRelease, "light"};
+const uTab userVoltageModuleTable = {&UserVoltageInit,&UserVoltageRelease,"volt"};
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
 #pragma code module
 
 /******************************************************************************
- * Function:        UserLightInit(void)
+ * Function:        UserVoltageInit(void)
  *
  * PreCondition:    None
  *
@@ -51,18 +51,19 @@ const uTab userLightModuleTable = {&UserLightInit, &UserLightRelease, "light"};
  *
  * Note:            None
  *****************************************************************************/
-void UserLightInit(byte usrLightHandler) {
+void UserVoltageInit(byte usrVoltageHandler){
     /* add my receive function to the handler module, to be called automatically
-     * when the pc sends data to the user module */
-    setHandlerReceiveFunction(usrLightHandler, &UserLightReceived);
-    /* initialize the send buffer, used to send data to the PC */
-    sendBufferUsrLight = getSharedBuffer(usrLightHandler);
-    /* get port where sensor/actuator is connected and set to IN/OUT mode*/
-    getPortDescriptor(usrLightHandler)->change_port_direction(IN);
-}/*end UserLightInit*/
+     * when someone sends data to the user module */
+    setHandlerReceiveFunction(usrVoltageHandler, &UserVoltageReceived);
+    /* initialize the send buffer, used to send data */
+    sendBufferUsrVoltage = getSharedBuffer(usrVoltageHandler);
+    /* get port where sensor/actuator is connected and set to IN/OUT mode
+     * as an example, it is set to IN mode */
+    getPortDescriptor(usrVoltageHandler)->change_port_direction(IN);
+}/* end UserVoltageInit */
 
 /******************************************************************************
- * Function:        UserLightProcessIO(void)
+ * Function:        UserVoltageProcessIO(void)
  *
  * PreCondition:    None
  *
@@ -78,14 +79,14 @@ void UserLightInit(byte usrLightHandler) {
  *
  * Note:            None
  *****************************************************************************/
-void UserLightProcessIO(void) {
-    if ((usb_device_state < CONFIGURED_STATE) || (UCONbits.SUSPND == 1)) return;
+void UserVoltageProcessIO(void){
+    if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND==1)) return;
     /* here enter the code that want to be called periodically,
      * per example interaction with buttons and leds */
-}/*end UserLightProcessIO*/
+}/* end UserVoltageProcessIO */
 
 /******************************************************************************
- * Function:        UserLightRelease(byte i)
+ * Function:        UserVoltageRelease(byte i)
  *
  * PreCondition:    None
  *
@@ -101,13 +102,13 @@ void UserLightProcessIO(void) {
  *
  * Note:            None
  *****************************************************************************/
-void UserLightRelease(byte i) {
-    unsetHandlerReceiveBuffer(i);
-    unsetHandlerReceiveFunction(i);
-}/*end UserLightRelease*/
+void UserVoltageRelease(byte usrVoltageHandler){
+    unsetHandlerReceiveBuffer(usrVoltageHandler);
+    unsetHandlerReceiveFunction(usrVoltageHandler);
+}/* end UserVoltageRelease */
 
 /******************************************************************************
- * Function:        UserLightReceived(byte* recBuffPtr, byte len)
+ * Function:        UserVoltageReceived(byte* recBuffPtr, byte len)
  *
  * PreCondition:    None
  *
@@ -117,28 +118,29 @@ void UserLightRelease(byte i) {
  *
  * Side Effects:    None
  *
- * Overview:        This function manages the comunication with the pc
+ * Overview:        This function manages the comunication with the other part
  *
  * Note:            None
  *****************************************************************************/
-void UserLightReceived(byte* recBuffPtr, byte len, byte handler) {
+void UserVoltageReceived(byte* recBuffPtr, byte len, byte handler){
     byte j;
     WORD data;
-    byte userLightCounter = 0;
-    switch (((LIGHT_DATA_PACKET*) recBuffPtr)->CMD) {
+    byte userVoltageCounter = 0;
+    switch(((VOLTAGE_DATA_PACKET*)recBuffPtr)->CMD)
+    {
         case READ_VERSION:
-            ((LIGHT_DATA_PACKET*) sendBufferUsrLight)->_byte[0] = ((LIGHT_DATA_PACKET*) recBuffPtr)->_byte[0];
-            ((LIGHT_DATA_PACKET*) sendBufferUsrLight)->_byte[1] = LIGHT_MINOR_VERSION;
-            ((LIGHT_DATA_PACKET*) sendBufferUsrLight)->_byte[2] = LIGHT_MAJOR_VERSION;
-            userLightCounter = 0x03;
+            ((VOLTAGE_DATA_PACKET*)sendBufferUsrVoltage)->_byte[0] = ((VOLTAGE_DATA_PACKET*)recBuffPtr)->_byte[0];
+            ((VOLTAGE_DATA_PACKET*)sendBufferUsrVoltage)->_byte[1] = VOLTAGE_MINOR_VERSION;
+            ((VOLTAGE_DATA_PACKET*)sendBufferUsrVoltage)->_byte[2] = VOLTAGE_MAJOR_VERSION;
+            userVoltageCounter=0x03;   /* cant of bytes to be send */
             break;
 
         case GET_VALUE:
-            ((LIGHT_DATA_PACKET*) sendBufferUsrLight)->_byte[0] = ((LIGHT_DATA_PACKET*) recBuffPtr)->_byte[0];
+            ((VOLTAGE_DATA_PACKET*)sendBufferUsrVoltage)->_byte[0] = ((VOLTAGE_DATA_PACKET*)recBuffPtr)->_byte[0];
             data = getPortDescriptor(handler)->get_data_analog();
-            ((LIGHT_DATA_PACKET*) sendBufferUsrLight)->_byte[1] = LSB(data);
-            ((LIGHT_DATA_PACKET*) sendBufferUsrLight)->_byte[2] = MSB(data);
-            userLightCounter = 0x03;
+            ((VOLTAGE_DATA_PACKET*)sendBufferUsrVoltage)->_byte[1] = LSB(data);
+            ((VOLTAGE_DATA_PACKET*)sendBufferUsrVoltage)->_byte[2] = MSB(data);
+            userVoltageCounter=0x03;
             break;
 
         case RESET:
@@ -147,14 +149,15 @@ void UserLightReceived(byte* recBuffPtr, byte len, byte handler) {
 
         default:
             break;
-    }/*end switch(s)*/
+    }/* end switch(s)*/
 
-    if (userLightCounter != 0) {
+    if(userVoltageCounter != 0)
+    {
         j = 255;
-        while (mUSBGenTxIsBusy() && j-- > 0); /* pruebo un maximo de 255 veces */
-            if (!mUSBGenTxIsBusy())
-                USBGenWrite2(handler, userLightCounter);
-    }/*end if*/
-}/*end UserLightReceived*/
+        while(mUSBGenTxIsBusy() && j-->0); /* try at last 255 tries */
+            if(!mUSBGenTxIsBusy())
+                USBGenWrite2(handler, userVoltageCounter);
+    }/* end if */
+}/* end UserVoltageReceived */
 
-/** EOF usr_light.c ***************************************************************/
+/** EOF usr_voltage.c **************************************************/

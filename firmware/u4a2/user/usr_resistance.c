@@ -1,6 +1,6 @@
 /* Author                                           Date        Comment
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- * Aylen Ricca                                      19/04/12    Original.
+ * Aylen Ricca                                      12/10/12    Original.
  *****************************************************************************/
 
 /** I N C L U D E S **********************************************************/
@@ -8,34 +8,34 @@
 #include <usart.h>
 #include "system/typedefs.h"
 #include "system/usb/usb.h"
-#include "user/usr_light.h"
-#include "io_cfg.h"              /* I/O pin mapping*/
-#include "user/handlerManager.h"
+#include "io_cfg.h"
 #include "dynamicPolling.h"
-#include "user/usb4butia.h"     /**/
+#include "user/usb4butia.h"
+#include "user/handlerManager.h"
+#include "user/usr_resistance.h"
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata 
 
-byte* sendBufferUsrLight; /* buffer to send data*/
+byte* sendBufferUsrResistance; /* buffer to send data*/
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void UserLightProcessIO(void);
-void UserLightInit(byte i);
-void UserLightReceived(byte*, byte, byte);
-void UserLightRelease(byte i);
+void UserResistanceProcessIO(void);
+void UserResistanceInit(byte i);
+void UserResistanceReceived(byte*, byte, byte);
+void UserResistanceRelease(byte i);
 
 /* Table used by te framework to get a fixed reference point to the user module functions defined by the framework */
 /** USER MODULE REFERENCE ****************************************************/
 #pragma romdata user
-const uTab userLightModuleTable = {&UserLightInit, &UserLightRelease, "light"};
+const uTab userResistanceModuleTable = {&UserResistanceInit,&UserResistanceRelease,"res"};
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
 #pragma code module
 
 /******************************************************************************
- * Function:        UserLightInit(void)
+ * Function:        UserResistanceInit(void)
  *
  * PreCondition:    None
  *
@@ -51,18 +51,19 @@ const uTab userLightModuleTable = {&UserLightInit, &UserLightRelease, "light"};
  *
  * Note:            None
  *****************************************************************************/
-void UserLightInit(byte usrLightHandler) {
+void UserResistanceInit(byte usrResistanceHandler){
     /* add my receive function to the handler module, to be called automatically
-     * when the pc sends data to the user module */
-    setHandlerReceiveFunction(usrLightHandler, &UserLightReceived);
-    /* initialize the send buffer, used to send data to the PC */
-    sendBufferUsrLight = getSharedBuffer(usrLightHandler);
-    /* get port where sensor/actuator is connected and set to IN/OUT mode*/
-    getPortDescriptor(usrLightHandler)->change_port_direction(IN);
-}/*end UserLightInit*/
+     * when someone sends data to the user module */
+    setHandlerReceiveFunction(usrResistanceHandler, &UserResistanceReceived);
+    /* initialize the send buffer, used to send data */
+    sendBufferUsrResistance = getSharedBuffer(usrResistanceHandler);
+    /* get port where sensor/actuator is connected and set to IN/OUT mode
+     * as an example, it is set to IN mode */
+    getPortDescriptor(usrResistanceHandler)->change_port_direction(IN);
+}/* end UserResistanceInit */
 
 /******************************************************************************
- * Function:        UserLightProcessIO(void)
+ * Function:        UserResistanceProcessIO(void)
  *
  * PreCondition:    None
  *
@@ -78,14 +79,14 @@ void UserLightInit(byte usrLightHandler) {
  *
  * Note:            None
  *****************************************************************************/
-void UserLightProcessIO(void) {
-    if ((usb_device_state < CONFIGURED_STATE) || (UCONbits.SUSPND == 1)) return;
+void UserResistanceProcessIO(void){
+    if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND==1)) return;
     /* here enter the code that want to be called periodically,
      * per example interaction with buttons and leds */
-}/*end UserLightProcessIO*/
+}/* end UserResistanceProcessIO */
 
 /******************************************************************************
- * Function:        UserLightRelease(byte i)
+ * Function:        UserResistanceRelease(byte i)
  *
  * PreCondition:    None
  *
@@ -101,13 +102,13 @@ void UserLightProcessIO(void) {
  *
  * Note:            None
  *****************************************************************************/
-void UserLightRelease(byte i) {
-    unsetHandlerReceiveBuffer(i);
-    unsetHandlerReceiveFunction(i);
-}/*end UserLightRelease*/
+void UserResistanceRelease(byte usrResistanceHandler){
+    unsetHandlerReceiveBuffer(usrResistanceHandler);
+    unsetHandlerReceiveFunction(usrResistanceHandler);
+}/* end UserResistanceRelease */
 
 /******************************************************************************
- * Function:        UserLightReceived(byte* recBuffPtr, byte len)
+ * Function:        UserResistanceReceived(byte* recBuffPtr, byte len)
  *
  * PreCondition:    None
  *
@@ -117,28 +118,29 @@ void UserLightRelease(byte i) {
  *
  * Side Effects:    None
  *
- * Overview:        This function manages the comunication with the pc
+ * Overview:        This function manages the comunication with the other part
  *
  * Note:            None
  *****************************************************************************/
-void UserLightReceived(byte* recBuffPtr, byte len, byte handler) {
+void UserResistanceReceived(byte* recBuffPtr, byte len, byte handler){
     byte j;
     WORD data;
-    byte userLightCounter = 0;
-    switch (((LIGHT_DATA_PACKET*) recBuffPtr)->CMD) {
+    byte userResistanceCounter = 0;
+    switch(((RESISTANCE_DATA_PACKET*)recBuffPtr)->CMD)
+    {
         case READ_VERSION:
-            ((LIGHT_DATA_PACKET*) sendBufferUsrLight)->_byte[0] = ((LIGHT_DATA_PACKET*) recBuffPtr)->_byte[0];
-            ((LIGHT_DATA_PACKET*) sendBufferUsrLight)->_byte[1] = LIGHT_MINOR_VERSION;
-            ((LIGHT_DATA_PACKET*) sendBufferUsrLight)->_byte[2] = LIGHT_MAJOR_VERSION;
-            userLightCounter = 0x03;
+            ((RESISTANCE_DATA_PACKET*)sendBufferUsrResistance)->_byte[0] = ((RESISTANCE_DATA_PACKET*)recBuffPtr)->_byte[0];
+            ((RESISTANCE_DATA_PACKET*)sendBufferUsrResistance)->_byte[1] = RESISTANCE_MINOR_VERSION;
+            ((RESISTANCE_DATA_PACKET*)sendBufferUsrResistance)->_byte[2] = RESISTANCE_MAJOR_VERSION;
+            userResistanceCounter=0x03;   /* cant of bytes to be send */
             break;
 
         case GET_VALUE:
-            ((LIGHT_DATA_PACKET*) sendBufferUsrLight)->_byte[0] = ((LIGHT_DATA_PACKET*) recBuffPtr)->_byte[0];
+            ((RESISTANCE_DATA_PACKET*)sendBufferUsrResistance)->_byte[0] = ((RESISTANCE_DATA_PACKET*)recBuffPtr)->_byte[0];
             data = getPortDescriptor(handler)->get_data_analog();
-            ((LIGHT_DATA_PACKET*) sendBufferUsrLight)->_byte[1] = LSB(data);
-            ((LIGHT_DATA_PACKET*) sendBufferUsrLight)->_byte[2] = MSB(data);
-            userLightCounter = 0x03;
+            ((RESISTANCE_DATA_PACKET*)sendBufferUsrResistance)->_byte[1] = LSB(data);
+            ((RESISTANCE_DATA_PACKET*)sendBufferUsrResistance)->_byte[2] = MSB(data);
+            userResistanceCounter=0x03;
             break;
 
         case RESET:
@@ -147,14 +149,15 @@ void UserLightReceived(byte* recBuffPtr, byte len, byte handler) {
 
         default:
             break;
-    }/*end switch(s)*/
+    }/* end switch(s)*/
 
-    if (userLightCounter != 0) {
+    if(userResistanceCounter != 0)
+    {
         j = 255;
-        while (mUSBGenTxIsBusy() && j-- > 0); /* pruebo un maximo de 255 veces */
-            if (!mUSBGenTxIsBusy())
-                USBGenWrite2(handler, userLightCounter);
-    }/*end if*/
-}/*end UserLightReceived*/
+        while(mUSBGenTxIsBusy() && j-->0); /* try at last 255 tries */
+            if(!mUSBGenTxIsBusy())
+                USBGenWrite2(handler, userResistanceCounter);
+    }/* end if */
+}/* end UserResistanceReceived */
 
-/** EOF usr_light.c ***************************************************************/
+/** EOF usr_resistance.c **************************************************/
