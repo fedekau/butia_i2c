@@ -1,11 +1,10 @@
-/* Author                   Date        Comment
+/* Author                                           Date        Comment
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- * Aylen Ricca              24/04/2012  Original.
- * John Pereira
+ * Aylen Ricca                                      10/10/12    Original.
  *****************************************************************************/
 
-#ifndef USER_LED_H
-#define USER_LED_H
+#ifndef USER_SKELETON_H
+#define USER_SKELETON_H
 
 /** I N C L U D E S **********************************************************/
 #include "system/typedefs.h"
@@ -14,21 +13,22 @@
 
 /** D E F I N I T I O N S ****************************************************/
 
-#define LED_MINOR_VERSION   0x01
-#define LED_MAJOR_VERSION   0x00
+#define SKELETON_MINOR_VERSION   0x01    /* Skeleton Version 0.1 */
+#define SKELETON_MAJOR_VERSION   0x00
 
 /** S T R U C T U R E S ******************************************************/
-typedef union LED_DATA_PACKET
+typedef union SKELETON_DATA_PACKET
 {
-    byte _byte[USBGEN_EP_SIZE];  /*For byte access*/
-    word _word[USBGEN_EP_SIZE/2];/*For word access(USBGEN_EP_SIZE msut be even)*/
+    byte _byte[USBGEN_EP_SIZE];  /* For byte access */
+    word _word[USBGEN_EP_SIZE/2];/* For word access(USBGEN_EP_SIZE msut be even) */
     struct
     {
         enum
-        { 
-            READ_VERSION    = 0x00,
-            TURN            = 0x01,
-            RESET           = 0xFF
+        {
+            READ_VERSION        = 0x00,
+            GET_ANALOG_VALUE    = 0x01,
+            GET_DIGITAL_VALUE   = 0x02,
+            RESET               = 0xFF
         }CMD;
         byte len;
     };
@@ -48,8 +48,10 @@ typedef union LED_DATA_PACKET
         unsigned :8;
         word word_data;
     };
-} LED_DATA_PACKET;
+} SKELETON_DATA_PACKET;
 
 /** P U B L I C  P R O T O T Y P E S *****************************************/
 
-#endif /*USER_LED_H*/
+/* here enter public prototypes */
+
+#endif /* USER_SKELETON_H */

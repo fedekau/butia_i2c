@@ -1,6 +1,7 @@
-/* Author             									  Date        Comment
+/* Author          				  Date        Comment
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * Andrés Aguirre, Rafael Fernandez, Carlos Grossy       16/10/07    Original.
+ * Ayle 25/01/13 make it compatible
  *****************************************************************************/
 
 #ifndef USER_LOOPBACK_H
@@ -13,11 +14,11 @@
 
 /** D E F I N I T I O N S ****************************************************/
 
-#define LOOPBACK_MINOR_VERSION   0x0D    //Skeleton Version 0.13
+#define LOOPBACK_MINOR_VERSION   0x02
 #define LOOPBACK_MAJOR_VERSION   0x00
 
 /** S T R U C T U R E S ******************************************************/
-/*
+
 typedef union LOOPBACK_DATA_PACKET
 {
     byte _byte[USBGEN_EP_SIZE];  //For byte access
@@ -26,10 +27,8 @@ typedef union LOOPBACK_DATA_PACKET
     {
         enum
         { 
-            READ_VERSION    = 0x00,
-			MESS			= 0x05,
-			LOOPBACK_COMMAND= 0x20,
-			RESET			= 0xFF //backward compatibility
+            LOOPBACK_VERSION = 0x00,
+            SEND_DATA = 0x01
         }CMD;
         byte len;
     };
@@ -50,7 +49,7 @@ typedef union LOOPBACK_DATA_PACKET
         word word_data;
     };
 } LOOPBACK_DATA_PACKET;
-*/
+
 /** P U B L I C  P R O T O T Y P E S *****************************************/
 
 

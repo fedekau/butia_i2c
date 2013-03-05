@@ -1,6 +1,7 @@
 /* Author             									  Date        Comment
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * Andrés Aguirre, Rafael Fernandez, Carlos Grossy       16/10/07    Original.
+ * Ayle 25/01/13
  *****************************************************************************/
 
 /** I N C L U D E S **********************************************************/
@@ -17,20 +18,18 @@
 /** V A R I A B L E S ********************************************************/
 #pragma udata 
 
-byte  usrLoopbackHandler;	 // Handler number asigned to the module
 byte* sendBufferUsrLoopback; // buffer to send data
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
 void UserLoopBackProcessIO(void);
 void UserLoopBackInit(byte i);
-void UserLoopBackReceived(byte*, byte);
+void UserLoopBackReceived(byte*, byte, byte);
 void UserLoopBackRelease(byte i);
-void UserLoopBackConfigure(void);
 
 // Table used by te framework to get a fixed reference point to the user module functions defined by the framework 
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
-const uTab UserLoopBackModuleTable = {&UserLoopBackInit,&UserLoopBackRelease,&UserLoopBackConfigure,"lback"}; //modName must be less or equal 8 characters
+const uTab UserLoopBackModuleTable = {&UserLoopBackInit, &UserLoopBackRelease, "lback"};
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
@@ -53,37 +52,15 @@ const uTab UserLoopBackModuleTable = {&UserLoopBackInit,&UserLoopBackRelease,&Us
  * Note:            None
  *****************************************************************************/
 
-void UserLoopBackInit(byte i){
-	BOOL res;
-	usrLoopbackHandler = i;
-	// add my receive function to the handler module, to be called automatically when the pc sends data to the user module
-	setHandlerReceiveFunction(usrLoopbackHandler,&UserLoopBackReceived);
-	// add my receive pooling function to the dynamic pooling module, to be called periodically 
-	res = addPollingFunction(&UserLoopBackProcessIO);
-	// initialize the send buffer, used to send data to the PC
-	sendBufferUsrLoopback = getSharedBuffer(usrLoopbackHandler);
-	//TODO return res value 
+void UserLoopBackInit(byte usrLoopbackHandler) {
+    BOOL res;
+    // add my receive function to the handler module, to be called automatically when the pc sends data to the user module
+    setHandlerReceiveFunction(usrLoopbackHandler, &UserLoopBackReceived);
+    // add my receive pooling function to the dynamic pooling module, to be called periodically
+    res = addPollingFunction(&UserLoopBackProcessIO);
+    // initialize the send buffer, used to send data to the PC
+    sendBufferUsrLoopback = getSharedBuffer(usrLoopbackHandler);
 }//end UserLoopBackInit
-
-/******************************************************************************
- * Function:        UserLoopBackConfigure(void)
- *
- * PreCondition:    None
- *
- * Input:           None
- *
- * Output:          None
- *
- * Side Effects:    None
- *
- * Overview:        This function sets the specific configuration for the user module, it is called by the framework 
- *						
- *
- * Note:            None
- *****************************************************************************/
-void UserLoopBackConfigure(void){
-// Do the configuration
-}
 
 /******************************************************************************
  * Function:        UserLoopBackProcessIO(void)
@@ -102,14 +79,12 @@ void UserLoopBackConfigure(void){
  * Note:            None
  *****************************************************************************/
 
-void UserLoopBackProcessIO(void){  
+void UserLoopBackProcessIO(void) {
 
-    if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND==1)) return;
-	// here enter the code that want to be called periodically, per example interaction with buttons and leds
-	
+    if ((usb_device_state < CONFIGURED_STATE) || (UCONbits.SUSPND == 1)) return;
+    // here enter the code that want to be called periodically, per example interaction with buttons and leds
+
 }//end ProcessIO
-
-
 
 /******************************************************************************
  * Function:        UserLoopBackRelease(byte i)
@@ -128,12 +103,11 @@ void UserLoopBackProcessIO(void){
  * Note:            None
  *****************************************************************************/
 
-void UserLoopBackRelease(byte i){
-	unsetHandlerReceiveBuffer(i);
-	unsetHandlerReceiveFunction(i);
-	removePoolingFunction(&UserLoopBackProcessIO);
+void UserLoopBackRelease(byte i) {
+    unsetHandlerReceiveBuffer(i);
+    unsetHandlerReceiveFunction(i);
+    removePoolingFunction(&UserLoopBackProcessIO);
 }
-
 
 /******************************************************************************
  * Function:        UserLoopBackReceived(byte* recBuffPtr, byte len)
@@ -151,27 +125,38 @@ void UserLoopBackRelease(byte i){
  * Note:            None
  *****************************************************************************/
 
-void UserLoopBackReceived(byte* recBuffPtr, byte len){
-	  byte index;
-	  char mens[9] = "LBACK :)";	
-      byte UserLoopBackCounter = 0;
-	  for (UserLoopBackCounter=0 ; UserLoopBackCounter < len ; UserLoopBackCounter++){
-	  	*(sendBufferUsrLoopback+UserLoopBackCounter)= *(recBuffPtr+UserLoopBackCounter); // TODO pensar algo mas eficiente
-	  }
-	  UserLoopBackCounter=len; //por las dudas
-	  /*
-	  //para que devuelva el doble de lo que recibe
-	  for (UserLoopBackCounter=0 ; UserLoopBackCounter < len ; UserLoopBackCounter++){
-	  	*(sendBufferUsrLoopback+(UserLoopBackCounter+len))= *(recBuffPtr+UserLoopBackCounter); // TODO pensar algo mas eficiente
-	  }
-      UserLoopBackCounter=len*2; //por las dudas
-	  */
-	  
-      if(UserLoopBackCounter != 0)
-      {
-          if(!mUSBGenTxIsBusy())
-              USBGenWrite2(usrLoopbackHandler, UserLoopBackCounter);
-      }//end if  	  	
+void UserLoopBackReceived(byte* recBuffPtr, byte len, byte handler) {
+    byte UserLoopBackCounter = 0;
+
+    switch (((LOOPBACK_DATA_PACKET*) recBuffPtr)->CMD) {
+        case LOOPBACK_VERSION:
+            ((LOOPBACK_DATA_PACKET*) sendBufferUsrLoopback)->_byte[0] = ((LOOPBACK_DATA_PACKET*) recBuffPtr)->_byte[0];
+            ((LOOPBACK_DATA_PACKET*) sendBufferUsrLoopback)->_byte[1] = LOOPBACK_MINOR_VERSION;
+            ((LOOPBACK_DATA_PACKET*) sendBufferUsrLoopback)->_byte[2] = LOOPBACK_MAJOR_VERSION;
+            UserLoopBackCounter = 0x03;
+            break;
+
+        case SEND_DATA:
+            // we must return all: opcode + data
+            for (UserLoopBackCounter = 0; UserLoopBackCounter < len; UserLoopBackCounter++) {
+                *(sendBufferUsrLoopback + UserLoopBackCounter) = *(recBuffPtr + UserLoopBackCounter); // TODO pensar algo mas eficiente
+            }
+            UserLoopBackCounter = len; //por las dudas
+            break;
+    }
+    
+    /*
+    //para que devuelva el doble de lo que recibe
+    for (UserLoopBackCounter=0 ; UserLoopBackCounter < len ; UserLoopBackCounter++){
+     *(sendBufferUsrLoopback+(UserLoopBackCounter+len))= *(recBuffPtr+UserLoopBackCounter); // TODO pensar algo mas eficiente
+    }
+UserLoopBackCounter=len*2; //por las dudas
+     */
+
+    if (UserLoopBackCounter != 0) {
+        if (!mUSBGenTxIsBusy())
+            USBGenWrite2(handler, UserLoopBackCounter);
+    }//end if
 }//end UserLoopBackReceived
 
 /** EOF usr_skeleton.c ***************************************************************/
