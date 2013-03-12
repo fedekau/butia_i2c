@@ -1,4 +1,4 @@
-# EESchema Netlist Version 1.1 created  jue 15 nov 2012 20:10:06 UYST
+# EESchema Netlist Version 1.1 created  mar 05 mar 2013 14:27:18 UYST
 (
  ( /4C6EDA5F C1 C1 22pF
   ( 1 OSC1 )
@@ -16,16 +16,8 @@
   ( 1 Vusb )
   ( 2 GND )
  )
- ( /4C6ED9FF C1 C5 22pF
-  ( 1 N-000043 )
-  ( 2 GND )
- )
- ( /4C6EDA5A C1 C6 22pF
-  ( 1 N-000039 )
-  ( 2 GND )
- )
  ( /4C6ED9FC C1 C7 0,1uF
-  ( 1 N-000037 )
+  ( 1 N-000046 )
   ( 2 GND )
  )
  ( /4C6ED9F4 C1 C8 0,1uF
@@ -41,15 +33,15 @@
   ( 2 GND )
  )
  ( /4C6EDC1C LEDV D1 LED
-  ( 1 N-000048 )
+  ( 1 N-000045 )
   ( 2 GND )
  )
  ( /4CA35CFE D5 D2 1N5819
-  ( 1 N-000041 )
+  ( 1 N-000043 )
   ( 2 VDD )
  )
  ( /4C6ED928 USB_B J1 USB_B
-  ( 1 N-000041 )
+  ( 1 N-000043 )
   ( 2 D- )
   ( 3 D+ )
   ( 4 GND )
@@ -127,6 +119,11 @@
   ( 2 VDC10 )
   ( 3 data )
  )
+ ( /51361C7A PIN_ARRAY_3X1 K2 CONN_3
+  ( 1 RC0 )
+  ( 2 CCP2 )
+  ( 3 CCP1 )
+ )
  ( /4F1D9A77 PIN_ARRAY_3X1 K3 CONN_3
   ( 1 GND )
   ( 2 ? )
@@ -138,12 +135,6 @@
   ( 3 GND )
   ( 4 RB7 )
   ( 5 RB6 )
- )
- ( /4C6EDE43 PIN_ARRAY_2X2 P2 CONN_2X2
-  ( 1 N-000043 )
-  ( 2 RC0 )
-  ( 3 N-000039 )
-  ( 4 RC1 )
  )
  ( /4F14716E PIN_ARRAY_2X1 P3 CONN_2
   ( 1 HK21 )
@@ -166,7 +157,7 @@
   ( 1 HK38 )
  )
  ( /4F187034 PINTST P8 CONN_1
-  ( 1 HK17 )
+  ( 1 ? )
  )
  ( /50A56724 PIN_ARRAY_2X1 P9 CONN_2
   ( 1 VDC10 )
@@ -181,7 +172,7 @@
   ( 2 GND )
  )
  ( /4C6EDBDF R3 R1 1K
-  ( 1 N-000048 )
+  ( 1 N-000045 )
   ( 2 VDD )
  )
  ( /4C6EDBEC R3 R2 1M
@@ -198,10 +189,10 @@
  )
  ( /4C6EDBE4 R3 R5 390R
   ( 1 RB4 )
-  ( 2 N-000037 )
+  ( 2 N-000046 )
  )
  ( /4C6EDBE2 R3 R6 10K
-  ( 1 N-000037 )
+  ( 1 N-000046 )
   ( 2 VDD )
  )
  ( /4EFB2A54 R3 R7 10K
@@ -222,7 +213,7 @@
  )
  ( /4EFB5095 R3 R11 100R
   ( 1 data )
-  ( 2 N-000052 )
+  ( 2 N-000040 )
  )
  ( /4F15C816 R3 R12 10K
   ( 1 GND )
@@ -241,7 +232,7 @@
   ( 2 N-000044 )
  )
  ( /4C6ED955 SW_PUSH_SMALL SW2 PROG
-  ( 1 N-000037 )
+  ( 1 N-000046 )
   ( 2 GND )
  )
  ( /4C6EE08D 40DIP-ELL600 U1 PIC18F4550
@@ -260,8 +251,8 @@
   ( 13 OSC1 )
   ( 14 OSC2 )
   ( 15 RC0 )
-  ( 16 RC1 )
-  ( 17 HK17 )
+  ( 16 CCP2 )
+  ( 17 CCP1 )
   ( 18 Vusb )
   ( 19 HK19 )
   ( 20 HK20 )
@@ -269,7 +260,7 @@
   ( 22 HK22 )
   ( 23 D- )
   ( 24 D+ )
-  ( 25 N-000052 )
+  ( 25 N-000040 )
   ( 26 data )
   ( 27 HK27 )
   ( 28 HK28 )
@@ -290,10 +281,6 @@
   ( 1 OSC2 )
   ( 2 OSC1 )
  )
- ( /4C6EDDF7 PIN_ARRAY_2X1 X2 32.768KHz
-  ( 1 N-000043 )
-  ( 2 N-000039 )
- )
 )
 *
 { Allowed footprints by component:
@@ -313,16 +300,6 @@ $component C3
  C1-1
 $endlist
 $component C4
- SM*
- C?
- C1-1
-$endlist
-$component C5
- SM*
- C?
- C1-1
-$endlist
-$component C6
  SM*
  C?
  C1-1
@@ -364,84 +341,98 @@ $component R1
  SM0603
  SM0805
  R?-*
+ SM1206
 $endlist
 $component R2
  R?
  SM0603
  SM0805
  R?-*
+ SM1206
 $endlist
 $component R3
  R?
  SM0603
  SM0805
  R?-*
+ SM1206
 $endlist
 $component R4
  R?
  SM0603
  SM0805
  R?-*
+ SM1206
 $endlist
 $component R5
  R?
  SM0603
  SM0805
  R?-*
+ SM1206
 $endlist
 $component R6
  R?
  SM0603
  SM0805
  R?-*
+ SM1206
 $endlist
 $component R7
  R?
  SM0603
  SM0805
  R?-*
+ SM1206
 $endlist
 $component R8
  R?
  SM0603
  SM0805
  R?-*
+ SM1206
 $endlist
 $component R9
  R?
  SM0603
  SM0805
  R?-*
+ SM1206
 $endlist
 $component R10
  R?
  SM0603
  SM0805
  R?-*
+ SM1206
 $endlist
 $component R11
  R?
  SM0603
  SM0805
  R?-*
+ SM1206
 $endlist
 $component R12
  R?
  SM0603
  SM0805
  R?-*
+ SM1206
 $endlist
 $component R13
  R?
  SM0603
  SM0805
  R?-*
+ SM1206
 $endlist
 $component R14
  R?
  SM0603
  SM0805
  R?-*
+ SM1206
 $endlist
 $endfootprintlist
 }
