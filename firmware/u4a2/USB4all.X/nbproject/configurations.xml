@@ -33,6 +33,7 @@
       <itemPath>../user/usr_voltage.h</itemPath>
       <itemPath>../user/usr_led.h</itemPath>
       <itemPath>../user/usr_hackpoints.h</itemPath>
+      <itemPath>../user/usr_shield_cc.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LibraryFiles"
                    displayName="Library Files"
@@ -81,6 +82,7 @@
       <itemPath>../user/usr_led.c</itemPath>
       <itemPath>../user/usr_hackpoints.c</itemPath>
       <itemPath>../user/usr_ax.c</itemPath>
+      <itemPath>../user/usr_shield_cc.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

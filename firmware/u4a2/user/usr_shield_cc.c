@@ -49,11 +49,9 @@ void UserShieldCCRelease(byte i) {
 }
 
 void UserShieldCCReceived(byte* recBuffPtr, byte len, byte handler) {
-    byte j;
+    byte j, dir_MI, dir_MD, en_MI, en_MD;
     byte userShieldCCCounter = 0;
-    char direction1, direction2;
-    byte lowVel1, lowVel2, highVel1, highVel2, res, idmotor;
-    word vel1, vel2;
+
     switch (((SHIELD_CC_DATA_PACKET*) recBuffPtr)->CMD) {
 
         case READ_VERSION:
@@ -68,38 +66,24 @@ void UserShieldCCReceived(byte* recBuffPtr, byte len, byte handler) {
             break;
 
         case SET_2CCMOTOR_SPEED:
-//            ((SHIELD_CC_DATA_PACKET*) sendBufferUsrShieldCC)->_byte[0] = ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[0];
-//            direction1 = ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[1];
-//            highVel1 = ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[2];
-//            lowVel1 = ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[3];
-//            vel1 = highVel1;
-//            vel1 = vel1 << 8 | lowVel1;
-//            direction2 = ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[4];
-//            highVel2 = ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[5];
-//            lowVel2 = ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[6];
-//            vel2 = highVel2;
-//            vel2 = vel2 << 8 | lowVel2;
-//            if (direction1 == 0x01) {
-//                endlessTurn(wheels.left.id, vel1, 0);
-//            } else {
-//                endlessTurn(wheels.left.id, 0 - vel1, 0);
-//            }
-//            if (direction2 == 0x01)
-//                endlessTurn(wheels.right.id, vel2, 1);
-//            else
-//                endlessTurn(wheels.right.id, 0 - vel2, 1);
-//            userShieldCCCounter = 0x01;
+            ((SHIELD_CC_DATA_PACKET*) sendBufferUsrShieldCC)->_byte[0] = ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[0];
+            dir_MI = ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[1];
+            en_MI = ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[2];
+            dir_MD = ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[3];
+            en_MD = ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[4];
+            PORTD |= (dir_MI << 3) | (en_MI << 2) | (dir_MD << 1) | en_MD;
+            userShieldCCCounter = 0x01;
             break;
 
         default:
             break;
-    }/*end switch(s)*/
+    }
     if (userShieldCCCounter != 0) {
         j = 255;
         while (mUSBGenTxIsBusy() && j-- > 0);
         if (!mUSBGenTxIsBusy())
             USBGenWrite2(handler, userShieldCCCounter);
-    }/*end if*/
+    }
 }/*end UserShieldCCReceived*/
 
-/** EOF usr_shield_cc.c ***************************************************************/
+/** EOF usr_shield_cc.c *******************************************************/
