@@ -27,6 +27,7 @@ typedef union SHIELD_CC_DATA_PACKET {
         enum {
             READ_VERSION = 0x00,
             SET_2CCMOTOR_SPEED = 0x01,
+            TEST = 0x02,
             RESET = 0xFF
         } CMD;
         byte len;

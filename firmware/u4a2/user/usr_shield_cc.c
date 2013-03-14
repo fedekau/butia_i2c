@@ -13,6 +13,7 @@
 #include "user/usr_shield_cc.h"
 #include "io_cfg.h"
 #include "user/handlerManager.h"
+#include "../usb4all/proxys/T1Service.h"
 #include "dynamicPolling.h"
 
 /** V A R I A B L E S *********************************************************/
@@ -50,6 +51,7 @@ void UserShieldCCRelease(byte i) {
 
 void UserShieldCCReceived(byte* recBuffPtr, byte len, byte handler) {
     byte j, dir_MI, dir_MD, en_MI, en_MD;
+    int dc;
     byte userShieldCCCounter = 0;
 
     switch (((SHIELD_CC_DATA_PACKET*) recBuffPtr)->CMD) {
@@ -73,6 +75,28 @@ void UserShieldCCReceived(byte* recBuffPtr, byte len, byte handler) {
             en_MD = ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[4];
             PORTD |= (dir_MI << 3) | (en_MI << 2) | (dir_MD << 1) | en_MD;
             userShieldCCCounter = 0x01;
+            break;
+
+        case TEST:
+            ((SHIELD_CC_DATA_PACKET*) sendBufferUsrShieldCC)->_byte[0] = ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[0];
+            j = ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[1];
+            switch (j) {
+                case 0:
+                    finishPWM();
+                    ((SHIELD_CC_DATA_PACKET*) sendBufferUsrShieldCC)->_byte[1] = j+2;
+                    break;
+
+                case 1:
+                    dc = (int) ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[2];
+                    ((SHIELD_CC_DATA_PACKET*) sendBufferUsrShieldCC)->_byte[1] = dc;
+                    startPWM(dc);
+                    break;
+
+                default:
+                    ((SHIELD_CC_DATA_PACKET*) sendBufferUsrShieldCC)->_byte[1] = 0x0A;
+                    break;
+            }
+            userShieldCCCounter = 0x02;
             break;
 
         default:
