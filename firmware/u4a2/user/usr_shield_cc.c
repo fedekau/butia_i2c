@@ -38,20 +38,23 @@ const uTab userShieldCCModuleTable = {&UserShieldCCInit, &UserShieldCCRelease, "
 void UserShieldCCInit(byte usrShieldCCHandler) {
     setHandlerReceiveFunction(usrShieldCCHandler, &UserShieldCCReceived);
     sendBufferUsrShieldCC = getSharedBuffer(usrShieldCCHandler);
+    TRISD &= 0x0F;
+    PORTD |= 0xF0;
 }
 
-void UserShieldCCProcessIO(void) {
+void UserShieldCCProcessIO() {
     if ((usb_device_state < CONFIGURED_STATE) || (UCONbits.SUSPND == 1)) return;
 }
 
 void UserShieldCCRelease(byte i) {
     unsetHandlerReceiveBuffer(i);
     unsetHandlerReceiveFunction(i);
+    PORTD &= 0x0F;
 }
 
 void UserShieldCCReceived(byte* recBuffPtr, byte len, byte handler) {
-    byte j, dir_MI, dir_MD, en_MI, en_MD;
-    int dc;
+    byte j, sen_MI, sen_MD, velH_MI, velH_MD, velL_MI, velL_MD;
+    word velD, velI;
     byte userShieldCCCounter = 0;
 
     switch (((SHIELD_CC_DATA_PACKET*) recBuffPtr)->CMD) {
@@ -60,6 +63,7 @@ void UserShieldCCReceived(byte* recBuffPtr, byte len, byte handler) {
             ((SHIELD_CC_DATA_PACKET*) sendBufferUsrShieldCC)->_byte[0] = ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[0];
             ((SHIELD_CC_DATA_PACKET*) sendBufferUsrShieldCC)->_byte[1] = SHIELD_CC_MINOR_VERSION;
             ((SHIELD_CC_DATA_PACKET*) sendBufferUsrShieldCC)->_byte[2] = SHIELD_CC_MAJOR_VERSION;
+            startPWM(70);
             userShieldCCCounter = 0x03;
             break;
 
@@ -69,34 +73,52 @@ void UserShieldCCReceived(byte* recBuffPtr, byte len, byte handler) {
 
         case SET_2CCMOTOR_SPEED:
             ((SHIELD_CC_DATA_PACKET*) sendBufferUsrShieldCC)->_byte[0] = ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[0];
-            dir_MI = ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[1];
-            en_MI = ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[2];
-            dir_MD = ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[3];
-            en_MD = ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[4];
-            PORTD |= (dir_MI << 3) | (en_MI << 2) | (dir_MD << 1) | en_MD;
+            sen_MI = ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[1];
+            velH_MI = ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[2];
+            velL_MI = ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[3];
+            sen_MD = ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[4];
+            velH_MD = ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[5];
+            velL_MD = ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[6];
+
+            velD = (unsigned int) velH_MD << 8 | velL_MD;
+            velI = (unsigned int) velH_MI << 8 | velL_MI;
+
+            // frenar
+            if ((velD == 0) && (velI == 0)) {
+                /* pongo en cero los 4 hackp */
+                PORTD |= 0xF0;
+            } else {
+                // motor derecho
+                if (sen_MD == 0) {
+                    /* adelante */
+                    /* pongo P4=0 P5=1 */
+                    PORTDbits.RD4 = 0;
+                    PORTDbits.RD5 = 1;
+                } else {
+                    /* atras */
+                    /* pongo 4=1 5=0 */
+                    PORTDbits.RD4 = 1;
+                    PORTDbits.RD5 = 0;
+                }
+                // motor izquierdo
+                if (sen_MI == 0) {
+                    /* adelante */
+                    /* pongo 6=0 7=1 */
+                    PORTDbits.RD6 = 0;
+                    PORTDbits.RD7 = 1;
+                } else {
+                    /* atras */
+                    /* pongo 6=1 7=0 */
+                    PORTDbits.RD6 = 1;
+                    PORTDbits.RD7 = 0;
+                }
+            }
             userShieldCCCounter = 0x01;
             break;
 
         case TEST:
             ((SHIELD_CC_DATA_PACKET*) sendBufferUsrShieldCC)->_byte[0] = ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[0];
-            j = ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[1];
-            switch (j) {
-                case 0:
-                    finishPWM();
-                    ((SHIELD_CC_DATA_PACKET*) sendBufferUsrShieldCC)->_byte[1] = j+2;
-                    break;
-
-                case 1:
-                    dc = (int) ((SHIELD_CC_DATA_PACKET*) recBuffPtr)->_byte[2];
-                    ((SHIELD_CC_DATA_PACKET*) sendBufferUsrShieldCC)->_byte[1] = dc;
-                    startPWM(dc);
-                    break;
-
-                default:
-                    ((SHIELD_CC_DATA_PACKET*) sendBufferUsrShieldCC)->_byte[1] = 0x0A;
-                    break;
-            }
-            userShieldCCCounter = 0x02;
+            userShieldCCCounter = 0x01;
             break;
 
         default:
