@@ -12,7 +12,8 @@ rom const device_resistance table_device_id_resistance[MAX_DEVICES] = {
     { "gpio", R_GPIO_MIN, R_GPIO_MAX},
     { "volt", R_VOLT_MIN, R_VOLT_MAX},
     { "res", R_RES_MIN, R_RES_MAX},
-    { "led", R_LED_MIN, R_LED_MAX}
+    { "led", R_LED_MIN, R_LED_MAX},
+    { "shld_cc", R_SHIELD_CC_MIN, R_SHIELD_CC_MAX}
 };
 
 #pragma udata 
