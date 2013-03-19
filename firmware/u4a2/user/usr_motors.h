@@ -38,7 +38,8 @@ typedef union MOTORS_DATA_PACKET {
         enum {
             READ_VERSION = 0x00,
             SET_VEL_2MTR = 0x01,
-            TEST_MOTORS = 0x02
+            SET_VEL_MTR = 0x02,
+            TEST_MOTORS = 0x03
         } CMD;
         byte len;
     };
