@@ -1,0 +1,45 @@
+Cmp-Mod V01 Created by CvPcb (2013-mar-13)-testing date = jue 21 mar 2013 09:53:54 UYT
+
+BeginCmp
+TimeStamp = /514B0133;
+Reference = D1;
+ValeurCmp = LED;
+IdModule  = LED-5MM;
+EndCmp
+
+BeginCmp
+TimeStamp = /4F68816E;
+Reference = J1;
+ValeurCmp = RJ45;
+IdModule  = RJ45_8;
+EndCmp
+
+BeginCmp
+TimeStamp = /514B0110;
+Reference = Q1;
+ValeurCmp = BC849;
+IdModule  = SOT23;
+EndCmp
+
+BeginCmp
+TimeStamp = /4FAC1B98;
+Reference = R1;
+ValeurCmp = R;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /4FAC1BA4;
+Reference = R2;
+ValeurCmp = R;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /514B01BB;
+Reference = R3;
+ValeurCmp = R;
+IdModule  = R3;
+EndCmp
+
+EndListe
