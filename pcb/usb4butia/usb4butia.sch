@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date jue 04 abr 2013 17:43:03 UYT
+EESchema Schematic File Version 2  date jue 04 abr 2013 20:23:54 UYT
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -69,8 +69,6 @@ Wire Wire Line
 	5100 1700 5300 1700
 Wire Wire Line
 	4300 2200 4150 2200
-Wire Wire Line
-	5400 2650 5550 2650
 Wire Wire Line
 	5400 2800 5550 2800
 Wire Wire Line
@@ -449,27 +447,16 @@ HK38
 $Comp
 L CONN_1 P7
 U 1 1 4F187057
-P 5700 2650
-F 0 "P7" H 5780 2650 40  0000 L CNN
-F 1 "CONN_1" H 5700 2705 30  0001 C CNN
-	1    5700 2650
-	1    0    0    -1  
-$EndComp
-Text GLabel 5400 2650 0    60   Input ~ 0
-HK38
-Text GLabel 1850 4000 0    60   Input ~ 0
-HK17
-Text GLabel 5400 2800 0    60   Input ~ 0
-HK17
-$Comp
-L CONN_1 P8
-U 1 1 4F187034
 P 5700 2800
-F 0 "P8" H 5780 2800 40  0000 L CNN
+F 0 "P7" H 5780 2800 40  0000 L CNN
 F 1 "CONN_1" H 5700 2855 30  0001 C CNN
 	1    5700 2800
 	1    0    0    -1  
 $EndComp
+Text GLabel 5400 2800 0    60   Input ~ 0
+HK38
+Text GLabel 1850 4000 0    60   Input ~ 0
+HK17
 $Comp
 L CONN_1 P6
 U 1 1 4F186E55
@@ -1155,7 +1142,7 @@ L R R17
 U 1 1 515DE38D
 P 4000 6750
 F 0 "R17" V 4080 6750 50  0000 C CNN
-F 1 "1K" V 4000 6750 50  0000 C CNN
+F 1 "10K" V 4000 6750 50  0000 C CNN
 	1    4000 6750
 	1    0    0    -1  
 $EndComp
@@ -1164,7 +1151,7 @@ L R R16
 U 1 1 515DE39A
 P 3850 6750
 F 0 "R16" V 3930 6750 50  0000 C CNN
-F 1 "1K" V 3850 6750 50  0000 C CNN
+F 1 "10K" V 3850 6750 50  0000 C CNN
 	1    3850 6750
 	1    0    0    -1  
 $EndComp
@@ -1173,7 +1160,7 @@ L R R15
 U 1 1 515DE3A0
 P 3700 6750
 F 0 "R15" V 3780 6750 50  0000 C CNN
-F 1 "1K" V 3700 6750 50  0000 C CNN
+F 1 "10K" V 3700 6750 50  0000 C CNN
 	1    3700 6750
 	1    0    0    -1  
 $EndComp
