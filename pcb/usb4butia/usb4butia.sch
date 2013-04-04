@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date mar 05 mar 2013 15:15:12 UYST
+EESchema Schematic File Version 2  date jue 04 abr 2013 17:43:03 UYT
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -30,13 +30,13 @@ LIBS:atmel
 LIBS:contrib
 LIBS:valves
 LIBS:usb4butia-cache
-EELAYER 25  0
+EELAYER 27 0
 EELAYER END
-$Descr A4 11700 8267
+$Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "USB4butia"
-Date "5 mar 2013"
+Date "4 apr 2013"
 Rev "1.0"
 Comp ""
 Comment1 ""
@@ -47,16 +47,16 @@ $EndDescr
 $Comp
 L CONN_3 K2
 U 1 1 51361C7A
-P 4500 6800
-F 0 "K2" V 4450 6800 50  0000 C CNN
-F 1 "CONN_3" V 4550 6800 40  0000 C CNN
-	1    4500 6800
+P 4450 7250
+F 0 "K2" V 4400 7250 50  0000 C CNN
+F 1 "CONN_3" V 4500 7250 40  0000 C CNN
+	1    4450 7250
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3850 6900 4150 6900
+	3450 7350 4100 7350
 Wire Wire Line
-	3850 6800 4150 6800
+	3450 7250 4100 7250
 Wire Wire Line
 	6750 6850 6850 6850
 Wire Wire Line
@@ -71,8 +71,6 @@ Wire Wire Line
 	4300 2200 4150 2200
 Wire Wire Line
 	5400 2650 5550 2650
-Wire Wire Line
-	1900 4000 2050 4000
 Wire Wire Line
 	5400 2800 5550 2800
 Wire Wire Line
@@ -145,14 +143,14 @@ Wire Wire Line
 	4950 3600 5100 3600
 Connection ~ 3300 5150
 Wire Wire Line
-	3500 5150 2950 5150
+	2950 5150 3500 5150
 Wire Wire Line
 	2950 5150 2950 5450
 Wire Wire Line
 	1100 5350 2800 5350
 Connection ~ 1350 4500
 Wire Wire Line
-	2050 4500 1250 4500
+	1250 4500 2050 4500
 Wire Wire Line
 	1850 4400 2050 4400
 Wire Wire Line
@@ -211,20 +209,20 @@ Wire Wire Line
 Wire Wire Line
 	2050 4100 1850 4100
 Wire Wire Line
-	2950 5650 2950 5750
+	2950 5750 2950 5650
 Wire Wire Line
-	2950 5750 1100 5750
+	1100 5750 2950 5750
 Connection ~ 1900 5750
 Connection ~ 2400 5350
 Connection ~ 1550 5350
 Connection ~ 1100 6750
 Wire Wire Line
-	1300 6750 950  6750
+	950  6750 1300 6750
 Wire Wire Line
 	1850 3650 2050 3650
 Connection ~ 1350 1250
 Wire Wire Line
-	2100 1250 1200 1250
+	1200 1250 2100 1250
 Wire Wire Line
 	6900 1400 6250 1400
 Wire Wire Line
@@ -239,8 +237,6 @@ Wire Wire Line
 	4350 3000 4150 3000
 Wire Wire Line
 	1850 3800 2050 3800
-Wire Wire Line
-	3950 6700 4150 6700
 Wire Wire Line
 	1850 2400 2050 2400
 Wire Wire Line
@@ -311,14 +307,14 @@ Wire Wire Line
 Wire Wire Line
 	5000 5300 4250 5300
 Wire Wire Line
-	4100 5500 4250 5500
+	4250 5500 4100 5500
 Wire Wire Line
 	3900 6050 4100 6050
 Connection ~ 1900 5350
 Connection ~ 1550 5750
 Connection ~ 2400 5750
 Wire Wire Line
-	4250 5500 4250 5300
+	4250 5300 4250 5500
 Connection ~ 4250 5400
 Wire Wire Line
 	6450 4200 6250 4200
@@ -378,10 +374,10 @@ Wire Wire Line
 	6300 7150 6400 7150
 Wire Wire Line
 	6300 7350 6400 7350
-Text GLabel 3850 6900 0    60   Input ~ 0
-CCP1
-Text GLabel 3850 6800 0    60   Input ~ 0
-CCP2
+Text GLabel 3450 7350 0    60   Input ~ 0
+HK17
+Text GLabel 3450 7250 0    60   Input ~ 0
+HK16
 Text GLabel 6300 7150 0    60   Input ~ 0
 VDC10
 Text GLabel 6300 7350 0    60   Input ~ 0
@@ -461,8 +457,8 @@ F 1 "CONN_1" H 5700 2705 30  0001 C CNN
 $EndComp
 Text GLabel 5400 2650 0    60   Input ~ 0
 HK38
-Text GLabel 1900 4000 0    60   Input ~ 0
-CCP1
+Text GLabel 1850 4000 0    60   Input ~ 0
+HK17
 Text GLabel 5400 2800 0    60   Input ~ 0
 HK17
 $Comp
@@ -918,11 +914,11 @@ VSS
 Text GLabel 1850 3200 0    60   Input ~ 0
 VDD
 Text GLabel 1850 3900 0    60   Input ~ 0
-CCP2
+HK16
 Text GLabel 1850 3800 0    60   Input ~ 0
-RC0
-Text GLabel 3950 6700 0    60   Input ~ 0
-RC0
+HK15
+Text GLabel 3450 7150 0    60   Input ~ 0
+HK15
 Text GLabel 4350 3000 2    60   Input ~ 0
 VSS
 Text GLabel 4350 2900 2    60   Input ~ 0
@@ -1150,4 +1146,52 @@ F 1 "USB_B" V 4400 6000 60  0000 C CNN
 	1    4650 5850
 	1    0    0    1   
 $EndComp
+Wire Wire Line
+	3450 7150 4100 7150
+Wire Wire Line
+	1850 4000 2050 4000
+$Comp
+L R R17
+U 1 1 515DE38D
+P 4000 6750
+F 0 "R17" V 4080 6750 50  0000 C CNN
+F 1 "1K" V 4000 6750 50  0000 C CNN
+	1    4000 6750
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R16
+U 1 1 515DE39A
+P 3850 6750
+F 0 "R16" V 3930 6750 50  0000 C CNN
+F 1 "1K" V 3850 6750 50  0000 C CNN
+	1    3850 6750
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R15
+U 1 1 515DE3A0
+P 3700 6750
+F 0 "R15" V 3780 6750 50  0000 C CNN
+F 1 "1K" V 3700 6750 50  0000 C CNN
+	1    3700 6750
+	1    0    0    -1  
+$EndComp
+Text GLabel 3450 6500 0    60   Input ~ 0
+VDD
+Wire Wire Line
+	3450 6500 4000 6500
+Connection ~ 3700 6500
+Connection ~ 3850 6500
+Wire Wire Line
+	3700 7000 3700 7150
+Connection ~ 3700 7150
+Wire Wire Line
+	3850 7000 3850 7250
+Connection ~ 3850 7250
+Wire Wire Line
+	4000 7000 4000 7350
+Connection ~ 4000 7350
+Text Notes 3600 7550 0    60   ~ 0
+SHIELD-ID
 $EndSCHEMATC

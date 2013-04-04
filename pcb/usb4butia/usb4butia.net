@@ -1,438 +1,723 @@
-# EESchema Netlist Version 1.1 created  mar 05 mar 2013 14:27:18 UYST
-(
- ( /4C6EDA5F C1 C1 22pF
-  ( 1 OSC1 )
-  ( 2 GND )
- )
- ( /4C6EDA5C C1 C2 22pF
-  ( 1 OSC2 )
-  ( 2 GND )
- )
- ( /4C6EDA57 C1 C3 0,1uF
-  ( 1 N-000044 )
-  ( 2 GND )
- )
- ( /4C6ED9F9 C1 C4 0,47uF
-  ( 1 Vusb )
-  ( 2 GND )
- )
- ( /4C6ED9FC C1 C7 0,1uF
-  ( 1 N-000046 )
-  ( 2 GND )
- )
- ( /4C6ED9F4 C1 C8 0,1uF
-  ( 1 VDD )
-  ( 2 GND )
- )
- ( /4C6EDA69 C1 C9 0,1uF
-  ( 1 VDD )
-  ( 2 GND )
- )
- ( /4C6EDA8C C1V8 C10 10uF
-  ( 1 VDD )
-  ( 2 GND )
- )
- ( /4C6EDC1C LEDV D1 LED
-  ( 1 N-000045 )
-  ( 2 GND )
- )
- ( /4CA35CFE D5 D2 1N5819
-  ( 1 N-000043 )
-  ( 2 VDD )
- )
- ( /4C6ED928 USB_B J1 USB_B
-  ( 1 N-000043 )
-  ( 2 D- )
-  ( 3 D+ )
-  ( 4 GND )
-  ( 5 GND )
-  ( 6 GND )
- )
- ( /4EFB1AFC RJ45_8 J2 RJ45
-  ( 1 ? )
-  ( 2 ? )
-  ( 3 VDD )
-  ( 4 idAN0 )
-  ( 5 GND )
-  ( 6 AN1 )
-  ( 7 ? )
-  ( 8 ? )
-  ( 9 GND )
- )
- ( /4EFB1B01 RJ45_8 J3 RJ45
-  ( 1 ? )
-  ( 2 ? )
-  ( 3 VDD )
-  ( 4 idAN2 )
-  ( 5 GND )
-  ( 6 AN3 )
-  ( 7 ? )
-  ( 8 ? )
-  ( 9 GND )
- )
- ( /4EFB1B05 RJ45_8 J4 RJ45
-  ( 1 ? )
-  ( 2 ? )
-  ( 3 VDD )
-  ( 4 idAN8 )
-  ( 5 GND )
-  ( 6 AN9 )
-  ( 7 ? )
-  ( 8 ? )
-  ( 9 GND )
- )
- ( /4EFB1B08 RJ45_8 J5 RJ45
-  ( 1 ? )
-  ( 2 ? )
-  ( 3 VDD )
-  ( 4 idAN12 )
-  ( 5 GND )
-  ( 6 AN10 )
-  ( 7 ? )
-  ( 8 ? )
-  ( 9 GND )
- )
- ( /4F15C817 RJ45_8 J6 RJ45
-  ( 1 ? )
-  ( 2 ? )
-  ( 3 VDD )
-  ( 4 idAN7 )
-  ( 5 GND )
-  ( 6 AN6 )
-  ( 7 ? )
-  ( 8 ? )
-  ( 9 GND )
- )
- ( /4F171600 RJ45_8 J7 RJ45
-  ( 1 ? )
-  ( 2 ? )
-  ( 3 VDD )
-  ( 4 idAN5 )
-  ( 5 GND )
-  ( 6 AN4 )
-  ( 7 ? )
-  ( 8 ? )
-  ( 9 GND )
- )
- ( /4EFB4F25 PIN_ARRAY_3X1 K1 AX-12
-  ( 1 GND )
-  ( 2 VDC10 )
-  ( 3 data )
- )
- ( /51361C7A PIN_ARRAY_3X1 K2 CONN_3
-  ( 1 RC0 )
-  ( 2 CCP2 )
-  ( 3 CCP1 )
- )
- ( /4F1D9A77 PIN_ARRAY_3X1 K3 CONN_3
-  ( 1 GND )
-  ( 2 ? )
-  ( 3 VDD )
- )
- ( /4C6EDD0D PIN_ARRAY_5x1 P1 PICkit2
-  ( 1 Vpp )
-  ( 2 VDD )
-  ( 3 GND )
-  ( 4 RB7 )
-  ( 5 RB6 )
- )
- ( /4F14716E PIN_ARRAY_2X1 P3 CONN_2
-  ( 1 HK21 )
-  ( 2 HK22 )
- )
- ( /4F170606 PIN_ARRAY_2X1 P4 CONN_2
-  ( 1 HK20 )
-  ( 2 HK19 )
- )
- ( /4F1868B4 PIN_ARRAY_2X2 P5 CONN_4
-  ( 1 HK29 )
-  ( 2 HK30 )
-  ( 3 HK28 )
-  ( 4 HK27 )
- )
- ( /4F186E55 PINTST P6 CONN_1
-  ( 1 HK6 )
- )
- ( /4F187057 PINTST P7 CONN_1
-  ( 1 HK38 )
- )
- ( /4F187034 PINTST P8 CONN_1
-  ( 1 ? )
- )
- ( /50A56724 PIN_ARRAY_2X1 P9 CONN_2
-  ( 1 VDC10 )
-  ( 2 VDC10_i )
- )
- ( /4FD00BA9 bornier2 P13 Bornier
-  ( 1 VDC10 )
-  ( 2 VDC10_i )
- )
- ( /4FD1ED3E bornier2 P14 CONN_2
-  ( 1 VDC10_i )
-  ( 2 GND )
- )
- ( /4C6EDBDF R3 R1 1K
-  ( 1 N-000045 )
-  ( 2 VDD )
- )
- ( /4C6EDBEC R3 R2 1M
-  ( 1 OSC1 )
-  ( 2 OSC2 )
- )
- ( /4C6EDBE6 R3 R3 10K
-  ( 1 N-000044 )
-  ( 2 VDD )
- )
- ( /4C6EDBE9 R3 R4 390R
-  ( 1 Vpp )
-  ( 2 N-000044 )
- )
- ( /4C6EDBE4 R3 R5 390R
-  ( 1 RB4 )
-  ( 2 N-000046 )
- )
- ( /4C6EDBE2 R3 R6 10K
-  ( 1 N-000046 )
-  ( 2 VDD )
- )
- ( /4EFB2A54 R3 R7 10K
-  ( 1 GND )
-  ( 2 idAN0 )
- )
- ( /4EFB2A73 R3 R8 10K
-  ( 1 GND )
-  ( 2 idAN2 )
- )
- ( /4EFB2A7F R3 R9 10K
-  ( 1 GND )
-  ( 2 idAN8 )
- )
- ( /4EFB2A89 R3 R10 10K
-  ( 1 GND )
-  ( 2 idAN12 )
- )
- ( /4EFB5095 R3 R11 100R
-  ( 1 data )
-  ( 2 N-000040 )
- )
- ( /4F15C816 R3 R12 10K
-  ( 1 GND )
-  ( 2 idAN7 )
- )
- ( /4F1715FF R3 R13 10K
-  ( 1 GND )
-  ( 2 idAN5 )
- )
- ( /4F91F453 R3 R14 1K
-  ( 1 VDD )
-  ( 2 data )
- )
- ( /4C6ED95B SW_PUSH_SMALL SW1 RST
-  ( 1 GND )
-  ( 2 N-000044 )
- )
- ( /4C6ED955 SW_PUSH_SMALL SW2 PROG
-  ( 1 N-000046 )
-  ( 2 GND )
- )
- ( /4C6EE08D 40DIP-ELL600 U1 PIC18F4550
-  ( 1 Vpp )
-  ( 2 idAN0 )
-  ( 3 AN1 )
-  ( 4 idAN2 )
-  ( 5 AN3 )
-  ( 6 HK6 )
-  ( 7 AN4 )
-  ( 8 idAN5 )
-  ( 9 AN6 )
-  ( 10 idAN7 )
-  ( 11 VDD )
-  ( 12 GND )
-  ( 13 OSC1 )
-  ( 14 OSC2 )
-  ( 15 RC0 )
-  ( 16 CCP2 )
-  ( 17 CCP1 )
-  ( 18 Vusb )
-  ( 19 HK19 )
-  ( 20 HK20 )
-  ( 21 HK21 )
-  ( 22 HK22 )
-  ( 23 D- )
-  ( 24 D+ )
-  ( 25 N-000040 )
-  ( 26 data )
-  ( 27 HK27 )
-  ( 28 HK28 )
-  ( 29 HK29 )
-  ( 30 HK30 )
-  ( 31 GND )
-  ( 32 VDD )
-  ( 33 idAN12 )
-  ( 34 AN10 )
-  ( 35 idAN8 )
-  ( 36 AN9 )
-  ( 37 RB4 )
-  ( 38 HK38 )
-  ( 39 RB6 )
-  ( 40 RB7 )
- )
- ( /4C6EDDF1 HC-18UV X1 20MHz
-  ( 1 OSC2 )
-  ( 2 OSC1 )
- )
-)
-*
-{ Allowed footprints by component:
-$component C1
- SM*
- C?
- C1-1
-$endlist
-$component C2
- SM*
- C?
- C1-1
-$endlist
-$component C3
- SM*
- C?
- C1-1
-$endlist
-$component C4
- SM*
- C?
- C1-1
-$endlist
-$component C7
- SM*
- C?
- C1-1
-$endlist
-$component C8
- SM*
- C?
- C1-1
-$endlist
-$component C9
- SM*
- C?
- C1-1
-$endlist
-$component C10
- CP*
- SM*
-$endlist
-$component D1
- LED-3MM
- LED-5MM
- LED-10MM
- LED-0603
- LED-0805
- LED-1206
- LEDV
-$endlist
-$component D2
- D?
- S*
-$endlist
-$component R1
- R?
- SM0603
- SM0805
- R?-*
- SM1206
-$endlist
-$component R2
- R?
- SM0603
- SM0805
- R?-*
- SM1206
-$endlist
-$component R3
- R?
- SM0603
- SM0805
- R?-*
- SM1206
-$endlist
-$component R4
- R?
- SM0603
- SM0805
- R?-*
- SM1206
-$endlist
-$component R5
- R?
- SM0603
- SM0805
- R?-*
- SM1206
-$endlist
-$component R6
- R?
- SM0603
- SM0805
- R?-*
- SM1206
-$endlist
-$component R7
- R?
- SM0603
- SM0805
- R?-*
- SM1206
-$endlist
-$component R8
- R?
- SM0603
- SM0805
- R?-*
- SM1206
-$endlist
-$component R9
- R?
- SM0603
- SM0805
- R?-*
- SM1206
-$endlist
-$component R10
- R?
- SM0603
- SM0805
- R?-*
- SM1206
-$endlist
-$component R11
- R?
- SM0603
- SM0805
- R?-*
- SM1206
-$endlist
-$component R12
- R?
- SM0603
- SM0805
- R?-*
- SM1206
-$endlist
-$component R13
- R?
- SM0603
- SM0805
- R?-*
- SM1206
-$endlist
-$component R14
- R?
- SM0603
- SM0805
- R?-*
- SM1206
-$endlist
-$endfootprintlist
-}
+(export (version D)
+  (design
+    (source /home/edgardo/usb4all-code/pcb/usb4butia/usb4butia.sch)
+    (date "jue 04 abr 2013 17:38:36 UYT")
+    (tool "eeschema (2012-nov-02)-testing"))
+  (components
+    (comp (ref K2)
+      (value CONN_3)
+      (libsource (lib conn) (part CONN_3))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 51361C7A))
+    (comp (ref P9)
+      (value CONN_2)
+      (libsource (lib conn) (part CONN_2))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 50A56724))
+    (comp (ref P14)
+      (value CONN_2)
+      (libsource (lib conn) (part CONN_2))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4FD1ED3E))
+    (comp (ref P13)
+      (value Bornier)
+      (libsource (lib conn) (part CONN_2))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4FD00BA9))
+    (comp (ref R14)
+      (value 1K)
+      (libsource (lib device) (part R))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4F91F453))
+    (comp (ref K3)
+      (value CONN_3)
+      (libsource (lib conn) (part CONN_3))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4F1D9A77))
+    (comp (ref P7)
+      (value CONN_1)
+      (libsource (lib conn) (part CONN_1))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4F187057))
+    (comp (ref P8)
+      (value CONN_1)
+      (libsource (lib conn) (part CONN_1))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4F187034))
+    (comp (ref P6)
+      (value CONN_1)
+      (libsource (lib conn) (part CONN_1))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4F186E55))
+    (comp (ref P5)
+      (value CONN_4)
+      (libsource (lib conn) (part CONN_4))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4F1868B4))
+    (comp (ref J7)
+      (value RJ45)
+      (libsource (lib conn) (part RJ45))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4F171600))
+    (comp (ref R13)
+      (value 10K)
+      (libsource (lib device) (part R))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4F1715FF))
+    (comp (ref P4)
+      (value CONN_2)
+      (libsource (lib conn) (part CONN_2))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4F170606))
+    (comp (ref J6)
+      (value RJ45)
+      (libsource (lib conn) (part RJ45))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4F15C817))
+    (comp (ref R12)
+      (value 10K)
+      (libsource (lib device) (part R))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4F15C816))
+    (comp (ref P3)
+      (value CONN_2)
+      (libsource (lib conn) (part CONN_2))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4F14716E))
+    (comp (ref R11)
+      (value 100R)
+      (libsource (lib device) (part R))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4EFB5095))
+    (comp (ref K1)
+      (value AX-12)
+      (libsource (lib conn) (part CONN_3))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4EFB4F25))
+    (comp (ref R10)
+      (value 10K)
+      (libsource (lib device) (part R))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4EFB2A89))
+    (comp (ref R9)
+      (value 10K)
+      (libsource (lib device) (part R))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4EFB2A7F))
+    (comp (ref R8)
+      (value 10K)
+      (libsource (lib device) (part R))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4EFB2A73))
+    (comp (ref R7)
+      (value 10K)
+      (libsource (lib device) (part R))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4EFB2A54))
+    (comp (ref J5)
+      (value RJ45)
+      (libsource (lib conn) (part RJ45))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4EFB1B08))
+    (comp (ref J4)
+      (value RJ45)
+      (libsource (lib conn) (part RJ45))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4EFB1B05))
+    (comp (ref J3)
+      (value RJ45)
+      (libsource (lib conn) (part RJ45))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4EFB1B01))
+    (comp (ref J2)
+      (value RJ45)
+      (libsource (lib conn) (part RJ45))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4EFB1AFC))
+    (comp (ref D2)
+      (value 1N5819)
+      (libsource (lib device) (part DIODESCH))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4CA35CFE))
+    (comp (ref U1)
+      (value PIC18F4550)
+      (libsource (lib usb4butia-cache) (part PIC18F4550))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4C6EE08D))
+    (comp (ref X1)
+      (value 20MHz)
+      (libsource (lib device) (part CRYSTAL))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4C6EDDF1))
+    (comp (ref P1)
+      (value PICkit2)
+      (libsource (lib conn) (part CONN_5))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4C6EDD0D))
+    (comp (ref D1)
+      (value LED)
+      (libsource (lib device) (part LED))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4C6EDC1C))
+    (comp (ref R2)
+      (value 1M)
+      (libsource (lib device) (part R))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4C6EDBEC))
+    (comp (ref R4)
+      (value 390R)
+      (libsource (lib device) (part R))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4C6EDBE9))
+    (comp (ref R3)
+      (value 10K)
+      (libsource (lib device) (part R))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4C6EDBE6))
+    (comp (ref R5)
+      (value 390R)
+      (libsource (lib device) (part R))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4C6EDBE4))
+    (comp (ref R6)
+      (value 10K)
+      (libsource (lib device) (part R))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4C6EDBE2))
+    (comp (ref R1)
+      (value 1K)
+      (libsource (lib device) (part R))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4C6EDBDF))
+    (comp (ref C10)
+      (value 10uF)
+      (libsource (lib device) (part CP))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4C6EDA8C))
+    (comp (ref C9)
+      (value 0,1uF)
+      (libsource (lib device) (part C))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4C6EDA69))
+    (comp (ref C1)
+      (value 22pF)
+      (libsource (lib device) (part C))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4C6EDA5F))
+    (comp (ref C2)
+      (value 22pF)
+      (libsource (lib device) (part C))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4C6EDA5C))
+    (comp (ref C3)
+      (value 0,1uF)
+      (libsource (lib device) (part C))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4C6EDA57))
+    (comp (ref C7)
+      (value 0,1uF)
+      (libsource (lib device) (part C))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4C6ED9FC))
+    (comp (ref C4)
+      (value 0,47uF)
+      (libsource (lib device) (part C))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4C6ED9F9))
+    (comp (ref C8)
+      (value 0,1uF)
+      (libsource (lib device) (part C))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4C6ED9F4))
+    (comp (ref SW1)
+      (value RST)
+      (libsource (lib device) (part SW_PUSH))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4C6ED95B))
+    (comp (ref SW2)
+      (value PROG)
+      (libsource (lib device) (part SW_PUSH))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4C6ED955))
+    (comp (ref J1)
+      (value USB_B)
+      (libsource (lib usb4butia-cache) (part USB_CONN))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 4C6ED928))
+    (comp (ref R17)
+      (value 1K)
+      (libsource (lib device) (part R))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 515DE38D))
+    (comp (ref R16)
+      (value 1K)
+      (libsource (lib device) (part R))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 515DE39A))
+    (comp (ref R15)
+      (value 1K)
+      (libsource (lib device) (part R))
+      (sheetpath (names /) (tstamps /))
+      (tstamp 515DE3A0)))
+  (libparts
+    (libpart (lib device) (part C)
+      (description "Condensateur non polarise")
+      (footprints
+        (fp SM*)
+        (fp C?)
+        (fp C1-1))
+      (fields
+        (field (name Reference) C)
+        (field (name Value) C))
+      (pins
+        (pin (num 1) (name ~) (type passive))
+        (pin (num 2) (name ~) (type passive))))
+    (libpart (lib device) (part CP)
+      (description "Condensateur polarise")
+      (footprints
+        (fp CP*)
+        (fp SM*))
+      (fields
+        (field (name Reference) C)
+        (field (name Value) CP))
+      (pins
+        (pin (num 1) (name ~) (type passive))
+        (pin (num 2) (name ~) (type passive))))
+    (libpart (lib device) (part CRYSTAL)
+      (fields
+        (field (name Reference) X)
+        (field (name Value) CRYSTAL))
+      (pins
+        (pin (num 1) (name 1) (type passive))
+        (pin (num 2) (name 2) (type passive))))
+    (libpart (lib device) (part DIODESCH)
+      (description "Diode schottky")
+      (footprints
+        (fp D?)
+        (fp S*))
+      (fields
+        (field (name Reference) D)
+        (field (name Value) DIODESCH))
+      (pins
+        (pin (num 1) (name A) (type passive))
+        (pin (num 2) (name K) (type passive))))
+    (libpart (lib device) (part LED)
+      (footprints
+        (fp LED-3MM)
+        (fp LED-5MM)
+        (fp LED-10MM)
+        (fp LED-0603)
+        (fp LED-0805)
+        (fp LED-1206)
+        (fp LEDV))
+      (fields
+        (field (name Reference) D)
+        (field (name Value) LED))
+      (pins
+        (pin (num 1) (name A) (type passive))
+        (pin (num 2) (name K) (type passive))))
+    (libpart (lib device) (part R)
+      (description Resistance)
+      (footprints
+        (fp R?)
+        (fp SM0603)
+        (fp SM0805)
+        (fp R?-*)
+        (fp SM1206))
+      (fields
+        (field (name Reference) R)
+        (field (name Value) R))
+      (pins
+        (pin (num 1) (name ~) (type passive))
+        (pin (num 2) (name ~) (type passive))))
+    (libpart (lib device) (part SW_PUSH)
+      (description "Push Button")
+      (fields
+        (field (name Reference) SW)
+        (field (name Value) SW_PUSH))
+      (pins
+        (pin (num 1) (name 1) (type passive))
+        (pin (num 2) (name 2) (type passive))))
+    (libpart (lib conn) (part CONN_1)
+      (description "1 pin")
+      (fields
+        (field (name Reference) P)
+        (field (name Value) CONN_1))
+      (pins
+        (pin (num 1) (name 1) (type passive))))
+    (libpart (lib conn) (part CONN_2)
+      (description "Symbole general de connecteur")
+      (fields
+        (field (name Reference) P)
+        (field (name Value) CONN_2))
+      (pins
+        (pin (num 1) (name P1) (type passive))
+        (pin (num 2) (name PM) (type passive))))
+    (libpart (lib conn) (part CONN_3)
+      (description "Symbole general de connecteur")
+      (fields
+        (field (name Reference) K)
+        (field (name Value) CONN_3))
+      (pins
+        (pin (num 1) (name P1) (type passive))
+        (pin (num 2) (name PM) (type passive))
+        (pin (num 3) (name P3) (type passive))))
+    (libpart (lib conn) (part CONN_4)
+      (description "Symbole general de connecteur")
+      (fields
+        (field (name Reference) P)
+        (field (name Value) CONN_4))
+      (pins
+        (pin (num 1) (name P1) (type passive))
+        (pin (num 2) (name P2) (type passive))
+        (pin (num 3) (name P3) (type passive))
+        (pin (num 4) (name P4) (type passive))))
+    (libpart (lib conn) (part CONN_5)
+      (description "Symbole general de connecteur")
+      (fields
+        (field (name Reference) P)
+        (field (name Value) CONN_5))
+      (pins
+        (pin (num 1) (name ~) (type passive))
+        (pin (num 2) (name ~) (type passive))
+        (pin (num 3) (name ~) (type passive))
+        (pin (num 4) (name ~) (type passive))
+        (pin (num 5) (name ~) (type passive))))
+    (libpart (lib conn) (part RJ45)
+      (fields
+        (field (name Reference) J)
+        (field (name Value) RJ45))
+      (pins
+        (pin (num 1) (name ~) (type passive))
+        (pin (num 2) (name ~) (type passive))
+        (pin (num 3) (name ~) (type passive))
+        (pin (num 4) (name ~) (type passive))
+        (pin (num 5) (name ~) (type passive))
+        (pin (num 6) (name ~) (type passive))
+        (pin (num 7) (name ~) (type passive))
+        (pin (num 8) (name ~) (type passive))
+        (pin (num 9) (name SHIELD) (type passive))))
+    (libpart (lib usb4butia-cache) (part PIC18F4550)
+      (fields
+        (field (name Reference) U***)
+        (field (name Value) PIC18F4550))
+      (pins
+        (pin (num 1) (name -MCLR/VPP/RE3) (type input))
+        (pin (num 2) (name RA0/AN0) (type BiDi))
+        (pin (num 3) (name RA1/AN1) (type BiDi))
+        (pin (num 4) (name RA2/AN2/Vref-/CVref) (type BiDi))
+        (pin (num 5) (name RA3/AN3/Vref+) (type BiDi))
+        (pin (num 6) (name RA4/TOCKI/C1OUT/RCV) (type BiDi))
+        (pin (num 7) (name RA5/AN4/-SS/C2OUT) (type BiDi))
+        (pin (num 8) (name RE0/AN5/CK1SPP) (type BiDi))
+        (pin (num 9) (name RE1/AN6) (type BiDi))
+        (pin (num 10) (name RE2/AN7/OESPP) (type BiDi))
+        (pin (num 11) (name VDD) (type power_in))
+        (pin (num 12) (name VSS) (type power_in))
+        (pin (num 13) (name OSC1/CLKI) (type input))
+        (pin (num 14) (name OSC2/CLKO/RA6) (type output))
+        (pin (num 15) (name RC0/T10S0/T13CKI) (type BiDi))
+        (pin (num 16) (name RC1/T1OSI/CCP2) (type BiDi))
+        (pin (num 17) (name RC2/CCP1/P1A) (type BiDi))
+        (pin (num 18) (name Vusb) (type BiDi))
+        (pin (num 19) (name RD0/SPP0) (type BiDi))
+        (pin (num 20) (name RD1/SPP1) (type BiDi))
+        (pin (num 21) (name RD2/SPP2) (type BiDi))
+        (pin (num 22) (name RD3/SPP3) (type BiDi))
+        (pin (num 23) (name RC4/D-/VM) (type BiDi))
+        (pin (num 24) (name RC5/D+/VP) (type BiDi))
+        (pin (num 25) (name RC6/TX/CK) (type BiDi))
+        (pin (num 26) (name RC7/RX/DT) (type BiDi))
+        (pin (num 27) (name RD4/SPP4) (type BiDi))
+        (pin (num 28) (name RD5/SPP5) (type BiDi))
+        (pin (num 29) (name RD6/SPP6/P1C) (type BiDi))
+        (pin (num 30) (name RD7/SPP7/P1D) (type BiDi))
+        (pin (num 31) (name VSS) (type power_in))
+        (pin (num 32) (name VDD) (type power_in))
+        (pin (num 33) (name RB0/INT0/SDA) (type BiDi))
+        (pin (num 34) (name RB1/AN10/INT1) (type BiDi))
+        (pin (num 35) (name RB2/INT2) (type BiDi))
+        (pin (num 36) (name RB3/AN9/CCP2/VPO) (type BiDi))
+        (pin (num 37) (name RB4/AN11) (type BiDi))
+        (pin (num 38) (name RB5/PGM) (type BiDi))
+        (pin (num 39) (name RB6/PGC) (type BiDi))
+        (pin (num 40) (name RB7/PGD) (type BiDi))))
+    (libpart (lib usb4butia-cache) (part USB_CONN)
+      (fields
+        (field (name Reference) J)
+        (field (name Value) USB_CONN))
+      (pins
+        (pin (num 1) (name Vbus) (type power_out))
+        (pin (num 2) (name D-) (type BiDi))
+        (pin (num 3) (name D+) (type BiDi))
+        (pin (num 4) (name GND) (type power_in))
+        (pin (num 5) (name Shield_1) (type passive))
+        (pin (num 6) (name Shield_2) (type passive)))))
+  (libraries
+    (library (logical device)
+      (uri /usr/share/kicad/library/device.lib))
+    (library (logical conn)
+      (uri /usr/share/kicad/library/conn.lib))
+    (library (logical usb4butia-cache)
+      (uri /home/edgardo/usb4all-code/pcb/usb4butia/usb4butia-cache.lib)))
+  (nets
+    (net (code 1) (name "")
+      (node (ref J3) (pin 1)))
+    (net (code 2) (name "")
+      (node (ref J4) (pin 2)))
+    (net (code 3) (name "")
+      (node (ref J4) (pin 7)))
+    (net (code 4) (name "")
+      (node (ref J4) (pin 8)))
+    (net (code 5) (name "")
+      (node (ref J4) (pin 1)))
+    (net (code 6) (name "")
+      (node (ref J3) (pin 2)))
+    (net (code 7) (name "")
+      (node (ref J3) (pin 7)))
+    (net (code 8) (name "")
+      (node (ref J3) (pin 8)))
+    (net (code 9) (name "")
+      (node (ref J5) (pin 2)))
+    (net (code 10) (name idAN2)
+      (node (ref R8) (pin 2))
+      (node (ref J3) (pin 4))
+      (node (ref U1) (pin 4)))
+    (net (code 11) (name "")
+      (node (ref J5) (pin 1)))
+    (net (code 12) (name "")
+      (node (ref J5) (pin 7)))
+    (net (code 13) (name "")
+      (node (ref J5) (pin 8)))
+    (net (code 14) (name "")
+      (node (ref J2) (pin 1)))
+    (net (code 15) (name "")
+      (node (ref J2) (pin 2)))
+    (net (code 16) (name idAN0)
+      (node (ref U1) (pin 2))
+      (node (ref J2) (pin 4))
+      (node (ref R7) (pin 2)))
+    (net (code 17) (name "")
+      (node (ref J2) (pin 7)))
+    (net (code 18) (name "")
+      (node (ref J2) (pin 8)))
+    (net (code 19) (name idAN12)
+      (node (ref R10) (pin 2))
+      (node (ref U1) (pin 33))
+      (node (ref J5) (pin 4)))
+    (net (code 20) (name GND)
+      (node (ref R10) (pin 1))
+      (node (ref C3) (pin 2))
+      (node (ref C2) (pin 2))
+      (node (ref C1) (pin 2))
+      (node (ref P14) (pin 2))
+      (node (ref C10) (pin 2))
+      (node (ref C9) (pin 2))
+      (node (ref C4) (pin 2))
+      (node (ref J1) (pin 6))
+      (node (ref J1) (pin 5))
+      (node (ref J1) (pin 4))
+      (node (ref SW2) (pin 2))
+      (node (ref SW1) (pin 1))
+      (node (ref C8) (pin 2))
+      (node (ref U1) (pin 12))
+      (node (ref P1) (pin 3))
+      (node (ref C7) (pin 2))
+      (node (ref D1) (pin 2))
+      (node (ref J6) (pin 9))
+      (node (ref R12) (pin 1))
+      (node (ref U1) (pin 31))
+      (node (ref J3) (pin 9))
+      (node (ref J5) (pin 5))
+      (node (ref K1) (pin 1))
+      (node (ref R13) (pin 1))
+      (node (ref R9) (pin 1))
+      (node (ref J5) (pin 9))
+      (node (ref J2) (pin 5))
+      (node (ref J7) (pin 5))
+      (node (ref J2) (pin 9))
+      (node (ref K3) (pin 1))
+      (node (ref J3) (pin 5))
+      (node (ref J7) (pin 9))
+      (node (ref R7) (pin 1))
+      (node (ref J6) (pin 5))
+      (node (ref J4) (pin 5))
+      (node (ref J4) (pin 9))
+      (node (ref R8) (pin 1)))
+    (net (code 21) (name VDC10)
+      (node (ref P13) (pin 1))
+      (node (ref P9) (pin 1))
+      (node (ref K1) (pin 2)))
+    (net (code 22) (name AN10)
+      (node (ref U1) (pin 34))
+      (node (ref J5) (pin 6)))
+    (net (code 23) (name AN9)
+      (node (ref J4) (pin 6))
+      (node (ref U1) (pin 36)))
+    (net (code 24) (name idAN8)
+      (node (ref R9) (pin 2))
+      (node (ref J4) (pin 4))
+      (node (ref U1) (pin 35)))
+    (net (code 25) (name AN3)
+      (node (ref U1) (pin 5))
+      (node (ref J3) (pin 6)))
+    (net (code 26) (name "")
+      (node (ref J6) (pin 1)))
+    (net (code 27) (name "")
+      (node (ref J6) (pin 2)))
+    (net (code 28) (name "")
+      (node (ref J6) (pin 7)))
+    (net (code 29) (name "")
+      (node (ref J6) (pin 8)))
+    (net (code 30) (name idAN7)
+      (node (ref J6) (pin 4))
+      (node (ref R12) (pin 2))
+      (node (ref U1) (pin 10)))
+    (net (code 31) (name HK21)
+      (node (ref U1) (pin 21))
+      (node (ref P3) (pin 1)))
+    (net (code 32) (name HK22)
+      (node (ref U1) (pin 22))
+      (node (ref P3) (pin 2)))
+    (net (code 33) (name VDC10_i)
+      (node (ref P13) (pin 2))
+      (node (ref P14) (pin 1))
+      (node (ref P9) (pin 2)))
+    (net (code 34) (name AN1)
+      (node (ref J2) (pin 6))
+      (node (ref U1) (pin 3)))
+    (net (code 35) (name "")
+      (node (ref C7) (pin 1))
+      (node (ref R5) (pin 2))
+      (node (ref R6) (pin 1))
+      (node (ref SW2) (pin 1)))
+    (net (code 36) (name RB4)
+      (node (ref R5) (pin 1))
+      (node (ref U1) (pin 37)))
+    (net (code 37) (name "")
+      (node (ref R4) (pin 2))
+      (node (ref R3) (pin 1))
+      (node (ref C3) (pin 1))
+      (node (ref SW1) (pin 2)))
+    (net (code 38) (name "")
+      (node (ref D1) (pin 1))
+      (node (ref R1) (pin 1)))
+    (net (code 39) (name OSC2)
+      (node (ref C2) (pin 1))
+      (node (ref R2) (pin 2))
+      (node (ref U1) (pin 14))
+      (node (ref X1) (pin 1)))
+    (net (code 40) (name Vpp)
+      (node (ref P1) (pin 1))
+      (node (ref U1) (pin 1))
+      (node (ref R4) (pin 1)))
+    (net (code 41) (name HK17)
+      (node (ref U1) (pin 17))
+      (node (ref P8) (pin 1))
+      (node (ref K2) (pin 3))
+      (node (ref R17) (pin 2)))
+    (net (code 42) (name HK29)
+      (node (ref P5) (pin 1))
+      (node (ref U1) (pin 29)))
+    (net (code 43) (name "")
+      (node (ref D2) (pin 1))
+      (node (ref J1) (pin 1)))
+    (net (code 44) (name Vusb)
+      (node (ref C4) (pin 1))
+      (node (ref U1) (pin 18)))
+    (net (code 45) (name RB6)
+      (node (ref U1) (pin 39))
+      (node (ref P1) (pin 5)))
+    (net (code 46) (name D+)
+      (node (ref U1) (pin 24))
+      (node (ref J1) (pin 3)))
+    (net (code 47) (name HK15)
+      (node (ref U1) (pin 15))
+      (node (ref R15) (pin 2))
+      (node (ref K2) (pin 1)))
+    (net (code 48) (name "")
+      (node (ref U1) (pin 25))
+      (node (ref R11) (pin 2)))
+    (net (code 49) (name HK16)
+      (node (ref U1) (pin 16))
+      (node (ref R16) (pin 2))
+      (node (ref K2) (pin 2)))
+    (net (code 50) (name HK27)
+      (node (ref U1) (pin 27))
+      (node (ref P5) (pin 4)))
+    (net (code 51) (name HK28)
+      (node (ref P5) (pin 3))
+      (node (ref U1) (pin 28)))
+    (net (code 52) (name D-)
+      (node (ref U1) (pin 23))
+      (node (ref J1) (pin 2)))
+    (net (code 53) (name RB7)
+      (node (ref U1) (pin 40))
+      (node (ref P1) (pin 4)))
+    (net (code 54) (name HK30)
+      (node (ref U1) (pin 30))
+      (node (ref P5) (pin 2)))
+    (net (code 55) (name AN6)
+      (node (ref U1) (pin 9))
+      (node (ref J6) (pin 6)))
+    (net (code 56) (name idAN5)
+      (node (ref J7) (pin 4))
+      (node (ref R13) (pin 2))
+      (node (ref U1) (pin 8)))
+    (net (code 57) (name AN4)
+      (node (ref J7) (pin 6))
+      (node (ref U1) (pin 7)))
+    (net (code 58) (name OSC1)
+      (node (ref U1) (pin 13))
+      (node (ref C1) (pin 1))
+      (node (ref X1) (pin 2))
+      (node (ref R2) (pin 1)))
+    (net (code 59) (name HK38)
+      (node (ref U1) (pin 38))
+      (node (ref P7) (pin 1)))
+    (net (code 60) (name HK6)
+      (node (ref U1) (pin 6))
+      (node (ref P6) (pin 1)))
+    (net (code 61) (name data)
+      (node (ref U1) (pin 26))
+      (node (ref R14) (pin 2))
+      (node (ref R11) (pin 1))
+      (node (ref K1) (pin 3)))
+    (net (code 62) (name HK20)
+      (node (ref U1) (pin 20))
+      (node (ref P4) (pin 1)))
+    (net (code 63) (name HK19)
+      (node (ref U1) (pin 19))
+      (node (ref P4) (pin 2)))
+    (net (code 64) (name "")
+      (node (ref J7) (pin 1)))
+    (net (code 65) (name "")
+      (node (ref J7) (pin 2)))
+    (net (code 66) (name "")
+      (node (ref J7) (pin 7)))
+    (net (code 67) (name "")
+      (node (ref J7) (pin 8)))
+    (net (code 68) (name VDD)
+      (node (ref J2) (pin 3))
+      (node (ref R6) (pin 2))
+      (node (ref R14) (pin 1))
+      (node (ref R1) (pin 2))
+      (node (ref C10) (pin 1))
+      (node (ref C9) (pin 1))
+      (node (ref P1) (pin 2))
+      (node (ref J4) (pin 3))
+      (node (ref J3) (pin 3))
+      (node (ref J5) (pin 3))
+      (node (ref D2) (pin 2))
+      (node (ref R16) (pin 1))
+      (node (ref J7) (pin 3))
+      (node (ref K3) (pin 3))
+      (node (ref U1) (pin 32))
+      (node (ref U1) (pin 11))
+      (node (ref R3) (pin 2))
+      (node (ref R17) (pin 1))
+      (node (ref J6) (pin 3))
+      (node (ref R15) (pin 1))
+      (node (ref C8) (pin 1)))
+    (net (code 69) (name "")
+      (node (ref K3) (pin 2)))))
