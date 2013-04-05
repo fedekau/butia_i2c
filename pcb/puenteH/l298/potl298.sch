@@ -1,0 +1,431 @@
+EESchema Schematic File Version 2  date jue 04 abr 2013 20:20:31 UYT
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:special
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:h_bridges
+LIBS:potl298-cache
+EELAYER 27 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title "H-Bridge L298"
+Date "4 apr 2013"
+Rev "1.0"
+Comp "Butia 2.0"
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L DIODE D8
+U 1 1 513961AA
+P 7700 4200
+F 0 "D8" H 7700 4300 40  0000 C CNN
+F 1 "DIODE" H 7700 4100 40  0000 C CNN
+	1    7700 4200
+	0    -1   -1   0   
+$EndComp
+$Comp
+L DIODE D7
+U 1 1 513961A8
+P 7450 4200
+F 0 "D7" H 7450 4300 40  0000 C CNN
+F 1 "DIODE" H 7450 4100 40  0000 C CNN
+	1    7450 4200
+	0    -1   -1   0   
+$EndComp
+$Comp
+L DIODE D5
+U 1 1 513961A6
+P 7450 2900
+F 0 "D5" H 7450 3000 40  0000 C CNN
+F 1 "DIODE" H 7450 2800 40  0000 C CNN
+	1    7450 2900
+	0    -1   -1   0   
+$EndComp
+$Comp
+L DIODE D6
+U 1 1 513961A3
+P 7700 2900
+F 0 "D6" H 7700 3000 40  0000 C CNN
+F 1 "DIODE" H 7700 2800 40  0000 C CNN
+	1    7700 2900
+	0    -1   -1   0   
+$EndComp
+$Comp
+L DIODE D4
+U 1 1 5139617E
+P 6900 4200
+F 0 "D4" H 6900 4300 40  0000 C CNN
+F 1 "DIODE" H 6900 4100 40  0000 C CNN
+	1    6900 4200
+	0    -1   -1   0   
+$EndComp
+$Comp
+L DIODE D3
+U 1 1 5139617B
+P 6650 4200
+F 0 "D3" H 6650 4300 40  0000 C CNN
+F 1 "DIODE" H 6650 4100 40  0000 C CNN
+	1    6650 4200
+	0    -1   -1   0   
+$EndComp
+$Comp
+L DIODE D1
+U 1 1 51396178
+P 6650 2900
+F 0 "D1" H 6650 3000 40  0000 C CNN
+F 1 "DIODE" H 6650 2800 40  0000 C CNN
+	1    6650 2900
+	0    -1   -1   0   
+$EndComp
+$Comp
+L DIODE D2
+U 1 1 51396175
+P 6900 2900
+F 0 "D2" H 6900 3000 40  0000 C CNN
+F 1 "DIODE" H 6900 2800 40  0000 C CNN
+	1    6900 2900
+	0    -1   -1   0   
+$EndComp
+Text GLabel 4100 4750 0    60   Input ~ 0
+GND
+Text GLabel 5200 2400 0    60   Input ~ 0
+GND
+$Comp
+L R R2
+U 1 1 51395CC9
+P 5050 4050
+F 0 "R2" V 5130 4050 50  0000 C CNN
+F 1 "10K" V 5050 4050 50  0000 C CNN
+	1    5050 4050
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R1
+U 1 1 51395CC6
+P 4750 4000
+F 0 "R1" V 4830 4000 50  0000 C CNN
+F 1 "10K" V 4750 4000 50  0000 C CNN
+	1    4750 4000
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_2 P2
+U 1 1 51395CA9
+P 8100 1650
+F 0 "P2" V 8050 1650 40  0000 C CNN
+F 1 "v10" V 8150 1650 40  0000 C CNN
+	1    8100 1650
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_2 MOT2
+U 1 1 51395CA6
+P 8150 3700
+F 0 "MOT2" V 8100 3700 40  0000 C CNN
+F 1 "CONN_2" V 8200 3700 40  0000 C CNN
+	1    8150 3700
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_2 MOT1
+U 1 1 51395C9B
+P 8150 3300
+F 0 "MOT1" V 8100 3300 40  0000 C CNN
+F 1 "CONN_2" V 8200 3300 40  0000 C CNN
+	1    8150 3300
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_2X2 P1
+U 1 1 5141B785
+P 5750 5300
+F 0 "P1" H 5750 5450 50  0000 C CNN
+F 1 "CONN_2X2" H 5760 5170 40  0000 C CNN
+	1    5750 5300
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_3 K1
+U 1 1 5141B794
+P 4850 1650
+F 0 "K1" V 4800 1650 50  0000 C CNN
+F 1 "CONN_3" V 4900 1650 40  0000 C CNN
+	1    4850 1650
+	-1   0    0    1   
+$EndComp
+Connection ~ 7450 4750
+Wire Wire Line
+	7700 4750 7700 4400
+Connection ~ 6650 4750
+Wire Wire Line
+	6900 4750 6900 4400
+Wire Wire Line
+	6650 3100 6650 4000
+Wire Wire Line
+	7450 3100 7450 4000
+Connection ~ 7700 3800
+Connection ~ 6900 3400
+Wire Wire Line
+	5900 4750 5900 4500
+Wire Wire Line
+	6500 3200 7800 3200
+Wire Wire Line
+	6500 3600 7800 3600
+Wire Wire Line
+	6500 3800 7800 3800
+Wire Wire Line
+	6500 3400 7800 3400
+Wire Wire Line
+	6100 4750 6100 4500
+Connection ~ 5900 4750
+Wire Wire Line
+	5050 3800 5100 3800
+Connection ~ 6650 3200
+Connection ~ 7450 3600
+Wire Wire Line
+	7700 3100 7700 4000
+Wire Wire Line
+	6900 3100 6900 4000
+Wire Wire Line
+	6650 4750 6650 4400
+Connection ~ 6100 4750
+Wire Wire Line
+	7450 4750 7450 4400
+Connection ~ 6900 4750
+Wire Wire Line
+	4750 4250 4750 4300
+Connection ~ 4750 4300
+NoConn ~ 5200 1650
+Connection ~ 7700 2700
+Connection ~ 7450 2700
+Connection ~ 6900 2700
+Connection ~ 6650 2700
+Text GLabel 7100 1750 0    60   Input ~ 0
+VCC_10
+Wire Wire Line
+	6200 2700 8050 2700
+$Comp
+L +5V #PWR01
+U 1 1 5141C3E0
+P 5600 1550
+F 0 "#PWR01" H 5600 1640 20  0001 C CNN
+F 1 "+5V" H 5600 1640 30  0000 C CNN
+	1    5600 1550
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR02
+U 1 1 5141C437
+P 5650 1850
+F 0 "#PWR02" H 5650 1850 30  0001 C CNN
+F 1 "GND" H 5650 1780 30  0001 C CNN
+	1    5650 1850
+	1    0    0    -1  
+$EndComp
+$Comp
+L PWR_FLAG #FLG03
+U 1 1 5141C97A
+P 5400 1750
+F 0 "#FLG03" H 5400 1845 30  0001 C CNN
+F 1 "PWR_FLAG" H 5400 1930 30  0000 C CNN
+	1    5400 1750
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	5200 1550 5800 1550
+$Comp
+L PWR_FLAG #FLG04
+U 1 1 5141CEF1
+P 5400 1550
+F 0 "#FLG04" H 5400 1645 30  0001 C CNN
+F 1 "PWR_FLAG" H 5400 1730 30  0000 C CNN
+	1    5400 1550
+	1    0    0    -1  
+$EndComp
+Connection ~ 5600 1550
+Wire Wire Line
+	5400 1550 5600 1550
+Connection ~ 5400 1550
+Text GLabel 5200 2600 0    60   Input ~ 0
+VCC
+Wire Wire Line
+	5200 2600 5700 2600
+Wire Wire Line
+	5700 2600 5700 2700
+Text GLabel 4400 4300 0    60   Input ~ 0
+VCC
+Wire Wire Line
+	4400 4300 5050 4300
+Wire Wire Line
+	5100 3700 4750 3700
+Wire Wire Line
+	4750 3700 4750 3750
+Text GLabel 5800 1550 2    60   Input ~ 0
+VCC
+Text GLabel 8050 2700 2    60   Input ~ 0
+VCC_10
+Wire Wire Line
+	7100 1750 7750 1750
+$Comp
+L PWR_FLAG #FLG05
+U 1 1 51435B1B
+P 7500 1750
+F 0 "#FLG05" H 7500 1845 30  0001 C CNN
+F 1 "PWR_FLAG" H 7500 1930 30  0000 C CNN
+	1    7500 1750
+	-1   0    0    1   
+$EndComp
+Connection ~ 7500 1750
+Wire Wire Line
+	4100 4750 7700 4750
+Text GLabel 7350 1550 0    60   Input ~ 0
+GND
+Wire Wire Line
+	7350 1550 7750 1550
+Text GLabel 5800 1750 2    60   Input ~ 0
+GND
+Wire Wire Line
+	5200 1750 5800 1750
+Connection ~ 5400 1750
+Wire Wire Line
+	5650 1850 5650 1750
+Connection ~ 5650 1750
+Wire Wire Line
+	5200 2400 5900 2400
+Wire Wire Line
+	5900 2400 5900 2700
+Text GLabel 5100 5200 0    60   Input ~ 0
+IN1
+Text GLabel 6350 5200 2    60   Input ~ 0
+IN2
+Text GLabel 5100 5400 0    60   Input ~ 0
+IN3
+Text GLabel 6350 5400 2    60   Input ~ 0
+IN4
+Wire Wire Line
+	5100 5200 5350 5200
+Wire Wire Line
+	5350 5200 5350 5250
+Wire Wire Line
+	5100 5400 5350 5400
+Wire Wire Line
+	5350 5400 5350 5350
+Wire Wire Line
+	6350 5200 6150 5200
+Wire Wire Line
+	6150 5200 6150 5250
+Wire Wire Line
+	6350 5400 6150 5400
+Wire Wire Line
+	6150 5400 6150 5350
+Text GLabel 4550 3300 0    60   Input ~ 0
+IN1
+Text GLabel 4550 3400 0    60   Input ~ 0
+IN2
+Text GLabel 4550 3500 0    60   Input ~ 0
+IN3
+Text GLabel 4550 3600 0    60   Input ~ 0
+IN4
+Wire Wire Line
+	4550 3300 5100 3300
+Wire Wire Line
+	4550 3400 5100 3400
+Wire Wire Line
+	4550 3500 5100 3500
+Wire Wire Line
+	4550 3600 5100 3600
+$Comp
+L CONN_2 P3
+U 1 1 515DD4A6
+P 3450 1500
+F 0 "P3" V 3400 1500 40  0000 C CNN
+F 1 "CONN_2" V 3500 1500 40  0000 C CNN
+	1    3450 1500
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_2 P4
+U 1 1 515DD4BA
+P 3450 1950
+F 0 "P4" V 3400 1950 40  0000 C CNN
+F 1 "CONN_2" V 3500 1950 40  0000 C CNN
+	1    3450 1950
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_3 K2
+U 1 1 515DD4E0
+P 3450 2450
+F 0 "K2" V 3400 2450 50  0000 C CNN
+F 1 "CONN_3" V 3500 2450 40  0000 C CNN
+	1    3450 2450
+	1    0    0    -1  
+$EndComp
+Text GLabel 2750 2550 0    60   Input ~ 0
+HK17
+Text GLabel 2750 2450 0    60   Input ~ 0
+HK16
+Text GLabel 2750 2350 0    60   Input ~ 0
+HK15
+Wire Wire Line
+	2750 2350 3100 2350
+Wire Wire Line
+	2750 2450 3100 2450
+Wire Wire Line
+	2750 2550 3100 2550
+$Comp
+L L298 U1
+U 1 1 515DD8EC
+P 5800 3600
+F 0 "U1" H 5318 4335 50  0000 L BNN
+F 1 "L298" H 5341 2952 50  0000 L BNN
+F 2 "drivers_motor" H 5800 3750 50  0001 C CNN
+F 3 "~" H 5800 3600 60  0000 C CNN
+	1    5800 3600
+	1    0    0    -1  
+$EndComp
+NoConn ~ 3100 1400
+NoConn ~ 3100 1600
+NoConn ~ 3100 1850
+NoConn ~ 3100 2050
+Text GLabel 2750 2900 0    60   Input ~ 0
+GND
+Wire Wire Line
+	2900 2900 2750 2900
+Wire Wire Line
+	2900 2350 2900 2900
+Connection ~ 2900 2550
+Connection ~ 2900 2450
+Connection ~ 2900 2350
+$EndSCHEMATC
