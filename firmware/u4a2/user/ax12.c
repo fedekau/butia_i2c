@@ -241,7 +241,6 @@ byte ax12ReadPacket(int* status_id, int* status_error, int* status_data){
 
     byte error, status_length;
     //byte checksum, i;
-    byte volatile bcount;      
     byte ready;
     byte estado = 1;
 

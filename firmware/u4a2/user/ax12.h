@@ -30,7 +30,8 @@
 ******************************************************************************/ 
    
      //Includes
-    #include <p18f4550.h>                   //PIC184550                                     
+    #include <p18f4550.h>                   //PIC184550
+#include "../typedefs.h"
 
 /*****************************************************************************/ 
 /**************************    Tabla de direcciones   ************************/
@@ -115,7 +116,7 @@
 /*****************************************************************************/ 
 /***************************   Definici�n de Tipos   *************************/
 /*****************************************************************************/ 
-    typedef unsigned char byte;
+//    typedef unsigned char byte;
     typedef unsigned char boolean;
 
 
@@ -127,7 +128,7 @@
     void setTX(void);
     void setRX(void);
     void setNone(void);
-    void autoDetect (int* list_motors, byte num_motors);
+//    void autoDetect (int* list_motors, byte num_motors);
 
     //Configuraci�n de la USART
     void ax12InitSerial(void);
