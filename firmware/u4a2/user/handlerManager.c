@@ -14,7 +14,7 @@
 #include "user/loaderModule.h"
 #include "io_cfg.h"             // I/O pin mapping
 #include "user/handlerManager.h"
-#include "usr_motors.h"
+//#include "usr_motors.h"
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata
@@ -190,7 +190,7 @@ void initHandlerManager(void){
     modulename[4]=0; modulename[5]=0  ; modulename[6]=0  ; modulename[7]=0  ;
     epHandlerMap[7].ep = getPnPEndpoint();
     epHandlerMap[7].uTableDirection = getUserTableDirection(modulename);
-    autoDetectWheels();
+//    autoDetectWheels();
     PNPInit(7);
 
 }
