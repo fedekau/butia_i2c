@@ -4,13 +4,13 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>../usb4all/proxys/T0Proxy.h</itemPath>
       <itemPath>../usb4all/proxys/T0Service.h</itemPath>
       <itemPath>../user/adminModule.h</itemPath>
       <itemPath>../user/ax12.h</itemPath>
       <itemPath>../user/descriptorManager.h</itemPath>
       <itemPath>../usb4all/dynamicISR/dynamicISR.h</itemPath>
       <itemPath>../user/dynamicPolling.h</itemPath>
-      <itemPath>../user/gpio.h</itemPath>
       <itemPath>../user/handlerManager.h</itemPath>
       <itemPath>../io_cfg.h</itemPath>
       <itemPath>../user/loaderModule.h</itemPath>
@@ -18,21 +18,13 @@
       <itemPath>../user/port.h</itemPath>
       <itemPath>../system/usb/usb.h</itemPath>
       <itemPath>../user/usb4butia.h</itemPath>
+      <itemPath>../system/usb/usb9/usb9.h</itemPath>
+      <itemPath>../system/usb/usbctrltrf/usbctrltrf.h</itemPath>
+      <itemPath>../system/usb/usbdrv/usbdrv.h</itemPath>
       <itemPath>../autofiles/usbcfg.h</itemPath>
       <itemPath>../usb4all/usbconf/desc/usbdsc.h</itemPath>
       <itemPath>../usb4all/usbconf/usballoc/usbmmap.h</itemPath>
-      <itemPath>../user/userLoopBack.h</itemPath>
-      <itemPath>../user/usr_ax12.h</itemPath>
       <itemPath>../user/usr_butia.h</itemPath>
-      <itemPath>../user/usr_button.h</itemPath>
-      <itemPath>../user/usr_distance.h</itemPath>
-      <itemPath>../user/usr_grey.h</itemPath>
-      <itemPath>../user/usr_motors.h</itemPath>
-      <itemPath>../user/usr_light.h</itemPath>
-      <itemPath>../user/usr_resistance.h</itemPath>
-      <itemPath>../user/usr_voltage.h</itemPath>
-      <itemPath>../user/usr_led.h</itemPath>
-      <itemPath>../user/usr_hackpoints.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LibraryFiles"
                    displayName="Library Files"
@@ -57,7 +49,6 @@
       <itemPath>../user/descriptorManager.c</itemPath>
       <itemPath>../usb4all/dynamicISR/dynamicISR.c</itemPath>
       <itemPath>../user/dynamicPolling.c</itemPath>
-      <itemPath>../user/gpio.c</itemPath>
       <itemPath>../user/handlerManager.c</itemPath>
       <itemPath>../user/loaderModule.c</itemPath>
       <itemPath>../main.c</itemPath>
@@ -69,18 +60,7 @@
       <itemPath>../system/usb/usbdrv/usbdrv.c</itemPath>
       <itemPath>../usb4all/usbconf/desc/usbdsc.c</itemPath>
       <itemPath>../usb4all/usbconf/usballoc/usbmmap.c</itemPath>
-      <itemPath>../user/userLoopBack.c</itemPath>
       <itemPath>../user/usr_butia.c</itemPath>
-      <itemPath>../user/usr_button.c</itemPath>
-      <itemPath>../user/usr_distance.c</itemPath>
-      <itemPath>../user/usr_grey.c</itemPath>
-      <itemPath>../user/usr_motors.c</itemPath>
-      <itemPath>../user/usr_light.c</itemPath>
-      <itemPath>../user/usr_resistance.c</itemPath>
-      <itemPath>../user/usr_voltage.c</itemPath>
-      <itemPath>../user/usr_led.c</itemPath>
-      <itemPath>../user/usr_hackpoints.c</itemPath>
-      <itemPath>../user/usr_ax.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -116,61 +96,61 @@
         <makeCustomizationPutChecksumInUserID>false</makeCustomizationPutChecksumInUserID>
       </makeCustomizationType>
       <C18>
-        <property key="code-model" value="mS"/>
-        <property key="data-model" value="Oa-"/>
-        <property key="default-char-unsigned" value="false"/>
-        <property key="enable-all-optimizations" value="true"/>
-        <property key="enable-int-promotion" value="false"/>
-        <property key="enable-multi-bank-stack-model" value="false"/>
-        <property key="enable-ob" value="true"/>
-        <property key="enable-od" value="true"/>
-        <property key="enable-om" value="true"/>
-        <property key="enable-on" value="true"/>
-        <property key="enable-op" value="true"/>
+        <property key="storage-class" value="sca"/>
         <property key="enable-opa" value="true"/>
-        <property key="enable-or" value="true"/>
-        <property key="enable-os" value="true"/>
-        <property key="enable-ot" value="true"/>
-        <property key="enable-ou" value="true"/>
-        <property key="enable-ow" value="true"/>
+        <property key="enable-all-optimizations" value="true"/>
+        <property key="preprocessor-macros" value=""/>
+        <property key="default-char-unsigned" value="false"/>
+        <property key="optimization-master" value="Custom"/>
+        <property key="code-model" value="mS"/>
+        <property key="warning-level" value="2"/>
         <property key="extra-include-directories"
                   value="../user;../usb4all/proxys;../usb4all/dynamicISR;../usb4all/usbconf/usballoc;../usb4all/usbconf/desc;../system;../system/usb;../autofiles;.."/>
-        <property key="optimization-master" value="Custom"/>
-        <property key="preprocessor-macros" value=""/>
-        <property key="procedural-abstraction-passes" value="9"/>
-        <property key="storage-class" value="sca"/>
+        <property key="enable-ow" value="true"/>
         <property key="verbose" value="false"/>
-        <property key="warning-level" value="2"/>
+        <property key="enable-ou" value="true"/>
+        <property key="enable-ot" value="true"/>
+        <property key="enable-os" value="true"/>
+        <property key="data-model" value="Oa-"/>
+        <property key="enable-or" value="true"/>
+        <property key="enable-op" value="true"/>
+        <property key="enable-on" value="true"/>
+        <property key="enable-om" value="true"/>
+        <property key="procedural-abstraction-passes" value="9"/>
+        <property key="enable-multi-bank-stack-model" value="false"/>
+        <property key="enable-int-promotion" value="false"/>
+        <property key="enable-od" value="true"/>
+        <property key="enable-ob" value="true"/>
       </C18>
       <C18-AS>
-        <property key="cross.reference.file" value=""/>
         <property key="default.radix" value="HEX"/>
-        <property key="enable.case.sensitivity" value="false"/>
         <property key="hex.output.format" value="INHX32"/>
+        <property key="enable.case.sensitivity" value="false"/>
         <property key="preprocessor.macros" value=""/>
         <property key="warning.level" value="0"/>
+        <property key="cross.reference.file" value=""/>
       </C18-AS>
       <C18-LD>
+        <property key="hex-output-format" value="INHX32"/>
         <property key="cod-file" value="false"/>
+        <property key="map-file" value=""/>
         <property key="extra-lib-directories"
                   value="/usr/local/microchip/mplabc18/v3.40/lib"/>
-        <property key="hex-output-format" value="INHX32"/>
-        <property key="map-file" value=""/>
       </C18-LD>
       <C18LanguageToolchain>
-        <property key="extended-mode" value="false"/>
+        <property key="stack-analysis-mplink" value="false"/>
+        <property key="stack-analysis-mcc18" value="false"/>
+        <property key="stack-analysis" value="false"/>
         <property key="extended-mode-mcc18" value="false"/>
+        <property key="extended-mode" value="false"/>
         <property key="extended-mode-mpasm" value="false"/>
         <property key="extended-mode-mplink" value="false"/>
-        <property key="stack-analysis" value="false"/>
-        <property key="stack-analysis-mcc18" value="false"/>
-        <property key="stack-analysis-mplink" value="false"/>
       </C18LanguageToolchain>
       <PICkit2PlatformTool>
+        <property key="pk2settings.userpgmexec" value="true"/>
+        <property key="pk2settings.setvddvoltage" value="${pk2settings.setvddvoltage}"/>
         <property key="pk2settings.3state" value="false"/>
         <property key="pk2settings.preserveee" value="false"/>
-        <property key="pk2settings.setvddvoltage" value="${pk2settings.setvddvoltage}"/>
-        <property key="pk2settings.userpgmexec" value="true"/>
         <property key="pk2settings.usetargetpower" value="false"/>
       </PICkit2PlatformTool>
     </conf>
