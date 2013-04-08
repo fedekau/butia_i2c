@@ -25,6 +25,7 @@
       <itemPath>../usb4all/usbconf/desc/usbdsc.h</itemPath>
       <itemPath>../usb4all/usbconf/usballoc/usbmmap.h</itemPath>
       <itemPath>../user/usr_butia.h</itemPath>
+      <itemPath>../system/typedefs.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LibraryFiles"
                    displayName="Library Files"
