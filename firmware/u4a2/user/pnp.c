@@ -78,7 +78,7 @@ void PNPInit(byte i) {
     openPnP(modulename, 6);
 
     //register the detection mecanism in the timmer interrupt
-//    registerT0event(PNP_DETECTION_TIME, &hotplug_pnp);
+    registerT0event(PNP_DETECTION_TIME, &hotplug_pnp);
 
 }//end PNPInit
 

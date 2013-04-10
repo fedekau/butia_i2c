@@ -4,6 +4,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>../system/typedefs.h</itemPath>
       <itemPath>../usb4all/proxys/T0Proxy.h</itemPath>
       <itemPath>../usb4all/proxys/T0Service.h</itemPath>
       <itemPath>../user/adminModule.h</itemPath>
@@ -25,7 +26,8 @@
       <itemPath>../usb4all/usbconf/desc/usbdsc.h</itemPath>
       <itemPath>../usb4all/usbconf/usballoc/usbmmap.h</itemPath>
       <itemPath>../user/usr_butia.h</itemPath>
-      <itemPath>../system/typedefs.h</itemPath>
+      <itemPath>../user/usr_ax.h</itemPath>
+      <itemPath>../user/usr_grey.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LibraryFiles"
                    displayName="Library Files"
@@ -62,6 +64,8 @@
       <itemPath>../usb4all/usbconf/desc/usbdsc.c</itemPath>
       <itemPath>../usb4all/usbconf/usballoc/usbmmap.c</itemPath>
       <itemPath>../user/usr_butia.c</itemPath>
+      <itemPath>../user/usr_ax.c</itemPath>
+      <itemPath>../user/usr_grey.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
