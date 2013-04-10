@@ -51,10 +51,15 @@ void UserAX12Release(byte usrAXHandler) {
     removePoolingFunction(&UserAX12ProcessIO);
 }
 
+
+
 void UserAX12Received(byte* recBuffPtr, byte lenght, byte usrAXHandler) {
     int data_received, err = 0, value;
     byte data [2];
+    byte pack[20];
     byte j, id, regstart, res, valueH, valueL, userAXCounter = 0;
+
+    byte wait_res = 0x00, error = 0x00, len = 0x00, timeout = 0x00;
 
     switch (((AX_DATA_PACKET*) recBuffPtr)->CMD) {
         case READ_VERSION:
@@ -63,6 +68,33 @@ void UserAX12Received(byte* recBuffPtr, byte lenght, byte usrAXHandler) {
             ((AX_DATA_PACKET*) sendBufferUsrAX)->_byte[2] = AX_MINOR_VERSION;
             ((AX_DATA_PACKET*) sendBufferUsrAX)->_byte[3] = AX_MAJOR_VERSION;
             userAXCounter = 0x04;
+            break;
+
+        case SEND_RAW:
+            ((AX_DATA_PACKET*) sendBufferUsrAX)->_byte[0] = ((AX_DATA_PACKET*) recBuffPtr)->_byte[0]; /* OPCODE */
+            wait_res = ((AX_DATA_PACKET*) recBuffPtr)->_byte[1]; /* wait_res indicates whether a response is being waited */
+            ax12SendRawPacket(recBuffPtr, lenght); /* raw packet is sent */
+
+            if (wait_res) { /* the client is waiting an answer */
+                timeout = ax12ReceiveRawPacket(&len, &error, &pack); /* read the answer */
+//                res = ax12ReadPacket(&value, &err, &data_received, &pack);
+                ((AX_DATA_PACKET*) sendBufferUsrAX)->_byte[1] = (byte) len; /* LENGHT of answer */
+                ((AX_DATA_PACKET*) sendBufferUsrAX)->_byte[2] = (byte) timeout; /* TIMEOUT of answer. 1 means timeout during reading */
+                ((AX_DATA_PACKET*) sendBufferUsrAX)->_byte[3] = (byte) error; /* ERROR of read operation. 1 means PREpacket is wrong. 2 means POSTpacket is wrong */
+
+                /* from sendBufferUsrAx[4] is stored the answer, or part of it */
+//                len = res;
+                j = 0; /* used to iterate in answer packet */
+                while (len > 0) { /* while there are answer elements */
+                    ((AX_DATA_PACKET*) sendBufferUsrAX)->_byte[j + 4] = (byte) pack[j];
+                    j++;
+                    len--;
+                }
+                userAXCounter = (byte) (j + 0x04);
+            } else {
+                ((AX_DATA_PACKET*) sendBufferUsrAX)->_byte[1] = 0x00; /* no answer was expected */
+                userAXCounter = 0x02;
+            }
             break;
 
         case WRITE_INFO:
@@ -80,13 +112,13 @@ void UserAX12Received(byte* recBuffPtr, byte lenght, byte usrAXHandler) {
 
         case READ_INFO:
             ((AX_DATA_PACKET*) sendBufferUsrAX)->_byte[0] = ((AX_DATA_PACKET*) recBuffPtr)->_byte[0];
-            value = (((AX_DATA_PACKET*) recBuffPtr)->_byte[1]);
+            id = (((AX_DATA_PACKET*) recBuffPtr)->_byte[1]);
             data[0] = (byte) (((AX_DATA_PACKET*) recBuffPtr)->_byte[2]); /* regstart */
             data[1] = (byte) (((AX_DATA_PACKET*) recBuffPtr)->_byte[3]); /* length of reg to read */
             ax12SendPacket(id, 0x02, READ_DATA, data); /* id, lenght(data[]), instr, data */
-            res = ax12ReadPacket(&value, &err, &data_received);
-            ((AX_DATA_PACKET*) sendBufferUsrAX)->_byte[1] = data_received / 256;
-            ((AX_DATA_PACKET*) sendBufferUsrAX)->_byte[2] = data_received % 256;
+            res = ax12ReadPacket(&id, &err, &data_received, pack);
+            ((AX_DATA_PACKET*) sendBufferUsrAX)->_byte[1] = (byte) (data_received / 256);
+            ((AX_DATA_PACKET*) sendBufferUsrAX)->_byte[2] = (byte) (data_received % 256);
             userAXCounter = 0x03;
             break;
 
