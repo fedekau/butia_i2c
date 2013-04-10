@@ -136,7 +136,8 @@
     //Funciones de Transmisi�n y Recepci�n
     byte ax12writeB(byte data);
     void ax12SendPacket (byte id, byte datalength, byte instruction, byte* data);
-    byte ax12ReadPacket (int* status_id, int* status_error, int* status_data);
+    byte ax12ReadPacket (int* status_id, int* status_error, int* status_data, byte* pack);
+    byte ax12ReceiveRawPacket (byte*, byte*, byte*);
 
     //Funciones de control del Ax-12 
     byte ping ();

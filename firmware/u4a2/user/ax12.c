@@ -237,13 +237,15 @@ byte readSerial(void){
 }
 /***************************/
      
-byte ax12ReadPacket(int* status_id, int* status_error, int* status_data){          
+byte ax12ReadPacket(int* s_id, int* s_error, int* s_data, byte* pack){
 
     byte error, status_length;
     //byte checksum, i;
     byte ready;
     byte estado = 1;
+    int pos = 0;
 
+    *s_id = 0; *s_error = 0; *s_data = 0;
     ready = 0; // Not ready yet
     error = 0; // 0 mean not error
     ax_rx_Pointer = 0;
@@ -251,15 +253,18 @@ byte ax12ReadPacket(int* status_id, int* status_error, int* status_data){
     while (!ready && !error){
         switch (estado){
             case 1 : case 2: {          //Syncronizaion bytes
-                if (readSerial() == FF)
+                if (readSerial() == FF){
+                    pack[pos++] = 0xFF;
                     estado++;
+                }
                 else
                     error++;
             } break;
             case 3:{                    // Motor ID
-                *status_id = readSerial();
+                *s_id = readSerial();
+                pack[pos++] = (byte)(*s_id % 256);
                 //checksum += *status_id;
-                if (*status_id <= MAX_MOTOR_ID)
+                if (*s_id <= MAX_MOTOR_ID)
                     estado++;
                 else
                     error++;
@@ -267,6 +272,7 @@ byte ax12ReadPacket(int* status_id, int* status_error, int* status_data){
 
             case 4:{                    // Length of packet
                 status_length = readSerial();
+                pack[pos++] = (byte)(status_length % 256);
                 //checksum += status_length;
                 if(status_length < AX12_BUFFER_SIZE) //Check if the length is rigth
                     estado++;
@@ -275,6 +281,7 @@ byte ax12ReadPacket(int* status_id, int* status_error, int* status_data){
             } break;
             case 5:{                                // Error code, Parameters and check sum
                  ax_rx_buffer[ax_rx_Pointer] = readSerial();
+                 pack[pos++] = ax_rx_buffer[ax_rx_Pointer];
                  //checksum += ax_rx_buffer[ax_rx_Pointer];
                  ax_rx_Pointer++;
                  if (ax_rx_Pointer >= status_length)
@@ -292,19 +299,19 @@ byte ax12ReadPacket(int* status_id, int* status_error, int* status_data){
   //if (checksum != ax_rx_buffer[ax_rx_Pointer-1]) error+=4;              // Test checksum
   //  if (~checksum !=checksum^0xff) error+=4;              // Test checksum
    if (error != 0)  {                           //Falta verificar el checksum
-        *status_id = -1;
-        *status_error = -1;
-        *status_data = -1;
+        *s_id = -1;
+        *s_error = -1;
+        *s_data = -1;
     }
     else{
-        *status_error = ax_rx_buffer[0];
+        *s_error = ax_rx_buffer[0];
         switch (status_length) { //TODO: Se esta asumiendo que no vienen mas de 2 parametros ...
-                case 3: *status_data = ax_rx_buffer[1]; break;
-                case 4: *status_data = makeInt (ax_rx_buffer[1], ax_rx_buffer[2]); break;
-                default: *status_data = -1;   //No hay datos
+                case 3: *s_data = ax_rx_buffer[1]; break;
+                case 4: *s_data = makeInt (ax_rx_buffer[1], ax_rx_buffer[2]); break;
+                default: *s_data = -1;   //No hay datos
         }
     }
-    return (1-error); // 1 mean all is ok
+    return error;//pos; // 1 mean all is ok
 }
 
 /*****************************************************************************/ 
@@ -313,6 +320,7 @@ byte ax12ReadPacket(int* status_id, int* status_error, int* status_data){
 /*****************************************************************************/ 
 byte writeData(byte id,byte regstart, byte reglength, byte *values){
 	byte f;
+    byte row[20];
     byte data [MAXPAQSIZE];
     data [0] = regstart; 	
 	for (f=0; f<reglength; f++) {               // data = par�metros
@@ -320,16 +328,17 @@ byte writeData(byte id,byte regstart, byte reglength, byte *values){
     }
 
     ax12SendPacket (id, reglength+1, WRITE_DATA, data);
-    return ax12ReadPacket(&status_id, &status_error, &status_data);
+    return ax12ReadPacket(&status_id, &status_error, &status_data,&row);
 }
 
 
 byte readData(byte id, byte regstart, byte reglength){
+    byte row[20];
     byte data [2];
     data [0] = regstart;
     data [1] = reglength;
     ax12SendPacket (id, 2, READ_DATA, data);
-    return ax12ReadPacket(&status_id, &status_error, &status_data);
+    return ax12ReadPacket(&status_id, &status_error, &status_data, &row);
 }
 
 
@@ -346,6 +355,7 @@ byte reset (byte id){
 
 byte writeInfo (byte id,byte regstart, int value) {
     byte reglength = 0;
+    byte  row[20];
     byte data [MAXPAQSIZE];
     switch (regstart) {
       case 3: case 4: case 5: case 11: case 12:
@@ -365,7 +375,7 @@ byte writeInfo (byte id,byte regstart, int value) {
     if (reglength > 1) {data[2] = (value&0xFF00)>>8;}
     ax12SendPacket (id, reglength+1, WRITE_DATA, data);
     
-    return ax12ReadPacket(&status_id, &status_error, &status_data);
+    return ax12ReadPacket(&status_id, &status_error, &status_data, &row);
 }
 
 
@@ -400,5 +410,56 @@ byte presentPSL (boolean inverse, byte id, int* PSL) {                     // le
     return err;
 }
 
+void ax12SendRawPacket (byte* packet, byte len) {
+    byte pos = 2;
+    setTX(); /* Mode TX */
+    while (pos < len){
+        ax12writeB((byte)(packet[pos]));
+        pos++;
+    }
+    while(!TXSTAbits.TRMT); /* complete the transmision */
+    setRX(); /* Mode RX */
+}
 
+byte readSerial2(byte* data){
+    int timeout = 0;
+    while((!PIR1bits.RCIF) && (timeout < TIMEOUT)){
+        timeout++;                      //Mientras no este pronto el mensaje espero hasta recibirlo
+    }
+    if (timeout >= TIMEOUT){
+        return 1;
+    }
+    else{
+        *data = RCREG;
+        PIR1bits.RCIF=0;
+        return 0;  // Retorno el mensaje recibido
+    }
+}
 
+byte ax12ReceiveRawPacket (byte* len, byte* error, byte* pack) {
+    byte time = 0, pos = 0;
+    byte data = 0;
+    int timeout = 15000;
+    error = 0;
+    *len = 7;
+
+    T0CONbits.TMR0ON = FALSE;
+    INTCONbits.GIE = 0;
+//    while(!PIR1bits.RCIF && timeout--);
+    while (pos < 7){
+        timeout = TIMEOUT;
+        while(!PIR1bits.RCIF && timeout--);
+        PIR1bits.RCIF=0;
+        pack[pos++] = RCREG;
+
+//        pack[pos++] = readSerial();
+//        pack[pos++] = readSerial();
+//        pack[pos++] = readSerial();
+//        pack[pos++] = readSerial();
+//        pack[pos++] = readSerial();
+//        pack[pos++] = readSerial();
+//        pack[pos++] = readSerial();
+    }
+    setNone();
+    return time;
+}
