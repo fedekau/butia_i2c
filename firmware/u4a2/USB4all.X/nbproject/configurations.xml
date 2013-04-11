@@ -8,7 +8,6 @@
       <itemPath>../usb4all/proxys/T0Proxy.h</itemPath>
       <itemPath>../usb4all/proxys/T0Service.h</itemPath>
       <itemPath>../user/adminModule.h</itemPath>
-      <itemPath>../user/ax12.h</itemPath>
       <itemPath>../user/descriptorManager.h</itemPath>
       <itemPath>../usb4all/dynamicISR/dynamicISR.h</itemPath>
       <itemPath>../user/dynamicPolling.h</itemPath>
@@ -28,6 +27,7 @@
       <itemPath>../user/usr_butia.h</itemPath>
       <itemPath>../user/usr_ax.h</itemPath>
       <itemPath>../user/usr_grey.h</itemPath>
+      <itemPath>../user/newax12.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LibraryFiles"
                    displayName="Library Files"
@@ -48,7 +48,6 @@
       <itemPath>../usb4all/proxys/T0Proxy.c</itemPath>
       <itemPath>../usb4all/proxys/T0Service.c</itemPath>
       <itemPath>../user/adminModule.c</itemPath>
-      <itemPath>../user/ax12.c</itemPath>
       <itemPath>../user/descriptorManager.c</itemPath>
       <itemPath>../usb4all/dynamicISR/dynamicISR.c</itemPath>
       <itemPath>../user/dynamicPolling.c</itemPath>
@@ -66,6 +65,7 @@
       <itemPath>../user/usr_butia.c</itemPath>
       <itemPath>../user/usr_ax.c</itemPath>
       <itemPath>../user/usr_grey.c</itemPath>
+      <itemPath>../user/newax12.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -129,8 +129,8 @@
       </C18>
       <C18-AS>
         <property key="default.radix" value="HEX"/>
-        <property key="hex.output.format" value="INHX32"/>
         <property key="enable.case.sensitivity" value="false"/>
+        <property key="hex.output.format" value="INHX32"/>
         <property key="preprocessor.macros" value=""/>
         <property key="warning.level" value="0"/>
         <property key="cross.reference.file" value=""/>
@@ -144,9 +144,9 @@
       </C18-LD>
       <C18LanguageToolchain>
         <property key="stack-analysis-mplink" value="false"/>
-        <property key="stack-analysis-mcc18" value="false"/>
-        <property key="stack-analysis" value="false"/>
         <property key="extended-mode-mcc18" value="false"/>
+        <property key="stack-analysis" value="false"/>
+        <property key="stack-analysis-mcc18" value="false"/>
         <property key="extended-mode" value="false"/>
         <property key="extended-mode-mpasm" value="false"/>
         <property key="extended-mode-mplink" value="false"/>

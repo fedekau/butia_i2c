@@ -440,26 +440,27 @@ byte ax12ReceiveRawPacket (byte* len, byte* error, byte* pack) {
     byte time = 0, pos = 0;
     byte data = 0;
     int timeout = 15000;
-    error = 0;
+    *error = 0;
     *len = 7;
 
     T0CONbits.TMR0ON = FALSE;
     INTCONbits.GIE = 0;
-//    while(!PIR1bits.RCIF && timeout--);
-    while (pos < 7){
+    while (pos < 4){
         timeout = TIMEOUT;
         while(!PIR1bits.RCIF && timeout--);
         PIR1bits.RCIF=0;
         pack[pos++] = RCREG;
-
-//        pack[pos++] = readSerial();
-//        pack[pos++] = readSerial();
-//        pack[pos++] = readSerial();
-//        pack[pos++] = readSerial();
-//        pack[pos++] = readSerial();
-//        pack[pos++] = readSerial();
-//        pack[pos++] = readSerial();
     }
+    data = pack[pos-1];
+    while (pos < (4+data)){
+        timeout = TIMEOUT;
+        while(!PIR1bits.RCIF && timeout--);
+        PIR1bits.RCIF=0;
+        pack[pos++] = RCREG;
+    }
+    *len = pos;
+    T0CONbits.TMR0ON = TRUE;
+    INTCONbits.GIE = 1;
     setNone();
     return time;
 }
