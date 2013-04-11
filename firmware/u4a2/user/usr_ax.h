@@ -12,7 +12,7 @@
 #include "system/typedefs.h"
 #include "user/adminModule.h"
 #include "user/loaderModule.h"
-#include "user/ax12.h"
+#include "user/newax12.h"
 
 /** D E F I N I T I O N S ****************************************************/
 #define AX_MINOR_VERSION   0x02
