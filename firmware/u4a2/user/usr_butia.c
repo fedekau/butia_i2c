@@ -9,7 +9,7 @@
 #include "user/usr_butia.h"
 #include "user/handlerManager.h"
 #include "dynamicPolling.h"                              
-#include "ax12.h"
+//#include "ax12.h"
 #include "usr_motors.h"
 
 /** V A R I A B L E S ********************************************************/
