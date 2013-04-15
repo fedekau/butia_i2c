@@ -24,9 +24,15 @@
       <itemPath>../autofiles/usbcfg.h</itemPath>
       <itemPath>../usb4all/usbconf/desc/usbdsc.h</itemPath>
       <itemPath>../usb4all/usbconf/usballoc/usbmmap.h</itemPath>
-      <itemPath>../user/usr_butia.h</itemPath>
       <itemPath>../user/usr_ax.h</itemPath>
-      <itemPath>../user/newax12.h</itemPath>
+      <itemPath>../user/ax12.h</itemPath>
+      <itemPath>../user/usr_button.h</itemPath>
+      <itemPath>../user/usr_grey.h</itemPath>
+      <itemPath>../user/usr_hackpoints.h</itemPath>
+      <itemPath>../user/usr_light.h</itemPath>
+      <itemPath>../user/usr_resistance.h</itemPath>
+      <itemPath>../user/usr_voltage.h</itemPath>
+      <itemPath>../user/usr_distance.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LibraryFiles"
                    displayName="Library Files"
@@ -61,9 +67,15 @@
       <itemPath>../system/usb/usbdrv/usbdrv.c</itemPath>
       <itemPath>../usb4all/usbconf/desc/usbdsc.c</itemPath>
       <itemPath>../usb4all/usbconf/usballoc/usbmmap.c</itemPath>
-      <itemPath>../user/usr_butia.c</itemPath>
       <itemPath>../user/usr_ax.c</itemPath>
-      <itemPath>../user/newax12.c</itemPath>
+      <itemPath>../user/ax12.c</itemPath>
+      <itemPath>../user/usr_button.c</itemPath>
+      <itemPath>../user/usr_distance.c</itemPath>
+      <itemPath>../user/usr_grey.c</itemPath>
+      <itemPath>../user/usr_hackpoints.c</itemPath>
+      <itemPath>../user/usr_light.c</itemPath>
+      <itemPath>../user/usr_resistance.c</itemPath>
+      <itemPath>../user/usr_voltage.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -127,8 +139,8 @@
       </C18>
       <C18-AS>
         <property key="default.radix" value="HEX"/>
-        <property key="enable.case.sensitivity" value="false"/>
         <property key="hex.output.format" value="INHX32"/>
+        <property key="enable.case.sensitivity" value="false"/>
         <property key="preprocessor.macros" value=""/>
         <property key="warning.level" value="0"/>
         <property key="cross.reference.file" value=""/>
@@ -142,9 +154,9 @@
       </C18-LD>
       <C18LanguageToolchain>
         <property key="stack-analysis-mplink" value="false"/>
-        <property key="extended-mode-mcc18" value="false"/>
-        <property key="stack-analysis" value="false"/>
         <property key="stack-analysis-mcc18" value="false"/>
+        <property key="stack-analysis" value="false"/>
+        <property key="extended-mode-mcc18" value="false"/>
         <property key="extended-mode" value="false"/>
         <property key="extended-mode-mpasm" value="false"/>
         <property key="extended-mode-mplink" value="false"/>
