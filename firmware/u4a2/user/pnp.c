@@ -138,7 +138,7 @@ void hotplug_pnp(void) {
             modulename[7] = table_device_id_resistance[device_type].name[7];
             
 
-            openPnP(modulename, port + 1); /*in table_device_id_resistance_value are defined all device types with the resistance value*/
+            openPnP((byte *) modulename, port + 1); /*in table_device_id_resistance_value are defined all device types with the resistance value*/
             detected_device_type_id[port] = device_type;
         }
     }
