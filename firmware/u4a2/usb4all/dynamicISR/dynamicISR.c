@@ -67,7 +67,8 @@ BOOL removeISRFunction(volatile void (*ISRFun) (void)){
 	}
 	return TRUE;
 }
-#pragma interrupt interruption save=section(".tmpdata")
+//save is not necessary: http://www.xargs.com/pic/c18-isr-optim.pdf (page 7)
+#pragma interrupt interruption //save=section(".tmpdata")
 void interruption(void){
 	volatile byte i=0;
 	while (i<MAX_ISR_FUNCTIONS){
