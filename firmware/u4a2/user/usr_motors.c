@@ -14,6 +14,7 @@
 #include "user/handlerManager.h"
 #include "dynamicPolling.h"
 #include "usb4all/proxys/T0Service.h"
+#include "pnp.h"
 
 /* Structures to hold motors */
 #pragma code module
@@ -122,11 +123,11 @@ void ConfigWheels(byte id){
 void TryAutoDetect() {
     int _id, _error, _data, i;
     for (i = 0; i < C_TRIES; i++) {
+        _id = 0xFFFF;
         ax12SendPacket(current_id, 0, PING, 0);
         ax12ReadPacket(&_id, &_error, &_data);
         if (_id == current_id++) {
             list_motors[index++] = _id;
-            /*FIXME config motor to be used as wheels*/
             break;
         }
     }
@@ -139,7 +140,7 @@ void TryAutoDetect() {
         sexyMotorMoveStart();
         return;
     }
-    if (index == C_ID_MOTORS){
+    if (current_id == C_ID_MOTORS){
         return;
     }
     registerT0eventInEvent(LONG_TIME_UNIT, &TryAutoDetect);

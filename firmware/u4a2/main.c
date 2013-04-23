@@ -46,13 +46,9 @@
 #include "system/usb/usb_compile_time_validation.h" // Optional
 #include "user/dynamicPolling.h"                    // Modifiable
 #include "usb4all/dynamicISR/dynamicISR.h"          // Modifiable
-
-#include "user/usr_display.h"
-#include "user/usr_leds.h"
-#include "user/usr_buzzer.h"
+#include "usb4all/proxys/T0Service.h"
 
 #include "user/handlerManager.h"                              // Modifiable
-#include "user/usr_motors.h"
 #include "user/ax12.h"
 
 #include "user/usb4butia.h"

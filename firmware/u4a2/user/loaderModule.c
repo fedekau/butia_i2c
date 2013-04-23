@@ -82,7 +82,7 @@ void getModuleName(byte line, char* modName){
 }
 
 pUserFunc getModuleInitDirection(rom near char* direction){
-	const uTab* tabla = (const *) direction;
+	const uTab* tabla = (const uTab*) direction;
 	return tabla->pfI;
 }
 

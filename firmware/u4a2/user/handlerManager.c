@@ -182,14 +182,14 @@ void initHandlerManager(void){
     modulename[0]='a'; modulename[1]='d'; modulename[2]='m'; modulename[3]='i';
     modulename[4]='n'; modulename[5]=0  ; modulename[6]=0  ; modulename[7]=0  ;
     epHandlerMap[0].ep = getAdminEndpoint(); // Admin endpoint
-    epHandlerMap[0].uTableDirection = getUserTableDirection(modulename); // ModuleType=0;
+    epHandlerMap[0].uTableDirection = getUserTableDirection((byte *) modulename); // ModuleType=0;
     adminModuleInit(0);
 
     /* PNP module ; Handler=7 */
     modulename[0]='p'; modulename[1]='n'; modulename[2]='p'; modulename[3]=0 ;
     modulename[4]=0; modulename[5]=0  ; modulename[6]=0  ; modulename[7]=0  ;
     epHandlerMap[7].ep = getPnPEndpoint();
-    epHandlerMap[7].uTableDirection = getUserTableDirection(modulename);
+    epHandlerMap[7].uTableDirection = getUserTableDirection((byte *) modulename);
     autoDetectWheels();
     PNPInit(7);
 

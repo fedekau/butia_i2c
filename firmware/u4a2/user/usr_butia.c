@@ -9,7 +9,7 @@
 #include "user/usr_butia.h"
 #include "user/handlerManager.h"
 #include "dynamicPolling.h"                              
-#include "ax12.h"
+//#include "ax12.h"
 #include "usr_motors.h"
 
 /** V A R I A B L E S ********************************************************/
@@ -133,7 +133,7 @@ void UserButiaReceived(byte* recBuffPtr, byte len, byte handler){
         break;
         case GET_VOLT:
             ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[0] = ((BUTIA_DATA_PACKET*)recBuffPtr)->_byte[0];
-            getVoltage(&data_received);     //controlar error
+//            getVoltage(&data_received);     //controlar error
             ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[1] = data_received;
             UserButiaCounter=0x02;
         break;
