@@ -61,10 +61,9 @@ void UserAX12Received(byte* recBuffPtr, byte lenght, byte usrAXHandler) {
     switch (((AX_DATA_PACKET*) recBuffPtr)->CMD) {
         case READ_VERSION:
             ((AX_DATA_PACKET*) sendBufferUsrAX)->_byte[0] = ((AX_DATA_PACKET*) recBuffPtr)->_byte[0];
-            ((AX_DATA_PACKET*) sendBufferUsrAX)->_byte[1] = ((AX_DATA_PACKET*) recBuffPtr)->_byte[1];
-            ((AX_DATA_PACKET*) sendBufferUsrAX)->_byte[2] = AX_MINOR_VERSION;
-            ((AX_DATA_PACKET*) sendBufferUsrAX)->_byte[3] = AX_MAJOR_VERSION;
-            userAXCounter = 0x04;
+            ((AX_DATA_PACKET*) sendBufferUsrAX)->_byte[1] = AX_MINOR_VERSION;
+            ((AX_DATA_PACKET*) sendBufferUsrAX)->_byte[2] = AX_MAJOR_VERSION;
+            userAXCounter = 0x03;
             break;
 
         case SEND_RAW:
