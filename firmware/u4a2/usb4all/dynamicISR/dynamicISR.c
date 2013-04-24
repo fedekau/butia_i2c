@@ -19,7 +19,7 @@
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata
-volatile void ( *ISRFunction[MAX_ISR_FUNCTIONS]) (void) ;//arreglo de punteros a las funciones ISR de los modulos
+void ( *ISRFunction[MAX_ISR_FUNCTIONS]) (void) ;//arreglo de punteros a las funciones ISR de los modulos
 volatile byte ISRListeners;
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
 
@@ -34,7 +34,7 @@ void initISRFunctions(void){
 	ISRListeners=0;							
 }
 
-BOOL addISRFunction(volatile void (*ISRFun) (void)){
+BOOL addISRFunction(void (*ISRFun) (void)){
 	byte i = 0;
 	BOOL termine = FALSE;
 	while (i<MAX_ISR_FUNCTIONS && !termine){
@@ -51,7 +51,7 @@ BOOL addISRFunction(volatile void (*ISRFun) (void)){
 	return TRUE;
 } 		
 
-BOOL removeISRFunction(volatile void (*ISRFun) (void)){
+BOOL removeISRFunction(void (*ISRFun) (void)){
 	byte i=0;
 	BOOL termine=FALSE;
 	while (i<MAX_ISR_FUNCTIONS && !termine){
