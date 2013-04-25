@@ -47,7 +47,7 @@ BOOL addT0Function(volatile void (*ISRFun) (void)){
 		i++;
 	}
 	if (!termine) return FALSE;
-	if ((t0Listeners++)==0){
+	if ((t0Listeners++)== (byte) 0){
 		// add my receive ISR function to the dynamic pooling module, to be called periodically 
 		addISRFunction(&t0Interrupt);
 		INTCONbits.TMR0IF = 0; //apago bandera de interrupcion de timer0 por las dudas
@@ -72,7 +72,7 @@ BOOL removeT0Function(volatile void (*ISRFun) (void)){
 		i++;
 	}
 	if (!termine) return FALSE;
-	if ((--t0Listeners)==0) {
+	if ((--t0Listeners)== (byte) 0) {
 		T0CONbits.TMR0ON  = FALSE; //apago timer 0
 		INTCONbits.TMR0IF = 0; //apago bandera de interrupcion de timer0 por las dudas
 		INTCONbits.TMR0IE = 0; //cuando se quita la ultima funcion listener apagago ints de Timer0 

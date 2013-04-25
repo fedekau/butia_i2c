@@ -183,7 +183,7 @@ void USBStdSetCfgHandler(void)
     mDisableEP1to15();                          // See usbdrv.h
     ClearArray((byte*)&usb_alt_intf,MAX_NUM_INT);
     usb_active_cfg = SetupPkt.bCfgValue;
-    if(SetupPkt.bCfgValue == 0)
+    if(SetupPkt.bCfgValue == (byte) 0)
         usb_device_state = ADDRESS_STATE;
     else
     {
@@ -229,7 +229,7 @@ void USBStdGetStatusHandler(void)
             if(self_power == 1)                     // self_power defined in io_cfg.h
                 CtrlTrfData._byte0|=0b000000001;    // Set bit0
             
-            if(usb_stat.RemoteWakeup == 1)          // usb_stat defined in usbmmap.c
+            if(usb_stat.RemoteWakeup == (unsigned) 1)          // usb_stat defined in usbmmap.c
                 CtrlTrfData._byte0|=0b00000010;     // Set bit1
             break;
         case RCPT_INTF:
@@ -284,7 +284,7 @@ void USBStdFeatureReqHandler(void)
     
     if((SetupPkt.bFeature == ENDPOINT_HALT)&&
        (SetupPkt.Recipient == RCPT_EP)&&
-       (SetupPkt.EPNum != 0))
+       (SetupPkt.EPNum != (unsigned) 0))
     {
         ctrl_trf_session_owner = MUID_USB9;
         /* Must do address calculation here */
@@ -294,7 +294,7 @@ void USBStdFeatureReqHandler(void)
             *pDst.bRam = _USIE|_BSTALL;
         else
         {
-            if(SetupPkt.EPDir == 1) // IN
+            if(SetupPkt.EPDir == (unsigned) 1) // IN
                 *pDst.bRam = _UCPU;
             else
                 *pDst.bRam = _USIE|_DAT0|_DTSEN;

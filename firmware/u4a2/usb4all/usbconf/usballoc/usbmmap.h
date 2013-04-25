@@ -21,13 +21,13 @@
 #define _UCPU       0x00                //CPU owns buffer
 
 //USB Device States - To be used with [byte usb_device_state]
-#define DETACHED_STATE          0
-#define ATTACHED_STATE          1
-#define POWERED_STATE           2
-#define DEFAULT_STATE           3
-#define ADR_PENDING_STATE       4
-#define ADDRESS_STATE           5
-#define CONFIGURED_STATE        6
+#define DETACHED_STATE       (byte) 0
+#define ATTACHED_STATE       (byte) 1
+#define POWERED_STATE        (byte) 2
+#define DEFAULT_STATE        (byte) 3
+#define ADR_PENDING_STATE    (byte) 4
+#define ADDRESS_STATE        (byte) 5
+#define CONFIGURED_STATE     (byte) 6
 
 //		tamaño de los endpoints(va a quedar deprecated)
 
@@ -36,8 +36,8 @@
 
 //Memory Types for Control Transfer - used in USB_DEVICE_STATUS
 
-#define _RAM 0
-#define _ROM 1
+#define _RAM (unsigned) 0
+#define _ROM (unsigned) 1
 
 // T Y P E S ****************************************************************
 

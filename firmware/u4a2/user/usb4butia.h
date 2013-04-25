@@ -9,7 +9,7 @@
 #include <p18cxxx.h>
 #include "typedefs.h"
 
-#define MAX_PORTS 6
+#define MAX_PORTS   (byte) 6
 #define DISCONECTED 0
 
 typedef enum _direction {

@@ -2,7 +2,7 @@
 #define T0_PROXY_H
 
 /** D E F I N I T I O N S ****************************************************/
-#define MAX_T0_FUNCTIONS 0x05
+#define MAX_T0_FUNCTIONS (byte) 5
 
 typedef struct  {
 	int timestamp;

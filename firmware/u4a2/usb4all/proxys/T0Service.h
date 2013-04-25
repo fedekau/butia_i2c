@@ -8,7 +8,7 @@
 /** D E F I N I T I O N S ****************************************************/
 
 //max number of registrations to hold
-#define MAX_T0CALLS 10
+#define MAX_T0CALLS (byte)  10
 
 //default clock initializacion (comment out if undesired)
 #define DEFAULT_CLOCK_CONFIG	0x07

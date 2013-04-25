@@ -75,7 +75,7 @@ void UserButtonInit(byte handler) {
  *****************************************************************************/
 
 void UserButtonProcessIO(void) {
-    if ((usb_device_state < CONFIGURED_STATE) || (UCONbits.SUSPND == 1)) return;
+    if ((usb_device_state < CONFIGURED_STATE) || (UCONbits.SUSPND == (unsigned) 1)) return;
     /* here enter the code that want to be called periodically, per example interaction with buttons and leds*/
 
 }/*end ProcessIO*/
@@ -143,9 +143,9 @@ void UserButtonReceived(byte* recBuffPtr, byte len, byte handler) {
         default:
             break;
     }/*end switch(s)*/
-    if (userButtonCounter != 0) {
+    if (userButtonCounter != (byte) 0) {
         j = 255;
-        while (mUSBGenTxIsBusy() && j-- > 0); /* pruebo un maximo de 255 veces */
+        while (mUSBGenTxIsBusy() && j-- > (byte) 0); /* pruebo un maximo de 255 veces */
             if (!mUSBGenTxIsBusy())
                 USBGenWrite2(handler, userButtonCounter);
     }/*end if */
