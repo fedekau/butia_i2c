@@ -360,7 +360,7 @@ byte writeInfo(byte id, byte regstart, int value) {
     return ax12ReadPacket(&status_id, &status_error, &status_data);
 }
 
-void setEndlessTurnMode (byte id,boolean onoff) {
+void setEndlessTurnMode (byte id,byte onoff) {
     writeInfo (id,CW_ANGLELIMIT_L , 0);
     if (onoff) {
         writeInfo (id,CCW_ANGLELIMIT_L, 0);
