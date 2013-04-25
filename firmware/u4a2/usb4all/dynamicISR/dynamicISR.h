@@ -7,8 +7,8 @@
 /** I N C L U D E S **********************************************************/
 
 /** P U B L I C  P R O T O T Y P E S *****************************************/
-BOOL addISRFunction(volatile void (*ISRFun) (void));
-BOOL removeISRFunction(volatile void (*ISRFun) (void));
+BOOL addISRFunction(void (*ISRFun) (void));
+BOOL removeISRFunction(void (*ISRFun) (void));
 void initISRFunctions(void);
 void interruption(void);
 
