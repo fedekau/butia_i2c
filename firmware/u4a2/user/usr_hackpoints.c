@@ -124,7 +124,7 @@ void HackPointsReceived(byte* recBufferHackPoints, byte len, byte handler) {
         case SET_MODE:
             ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
             pin = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[1];
-            if (((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[2] == 0x01){
+            if (((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[2] == (byte) 1){
                 //salida
                 TRISD = TRISD & ~(byte) (MASK << pin);
             } else {
@@ -137,7 +137,7 @@ void HackPointsReceived(byte* recBufferHackPoints, byte len, byte handler) {
         case WRITE:
             ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
             pin = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[1];
-            if (((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[2] == 0x01){
+            if (((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[2] == (byte) 1){
                 PORTD = PORTD | (byte) (MASK << pin);
             } else {
                 PORTD = PORTD & ~(byte) (MASK << pin);
@@ -179,9 +179,9 @@ void HackPointsReceived(byte* recBufferHackPoints, byte len, byte handler) {
         default:
             break;
     }/*end switch(s) */
-    if (HackPointsCounter != 0) {
+    if (HackPointsCounter != (byte) 0) {
         j = 255;
-        while (mUSBGenTxIsBusy() && j-- > 0);
+        while (mUSBGenTxIsBusy() && j-- > (byte) 0);
             if (!mUSBGenTxIsBusy())
                 USBGenWrite2(handler, HackPointsCounter);
     }/*end if*/

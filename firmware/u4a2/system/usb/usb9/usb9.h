@@ -46,21 +46,21 @@
  * Standard Request Codes
  * USB 2.0 Spec Ref Table 9-4
  *****************************************************************************/
-#define GET_STATUS  0
-#define CLR_FEATURE 1
-#define SET_FEATURE 3
-#define SET_ADR     5
-#define GET_DSC     6
-#define SET_DSC     7
-#define GET_CFG     8
-#define SET_CFG     9
-#define GET_INTF    10
-#define SET_INTF    11
-#define SYNCH_FRAME 12
+#define GET_STATUS  (byte) 0
+#define CLR_FEATURE (byte) 1
+#define SET_FEATURE (byte) 3
+#define SET_ADR     (byte) 5
+#define GET_DSC     (byte) 6
+#define SET_DSC     (byte) 7
+#define GET_CFG     (byte) 8
+#define SET_CFG     (byte) 9
+#define GET_INTF    (byte) 10
+#define SET_INTF    (byte) 11
+#define SYNCH_FRAME (byte) 12
 
 /* Standard Feature Selectors */
-#define DEVICE_REMOTE_WAKEUP    0x01
-#define ENDPOINT_HALT           0x00
+#define DEVICE_REMOTE_WAKEUP    (byte) 1
+#define ENDPOINT_HALT           (byte) 0
 
 /******************************************************************************
  * Macro:           void mUSBCheckAdrPendingState(void)
@@ -81,7 +81,7 @@
 #define mUSBCheckAdrPendingState()  if(usb_device_state==ADR_PENDING_STATE) \
                                     {                                       \
                                         UADDR = SetupPkt.bDevADR._byte;     \
-                                        if(UADDR > 0)                       \
+                                        if(UADDR > (byte) 0)                       \
                                             usb_device_state=ADDRESS_STATE; \
                                         else                                \
                                             usb_device_state=DEFAULT_STATE; \

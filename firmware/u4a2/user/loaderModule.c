@@ -24,8 +24,8 @@ void loadModule(byte idModule, byte binaryStream[8]){
 BOOL isEqual(byte str1[8], byte str2[8]){
 	byte j = 0;
 	BOOL result = TRUE, termine = FALSE;
-	for(j = 0; j<8 && !termine; j++){
-		if((str1[j] == (char)'\0') || (str2[j] == (char)'\0')){
+	for(j = (byte) 0; j < (byte) 8 && !termine; j++){
+		if((str1[j] == (unsigned char)'\0') || (str2[j] == (unsigned char)'\0')){
 			termine = TRUE;
 		}
 		if((char)str1[j] != (char)str2[j]){
@@ -42,7 +42,7 @@ rom near char* getUserTableDirection(byte moduleId[8]){
 	byte j = 0;
 	while (*i != MEM_VACIO){
 		tabla = (const uTab*) i;
-		for (j = 0; j < 8; j++){       // hacking para poder comparar strings
+		for (j = (byte) 0; j < (byte) 8; j++){       // hacking para poder comparar strings
 			dest[j] = (tabla->id)[j];  // para poderse comparar ambos strings deben estar en igual espacio de memoria (RAM / ROM)
 		}
 		if (isEqual(dest, moduleId)){
@@ -75,7 +75,7 @@ void getModuleName(byte line, char* modName){
 	uTab* tabla; 
 	i = i + (line * TAM_U_TAB);
 	tabla = (uTab*) i;
-	for (j = 0; j < 8; j++){       
+	for (j = (byte) 0; j < (byte) 8; j++){
 		modName[j] = (tabla->id)[j];  
 	}
 	//memcpy(modName, tabla->id, 8); no anda, sera porque estan en espacios de memoria separados?(RAM/ROM)	

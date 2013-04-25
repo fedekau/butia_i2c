@@ -20,7 +20,7 @@
 /** V A R I A B L E S ********************************************************/
 #pragma udata
 void ( *ISRFunction[MAX_ISR_FUNCTIONS]) (void) ;//arreglo de punteros a las funciones ISR de los modulos
-volatile byte ISRListeners;
+byte ISRListeners;
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
 
 #pragma code sys
@@ -45,7 +45,7 @@ BOOL addISRFunction(void (*ISRFun) (void)){
 		i++;
 	}
 	if (!termine) return FALSE;
-	if ((ISRListeners++)==0){
+	if ((ISRListeners++)== (byte) 0){
 		INTCONbits.GIE = 1; //cuando se agrega la primer funcion listener prendo ints globales 
 	}
 	return TRUE;
@@ -62,7 +62,7 @@ BOOL removeISRFunction(void (*ISRFun) (void)){
 		i++;
 	}
 	if (!termine) return FALSE;
-	if ((--ISRListeners)==0) {
+	if ((--ISRListeners)== (byte) 0) {
 		INTCONbits.GIE = 0; //si se va el ultimo listener apago ints globales 
 	}
 	return TRUE;

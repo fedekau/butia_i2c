@@ -80,7 +80,7 @@ void UserVoltageInit(byte usrVoltageHandler){
  * Note:            None
  *****************************************************************************/
 void UserVoltageProcessIO(void){
-    if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND==1)) return;
+    if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND== (unsigned) 1)) return;
     /* here enter the code that want to be called periodically,
      * per example interaction with buttons and leds */
 }/* end UserVoltageProcessIO */
@@ -151,10 +151,10 @@ void UserVoltageReceived(byte* recBuffPtr, byte len, byte handler){
             break;
     }/* end switch(s)*/
 
-    if(userVoltageCounter != 0)
+    if(userVoltageCounter != (byte) 0)
     {
         j = 255;
-        while(mUSBGenTxIsBusy() && j-->0); /* try at last 255 tries */
+        while(mUSBGenTxIsBusy() && j--> (byte) 0); /* try at last 255 tries */
             if(!mUSBGenTxIsBusy())
                 USBGenWrite2(handler, userVoltageCounter);
     }/* end if */

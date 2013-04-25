@@ -44,7 +44,7 @@
 /********************************   Variables   ******************************/
 /*****************************************************************************/
 
-int status_id; /* ID del paquete de retorno */
+byte status_id; /* ID del paquete de retorno */
 int status_error; /* error del paquete de retorno */
 int status_data; /* data del paquete de */
 
@@ -218,7 +218,7 @@ void ax12SendPacket(byte id, byte datalength, byte instruction, byte *data) {
     setRX(); // Modo RX
 }
 
-byte ax12ReadPacket(int* s_id, int* s_error, int* s_data) {
+byte ax12ReadPacket(byte* s_id, int* s_error, int* s_data) {
 
     byte error, status_length;
     //byte checksum, i;
@@ -283,7 +283,7 @@ byte ax12ReadPacket(int* s_id, int* s_error, int* s_data) {
     //checksum = checksum^0xff ;//~checksum;
     //if (checksum != ax_rx_buffer[ax_rx_Pointer-1]) error+=4;              // Test checksum
     //  if (~checksum !=checksum^0xff) error+=4;              // Test checksum
-    if (error != 0) { //Falta verificar el checksum
+    if (error != (byte) 0) { //Falta verificar el checksum
         *s_id = -1;
         *s_error = -1;
         *s_data = -1;
@@ -352,7 +352,7 @@ byte writeInfo(byte id, byte regstart, int value) {
 
     data [0] = regstart;
     data [1] = value & 0xFF;
-    if (reglength > 1) {
+    if (reglength > (byte) 1) {
         data[2] = (value & 0xFF00) >> 8;
     }
     ax12SendPacket(id, reglength + 1, WRITE_DATA, data);
@@ -402,7 +402,7 @@ byte ax12ReceiveRawPacket(byte* len, byte* pack) {
     }
 
     lenght = (byte) pack[pos - 1];
-    if ((lenght > MAX_PACKET_SIZE) || (lenght == 0x00)) { /* something is wrong */
+    if ((lenght > MAX_PACKET_SIZE) || (lenght == (byte) 0)) { /* something is wrong */
         *len = 0;
         return 1;
     }
