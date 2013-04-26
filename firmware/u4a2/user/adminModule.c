@@ -113,14 +113,18 @@ void adminReceived(byte* recBuffPtr, byte len, byte admin_handler) {
             /* Abre un user module, y retorna el handler asignado en el sistema*/
         case OPEN:
             tableDirec = getUserTableDirection(((AM_PACKET*) recBuffPtr)->moduleId);
-            if (tableDirec != (rom near char*) ERROR) {
-                endIn = ((AM_PACKET*) recBuffPtr)->inEp;
-                handler = newHandlerTableEntry(endIn, tableDirec);
-                pUser = getModuleInitDirection(tableDirec);
-                pUser(handler); //hago el init ;)
-                ((AM_PACKET*) sendBufferAdmin)->handlerNumber = handler;
-            } else {
-                ((AM_PACKET*) sendBufferAdmin)->handlerNumber = ERROR;
+            if(!existsTableEntry(tableDirec)){
+                if (tableDirec != (rom near char*) ERROR) {
+                    endIn = ((AM_PACKET*) recBuffPtr)->inEp;
+                    handler = newHandlerTableEntry(endIn, tableDirec);
+                    pUser = getModuleInitDirection(tableDirec);
+                    pUser(handler); //hago el init ;)
+                    ((AM_PACKET*) sendBufferAdmin)->handlerNumber = handler;
+                } else {
+                    ((AM_PACKET*) sendBufferAdmin)->handlerNumber = ERROR;
+                }
+            } else{
+                ((AM_PACKET*)sendBufferAdmin)->handlerNumber = ERROR;
             }
             ((AM_PACKET*) sendBufferAdmin)->CMD = OPEN;
             adminCounter = 0x02; //1 byte para el campo CMD, otro para el handler
