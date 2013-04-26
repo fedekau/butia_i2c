@@ -160,7 +160,19 @@ BOOL existsTableEntry(rom near char* uTableDirection){
 		i++;
 	}
 	return FALSE;
-} 	
+}
+
+byte handlerFromTableEntry(rom near char* uTableDirection){
+	byte i=0;
+        /* it can be opimized A LOT! */
+	while (i<MAX_HANDLERS){
+		if (epHandlerMap[i].uTableDirection == uTableDirection) {
+			return i;
+		}
+		i++;
+	}
+	return FALSE;
+}
 
 void initHandlerTable() {
 	byte i;
@@ -209,17 +221,6 @@ respType removeHandlerTableEntry(byte handler){
 	}
 }
 
-//respType configureHandlerTableEntry(byte handler){
-//	pUserFunc configureFunction;
-//	if (handler < MAX_HANDLERS && epHandlerMap[handler].ep.empty == 0){
-//	    configureFunction = getModuleConfigureDirection(epHandlerMap[handler].uTableDirection);
-//		configureFunction(handler);
-//		return ACK;
-//	}
-//	else{
-//		return NACK;
-//	}
-//}
 
 byte removeAllOpenModules(void){
     pUserFunc releaseFunction;

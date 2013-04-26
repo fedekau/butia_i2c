@@ -124,7 +124,7 @@ void adminReceived(byte* recBuffPtr, byte len, byte admin_handler) {
                     ((AM_PACKET*) sendBufferAdmin)->handlerNumber = ERROR;
                 }
             } else{
-                ((AM_PACKET*)sendBufferAdmin)->handlerNumber = ERROR;
+                ((AM_PACKET*)sendBufferAdmin)->handlerNumber = handlerFromTableEntry(tableDirec);
             }
             ((AM_PACKET*) sendBufferAdmin)->CMD = OPEN;
             adminCounter = 0x02; //1 byte para el campo CMD, otro para el handler
