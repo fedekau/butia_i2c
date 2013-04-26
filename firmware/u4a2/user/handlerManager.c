@@ -171,7 +171,7 @@ byte handlerFromTableEntry(rom near char* uTableDirection){
 		}
 		i++;
 	}
-	return FALSE;
+	return ERROR;
 }
 
 void initHandlerTable() {
