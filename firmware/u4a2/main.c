@@ -47,6 +47,7 @@
 #include "user/dynamicPolling.h"                    // Modifiable
 #include "usb4all/dynamicISR/dynamicISR.h"          // Modifiable
 #include "usb4all/proxys/T0Service.h"
+//#include "usb4all/proxys/T1Service.h"
 
 #include "user/handlerManager.h"                              // Modifiable
 #include "user/ax12.h"
@@ -343,9 +344,9 @@ static void InitializeSystem(void) {
 
     initISRFunctions();      // Initialize interrupt service routines mechanism of USB4all
     initT0Service();         // Inicializa servicio T0 para manejar recurso de timmer
+//    initT1Service();         // Inicializa servicio T1 para manejar recurso de timmer
     initPollingFunctions();  // inicializa el buffer con 0s (dynamicPolling.c)
     initHandlerManager();    // inicializa el map de enpoints y crea el enpoint 0 (adminModule.c)
-    
 	
 }//end InitializeSystem
 

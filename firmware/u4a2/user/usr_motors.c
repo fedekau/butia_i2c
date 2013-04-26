@@ -1,6 +1,7 @@
 /* Author                                                   Date        Comment
  *John Pereira                                              28/02/2012
  * Andres Aguirre                                           02/03/2012
+ * Aylen Ricca                                              01/04/2013
  *****************************************************************************/
 
 /** I N C L U D E S **********************************************************/
@@ -39,10 +40,10 @@ byte* sendBufferUsrMotors; // buffer to send data
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
 void UserMotorsProcessIO(void);
 void UserMotorsInit(byte i);
-void UserMotorsReceived(byte*, byte, byte);
+void UserMotorsReceivedAX_12(byte*, byte, byte);
+void UserMotorsReceivedSHIELD_CC(byte*, byte, byte);
 void UserMotorsRelease(byte i);
 void sexyMotorMoveStart(void);
-
 // Table used by the framework to get a fixed reference point to the user module functions defined by the framework
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
@@ -92,29 +93,29 @@ void sexyMotorMoveStart() {
     registerT0event(TIME_UNIT, &forwardLeft);
 }
 
-boolean getVoltage(int *data_received) {
+void getVoltage(int *data_received) {
     byte data [2];
     int err = 0;
     byte id;
     data[0] = PRESENT_VOLTAGE;
     data[1] = 0x01; /*length of data to read*/
     ax12SendPacket(wheels.left.id, 0x02, READ_DATA, data);
-    return ax12ReadPacket(&id, &err, data_received);
+    ax12ReadPacket(&id, &err, data_received);
 }
 
-void ConfigWheels(byte id){
-/*    setEndlessTurnMode(id, 1);
-    writeInfo (id, CW_COMPLIANCE_MARGIN, 0);
-    writeInfo (id, CCW_COMPLIANCE_MARGIN, 0);
-    writeInfo (id, CW_COMPLIANCE_SLOPE, 95);
-    writeInfo (id, CCW_COMPLIANCE_SLOPE, 95);
-    writeInfo (id, PUNCH_L, 150);
-    writeInfo (id, MAX_TORQUE_L, 1023);
-    writeInfo (LIMIT_TEMPERATURE, 85);
-    writeInfo (DOWN_LIMIT_VOLTAGE, 60);
-    writeInfo (DOWN_LIMIT_VOLTAGE, 190);
-    writeInfo (RETURN_DELAY_TIME, 150);
-*/}
+void ConfigWheels(byte id) {
+    setEndlessTurnMode(id, 1);
+    writeInfo(id, CW_COMPLIANCE_MARGIN, 0);
+    writeInfo(id, CCW_COMPLIANCE_MARGIN, 0);
+    writeInfo(id, CW_COMPLIANCE_SLOPE, 95);
+    writeInfo(id, CCW_COMPLIANCE_SLOPE, 95);
+    writeInfo(id, PUNCH_L, 150);
+    writeInfo(id, MAX_TORQUE_L, 1023);
+    writeInfo(id, LIMIT_TEMPERATURE, 85);
+    writeInfo(id, LOWEST_LIMIT_VOLT, 60);
+    writeInfo(id, HIGHEST_LIMIT_VOLT, 190);
+    writeInfo(id, RETURN_DELAY, 150);
+}
 
 /*
  * Function to auto-detect motors (robot wheels)
@@ -133,23 +134,27 @@ void TryAutoDetect() {
             break;
         }
     }
-    if (index == (byte) 2) {
+    if (index >= (byte) 2) {
         /*Set found motors as Rigth/Left wheels*/
         wheels.left.id = list_motors[0];
         wheels.left.inverse = 0;
+        ConfigWheels(wheels.left.id);
         wheels.right.id = list_motors[1];
         wheels.right.inverse = 1;
+        ConfigWheels(wheels.right.id);
         sexyMotorMoveStart();
         return;
     }
-    if (current_id == C_ID_MOTORS){
+    if (current_id == C_ID_MOTORS) {
         return;
     }
     registerT0eventInEvent(LONG_TIME_UNIT, &TryAutoDetect);
 }
 
 void autoDetectWheels() {
-    registerT0event(TIME_UNIT, &TryAutoDetect);
+    if ((PORTC & MASK_SHIELD) != SHIELD_CC) {
+        registerT0event(TIME_UNIT, &TryAutoDetect);
+    }
 }
 
 /******************************************************************************
@@ -169,8 +174,14 @@ void autoDetectWheels() {
  * Note:            None
  *****************************************************************************/
 void UserMotorsInit(byte usrMotorsHandler) {
-    // add my receive function to the handler module, to be called automatically when the pc sends data to the user module
-    setHandlerReceiveFunction(usrMotorsHandler, &UserMotorsReceived);
+
+    if ((PORTC & MASK_SHIELD) == SHIELD_CC) {
+        TRISD = 0x09;
+        PORTD = 0x00;
+        setHandlerReceiveFunction(usrMotorsHandler, &UserMotorsReceivedSHIELD_CC);
+    } else {
+        setHandlerReceiveFunction(usrMotorsHandler, &UserMotorsReceivedAX_12);
+    }
     // initialize the send buffer, used to send data to the PC
     sendBufferUsrMotors = getSharedBuffer(usrMotorsHandler);
 }
@@ -216,7 +227,6 @@ void UserMotorsProcessIO(void) {
 void UserMotorsRelease(byte i) {
     unsetHandlerReceiveBuffer(i);
     unsetHandlerReceiveFunction(i);
-    unregisterT0event(&autoDetectWheels);
 }
 
 /******************************************************************************
@@ -234,8 +244,151 @@ void UserMotorsRelease(byte i) {
  *
  * Note:            None
  *****************************************************************************/
+void UserMotorsReceivedSHIELD_CC(byte* recBuffPtr, byte len, byte handler) {
+    byte motor, j, sen_MI, sen_MD, velH_MI, velH_MD, velL_MI, velL_MD, userMotorsCounter = 0;
+    unsigned int velD, velI;
 
-void UserMotorsReceived(byte* recBuffPtr, byte len, byte handler) {
+    switch (((MOTORS_DATA_PACKET*) recBuffPtr)->CMD) {
+
+        case READ_VERSION:
+            ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[0];
+            ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[1] = MOTORS_MINOR_VERSION;
+            ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[2] = MOTORS_MAJOR_VERSION;
+            userMotorsCounter = 0x03;
+            break;
+
+        case GET_TYPE:
+            ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[0];
+            ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[1] = MOTORS_SHIELD_CC;
+            userMotorsCounter = 0x02;
+            break;
+
+        case SET_VEL_MTR:
+            ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[0];
+            motor = (byte) ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[1];
+            sen_MI = (byte) ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[2];
+            velH_MI = (byte) ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[3];
+            velL_MI = (byte) ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[4];
+            velI = (unsigned int) velH_MI << 8 | velL_MI;
+            if (motor == 0x00) {
+                /* motor izquierdo */
+                if (velI == 0) {
+                    /* detener motor izquierdo */
+                    PORTDbits.RD4 = 0;
+                    PORTDbits.RD7 = 0;
+                    PORTDbits.RD2 = 0;
+                } else {
+                    /* mover motor izquierdo */
+                    PORTDbits.RD2 = 1;
+
+                    if (sen_MI == 0) {
+                        /* adelante */
+                        PORTDbits.RD4 = 0;
+                        PORTDbits.RD7 = 1;
+                    } else {
+                        /* atras */
+                        PORTDbits.RD4 = 1;
+                        PORTDbits.RD7 = 0;
+                    }
+                }
+            } else {
+                if (velI == 0) {
+                    /* detener motor derecho */
+                    PORTDbits.RD5 = 0;
+                    PORTDbits.RD6 = 0;
+                    PORTDbits.RD1 = 0;
+                } else {
+                    /* mover motor derecho */
+                    PORTDbits.RD1 = 1;
+
+                    if (sen_MI == 0) {
+                        /* adelante */
+                        PORTDbits.RD5 = 0;
+                        PORTDbits.RD6 = 1;
+                    } else {
+                        /* atras */
+                        PORTDbits.RD5 = 1;
+                        PORTDbits.RD6 = 0;
+                    }
+                }
+            }
+            userMotorsCounter = 0x01;
+            break;
+
+        case SET_VEL_2MTR:
+            ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[0];
+            sen_MI = (byte) ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[1];
+            velH_MI = (byte) ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[2];
+            velL_MI = (byte) ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[3];
+            sen_MD = (byte) ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[4];
+            velH_MD = (byte) ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[5];
+            velL_MD = (byte) ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[6];
+
+            velD = (unsigned int) velH_MD << 8 | velL_MD;
+            velI = (unsigned int) velH_MI << 8 | velL_MI;
+            /*
+             * ENABLE A = RD1
+             * SENTIDO A : RD5 - RD6
+             */
+            if (velD == 0) {
+                /* detener motor derecho */
+                PORTDbits.RD5 = 0;
+                PORTDbits.RD6 = 0;
+                PORTDbits.RD1 = 0;
+            } else {
+                /* mover motor derecho */
+                PORTDbits.RD1 = 1;
+
+                if (sen_MD == 0) {
+                    /* adelante */
+                    PORTDbits.RD5 = 0;
+                    PORTDbits.RD6 = 1;
+                } else {
+                    /* atras */
+                    PORTDbits.RD5 = 1;
+                    PORTDbits.RD6 = 0;
+                }
+            }
+            /*
+             * ENABLE B = RD2
+             * SENTIDO B : RD4 - RD7
+             */
+            if (velI == 0) {
+                /* detener motor izquierdo */
+                PORTDbits.RD4 = 0;
+                PORTDbits.RD7 = 0;
+                PORTDbits.RD2 = 0;
+            } else {
+                /* mover motor izquierdo */
+                PORTDbits.RD2 = 1;
+
+                if (sen_MI == 0) {
+                    /* adelante */
+                    PORTDbits.RD4 = 0;
+                    PORTDbits.RD7 = 1;
+                } else {
+                    /* atras */
+                    PORTDbits.RD4 = 1;
+                    PORTDbits.RD7 = 0;
+                }
+            }
+
+            userMotorsCounter = 0x01;
+            break;
+
+        default:
+            break;
+    }/*end switch(s)*/
+
+    if (userMotorsCounter != 0) {
+        j = 255;
+        while (mUSBGenTxIsBusy() && j-- > 0); /*pruebo un maximo de 255 veces*/
+        if (!mUSBGenTxIsBusy())
+            USBGenWrite2(handler, userMotorsCounter);
+    }/*end if*/
+}
+
+void UserMotorsReceivedAX_12(byte* recBuffPtr, byte len, byte handler) {
     byte j;
     byte userMotorsCounter = 0;
     char direction1, direction2;
@@ -249,9 +402,11 @@ void UserMotorsReceived(byte* recBuffPtr, byte len, byte handler) {
             ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[2] = MOTORS_MAJOR_VERSION;
             userMotorsCounter = 0x03;
             break;
-            
-        case RESET:
-            Reset();
+
+        case GET_TYPE:
+            ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[0];
+            ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[1] = MOTORS_AX12;
+            userMotorsCounter = 0x02;
             break;
 
         case SET_VEL_MTR:
@@ -266,13 +421,13 @@ void UserMotorsReceived(byte* recBuffPtr, byte len, byte handler) {
                 if (direction1 == 0x01) {
                     endlessTurn(wheels.left.id, vel1, 0);
                 } else {
-                    endlessTurn(wheels.left.id, 0-vel1, 0);
+                    endlessTurn(wheels.left.id, 0 - vel1, 0);
                 }
             } else {
                 if (direction1 == 0x01) {
                     endlessTurn(wheels.right.id, vel1, 0);
                 } else {
-                    endlessTurn(wheels.right.id, 0-vel1, 0);
+                    endlessTurn(wheels.right.id, 0 - vel1, 0);
                 }
             }
             userMotorsCounter = 0x01;
@@ -293,12 +448,12 @@ void UserMotorsReceived(byte* recBuffPtr, byte len, byte handler) {
             if (direction1 == 0x01) {
                 endlessTurn(wheels.left.id, vel1, 0);
             } else {
-                endlessTurn(wheels.left.id, 0-vel1, 0);
+                endlessTurn(wheels.left.id, 0 - vel1, 0);
             }
             if (direction2 == 0x01)
                 endlessTurn(wheels.right.id, vel2, 1);
             else
-                endlessTurn(wheels.right.id, 0-vel2, 1);
+                endlessTurn(wheels.right.id, 0 - vel2, 1);
             userMotorsCounter = 0x01;
             break;
 

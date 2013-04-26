@@ -122,8 +122,6 @@
 /***************************   Definicion de Tipos   *************************/
 /*****************************************************************************/
 
-typedef unsigned char boolean;
-
 /*****************************************************************************/
 /*************************   Prototipos de Funciones   ***********************/
 /*********************    Funciones utilizadas en ax12.c   *******************/
@@ -152,7 +150,7 @@ byte ax12ReceiveRawPacket(byte*, byte*);
 //    byte regWrite (byte regstart, byte reglength, int value);
 //    byte readInfo (byte regstart);
 byte writeInfo(byte id, byte regstart, int value);
-void setEndlessTurnMode(byte id, boolean onoff);
+void setEndlessTurnMode(byte id, byte onoff);
 void endlessTurn(byte id, int velocidad, byte inverse);
 //    byte presentPSL(boolean inverse, byte id, int* PSL);
 

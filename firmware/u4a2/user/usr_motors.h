@@ -14,8 +14,11 @@
 
 /** D E F I N I T I O N S ****************************************************/
 
-#define  MOTORS_MINOR_VERSION   0x01    /*motors version*/
-#define  MOTORS_MAJOR_VERSION   0x00
+#define MOTORS_AX12            0x01
+#define MOTORS_SHIELD_CC       0x02
+
+#define MOTORS_MINOR_VERSION   0x02    /*motors version*/
+#define MOTORS_MAJOR_VERSION   0x00
 
 #define FIRST_ON    0x01
 #define DELAY       0x02
@@ -28,6 +31,9 @@
 #define C_ID_MOTORS   (byte) 253
 #define C_TRIES       (byte) 2
 
+#define MASK_SHIELD 0x07
+#define SHIELD_CC   0x00
+
 /** S T R U C T U R E S ******************************************************/
 typedef union MOTORS_DATA_PACKET {
     byte _byte[USBGEN_EP_SIZE]; /*For byte access*/
@@ -39,7 +45,8 @@ typedef union MOTORS_DATA_PACKET {
             READ_VERSION = 0x00,
             SET_VEL_2MTR = 0x01,
             SET_VEL_MTR = 0x02,
-            TEST_MOTORS = 0x03
+            TEST_MOTORS = 0x03,
+            GET_TYPE = 0x04
         } CMD;
         byte len;
     };
@@ -63,6 +70,6 @@ typedef union MOTORS_DATA_PACKET {
 
 /** P U B L I C  P R O T O T Y P E S *****************************************/
 void autoDetectWheels(void);
-boolean getVoltage(int*);
+void getVoltage(int*);
 
 #endif /*USER_MOTORS_H*/
