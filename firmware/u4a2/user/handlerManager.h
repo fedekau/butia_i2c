@@ -74,6 +74,7 @@ void setHandlerReceiveFunction(byte handler,void (*pf) (byte* recBuffPtr,byte, b
 byte newHandlerTableEntry(byte endPIn, rom near char* uTableDirection);
 byte newHandlerTableEntryForcingHandler(byte endPIn, rom near char* uTableDirection, byte handler);
 BOOL existsTableEntry(rom near char* uTableDirection);
+byte handlerFromTableEntry(rom near char* uTableDirection);
 void initHandlerTable();
 void initHandlerManager(void);
 respType removeHandlerTableEntry(byte handler);
