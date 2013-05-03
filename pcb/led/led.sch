@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date jue 21 mar 2013 10:20:34 UYT
+EESchema Schematic File Version 2  date vie 03 may 2013 14:35:26 UYT
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -29,13 +29,14 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
-EELAYER 27 0
+LIBS:led-cache
+EELAYER 25  0
 EELAYER END
-$Descr A4 11693 8268
+$Descr A4 11700 8267
 encoding utf-8
 Sheet 1 1
 Title ""
-Date "21 mar 2013"
+Date "3 may 2013"
 Rev ""
 Comp ""
 Comment1 ""
@@ -62,9 +63,7 @@ L R R2
 U 1 1 4FAC1BA4
 P 1550 2450
 F 0 "R2" V 1630 2450 50  0000 C CNN
-F 1 "R" V 1550 2450 50  0000 C CNN
-F 2 "" H 1550 2450 60  0001 C CNN
-F 3 "" H 1550 2450 60  0001 C CNN
+F 1 "390kΩ" V 1550 2450 50  0000 C CNN
 	1    1550 2450
 	1    0    0    -1  
 $EndComp
@@ -92,8 +91,6 @@ U 1 1 4F68816E
 P 2350 1500
 F 0 "J1" H 2550 2000 60  0000 C CNN
 F 1 "RJ45" H 2200 2000 60  0000 C CNN
-F 2 "" H 2350 1500 60  0001 C CNN
-F 3 "" H 2350 1500 60  0001 C CNN
 	1    2350 1500
 	1    0    0    -1  
 $EndComp
@@ -124,9 +121,7 @@ L R R1
 U 1 1 4FAC1B98
 P 3300 2450
 F 0 "R1" V 3380 2450 50  0000 C CNN
-F 1 "1k" V 3300 2450 50  0000 C CNN
-F 2 "" H 3300 2450 60  0001 C CNN
-F 3 "" H 3300 2450 60  0001 C CNN
+F 1 "1kΩ" V 3300 2450 50  0000 C CNN
 	1    3300 2450
 	0    -1   -1   0   
 $EndComp
@@ -142,7 +137,7 @@ L R R3
 U 1 1 514B01BB
 P 4100 1900
 F 0 "R3" V 4180 1900 40  0000 C CNN
-F 1 "120" V 4107 1899 40  0000 C CNN
+F 1 "120 Ω" V 4107 1899 40  0000 C CNN
 F 2 "~" V 4030 1900 30  0000 C CNN
 F 3 "~" H 4100 1900 30  0000 C CNN
 	1    4100 1900

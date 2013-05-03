@@ -1,138 +1,98 @@
-(export (version D)
-  (design
-    (source /home/john/usb4all-code/pcb/led/led.sch)
-    (date "jue 21 mar 2013 09:51:44 UYT")
-    (tool "eeschema (2013-mar-13)-testing"))
-  (components
-    (comp (ref R2)
-      (value R)
-      (libsource (lib device) (part R))
-      (sheetpath (names /) (tstamps /))
-      (tstamp 4FAC1BA4))
-    (comp (ref J1)
-      (value RJ45)
-      (libsource (lib conn) (part RJ45))
-      (sheetpath (names /) (tstamps /))
-      (tstamp 4F68816E))
-    (comp (ref Q1)
-      (value BC849)
-      (footprint SOT-23)
-      (libsource (lib transistors) (part BC849))
-      (sheetpath (names /) (tstamps /))
-      (tstamp 514B0110))
-    (comp (ref D1)
-      (value LED)
-      (libsource (lib device) (part LED))
-      (sheetpath (names /) (tstamps /))
-      (tstamp 514B0133))
-    (comp (ref R1)
-      (value R)
-      (libsource (lib device) (part R))
-      (sheetpath (names /) (tstamps /))
-      (tstamp 4FAC1B98))
-    (comp (ref R3)
-      (value R)
-      (libsource (lib device) (part R))
-      (sheetpath (names /) (tstamps /))
-      (tstamp 514B01BB)))
-  (libparts
-    (libpart (lib device) (part LED)
-      (footprints
-        (fp LED-3MM)
-        (fp LED-5MM)
-        (fp LED-10MM)
-        (fp LED-0603)
-        (fp LED-0805)
-        (fp LED-1206)
-        (fp LEDV))
-      (fields
-        (field (name Reference) D)
-        (field (name Value) LED)
-        (field (name Footprint) ~)
-        (field (name Datasheet) ~))
-      (pins
-        (pin (num 1) (name A) (type passive))
-        (pin (num 2) (name K) (type passive))))
-    (libpart (lib device) (part R)
-      (description Resistance)
-      (footprints
-        (fp R?)
-        (fp SM0603)
-        (fp SM0805)
-        (fp R?-*)
-        (fp SM1206))
-      (fields
-        (field (name Reference) R)
-        (field (name Value) R)
-        (field (name Footprint) ~)
-        (field (name Datasheet) ~))
-      (pins
-        (pin (num 1) (name ~) (type passive))
-        (pin (num 2) (name ~) (type passive))))
-    (libpart (lib transistors) (part BC850)
-      (description "BC850, 45V Vce, 0.1A Ic, Low noise, NPN, SOT-23")
-      (docs http://www.fairchildsemi.com/ds/BC/BC850.pdf)
-      (footprints
-        (fp SOT-23*))
-      (fields
-        (field (name Reference) Q)
-        (field (name Value) BC850)
-        (field (name Footprint) SOT-23)
-        (field (name Datasheet) ~))
-      (pins
-        (pin (num 1) (name B) (type input))
-        (pin (num 2) (name E) (type passive))
-        (pin (num 3) (name C) (type passive))))
-    (libpart (lib conn) (part RJ45)
-      (fields
-        (field (name Reference) J)
-        (field (name Value) RJ45))
-      (pins
-        (pin (num 1) (name ~) (type passive))
-        (pin (num 2) (name ~) (type passive))
-        (pin (num 3) (name ~) (type passive))
-        (pin (num 4) (name ~) (type passive))
-        (pin (num 5) (name ~) (type passive))
-        (pin (num 6) (name ~) (type passive))
-        (pin (num 7) (name ~) (type passive))
-        (pin (num 8) (name ~) (type passive))
-        (pin (num 9) (name SHIELD) (type passive)))))
-  (libraries
-    (library (logical transistors)
-      (uri /usr/share/kicad/library/transistors.lib))
-    (library (logical device)
-      (uri /usr/share/kicad/library/device.lib))
-    (library (logical conn)
-      (uri /usr/share/kicad/library/conn.lib)))
-  (nets
-    (net (code 1) (name "")
-      (node (ref J1) (pin 7)))
-    (net (code 2) (name "")
-      (node (ref J1) (pin 8)))
-    (net (code 3) (name "")
-      (node (ref R1) (pin 2))
-      (node (ref Q1) (pin 1)))
-    (net (code 4) (name VDD)
-      (node (ref J1) (pin 3))
-      (node (ref R2) (pin 2))
-      (node (ref D1) (pin 1)))
-    (net (code 5) (name "")
-      (node (ref R3) (pin 1))
-      (node (ref D1) (pin 2)))
-    (net (code 6) (name AN)
-      (node (ref J1) (pin 6))
-      (node (ref R1) (pin 1)))
-    (net (code 7) (name "")
-      (node (ref R3) (pin 2))
-      (node (ref Q1) (pin 3)))
-    (net (code 8) (name GND)
-      (node (ref J1) (pin 5))
-      (node (ref J1) (pin 9))
-      (node (ref Q1) (pin 2)))
-    (net (code 9) (name "")
-      (node (ref J1) (pin 2)))
-    (net (code 10) (name idAN)
-      (node (ref R2) (pin 1))
-      (node (ref J1) (pin 4)))
-    (net (code 11) (name "")
-      (node (ref J1) (pin 1)))))
+# EESchema Netlist Version 1.1 created  vie 03 may 2013 14:35:37 UYT
+(
+ ( /4FAC1BA4 $noname  R2 390kΩ {Lib=R}
+  (    1 idAN )
+  (    2 VDD )
+ )
+ ( /4F68816E $noname  J1 RJ45 {Lib=RJ45}
+  (    1 ? )
+  (    2 ? )
+  (    3 VDD )
+  (    4 idAN )
+  (    5 GND )
+  (    6 AN )
+  (    7 ? )
+  (    8 ? )
+  (    9 GND )
+ )
+ ( /514B0110 SOT-23  Q1 BC849 {Lib=BC849}
+  (    1 N-000003 )
+  (    2 GND )
+  (    3 N-000007 )
+ )
+ ( /514B0133 $noname  D1 LED {Lib=LED}
+  (    1 VDD )
+  (    2 N-000005 )
+ )
+ ( /4FAC1B98 $noname  R1 1kΩ {Lib=R}
+  (    1 AN )
+  (    2 N-000003 )
+ )
+ ( /514B01BB $noname  R3 120_Ω {Lib=R}
+  (    1 N-000005 )
+  (    2 N-000007 )
+ )
+)
+*
+{ Allowed footprints by component:
+$component R2
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component Q1
+ SOT-23*
+$endlist
+$component D1
+ LED-3MM
+ LED-5MM
+ LED-10MM
+ LED-0603
+ LED-0805
+ LED-1206
+ LEDV
+$endlist
+$component R1
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R3
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$endfootprintlist
+}
+{ Pin List by Nets
+Net 3 "" ""
+ R1 2
+ Q1 1
+Net 4 "VDD" "VDD"
+ J1 3
+ R2 2
+ D1 1
+Net 5 "" ""
+ R3 1
+ D1 2
+Net 6 "AN" "AN"
+ J1 6
+ R1 1
+Net 7 "" ""
+ R3 2
+ Q1 3
+Net 8 "GND" "GND"
+ J1 5
+ J1 9
+ Q1 2
+Net 10 "idAN" "idAN"
+ R2 1
+ J1 4
+}
+#End
