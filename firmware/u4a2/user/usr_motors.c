@@ -22,7 +22,7 @@
 
 typedef struct _MOTOR {
     byte id;
-    int inverse;
+    byte inverse;
 } MOTOR;
 
 typedef struct _WHEELS {
@@ -78,12 +78,12 @@ void stopLeft() {
 }
 
 void backwardLeft() {
-    endlessTurn(wheels.left.id, -600, 1);
+    endlessTurn(wheels.left.id, -600, 0);
     registerT0eventInEvent(LONG_TIME_UNIT, &stopLeft);
 }
 
 void forwardLeft() {
-    endlessTurn(wheels.left.id, 600, 1);
+    endlessTurn(wheels.left.id, 600, 0);
     registerT0eventInEvent(LONG_TIME_UNIT, &backwardLeft);
 }
 
@@ -137,10 +137,10 @@ void TryAutoDetect() {
     if (index >= (byte) 2) {
         /*Set found motors as Rigth/Left wheels*/
         wheels.left.id = list_motors[0];
-        wheels.left.inverse = 0;
+        wheels.left.inverse = (byte) 0;
         ConfigWheels(wheels.left.id);
         wheels.right.id = list_motors[1];
-        wheels.right.inverse = 1;
+        wheels.right.inverse = (byte) 1;
         ConfigWheels(wheels.right.id);
         sexyMotorMoveStart();
         return;
@@ -425,9 +425,9 @@ void UserMotorsReceivedAX_12(byte* recBuffPtr, byte len, byte handler) {
                 }
             } else {
                 if (direction1 == 0x01) {
-                    endlessTurn(wheels.right.id, vel1, 0);
+                    endlessTurn(wheels.right.id, vel1, 1);
                 } else {
-                    endlessTurn(wheels.right.id, 0 - vel1, 0);
+                    endlessTurn(wheels.right.id, 0 - vel1, 1);
                 }
             }
             userMotorsCounter = 0x01;
