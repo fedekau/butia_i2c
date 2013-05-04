@@ -391,8 +391,7 @@ void UserMotorsReceivedSHIELD_CC(byte* recBuffPtr, byte len, byte handler) {
 void UserMotorsReceivedAX_12(byte* recBuffPtr, byte len, byte handler) {
     byte j;
     byte userMotorsCounter = 0;
-    char direction1, direction2;
-    byte lowVel1, lowVel2, highVel1, highVel2, res, idmotor;
+    byte direction1, direction2, lowVel1, lowVel2, highVel1, highVel2, res, idmotor;
     word vel1, vel2;
     switch (((MOTORS_DATA_PACKET*) recBuffPtr)->CMD) {
 
@@ -418,13 +417,13 @@ void UserMotorsReceivedAX_12(byte* recBuffPtr, byte len, byte handler) {
             vel1 = highVel1;
             vel1 = vel1 << 8 | lowVel1;
             if (idmotor == (byte) 0) {
-                if (direction1 == 0x01) {
+                if (direction1 == (byte) 1) {
                     endlessTurn(wheels.left.id, vel1, 0);
                 } else {
                     endlessTurn(wheels.left.id, 0 - vel1, 0);
                 }
             } else {
-                if (direction1 == 0x01) {
+                if (direction1 == (byte) 1) {
                     endlessTurn(wheels.right.id, vel1, 1);
                 } else {
                     endlessTurn(wheels.right.id, 0 - vel1, 1);
@@ -445,12 +444,12 @@ void UserMotorsReceivedAX_12(byte* recBuffPtr, byte len, byte handler) {
             lowVel2 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[6];
             vel2 = highVel2;
             vel2 = vel2 << 8 | lowVel2;
-            if (direction1 == 0x01) {
+            if (direction1 == (byte) 1) {
                 endlessTurn(wheels.left.id, vel1, 0);
             } else {
                 endlessTurn(wheels.left.id, 0 - vel1, 0);
             }
-            if (direction2 == 0x01)
+            if (direction2 == (byte) 1)
                 endlessTurn(wheels.right.id, vel2, 1);
             else
                 endlessTurn(wheels.right.id, 0 - vel2, 1);
