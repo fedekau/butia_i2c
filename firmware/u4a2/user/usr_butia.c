@@ -75,7 +75,7 @@ void UserButiaInit(byte usrButiaHandler){
  *****************************************************************************/
 
 void UserButiaProcessIO(void){
-    if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND==1)) return;
+    if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND== (unsigned) 1)) return;
 	// here enter the code that want to be called periodically, per example interaction with buttons and leds
 	
 }//end ProcessIO
@@ -143,9 +143,9 @@ void UserButiaReceived(byte* recBuffPtr, byte len, byte handler){
         default:
         break;
     }/*end switch(s)*/
-    if(UserButiaCounter != 0){
+    if(UserButiaCounter != (byte) 0){
         j = 255;
-        while(mUSBGenTxIsBusy() && j-->0); // pruebo un maximo de 255 veces
+        while(mUSBGenTxIsBusy() && j--> (byte) 0); // pruebo un maximo de 255 veces
             if(!mUSBGenTxIsBusy())
                 USBGenWrite2(handler, UserButiaCounter);
     }/*end if*/
