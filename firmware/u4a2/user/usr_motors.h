@@ -31,8 +31,8 @@
 #define C_ID_MOTORS   (byte) 253
 #define C_TRIES       (byte) 2
 
-#define MASK_SHIELD 0x07
-#define SHIELD_CC   0x00
+#define MASK_SHIELD (byte) 0x07
+#define SHIELD_CC   (byte) 0x00
 
 /** S T R U C T U R E S ******************************************************/
 typedef union MOTORS_DATA_PACKET {
