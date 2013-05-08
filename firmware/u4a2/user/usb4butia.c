@@ -110,7 +110,7 @@ WORD getDataA1(){
     ADCON0bits.CHS0 =  1;
 
     ADCON0bits.GO =  1; /*Start Reading Analogic pin*/
-    while(ADCON0bits.NOT_DONE && counter-->0);
+    while(ADCON0bits.NOT_DONE && counter--> (byte) 0);
     LSB(res) = ADRESL;
     MSB(res) = ADRESH;
 
@@ -141,7 +141,7 @@ WORD getDetectionPinValue1(void){
     ADCON0bits.CHS0 =  0;
 
     ADCON0bits.GO =  1; /*Start Reading Analogic pin*/
-    while(ADCON0bits.NOT_DONE && counter-->0);
+    while(ADCON0bits.NOT_DONE && counter--> (byte) 0);
     LSB(res) = ADRESL;
     MSB(res) = ADRESH;
 
@@ -164,7 +164,7 @@ WORD getDataA2(){
     ADCON0bits.CHS0 =  1;
 
     ADCON0bits.GO =  1; /*Start Reading Analogic pin*/
-    while(ADCON0bits.NOT_DONE && counter-->0);
+    while(ADCON0bits.NOT_DONE && counter--> (byte) 0);
     LSB(res) = ADRESL;
     MSB(res) = ADRESH;
 
@@ -194,7 +194,7 @@ WORD getDetectionPinValue2(void){
     ADCON0bits.CHS0 =  0;
 
     ADCON0bits.GO =  1; /*Start Reading Analogic pin*/
-    while(ADCON0bits.NOT_DONE && counter-->0);
+    while(ADCON0bits.NOT_DONE && counter--> (byte) 0);
     LSB(res) = ADRESL;
     MSB(res) = ADRESH;
 
@@ -217,7 +217,7 @@ WORD getDataA3(){
     ADCON0bits.CHS0 =  0;
 
     ADCON0bits.GO =  1; /*Start Reading Analogic pin*/
-    while((ADCON0bits.NOT_DONE) && counter-->0);
+    while((ADCON0bits.NOT_DONE) && counter--> (byte) 0);
     LSB(res) = ADRESL;
     MSB(res) = ADRESH;
 
@@ -247,7 +247,7 @@ WORD getDetectionPinValue3(void){
     ADCON0bits.CHS0 =  1;
 
     ADCON0bits.GO =  1; /*Start Reading Analogic pin*/
-    while(ADCON0bits.NOT_DONE && counter-->0);
+    while(ADCON0bits.NOT_DONE && counter--> (byte) 0);
     LSB(res) = ADRESL;
     MSB(res) = ADRESH;
 
@@ -270,7 +270,7 @@ WORD getDataA4(){
     ADCON0bits.CHS0 =  0;
 
     ADCON0bits.GO =  1; /*Start Reading Analogic pin*/
-    while(ADCON0bits.NOT_DONE && counter-->0);
+    while(ADCON0bits.NOT_DONE && counter--> (byte) 0);
     LSB(res) = ADRESL;
     MSB(res) = ADRESH;
 
@@ -300,7 +300,7 @@ WORD getDetectionPinValue4(void){
     ADCON0bits.CHS0 =  1;
 
     ADCON0bits.GO =  1; /*Start Reading Analogic pin*/
-    while(ADCON0bits.NOT_DONE && counter-->0);
+    while(ADCON0bits.NOT_DONE && counter--> (byte) 0);
     LSB(res) = ADRESL;
     MSB(res) = ADRESH;
 
@@ -323,7 +323,7 @@ WORD getDataA5(){
     ADCON0bits.CHS0 =  0;
 
     ADCON0bits.GO =  1; /*Start Reading Analogic pin*/
-    while(ADCON0bits.NOT_DONE && counter-->0);
+    while(ADCON0bits.NOT_DONE && counter--> (byte) 0);
     LSB(res) = ADRESL;
     MSB(res) = ADRESH;
 
@@ -353,7 +353,7 @@ WORD getDetectionPinValue5(void){
     ADCON0bits.CHS0 =  0;
 
     ADCON0bits.GO =  1; /*Start Reading Analogic pin*/
-    while(ADCON0bits.NOT_DONE && counter-->0);
+    while(ADCON0bits.NOT_DONE && counter--> (byte) 0);
     LSB(res) = ADRESL;
     MSB(res) = ADRESH;
 
@@ -376,7 +376,7 @@ WORD getDataA6(){
     ADCON0bits.CHS0 =  1;
 
     ADCON0bits.GO =  1; /*Start Reading Analogic pin*/
-    while(ADCON0bits.NOT_DONE && counter-->0);
+    while(ADCON0bits.NOT_DONE && counter--> (byte) 0);
     LSB(res) = ADRESL;
     MSB(res) = ADRESH;
 
@@ -406,7 +406,7 @@ WORD getDetectionPinValue6(void){
     ADCON0bits.CHS0 =  0;
 
     ADCON0bits.GO =  1; /*Start Reading Analogic pin*/
-    while(ADCON0bits.NOT_DONE && counter-->0);
+    while(ADCON0bits.NOT_DONE && counter--> (byte) 0);
     LSB(res) = ADRESL;
     MSB(res) = ADRESH;
 

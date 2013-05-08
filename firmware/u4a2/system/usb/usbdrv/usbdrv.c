@@ -84,12 +84,12 @@ void USBCheckBusStatus(void)
 
     if(usb_bus_sense == USB_BUS_ATTACHED)       // Is USB bus attached?
     {
-        if(UCONbits.USBEN == 0)                 // Is the module off?
+        if(UCONbits.USBEN == (unsigned) 0)                 // Is the module off?
             USBModuleEnable();                  // Is off, enable it
     }
     else
     {
-        if(UCONbits.USBEN == 1)                 // Is the module on?
+        if(UCONbits.USBEN == (unsigned) 1)                 // Is the module on?
             USBModuleDisable();                 // Is on, disable it
     }//end if(usb_bus_sense...)
     
@@ -228,7 +228,7 @@ void USBDriverService(void)
     /*
      * Pointless to continue servicing if the device is in suspend mode.
      */    
-    if(UCONbits.SUSPND==1) return;
+    if(UCONbits.SUSPND== (unsigned) 1) return;
             
     /*
      * Task B: Service USB Bus Reset Interrupt.
@@ -402,7 +402,7 @@ void USBRemoteWakeup(void)
 {
     static word delay_count;
     
-    if(usb_stat.RemoteWakeup == 1)          // Check if RemoteWakeup function
+    if(usb_stat.RemoteWakeup == (unsigned) 1)          // Check if RemoteWakeup function
     {                                       // has been enabled by the host.
         USBWakeFromSuspend();               // Unsuspend USB modue
         UCONbits.RESUME = 1;                // Start RESUME signaling
@@ -499,7 +499,7 @@ void USBStallHandler(void)
      *       reception of a SETUP transaction.
      *       Firmware work-around is implemented below.
      */
-    if(UEP0bits.EPSTALL == 1)
+    if(UEP0bits.EPSTALL == (unsigned) 1)
     {
         USBPrepareForNextSetupTrf();        // Firmware Work-Around
         UEP0bits.EPSTALL = 0;
@@ -562,7 +562,7 @@ void USBProtocolResetHandler(void)
     mDisableEP1to15();              // Reset all non-EP0 UEPn registers
     UEP0 = EP_CTRL|HSHK_EN;         // Init EP0 as a Ctrl EP, see usbdrv.h
 
-    while(UIRbits.TRNIF == 1)       // Flush any pending transactions
+    while(UIRbits.TRNIF == (unsigned) 1)       // Flush any pending transactions
         UIRbits.TRNIF = 0;
 
     UCONbits.PKTDIS = 0;            // Make sure packet processing is enabled

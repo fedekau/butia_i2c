@@ -52,7 +52,7 @@ byte next_entry(byte n) {
 
 //index of the previous entry in the array
 byte prev_entry(byte n) {
-    if (n==0) n=MAX_T0CALLS; 
+    if (n == (byte) 0) n=MAX_T0CALLS;
     n--;
     return n;
 }

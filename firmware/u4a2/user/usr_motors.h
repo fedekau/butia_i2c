@@ -28,8 +28,8 @@
 #define TIME_UNIT        2000
 #define LONG_TIME_UNIT   5000
 
-#define C_ID_MOTORS 253
-#define C_TRIES 2
+#define C_ID_MOTORS   (byte) 253
+#define C_TRIES       (byte) 2
 
 #define MASK_SHIELD 0x07
 #define SHIELD_CC   0x00

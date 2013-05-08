@@ -42,7 +42,7 @@ void UserAX12Init(byte usrAXHandler) {
 }
 
 void UserAX12ProcessIO(void) {
-    if ((usb_device_state < CONFIGURED_STATE) || (UCONbits.SUSPND == 1)) return;
+    if ((usb_device_state < CONFIGURED_STATE) || (UCONbits.SUSPND == (unsigned) 1)) return;
 }
 
 void UserAX12Release(byte usrAXHandler) {
@@ -78,7 +78,7 @@ void UserAX12Received(byte* recBuffPtr, byte lenght, byte usrAXHandler) {
                 userAXCounter = (byte) (len + 3);
 
                 j = 0; /* used to iterate in answer packet */
-                while (len-- > 0) { /* while there are answer elements */
+                while (len-- > (byte) 0) { /* while there are answer elements */
                     ((AX_DATA_PACKET*) sendBufferUsrAX)->_byte[j + 3] = (byte) pack[j];
                     j++;
                 }
@@ -107,7 +107,7 @@ void UserAX12Received(byte* recBuffPtr, byte lenght, byte usrAXHandler) {
             data[0] = (byte) (((AX_DATA_PACKET*) recBuffPtr)->_byte[2]); /* regstart */
             data[1] = (byte) (((AX_DATA_PACKET*) recBuffPtr)->_byte[3]); /* length of reg to read */
             ax12SendPacket(id, 0x02, READ_DATA, data); /* id, lenght(data[]), instr, data */
-            res = ax12ReadPacket((int *) &id, (int *) &err, (int *) &data_received);
+            res = ax12ReadPacket((byte *) &id, (int *) &err, (int *) &data_received);
             ((AX_DATA_PACKET*) sendBufferUsrAX)->_byte[1] = (byte) (data_received / 256);
             ((AX_DATA_PACKET*) sendBufferUsrAX)->_byte[2] = (byte) (data_received % 256);
             userAXCounter = 0x03;
@@ -120,9 +120,9 @@ void UserAX12Received(byte* recBuffPtr, byte lenght, byte usrAXHandler) {
         default:
             break;
     }
-    if (userAXCounter != 0) {
+    if (userAXCounter != (byte) 0) {
         j = 255;
-        while (mUSBGenTxIsBusy() && j-- > 0);
+        while (mUSBGenTxIsBusy() && j-- > (byte) 0);
         if (!mUSBGenTxIsBusy())
             USBGenWrite2(usrAXHandler, userAXCounter);
     }
