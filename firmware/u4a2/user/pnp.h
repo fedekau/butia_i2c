@@ -29,6 +29,8 @@
 #define R_RES_MAX 21992
 #define R_LED_MAX 1815
 #define R_LED_MIN 1493
+#define R_SHIELD_CC_MAX 12531
+#define R_SHIELD_CC_MIN 10622
 
 #define R_LUZ 9999
 #define R_ACCELEROMETER 9999
@@ -48,7 +50,7 @@
 #define R_BUZZER 9999
 
 
-#define MAX_DEVICES 9 /*Max cant of senssor/actuator type*/
+#define MAX_DEVICES 10 /*Max cant of senssor/actuator type*/
 /*TODO review this time, the micro is running @20MHZ with a pipeline of 4steps => 20000000/4 = 5000000 instructions per second */
 #define PNP_DETECTION_TIME 20000
 

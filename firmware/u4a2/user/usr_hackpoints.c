@@ -136,14 +136,12 @@ void HackPointsReceived(byte* recBufferHackPoints, byte len, byte handler) {
 
         case WRITE:
             ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
-            pin = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[1];
+            pin = (byte) ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[1];
             if (((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[2] == 0x01){
                 PORTD = PORTD | (byte) (MASK << pin);
             } else {
                 PORTD = PORTD & ~(byte) (MASK << pin);
             }
-            //seteo como salida siempre?
-            TRISD = TRISD & ~(byte) (MASK << pin);
             HackPointsCounter = 0x01;
             break;
 
@@ -172,7 +170,6 @@ void HackPointsReceived(byte* recBufferHackPoints, byte len, byte handler) {
             ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
             pin = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[1];
             ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[1] = (PORTD & (MASK<<pin))>>pin;
-            TRISD = TRISD | (byte) (MASK << pin);
             HackPointsCounter = 0x02;
             break;
 
