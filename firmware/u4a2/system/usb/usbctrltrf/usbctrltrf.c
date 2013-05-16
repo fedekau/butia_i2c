@@ -182,7 +182,7 @@ void USBCtrlTrfOutHandler(void)
          * because if _KEEP was set, TRNIF would not have been
          * generated in the first place.
          */
-        if(ep0Bo.Stat.DTS == 0)
+        if(ep0Bo.Stat.DTS == (unsigned) 0)
             ep0Bo.Stat._byte = _USIE|_DAT1|_DTSEN;
         else
             ep0Bo.Stat._byte = _USIE|_DAT0|_DTSEN;
@@ -224,7 +224,7 @@ void USBCtrlTrfInHandler(void)
     {
         USBCtrlTrfTxService();
         
-        if(ep0Bi.Stat.DTS == 0)
+        if(ep0Bi.Stat.DTS == (unsigned) 0)
             ep0Bi.Stat._byte = _USIE|_DAT1|_DTSEN;
         else
             ep0Bi.Stat._byte = _USIE|_DAT0|_DTSEN;

@@ -79,7 +79,7 @@ void UserLightInit(byte usrLightHandler) {
  * Note:            None
  *****************************************************************************/
 void UserLightProcessIO(void) {
-    if ((usb_device_state < CONFIGURED_STATE) || (UCONbits.SUSPND == 1)) return;
+    if ((usb_device_state < CONFIGURED_STATE) || (UCONbits.SUSPND == (unsigned) 1)) return;
     /* here enter the code that want to be called periodically,
      * per example interaction with buttons and leds */
 }/*end UserLightProcessIO*/
@@ -149,9 +149,9 @@ void UserLightReceived(byte* recBuffPtr, byte len, byte handler) {
             break;
     }/*end switch(s)*/
 
-    if (userLightCounter != 0) {
+    if (userLightCounter != (byte) 0) {
         j = 255;
-        while (mUSBGenTxIsBusy() && j-- > 0); /* pruebo un maximo de 255 veces */
+        while (mUSBGenTxIsBusy() && j-- > (byte) 0); /* pruebo un maximo de 255 veces */
             if (!mUSBGenTxIsBusy())
                 USBGenWrite2(handler, userLightCounter);
     }/*end if*/

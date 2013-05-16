@@ -112,11 +112,11 @@
 /**************************   Constantes Auxiliares   ************************/
 /*****************************************************************************/
 //HEX   //DEC
-#define BRODCAST                0xFE    //254
-#define AX12_MAX_SERVOS         0x12    //18
-#define AX12_BUFFER_SIZE        0x20    //32
-#define MAX_PACKET_SIZE         0x20    //32
-#define LEN_PRE_PACK            0x04    //4
+#define BRODCAST            (byte)    0xFE    //254
+#define AX12_MAX_SERVOS     (byte)    0x12    //18
+#define AX12_BUFFER_SIZE    (byte)    0x20    //32
+#define MAX_PACKET_SIZE     (byte)    0x20    //32
+#define LEN_PRE_PACK        (byte)    0x04    //4
 
 /*****************************************************************************/
 /***************************   Definicion de Tipos   *************************/
@@ -137,7 +137,7 @@ void ax12InitSerial(void);
 
 /* Funciones de Transmision y Recepcion */
 void ax12SendPacket(byte, byte, byte, byte*);
-byte ax12ReadPacket(int*, int*, int*);
+byte ax12ReadPacket(byte*, int*, int*);
 void ax12SendRawPacket(byte*, byte);
 byte ax12ReceiveRawPacket(byte*, byte*);
 

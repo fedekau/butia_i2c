@@ -162,7 +162,7 @@ void PNPReceived(byte* recBuffPtr, byte len, byte handler) {
             userPNPCounter = 0x04;
             break;
     }
-    if (userPNPCounter != 0) {
+    if (userPNPCounter != (byte) 0) {
         if (!mUSBGenTxIsBusy())
             USBGenWrite2(PNPHandler, userPNPCounter);
     }//end if

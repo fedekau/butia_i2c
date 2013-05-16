@@ -370,7 +370,7 @@ void USBTasks(void) {
 	* Servicing Hardware
 	*/
 	USBCheckBusStatus();                    // Must use polling method
-	if(UCFGbits.UTEYE!=1)
+	if(UCFGbits.UTEYE!= (unsigned) 1)
 		USBDriverService();                 // Interrupt or polling method
 
 }// end USBTasks

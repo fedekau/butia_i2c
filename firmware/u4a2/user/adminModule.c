@@ -44,7 +44,7 @@ const uTab AdminModuleTable = {&adminModuleInit, &adminModuleRelease, "admin"}; 
 
 void Busy_eep_non_block() {
     byte j = 255;
-    while (EECON1bits.WR && j-- > 0);
+    while (EECON1bits.WR && j-- > (byte) 0);
 }
 
 void Escribir_memoria_boot(void) {
@@ -175,7 +175,7 @@ void adminReceived(byte* recBuffPtr, byte len, byte admin_handler) {
             lineNumber = ((AM_PACKET*) recBuffPtr)->line;
             getModuleName(lineNumber, (char*) lineName);
             //memcpy(((AM_PACKET*)sendBufferAdmin)->lineName, lineName, 8); no anda, sera porque estan en espacios de memoria separados (RAM/ROM)?
-            for (j = 0; j < 8; j++) {
+            for (j = (byte) 0; j < (byte) 8; j++) {
                 ((AM_PACKET*) sendBufferAdmin)->lineName[j] = lineName[j];
             }
             adminCounter = 0x09;
@@ -205,7 +205,7 @@ void adminReceived(byte* recBuffPtr, byte len, byte admin_handler) {
             ((AM_PACKET*) sendBufferAdmin)->CMD = GET_HANDLER_TYPE;
             handler = ((AM_PACKET*) recBuffPtr)->size;
             handler = handler % MAX_HANDLERS; //sanity check
-            if (epHandlerMap[handler].ep.empty == 0) {
+            if (epHandlerMap[handler].ep.empty == (unsigned) 0) {
                 ((AM_PACKET*) sendBufferAdmin)->type = getModuleType(epHandlerMap[handler].uTableDirection);
             } else {
                 ((AM_PACKET*) sendBufferAdmin)->type = NULLTYPE;
@@ -222,9 +222,9 @@ void adminReceived(byte* recBuffPtr, byte len, byte admin_handler) {
             break;
 
     }//end switch()
-    if (adminCounter != 0) {
+    if (adminCounter != (byte) 0) {
         j = 255;
-        while (mUSBGenTxIsBusy() && j-- > 0); // probing a max of 255 times
+        while (mUSBGenTxIsBusy() && j-- > (byte) 0); // probing a max of 255 times
         if (!mUSBGenTxIsBusy())
             USBGenWrite2(adminHandler, adminCounter);
     }//end if

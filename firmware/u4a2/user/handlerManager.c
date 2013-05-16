@@ -58,7 +58,7 @@ void USBGenRead2(void){
 	byte ep;
 	//byte* buffer;
 	HM_DATA_PACKET_HEADER* dph;
-	if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND==1)) return;
+	if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND== (unsigned) 1)) return;
 	len = PACKET_MTU-1;
 	for(ep=1;ep<=ram_max_ep_number;ep++){
             if(!EPOUT_IS_BUSY(ep)){
@@ -77,7 +77,7 @@ void USBGenRead2(void){
 	         */
 		EPOUT_SIZE(ep) = getEPSizeOUT(ep);
 	        //mUSBBufferReady(USBGEN_BD_OUT);
-		if (ep<3){
+		if (ep < (byte) 3){
 			mUSBBufferReady2(EPOUT_BDT(ep));
 		}else{
 			mUSBBufferReady3(EPOUT_BDT(ep));
@@ -116,7 +116,7 @@ void USBGenWrite2(byte handler, byte len) {
 	 *mUSBBufferReady3 solo debe de invocarse para los endpoints interrupt*/
  
 	/*segun el tipo de transferencia es el BufferReady que tengo que invocar*/
-	if(ep < 3){
+	if(ep < (byte) 3){
 		mUSBBufferReady2(EPIN_BDT(ep));
 	}
 	else{
@@ -127,7 +127,7 @@ void USBGenWrite2(byte handler, byte len) {
 byte newHandlerTableEntry(byte endPIn, rom near char* uTableDirection){
 	byte i=0;
 	while (i<MAX_HANDLERS){
-		if (epHandlerMap[i].ep.empty == 1) {
+		if (epHandlerMap[i].ep.empty == (unsigned) 1) {
 			epHandlerMap[i].ep.endPoint = endPIn;
 			epHandlerMap[i].ep.empty = 0;
 			epHandlerMap[i].uTableDirection = uTableDirection;
@@ -139,7 +139,7 @@ byte newHandlerTableEntry(byte endPIn, rom near char* uTableDirection){
 } 			
 
 byte newHandlerTableEntryForcingHandler(byte endPIn, rom near char* uTableDirection, byte handler){
-    if (epHandlerMap[handler].ep.empty == 1) {
+    if (epHandlerMap[handler].ep.empty == (unsigned) 1) {
         epHandlerMap[handler].ep.endPoint = endPIn;
         epHandlerMap[handler].ep.empty = 0;
         epHandlerMap[handler].uTableDirection = uTableDirection;
@@ -209,7 +209,7 @@ void initHandlerManager(void){
 
 respType removeHandlerTableEntry(byte handler){
 	pUserFunc releaseFunction;
-	if (handler < MAX_HANDLERS && epHandlerMap[handler].ep.empty == 0){
+	if (handler < MAX_HANDLERS && epHandlerMap[handler].ep.empty == (unsigned) 0){
 		epHandlerMap[handler].ep.empty = 1;
 		releaseFunction = getModuleReleaseDirection(epHandlerMap[handler].uTableDirection);
 		releaseFunction(handler);
@@ -226,7 +226,7 @@ byte removeAllOpenModules(void){
     pUserFunc releaseFunction;
     byte handler = 1;
     while(handler < MAX_HANDLERS){
-        if (epHandlerMap[handler].ep.empty == 0){
+        if (epHandlerMap[handler].ep.empty == (unsigned) 0){
             epHandlerMap[handler].ep.empty = 1;
             releaseFunction = getModuleReleaseDirection(epHandlerMap[handler].uTableDirection);
             releaseFunction(handler);
@@ -244,7 +244,7 @@ byte* getSharedBuffer(byte handler){
 	byte ep;
 	hmi = epHandlerMap[handler];
 	ep = hmi.ep.EPNum;
-	if (handler==0)
+	if (handler == (byte) 0)
 		//Se que el admin atiende el endpoint 1 y esta es la forma que tengo de que se pueda inicializar antes
 		//el admin que la tabla de BDTs
 		return &ep1_in_buffer[SIZE__HM_DATA_PACKET_HEADER];
@@ -266,7 +266,7 @@ byte getEPSizeIN(byte ep){
 int getMaxHandler(void){
     byte handler, max_handler = 0;
     for(handler=0;handler<MAX_HANDLERS;handler++){
-        if (epHandlerMap[handler].ep.empty == 0){
+        if (epHandlerMap[handler].ep.empty == (unsigned) 0){
             max_handler = handler;
         }
     }

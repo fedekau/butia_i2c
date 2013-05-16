@@ -2,7 +2,7 @@
 #define DYNAMIC_ISR_H
 
 /** D E F I N I T I O N S ****************************************************/
-#define MAX_ISR_FUNCTIONS 0x05
+#define MAX_ISR_FUNCTIONS (byte) 5
 
 /** I N C L U D E S **********************************************************/
 

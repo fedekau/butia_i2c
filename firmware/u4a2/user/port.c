@@ -130,9 +130,9 @@ void PortReceived(byte* recBuffPtr, byte len, byte handler) {
         default:
             break;
     }//end switch(s)
-    if (PortCounter != 0) {
+    if (PortCounter != (byte) 0) {
         j = 255;
-        while (mUSBGenTxIsBusy() && j-- > 0); // pruebo un máximo de 255 veces
+        while (mUSBGenTxIsBusy() && j-- > (byte) 0); // pruebo un máximo de 255 veces
         if (!mUSBGenTxIsBusy())
             USBGenWrite2(handler, PortCounter);
     }//end if

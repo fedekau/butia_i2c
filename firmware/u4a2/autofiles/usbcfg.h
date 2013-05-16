@@ -52,8 +52,8 @@
  * Used to identify which of the USB classes owns the current
  * session of control transfer over EP0
  */
-#define MUID_NULL               0
-#define MUID_USB9               1
+#define MUID_NULL       (byte)  0
+#define MUID_USB9       (byte)  1
 
 
 /** E N D P O I N T S  A L L O C A T I O N **************************/

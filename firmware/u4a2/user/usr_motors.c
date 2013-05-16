@@ -21,7 +21,7 @@
 #pragma code module
 
 typedef struct _MOTOR {
-    int id;
+    byte id;
     int inverse;
 } MOTOR;
 
@@ -95,7 +95,8 @@ void sexyMotorMoveStart() {
 
 void getVoltage(int *data_received) {
     byte data [2];
-    int id, err = 0;
+    int err = 0;
+    byte id;
     data[0] = PRESENT_VOLTAGE;
     data[1] = 0x01; /*length of data to read*/
     ax12SendPacket(wheels.left.id, 0x02, READ_DATA, data);
@@ -122,7 +123,8 @@ void ConfigWheels(byte id) {
  * the other one to right wheel.
  */
 void TryAutoDetect() {
-    int _id, _error, _data, i;
+    int _error, _data;
+    byte _id, i;
     for (i = 0; i < C_TRIES; i++) {
         _id = 0xFFFF;
         ax12SendPacket(current_id, 0, PING, 0);
@@ -132,7 +134,8 @@ void TryAutoDetect() {
             break;
         }
     }
-    if (index >= 2) {
+
+    if (index >= (byte) 2) {
         /*Set found motors as Rigth/Left wheels*/
         wheels.left.id = list_motors[0];
         wheels.left.inverse = 0;
@@ -202,7 +205,7 @@ void UserMotorsInit(byte usrMotorsHandler) {
  *****************************************************************************/
 
 void UserMotorsProcessIO(void) {
-    if ((usb_device_state < CONFIGURED_STATE) || (UCONbits.SUSPND == 1)) return;
+    if ((usb_device_state < CONFIGURED_STATE) || (UCONbits.SUSPND == (unsigned) 1)) return;
 }/*end ProcessIO*/
 
 /******************************************************************************
@@ -268,9 +271,9 @@ void UserMotorsReceivedSHIELD_CC(byte* recBuffPtr, byte len, byte handler) {
             velH_MI = (byte) ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[3];
             velL_MI = (byte) ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[4];
             velI = (unsigned int) velH_MI << 8 | velL_MI;
-            if (motor == 0x00) {
+            if (motor == (byte) 0) {
                 /* motor izquierdo */
-                if (velI == 0) {
+                if (velI == (unsigned) 0) {
                     /* detener motor izquierdo */
                     PORTDbits.RD4 = 0;
                     PORTDbits.RD7 = 0;
@@ -279,7 +282,7 @@ void UserMotorsReceivedSHIELD_CC(byte* recBuffPtr, byte len, byte handler) {
                     /* mover motor izquierdo */
                     PORTDbits.RD2 = 1;
 
-                    if (sen_MI == 0) {
+                    if (sen_MI == (byte) 0) {
                         /* adelante */
                         PORTDbits.RD4 = 0;
                         PORTDbits.RD7 = 1;
@@ -290,7 +293,7 @@ void UserMotorsReceivedSHIELD_CC(byte* recBuffPtr, byte len, byte handler) {
                     }
                 }
             } else {
-                if (velI == 0) {
+                if (velI == (unsigned) 0) {
                     /* detener motor derecho */
                     PORTDbits.RD5 = 0;
                     PORTDbits.RD6 = 0;
@@ -299,7 +302,7 @@ void UserMotorsReceivedSHIELD_CC(byte* recBuffPtr, byte len, byte handler) {
                     /* mover motor derecho */
                     PORTDbits.RD1 = 1;
 
-                    if (sen_MI == 0) {
+                    if (sen_MI == (unsigned) 0) {
                         /* adelante */
                         PORTDbits.RD5 = 0;
                         PORTDbits.RD6 = 1;
@@ -328,7 +331,7 @@ void UserMotorsReceivedSHIELD_CC(byte* recBuffPtr, byte len, byte handler) {
              * ENABLE A = RD1
              * SENTIDO A : RD5 - RD6
              */
-            if (velD == 0) {
+            if (velD == (unsigned) 0) {
                 /* detener motor derecho */
                 PORTDbits.RD5 = 0;
                 PORTDbits.RD6 = 0;
@@ -337,7 +340,7 @@ void UserMotorsReceivedSHIELD_CC(byte* recBuffPtr, byte len, byte handler) {
                 /* mover motor derecho */
                 PORTDbits.RD1 = 1;
 
-                if (sen_MD == 0) {
+                if (sen_MD == (byte) 0) {
                     /* adelante */
                     PORTDbits.RD5 = 0;
                     PORTDbits.RD6 = 1;
@@ -351,7 +354,7 @@ void UserMotorsReceivedSHIELD_CC(byte* recBuffPtr, byte len, byte handler) {
              * ENABLE B = RD2
              * SENTIDO B : RD4 - RD7
              */
-            if (velI == 0) {
+            if (velI == (unsigned) 0) {
                 /* detener motor izquierdo */
                 PORTDbits.RD4 = 0;
                 PORTDbits.RD7 = 0;
@@ -360,7 +363,7 @@ void UserMotorsReceivedSHIELD_CC(byte* recBuffPtr, byte len, byte handler) {
                 /* mover motor izquierdo */
                 PORTDbits.RD2 = 1;
 
-                if (sen_MI == 0) {
+                if (sen_MI == (byte) 0) {
                     /* adelante */
                     PORTDbits.RD4 = 0;
                     PORTDbits.RD7 = 1;
@@ -378,9 +381,9 @@ void UserMotorsReceivedSHIELD_CC(byte* recBuffPtr, byte len, byte handler) {
             break;
     }/*end switch(s)*/
 
-    if (userMotorsCounter != 0) {
+    if (userMotorsCounter != (byte) 0) {
         j = 255;
-        while (mUSBGenTxIsBusy() && j-- > 0); /*pruebo un maximo de 255 veces*/
+        while (mUSBGenTxIsBusy() && j-- > (byte) 0); /*pruebo un maximo de 255 veces*/
         if (!mUSBGenTxIsBusy())
             USBGenWrite2(handler, userMotorsCounter);
     }/*end if*/
@@ -415,7 +418,7 @@ void UserMotorsReceivedAX_12(byte* recBuffPtr, byte len, byte handler) {
             lowVel1 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[4];
             vel1 = highVel1;
             vel1 = vel1 << 8 | lowVel1;
-            if (idmotor == 0x00) {
+            if (idmotor == (byte) 0) {
                 if (direction1 == 0x01) {
                     endlessTurn(wheels.left.id, vel1, 0);
                 } else {
@@ -463,11 +466,11 @@ void UserMotorsReceivedAX_12(byte* recBuffPtr, byte len, byte handler) {
         default:
             break;
     }/*end switch(s)*/
-    if (userMotorsCounter != 0) {
+    if (userMotorsCounter != (byte) 0) {
         j = 255;
-        while (mUSBGenTxIsBusy() && j-- > 0); /*pruebo un maximo de 255 veces*/
-        if (!mUSBGenTxIsBusy())
-            USBGenWrite2(handler, userMotorsCounter);
+        while (mUSBGenTxIsBusy() && j-- > (byte) 0); /*pruebo un maximo de 255 veces*/
+            if (!mUSBGenTxIsBusy())
+                USBGenWrite2(handler, userMotorsCounter);
     }/*end if*/
 }/*end UserMotorsReceived*/
 
