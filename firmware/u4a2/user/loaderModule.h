@@ -19,7 +19,7 @@
 
 typedef void(*pUserFunc)(byte);  // defino el tipo que representa las funciones init del usuario
 
-typedef rom struct UTAB{         // struct para mapear en rom los datos que identifican a las funciones init del usuario
+typedef rom struct uTab{         // struct para mapear en rom los datos que identifican a las funciones init del usuario
 	pUserFunc pfI;				// puntero a la funcion Init del usuario
 	pUserFunc pfR;				// puntero a la funcion Release del usuario
 	byte id[8];				// identificador del modulo usuario
