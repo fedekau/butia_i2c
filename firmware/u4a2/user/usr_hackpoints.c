@@ -124,7 +124,7 @@ void HackPointsReceived(byte* recBufferHackPoints, byte len, byte handler) {
         case SET_MODE:
             ((HACK_POINTS_DATA_PACKET*) sendBufferHackPoints)->_byte[0] = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[0];
             pin = ((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[1];
-            if (((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[2] == (byte) 1){
+            if (((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->_byte[2] == (byte) 0){
                 //salida
                 TRISD = TRISD & ~(byte) (MASK << pin);
             } else {
