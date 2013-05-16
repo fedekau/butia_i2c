@@ -133,7 +133,7 @@ void UserButiaReceived(byte* recBuffPtr, byte len, byte handler){
         case GET_VOLT:
             ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[0] = ((BUTIA_DATA_PACKET*)recBuffPtr)->_byte[0];
             getVoltage(&data_received);
-            ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[1] = data_received;
+            ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[1] = (byte) (data_received % 256);
             UserButiaCounter=0x02;
         break;
         case RESET:
