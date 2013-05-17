@@ -54,10 +54,10 @@ sizeof(USB_EP_DSC),DSC_EP,_EP03_OUT,_ISO,64,6,
 sizeof(USB_EP_DSC),DSC_EP,_EP03_IN,_ISO,64,6};
 rom struct{byte bLength;byte bDscType;word string[1];}sd000={
 sizeof(sd000),DSC_STR,0x409};
-rom struct{byte bLength;byte bDscType;word string[24];}sd001={
-sizeof(sd001),DSC_STR,'A','g','u','i','r','r','e',' ','F','e','r','n','a','n','d','e','z',' ','G','r','o','s','s','y'};
-rom struct{byte bLength;byte bDscType;word string[20];}sd002={
-sizeof(sd002),DSC_STR,'U','S','B','4','a','l','l',' ','(','C',')','2','0','0','7',' ','F','I','N','G'};
+rom struct{byte bLength;byte bDscType;word string[36];}sd001={
+sizeof(sd001),DSC_STR,'w','w','w','.','f','i','n','g','.','e','d','u','.','u','y','/','i','n','c','o','/','p','r','o','y','e','c','t','o','s','/','b','u','t','i','a'};
+rom struct{byte bLength;byte bDscType;word string[26];}sd002={
+sizeof(sd002),DSC_STR,'U','S','B','4','B','u','t','i','a',' ','2','0','1','1',' ','F','I','N','G',' ','U','d','e','l','a','R'};
 rom struct{byte bLength;byte bDscType;word string[8];}sd003={
 sizeof(sd003),DSC_STR,'0','0','0','0','0','0','0','2'};
 //dejo estos punteros en una posicion fija de memoria
