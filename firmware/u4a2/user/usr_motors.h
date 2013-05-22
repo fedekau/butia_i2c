@@ -32,7 +32,7 @@
 #define C_TRIES       (byte) 2
 
 #define MASK_SHIELD (byte) 0x07
-#define SHIELD_CC   (byte) 0x01
+#define SHIELD_CC   (byte) 0x04
 
 /** S T R U C T U R E S ******************************************************/
 typedef union MOTORS_DATA_PACKET {
