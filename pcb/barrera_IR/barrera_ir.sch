@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date mié 22 may 2013 19:52:20 UYT
+EESchema Schematic File Version 2  date mar 25 jun 2013 20:22:33 UYT
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -36,8 +36,8 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "Barrera infrarojo para detectar movimiento"
-Date "22 may 2013"
-Rev "1"
+Date "25 jun 2013"
+Rev "1.2"
 Comp ""
 Comment1 ""
 Comment2 ""
@@ -106,7 +106,7 @@ P 7450 3050
 F 0 "D1" H 7450 3150 40  0000 C CNN
 F 1 "1N4148" H 7450 2950 40  0000 C CNN
 	1    7450 3050
-	-1   0    0    1   
+	1    0    0    -1  
 $EndComp
 $Comp
 L LM358N U1
@@ -172,7 +172,7 @@ P 7450 5100
 F 0 "D2" H 7450 5200 40  0000 C CNN
 F 1 "1N4148" H 7450 5000 40  0000 C CNN
 	1    7450 5100
-	-1   0    0    1   
+	1    0    0    -1  
 $EndComp
 $Comp
 L LM358N U1
@@ -199,11 +199,11 @@ GND
 $Comp
 L R R7
 U 1 1 51957F9B
-P 7050 2650
-F 0 "R7" V 7130 2650 50  0000 C CNN
-F 1 "1K" V 7050 2650 50  0000 C CNN
-	1    7050 2650
-	0    1    -1   0   
+P 7950 5550
+F 0 "R7" V 8030 5550 50  0000 C CNN
+F 1 "1K" V 7950 5550 50  0000 C CNN
+	1    7950 5550
+	-1   0    0    -1  
 $EndComp
 $Comp
 L GND #PWR03
@@ -242,8 +242,6 @@ Text GLabel 9250 5000 3    60   Input ~ 0
 idAN
 Text GLabel 9450 5000 3    60   Input ~ 0
 AN
-Wire Wire Line
-	4900 2650 6800 2650
 Connection ~ 5150 2650
 Wire Wire Line
 	7650 3050 8300 3050
@@ -260,8 +258,6 @@ Wire Wire Line
 	5700 3750 5900 3750
 Wire Wire Line
 	6400 3750 6700 3750
-Wire Wire Line
-	6700 3750 6700 3050
 Wire Wire Line
 	5400 4250 5700 4250
 Wire Wire Line
@@ -283,16 +279,11 @@ Wire Wire Line
 Wire Wire Line
 	6400 5800 6700 5800
 Wire Wire Line
-	6700 5800 6700 5100
-Wire Wire Line
 	6100 5500 6200 5500
 Wire Wire Line
 	6700 5100 7250 5100
-Connection ~ 6100 2650
 Wire Wire Line
-	7300 2650 7950 2650
-Wire Wire Line
-	7950 2650 7950 5100
+	7950 3050 7950 5300
 Connection ~ 7950 3050
 Wire Wire Line
 	6100 3450 6200 3450
@@ -339,4 +330,15 @@ Wire Wire Line
 	4350 2950 5700 2950
 Wire Wire Line
 	4350 2950 4350 3250
+Wire Wire Line
+	4900 2650 6100 2650
+Connection ~ 7950 5100
+Text GLabel 7750 5800 0    60   Input ~ 0
+GND
+Wire Wire Line
+	7750 5800 7950 5800
+Text GLabel 6700 3750 2    60   Input ~ 0
+Vcc
+Text GLabel 6700 5800 2    60   Input ~ 0
+Vcc
 $EndSCHEMATC
