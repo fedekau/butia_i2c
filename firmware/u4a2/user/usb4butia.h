@@ -10,7 +10,7 @@
 #include "typedefs.h"
 
 #define MAX_PORTS   (byte) 6
-#define DISCONECTED 0
+#define DISCONECTED (byte) 0
 
 typedef enum _direction {
     _OUT = 0,

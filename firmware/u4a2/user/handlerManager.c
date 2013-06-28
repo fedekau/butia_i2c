@@ -200,10 +200,10 @@ void initHandlerManager(void){
     /* PNP module ; Handler=7 */
     modulename[0]='p'; modulename[1]='n'; modulename[2]='p'; modulename[3]=0 ;
     modulename[4]=0; modulename[5]=0  ; modulename[6]=0  ; modulename[7]=0  ;
-    epHandlerMap[7].ep = getPnPEndpoint();
-    epHandlerMap[7].uTableDirection = getUserTableDirection((byte *) modulename);
+    epHandlerMap[MAX_PORTS + 1].ep = getPnPEndpoint();
+    epHandlerMap[MAX_PORTS + 1].uTableDirection = getUserTableDirection((byte *) modulename);
     autoDetectWheels();
-    PNPInit(7);
+    PNPInit(MAX_PORTS + 1);
 
 }
 
