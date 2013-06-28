@@ -77,14 +77,14 @@ void USBCtrlTrfInHandler(void);
  *****************************************************************************/
 void USBCtrlEPService(void)
 {   
-    if(USTAT == EP00_OUT)
+    if(USTAT == (unsigned) EP00_OUT)
     {
-        if(ep0Bo.Stat.PID == SETUP_TOKEN)           // EP0 SETUP
+        if(ep0Bo.Stat.PID == (unsigned) SETUP_TOKEN)  // EP0 SETUP
             USBCtrlTrfSetupHandler();
-        else                                        // EP0 OUT
+        else                                          // EP0 OUT
             USBCtrlTrfOutHandler();
     }
-    else if(USTAT == EP00_IN)                       // EP0 IN
+    else if(USTAT == (unsigned) EP00_IN)              // EP0 IN
         USBCtrlTrfInHandler();
     
 }//end USBCtrlEPService
@@ -262,7 +262,7 @@ void USBCtrlTrfTxService(void)
     /*
      * First, have to figure out how many byte of data to send.
      */
-    if(wCount._word < EP0_BUFF_SIZE)
+    if(wCount._word < (unsigned) EP0_BUFF_SIZE)
         byte_to_send._word = wCount._word;
     else
         byte_to_send._word = EP0_BUFF_SIZE;
