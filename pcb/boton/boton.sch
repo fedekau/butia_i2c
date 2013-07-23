@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date jue 21 jun 2012 16:05:26 UYT
+EESchema Schematic File Version 2  date jue 02 may 2013 11:32:49 UYT
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -36,7 +36,7 @@ $Descr A4 11700 8267
 encoding utf-8
 Sheet 1 1
 Title ""
-Date "21 jun 2012"
+Date "2 may 2013"
 Rev ""
 Comp ""
 Comment1 ""
@@ -44,6 +44,8 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
+Wire Wire Line
+	3200 3000 3100 3000
 Wire Wire Line
 	3300 2600 3550 2600
 Wire Wire Line
@@ -80,6 +82,21 @@ Wire Wire Line
 	3300 2300 3550 2300
 Wire Wire Line
 	3300 2500 3550 2500
+Wire Wire Line
+	3800 3000 3900 3000
+Text GLabel 3900 3000 2    60   Input ~ 0
+GND
+Text GLabel 3100 3000 0    60   Input ~ 0
+AN
+$Comp
+L SW_PUSH SW1
+U 1 1 51826E72
+P 3500 3000
+F 0 "SW1" H 3650 3110 50  0000 C CNN
+F 1 "SW_PUSH" H 3500 2920 50  0000 C CNN
+	1    3500 3000
+	1    0    0    -1  
+$EndComp
 Text GLabel 3300 2600 0    60   Input ~ 0
 AN
 Text GLabel 3300 2400 0    60   Input ~ 0

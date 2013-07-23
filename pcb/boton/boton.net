@@ -1,4 +1,4 @@
-# EESchema Netlist Version 1.1 created  jue 21 jun 2012 16:06:13 UYT
+# EESchema Netlist Version 1.1 created  jue 02 may 2013 10:49:17 UYT
 (
  ( /4F68816E RJ45_8 J1 RJ45
   ( 1 ? )
@@ -19,7 +19,7 @@
   ( 5 GND )
   ( 6 GND )
  )
- ( /4FE36678 SW5x5mm P3 CONN_4
+ ( /4FE36678 $noname$ P3 CONN_4
   ( 1 GND )
   ( 2 AN )
   ( 3 GND )
@@ -33,6 +33,10 @@
   ( 1 idAN )
   ( 2 VDD )
  )
+ ( /51826E72 SW_PUSH-12mm SW1 SW_PUSH
+  ( 1 AN )
+  ( 2 GND )
+ )
 )
 *
 { Allowed footprints by component:
@@ -41,12 +45,14 @@ $component R1
  SM0603
  SM0805
  R?-*
+ SM1206
 $endlist
 $component R2
  R?
  SM0603
  SM0805
  R?-*
+ SM1206
 $endlist
 $endfootprintlist
 }

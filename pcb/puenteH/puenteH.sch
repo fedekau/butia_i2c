@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date mar 18 dic 2012 18:30:23 UYST
+EESchema Schematic File Version 2  date vie 21 dic 2012 21:28:10 UYST
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -36,7 +36,7 @@ $Descr A4 11700 8267
 encoding utf-8
 Sheet 1 1
 Title "Puente H para motores CC"
-Date "18 dec 2012"
+Date "21 dec 2012"
 Rev "1.0"
 Comp ""
 Comment1 ""
@@ -44,16 +44,8 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
-Text Notes 10430 1130 0    60   ~ 0
-Movimiento
-Text Notes 10080 1130 0    60   ~ 0
-En
-Text Notes 9720 1130 0    60   ~ 0
-Inv
-Text Notes 9350 1140 0    60   ~ 0
-Dir
-Text Notes 9350 770  0    60   ~ 0
-Tabla de verdad
+Wire Wire Line
+	1900 4300 1100 4300
 Wire Notes Line
 	9120 470  9120 7200
 Wire Wire Line
@@ -80,10 +72,6 @@ Wire Wire Line
 	5100 2750 4500 2750
 Wire Wire Line
 	7700 3500 8550 3500
-Wire Wire Line
-	8550 4300 7700 4300
-Wire Wire Line
-	1900 4300 1100 4300
 Wire Wire Line
 	6450 3500 6450 3650
 Wire Wire Line
@@ -172,6 +160,60 @@ Wire Wire Line
 	5300 2900 5300 2750
 Wire Wire Line
 	3150 3100 3150 3200
+Wire Wire Line
+	7700 4300 8550 4300
+Text Notes 9250 2300 0    60   ~ 0
+Nota: Con esta configuración de pines, \nobservar que no hay estados prohibidos, \no sea que nunca conducen a la vez un \ntransitor PNP con uno NPN que pongan \nen corto circutito fuente con tierra.
+Text Notes 10500 1600 0    60   ~ 0
+Freno motor
+Text Notes 9400 1600 0    60   ~ 0
+1
+Text Notes 9750 1600 0    60   ~ 0
+1
+Text Notes 10100 1600 0    60   ~ 0
+0
+Text Notes 10500 1900 0    60   ~ 0
+Fijo
+Text Notes 10100 1900 0    60   ~ 0
+1
+Text Notes 9750 1900 0    60   ~ 0
+X
+Text Notes 9400 1900 0    60   ~ 0
+X
+Text Notes 10500 1750 0    60   ~ 0
+Fijo
+Text Notes 10100 1750 0    60   ~ 0
+X
+Text Notes 9750 1750 0    60   ~ 0
+0
+Text Notes 9400 1750 0    60   ~ 0
+0
+Text Notes 10500 1450 0    60   ~ 0
+Atrás
+Text Notes 10100 1450 0    60   ~ 0
+0
+Text Notes 9750 1450 0    60   ~ 0
+1
+Text Notes 9400 1450 0    60   ~ 0
+0
+Text Notes 10500 1300 0    60   ~ 0
+Adelante
+Text Notes 10100 1300 0    60   ~ 0
+0
+Text Notes 9750 1300 0    60   ~ 0
+0
+Text Notes 9400 1300 0    60   ~ 0
+1
+Text Notes 10430 1130 0    60   ~ 0
+Movimiento
+Text Notes 10080 1130 0    60   ~ 0
+En
+Text Notes 9720 1130 0    60   ~ 0
+Inv
+Text Notes 9350 1140 0    60   ~ 0
+Dir
+Text Notes 9350 770  0    60   ~ 0
+Tabla de verdad
 Text GLabel 1100 3500 0    60   Input ~ 0
 Inv
 Text GLabel 8550 3500 2    60   Input ~ 0
@@ -189,37 +231,37 @@ En
 Text GLabel 1100 3200 0    60   Input ~ 0
 Dir
 $Comp
-L VCC #PWR6
+L VCC #PWR01
 U 1 1 50C7B069
 P 6450 3900
-F 0 "#PWR6" H 6450 4000 30  0001 C CNN
+F 0 "#PWR01" H 6450 4000 30  0001 C CNN
 F 1 "VCC" H 6450 4000 30  0000 C CNN
 	1    6450 3900
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR5
+L GND #PWR02
 U 1 1 50C7B05F
 P 6450 3650
-F 0 "#PWR5" H 6450 3650 30  0001 C CNN
+F 0 "#PWR02" H 6450 3650 30  0001 C CNN
 F 1 "GND" H 6450 3580 30  0001 C CNN
 	1    6450 3650
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR2
+L VCC #PWR03
 U 1 1 50C7B04C
 P 3150 3900
-F 0 "#PWR2" H 3150 4000 30  0001 C CNN
+F 0 "#PWR03" H 3150 4000 30  0001 C CNN
 F 1 "VCC" H 3150 4000 30  0000 C CNN
 	1    3150 3900
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR1
+L GND #PWR04
 U 1 1 50C7B034
 P 3150 3650
-F 0 "#PWR1" H 3150 3650 30  0001 C CNN
+F 0 "#PWR04" H 3150 3650 30  0001 C CNN
 F 1 "GND" H 3150 3580 30  0001 C CNN
 	1    3150 3650
 	1    0    0    -1  
@@ -229,7 +271,7 @@ L R R12
 U 1 1 50C7AECB
 P 8100 4000
 F 0 "R12" V 8180 4000 50  0000 C CNN
-F 1 "R" V 8100 4000 50  0000 C CNN
+F 1 "470" V 8100 4000 50  0000 C CNN
 	1    8100 4000
 	0    -1   -1   0   
 $EndComp
@@ -238,7 +280,7 @@ L R R11
 U 1 1 50C7AEBA
 P 8100 3200
 F 0 "R11" V 8180 3200 50  0000 C CNN
-F 1 "R" V 8100 3200 50  0000 C CNN
+F 1 "470" V 8100 3200 50  0000 C CNN
 	1    8100 3200
 	0    -1   -1   0   
 $EndComp
@@ -247,7 +289,7 @@ L R R1
 U 1 1 50C7A976
 P 1500 3200
 F 0 "R1" V 1580 3200 50  0000 C CNN
-F 1 "R" V 1500 3200 50  0000 C CNN
+F 1 "470" V 1500 3200 50  0000 C CNN
 	1    1500 3200
 	0    -1   -1   0   
 $EndComp
@@ -256,7 +298,7 @@ L R R2
 U 1 1 50C7A94E
 P 1500 4000
 F 0 "R2" V 1580 4000 50  0000 C CNN
-F 1 "R" V 1500 4000 50  0000 C CNN
+F 1 "470" V 1500 4000 50  0000 C CNN
 	1    1500 4000
 	0    -1   -1   0   
 $EndComp
@@ -314,19 +356,19 @@ F 1 "OPTO-TRANSISTOR4" H 2550 3900 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR4
+L GND #PWR05
 U 1 1 50C79DFE
 P 4800 4900
-F 0 "#PWR4" H 4800 4900 30  0001 C CNN
+F 0 "#PWR05" H 4800 4900 30  0001 C CNN
 F 1 "GND" H 4800 4830 30  0001 C CNN
 	1    4800 4900
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR3
+L VCC #PWR06
 U 1 1 50C79CA1
 P 4800 2600
-F 0 "#PWR3" H 4800 2700 30  0001 C CNN
+F 0 "#PWR06" H 4800 2700 30  0001 C CNN
 F 1 "VCC" H 4800 2700 30  0000 C CNN
 	1    4800 2600
 	1    0    0    -1  
