@@ -1,0 +1,98 @@
+# EESchema Netlist Version 1.1 created  vie 03 may 2013 14:35:37 UYT
+(
+ ( /4FAC1BA4 $noname  R2 390kΩ {Lib=R}
+  (    1 idAN )
+  (    2 VDD )
+ )
+ ( /4F68816E $noname  J1 RJ45 {Lib=RJ45}
+  (    1 ? )
+  (    2 ? )
+  (    3 VDD )
+  (    4 idAN )
+  (    5 GND )
+  (    6 AN )
+  (    7 ? )
+  (    8 ? )
+  (    9 GND )
+ )
+ ( /514B0110 SOT-23  Q1 BC849 {Lib=BC849}
+  (    1 N-000003 )
+  (    2 GND )
+  (    3 N-000007 )
+ )
+ ( /514B0133 $noname  D1 LED {Lib=LED}
+  (    1 VDD )
+  (    2 N-000005 )
+ )
+ ( /4FAC1B98 $noname  R1 1kΩ {Lib=R}
+  (    1 AN )
+  (    2 N-000003 )
+ )
+ ( /514B01BB $noname  R3 120_Ω {Lib=R}
+  (    1 N-000005 )
+  (    2 N-000007 )
+ )
+)
+*
+{ Allowed footprints by component:
+$component R2
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component Q1
+ SOT-23*
+$endlist
+$component D1
+ LED-3MM
+ LED-5MM
+ LED-10MM
+ LED-0603
+ LED-0805
+ LED-1206
+ LEDV
+$endlist
+$component R1
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R3
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$endfootprintlist
+}
+{ Pin List by Nets
+Net 3 "" ""
+ R1 2
+ Q1 1
+Net 4 "VDD" "VDD"
+ J1 3
+ R2 2
+ D1 1
+Net 5 "" ""
+ R3 1
+ D1 2
+Net 6 "AN" "AN"
+ J1 6
+ R1 1
+Net 7 "" ""
+ R3 2
+ Q1 3
+Net 8 "GND" "GND"
+ J1 5
+ J1 9
+ Q1 2
+Net 10 "idAN" "idAN"
+ R2 1
+ J1 4
+}
+#End
