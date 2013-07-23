@@ -14,8 +14,8 @@
 #include "user/handlerManager.h"
 #include "dynamicPolling.h"
 
-#define LED_ON 1
-#define LED_OFF 0
+#define LED_ON    (byte) 1
+#define LED_OFF   (byte) 0
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata 
@@ -62,6 +62,8 @@ void UserLedInit(byte usrLedHandler){
     sendBufferUsrLed = getSharedBuffer(usrLedHandler);
     /* get port where sensor/actuator is connected and set to OUT mode*/
     getPortDescriptor(usrLedHandler)->change_port_direction(OUT);
+    /*init the LED off*/
+    getPortDescriptor(usrLedHandler)->set_data(LED_OFF);
 }/*end UserLedInit*/
 
 /******************************************************************************
@@ -83,7 +85,7 @@ void UserLedInit(byte usrLedHandler){
 
 void UserLedProcessIO(byte i){
 
-    if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND==1)) return;
+    if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND== (unsigned) 1)) return;
 	/* here enter the code that want to be called periodically,
          * per example interaction with buttons and leds */
 }/*end UserLedProcessIO*/
@@ -137,7 +139,7 @@ void UserLedReceived(byte* recBuffPtr, byte len, byte handler){
             ((LED_DATA_PACKET*)sendBufferUsrLed)->_byte[0] = ((LED_DATA_PACKET*)recBuffPtr)->_byte[0]; 
             ((LED_DATA_PACKET*)sendBufferUsrLed)->_byte[1] = LED_MINOR_VERSION;
             ((LED_DATA_PACKET*)sendBufferUsrLed)->_byte[2] = LED_MAJOR_VERSION;
-            userLedCounter=0x04;
+            userLedCounter=0x03;
             break;
 
         case TURN:
@@ -147,7 +149,7 @@ void UserLedReceived(byte* recBuffPtr, byte len, byte handler){
             } else {
                 getPortDescriptor(handler)->set_data(LED_OFF);
             }
-            userLedCounter=0x02;
+            userLedCounter=0x01;
             break;
 
         case RESET:
@@ -157,10 +159,10 @@ void UserLedReceived(byte* recBuffPtr, byte len, byte handler){
         default:
             break;
       }/*end switch(s)*/
-      if(userLedCounter != 0)
+      if(userLedCounter != (byte) 0)
       {
-       j = 255;
-       while(mUSBGenTxIsBusy() && j-->0); /* pruebo un maximo de 255 veces*/
+      j = 255;
+       while(mUSBGenTxIsBusy() && j--> (byte) 0); /* pruebo un maximo de 255 veces*/
            if(!mUSBGenTxIsBusy())
                   USBGenWrite2(handler, userLedCounter);
       }/*end if*/
