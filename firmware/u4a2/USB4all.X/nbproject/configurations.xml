@@ -35,6 +35,7 @@
       <itemPath>../user/usr_voltage.h</itemPath>
       <itemPath>../user/usr_motors.h</itemPath>
       <itemPath>../user/usr_butia.h</itemPath>
+      <itemPath>../user/usr_led.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LibraryFiles"
                    displayName="Library Files"
@@ -80,6 +81,7 @@
       <itemPath>../user/usr_voltage.c</itemPath>
       <itemPath>../user/usr_motors.c</itemPath>
       <itemPath>../user/usr_butia.c</itemPath>
+      <itemPath>../user/usr_led.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -87,6 +89,9 @@
       <itemPath>Makefile</itemPath>
     </logicalFolder>
   </logicalFolder>
+  <sourceRootList>
+    <Elem>../user</Elem>
+  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="default" type="2">
