@@ -2,7 +2,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <linux/usb_ch9.h>
+#include <linux/usb/ch9.h>
 //#include <usb9.h>
 //#include <sys/ioctl.h>
 #include <errno.h>
