@@ -64,13 +64,18 @@ struct urb_node{
 
 /* Structure to hold all of our device specific stuff */
 struct usb_U4all {
-    struct usb_device *      udev;             /* the usb device for this device */
-    struct usb_interface *   interface;        /* the interface for this device */
+    struct usb_device      * udev;             /* the usb device for this device */
+    struct usb_interface   * interface;        /* the interface for this device */
     struct semaphore         limit_sem;        /* limiting the number of writes in progress */
+    struct usb_anchor        submitted;        /* in case we need to retract our submissions */
+    struct urb	             *bulk_in_urb;     /* the urb to read data with */
     unsigned char *          in_buffer;        /* the buffer to receive data */
     size_t                   in_size;          /* the size of the receive buffer */
     __u8                     in_endpointAddr;  /* the address of the bulk in endpoint */
     __u8                     out_endpointAddr; /* the address of the bulk out endpoint */
+    int                      open_count;       /* count the number of openers */
+    int                      errors;           /* the last request tanked */
+    spinlock_t               err_lock;         /* lock for errors */
     struct kref              kref;
     //isochronous I/O specific fields
     struct list_head free_read_urbs;                /* inactive urbs ready for read requests */
@@ -79,6 +84,7 @@ struct usb_U4all {
     int current_urb_readptr;                        /* ptr to next byte to read  in the current urb*/
     int urbBufferSize;                              /* size of the buffer to alloc for each urb*/
     int nurbs;                                      /* number of urbs allocated for reading*/
+    struct mutex            io_mutex;               /* synchronize I/O with disconnect */
 };
 
 struct endpointSizeItem {

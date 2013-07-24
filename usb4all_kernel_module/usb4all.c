@@ -19,7 +19,7 @@ static const struct usb_device_id U4all_table [] = {
     { USB_DEVICE(USB4all_VENDOR_ID, USB4all_PRODUCT_ID) },
     { }                    /* Terminating entry */
 };
-MODULE_DEVICE_TABLE (usb, USB4all_table);
+MODULE_DEVICE_TABLE(usb, U4all_table);
 
 #define to_U4all_dev(d) container_of(d, struct usb_U4all, kref)
 
@@ -40,7 +40,7 @@ static void U4all_delete(struct kref *kref)
 
     usb_free_urb(dev->bulk_in_urb);
     usb_put_dev(dev->udev);
-    kfree(dev->bulk_in_buffer);
+    kfree(dev->in_buffer);
     kfree(dev);
 }
 
@@ -55,7 +55,7 @@ static int U4all_open(struct inode *inode, struct file *file)
 
     interface = usb_find_interface(&U4all_driver, subminor);
     if (!interface) {
-        err("%s - error, can't find device for minor %d",
+        printk(KERN_ERR "%s - error, can't find device for minor %d",
              __func__, subminor);
         retval = -ENODEV;
         goto exit;
@@ -79,14 +79,14 @@ static int U4all_open(struct inode *inode, struct file *file)
             if (retval) {
                 dev->open_count--;
                 mutex_unlock(&dev->io_mutex);
-                kref_put(&dev->kref, skel_delete);
+                kref_put(&dev->kref, U4all_delete);
                 goto exit;
             }
     } /* else { //uncomment this block if you want exclusive open
         retval = -EBUSY;
         dev->open_count--;
         mutex_unlock(&dev->io_mutex);
-        kref_put(&dev->kref, skel_delete);
+        kref_put(&dev->kref, U4all_delete);
         goto exit;
     } */
     /* prevent the device from being autosuspended */
@@ -140,15 +140,15 @@ static void U4all_iso_read_complete(struct urb * purb, struct pt_regs *regs)
                                     memcpy (buf + dst, buf + purb->iso_frame_desc[i].offset, len);
                                     dst += len;
                             }else//TODO es necesario este control???
-                                    err("usb4all_iso_complete: invalid len %d", len);
+                                    printk(KERN_ERR "usb4all_iso_complete: invalid len %d", len);
                     }else
-                            warn("usb4all_iso_complete: corrupted packet status: %d", purb->iso_frame_desc[i].status);
+                            printk(KERN_ERR "usb4all_iso_complete: corrupted packet status: %d", purb->iso_frame_desc[i].status);
 
             if (dst != purb->actual_length)
-                    err("dst!=purb->actual_length:%d!=%d", dst, purb->actual_length);
-            //err("salgo read complete leido %d",purb->actual_length);
+                    printk(KERN_ERR "dst!=purb->actual_length:%d!=%d", dst, purb->actual_length);
+            //printk(KERN_ERR "salgo read complete leido %d",purb->actual_length);
         }else
-            err("salgo read complete ENOENT");
+            printk(KERN_ERR "salgo read complete ENOENT");
         
         wake_up (&dev->read_wait);
 }
@@ -225,7 +225,7 @@ static int U4all_iso_init_read_urbs( struct usb_U4all * dev )
         memset (node, 0, sizeof (struct urb_node));
         node->request = usb_alloc_urb(packets, GFP_KERNEL);
         if (!node->request ) {
-            err("usb4all: alloc_urb == NULL");
+            printk(KERN_ERR "usb4all: alloc_urb == NULL");
             kfree(node);
             goto err;
         }
@@ -234,13 +234,13 @@ static int U4all_iso_init_read_urbs( struct usb_U4all * dev )
         if (!node->request->transfer_buffer) {
             kfree (node->request);
             kfree (node);
-            //err("kmalloc(%d)==NULL", dev->urbBufferSize);
+            //printk(KERN_ERR "kmalloc(%d)==NULL", dev->urbBufferSize);
             goto err;
         }
 
         node->request->transfer_buffer_length = dev->urbBufferSize;
         node->request->number_of_packets = packets;
-        node->request->complete = U4all_iso_read_complete;
+        node->request->complete = (usb_complete_t) U4all_iso_read_complete;
         node->request->context = dev;
         node->request->dev = dev->udev;
         node->request->pipe = pipe;
@@ -249,7 +249,7 @@ static int U4all_iso_init_read_urbs( struct usb_U4all * dev )
             node->request->interval = 1 << (interval - 1);
         else
             node->request->interval = interval;
-        err("INTERVAL: %d",node->request->interval);    
+        printk(KERN_ERR "INTERVAL: %d",node->request->interval);    
         node->request->start_frame = -1;
 
         for(i = 0; i < packets-1; i++){
@@ -291,7 +291,7 @@ static int U4all_iso_request_data( struct usb_U4all * dev )
 
             ret = usb_submit_urb (temp->request, GFP_KERNEL);//TODO ver en el cap 13 si corresponde esta FLAG
             if(ret){
-                //err("usb_submit_urb returned: %d", ret);
+                //printk(KERN_ERR "usb_submit_urb returned: %d", ret);
                 //TODO devolver urb a la lista de free
                 break;
             }
@@ -329,14 +329,14 @@ static ssize_t U4all_read(struct file *file, char *buffer, size_t count, loff_t 
             }
             break;
         case ISO:
-             //err("Arrnaca read ISO\n");
+             //printk(KERN_ERR "Arrnaca read ISO\n");
             U4all_iso_read_init(dev);
-             //err("paso read INIT\n");
+             //printk(KERN_ERR "paso read INIT\n");
             dev->current_urb_readptr = 0;
             while(count > 0){
-//             //err("vuelta loop count= %d\n",count);
+//             //printk(KERN_ERR "vuelta loop count= %d\n",count);
                 U4all_iso_request_data(dev);                                       
-//             //err("paso requestData \n");
+//             //printk(KERN_ERR "paso requestData \n");
                 //get current urb 
                 unode = list_entry(dev->busy_read_urbs.next, struct urb_node, list);
                 current_urb = unode->request;
@@ -348,11 +348,11 @@ static ssize_t U4all_read(struct file *file, char *buffer, size_t count, loff_t 
                             return -EAGAIN;
                         return bytes_read;             
                     }
-             //err("me voy a bloquear\n");
+             //printk(KERN_ERR "me voy a bloquear\n");
 
                     //wait for the urb to complete
                     interruptible_sleep_on(&dev->read_wait);
-             //err("sali bloqueo\n");
+             //printk(KERN_ERR "sali bloqueo\n");
 
                     if(signal_pending(current)){
                         if(!bytes_read)
@@ -368,7 +368,7 @@ static ssize_t U4all_read(struct file *file, char *buffer, size_t count, loff_t 
                 curr_count = min(count, (size_t)urb_count);
                 
                 if (copy_to_user(buffer, current_urb->transfer_buffer + dev->current_urb_readptr, curr_count)) {
-                    //err("read: copy_to_user failed");
+                    //printk(KERN_ERR "read: copy_to_user failed");
                     if (!bytes_read)
                         return -EFAULT;
                                 return bytes_read;             
@@ -382,7 +382,7 @@ static ssize_t U4all_read(struct file *file, char *buffer, size_t count, loff_t 
                 if(dev->current_urb_readptr == current_urb->actual_length){
                     // finished, free urb and start next
                     if (U4all_switch_urb_list (&dev->free_read_urbs, &dev->busy_read_urbs))
-                        //err("ERRORRRRRRR");
+                        //printk(KERN_ERR "ERRORRRRRRR");
                     dev->current_urb_readptr = 0;
                 }
                 
@@ -408,7 +408,7 @@ static void U4all_write_bulk_callback(struct urb *urb)
         if (!(urb->status == -ENOENT ||
             urb->status == -ECONNRESET ||
             urb->status == -ESHUTDOWN))
-            err("%s - nonzero write bulk status received: %d",
+            printk(KERN_ERR "%s - nonzero write bulk status received: %d",
                 __func__, urb->status);
 
         spin_lock(&dev->err_lock);
@@ -433,18 +433,18 @@ static void U4all_write_iso_callback(struct urb *urb, struct pt_regs *regs)
         !(urb->status == -ENOENT || 
           urb->status == -ECONNRESET ||
           urb->status == -ESHUTDOWN)) {
-        //err("%s - nonzero write iso status received: %d",
+        //printk(KERN_ERR "%s - nonzero write iso status received: %d",
            // __FUNCTION__, urb->status);
     }
-    //err("%s - iso status received: %d", __FUNCTION__, urb->status);
-    //err("%s - Se escribio: %d", __FUNCTION__,urb->actual_length );
-//    //err("%s - iso_frame_desc status received: %d", __FUNCTION__, urb->iso_frame_desc[0].status);
-//    //err("%s - iso_frame_desc Se escribio: %d", __FUNCTION__,urb->iso_frame_desc[0].actual_length );
+    //printk(KERN_ERR "%s - iso status received: %d", __FUNCTION__, urb->status);
+    //printk(KERN_ERR "%s - Se escribio: %d", __FUNCTION__,urb->actual_length );
+//    //printk(KERN_ERR "%s - iso_frame_desc status received: %d", __FUNCTION__, urb->iso_frame_desc[0].status);
+//    //printk(KERN_ERR "%s - iso_frame_desc Se escribio: %d", __FUNCTION__,urb->iso_frame_desc[0].actual_length );
 
 
     /* free up our allocated buffer */
-    usb_buffer_free(urb->dev, urb->transfer_buffer_length, 
-            urb->transfer_buffer, urb->transfer_dma);
+    usb_free_coherent(urb->dev, urb->transfer_buffer_length, 
+    urb->transfer_buffer, urb->transfer_dma);
     up(&dev->limit_sem);
 }
 
@@ -465,8 +465,8 @@ static ssize_t U4all_write(struct file *file, const char *user_buffer,
     /* verify that we actually have some data to write */
     if (count == 0)
         goto exit;
-/*    switch(transferType){
-        case BULK:  /*
+       /* switch(transferType){
+        case BULK */
 
 
     /*
@@ -526,7 +526,7 @@ static ssize_t U4all_write(struct file *file, const char *user_buffer,
 
     /* initialize the urb properly */
     usb_fill_bulk_urb(urb, dev->udev,
-              usb_sndbulkpipe(dev->udev, dev->bulk_out_endpointAddr),
+              usb_sndbulkpipe(dev->udev, dev->out_endpointAddr),
               buf, writesize, U4all_write_bulk_callback, dev);
     urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
     usb_anchor_urb(urb, &dev->submitted);
@@ -535,7 +535,7 @@ static ssize_t U4all_write(struct file *file, const char *user_buffer,
     retval = usb_submit_urb(urb, GFP_KERNEL);
     mutex_unlock(&dev->io_mutex);
     if (retval) {
-        err("%s - failed submitting write urb, error %d", __func__,
+        printk(KERN_ERR "%s - failed submitting write urb, error %d", __func__,
             retval);
         goto error_unanchor;
     }
@@ -549,23 +549,23 @@ static ssize_t U4all_write(struct file *file, const char *user_buffer,
 
     return writesize;
 
-
+    switch(transferType){
         case ISO:{
-             unsigned int pipe = usb_sndisocpipe (dev->udev, dev->out_endpointAddr);
-             int packetSize = usb_maxpacket (dev->udev, pipe, usb_pipeout (pipe));
+            unsigned int pipe = usb_sndisocpipe (dev->udev, dev->out_endpointAddr);
+            int packetSize = usb_maxpacket (dev->udev, pipe, usb_pipeout (pipe));
             int packets, lastPacketSize;
-//            unsigned int read_pipe = usb_rcvisocpipe (dev->udev, dev->in_endpointAddr);
+            // unsigned int read_pipe = usb_rcvisocpipe (dev->udev, dev->in_endpointAddr);
 
             //RESETEO PIPE DE LECTURA
-//            usb_clear_halt(dev->udev,read_pipe);
-  //          usb_clear_halt(dev->udev,pipe);
+            //usb_clear_halt(dev->udev,read_pipe);
+            //usb_clear_halt(dev->udev,pipe);
             //FIN RESETEO PIPE DE LECTURA
 
-//             err("%s - packet size write %d", __FUNCTION__,packetSize);
+            //printk(KERN_ERR "%s - packet size write %d", __FUNCTION__,packetSize);
              nurbs = writesize/dev->urbBufferSize;
              if(writesize % dev->urbBufferSize != 0)
                 nurbs++;
-//             err("%s - nurbs %d", __FUNCTION__,nurbs);
+                //printk(KERN_ERR "%s - nurbs %d", __FUNCTION__,nurbs);
 
              rem = writesize;
              for(i=0; i < nurbs; i++){
@@ -574,7 +574,7 @@ static ssize_t U4all_write(struct file *file, const char *user_buffer,
                 lastPacketSize = curr_count%packetSize;                     
                 if(lastPacketSize > 0)
                     packets++;
-//             err("%s - packets %d", __FUNCTION__,packets);
+                //printk(KERN_ERR "%s - packets %d", __FUNCTION__,packets);
                 /* limit the number of URBs in flight to stop a user from using up all RAM */
                 if(down_interruptible(&dev->limit_sem)) {
                     retval = -ERESTARTSYS;
@@ -588,7 +588,7 @@ static ssize_t U4all_write(struct file *file, const char *user_buffer,
                     goto error;
                 }
             
-                buf = usb_buffer_alloc(dev->udev, curr_count, GFP_KERNEL, &urb->transfer_dma);
+                buf = usb_alloc_coherent(dev->udev, curr_count, GFP_KERNEL, &urb->transfer_dma);
                 if (!buf) {
                     retval = -ENOMEM;
                     goto error;
@@ -602,7 +602,7 @@ static ssize_t U4all_write(struct file *file, const char *user_buffer,
                 /* initialize the urb properly */
                 urb->transfer_buffer_length = curr_count;
                 urb->number_of_packets = packets;
-                urb->complete = U4all_write_iso_callback;
+                urb->complete = (usb_complete_t) U4all_write_iso_callback;
                 urb->context = dev;
                 urb->dev = dev->udev;
                 urb->pipe = pipe;
@@ -611,7 +611,7 @@ static ssize_t U4all_write(struct file *file, const char *user_buffer,
                     urb->interval = 1 << (interval - 1);
                 else
                     urb->interval = interval;
-                //err("INTERVAL: %d",urb->interval);    
+                //printk(KERN_ERR "INTERVAL: %d",urb->interval);    
                 urb->start_frame = -1;
         
                 for(i = 0; i < packets-1; i++){
@@ -626,25 +626,25 @@ static ssize_t U4all_write(struct file *file, const char *user_buffer,
                 }
                 
 /*                for(i=0;i < packets;i++)
-                    //err("offset: %d  lenth: %d\n", urb->iso_frame_desc[i].offset , urb->iso_frame_desc[i].length );
+                    //printk(KERN_ERR "offset: %d  lenth: %d\n", urb->iso_frame_desc[i].offset , urb->iso_frame_desc[i].length );
  */       
                 /* send the data out the iso port */
                 retval = usb_submit_urb(urb, GFP_KERNEL);
                 if (retval) {
-                    //err("%s - failed submitting write urb, error %d", __FUNCTION__, retval);
+                    //printk(KERN_ERR "%s - failed submitting write urb, error %d", __FUNCTION__, retval);
                     switch(retval){
-                        case -ENOMEM: err("error: ENOMEM\n");break;
-                        case -ENODEV: err("error: ENODEV\n");break;
-                        case -ENOENT: err("error: ENOENT\n");break;
-                        case -ENXIO: err("error: ENXIO\n");break;
-                        case -EINVAL: err("error: EINVAL\n");break;
-                        case -EAGAIN: err("error: EAGAIN\n");break;
-                        case -EFBIG: err("error: EFBIG\n");break;
-                        case -EPIPE: err("error: EPIPE\n");break;
-                        case -EMSGSIZE: err("error: EMSGSIZE\n");break;
-                        case -ESHUTDOWN: err("error: ESHUTDOWN\n");break;
-                        case -EPERM: err("error: EPERM\n");break;
-                        case -EHOSTUNREACH: err("error: EHOSTUNREACH\n");break;
+                        case -ENOMEM: printk(KERN_ERR "error: ENOMEM\n");break;
+                        case -ENODEV: printk(KERN_ERR "error: ENODEV\n");break;
+                        case -ENOENT: printk(KERN_ERR "error: ENOENT\n");break;
+                        case -ENXIO: printk(KERN_ERR "error: ENXIO\n");break;
+                        case -EINVAL: printk(KERN_ERR "error: EINVAL\n");break;
+                        case -EAGAIN: printk(KERN_ERR "error: EAGAIN\n");break;
+                        case -EFBIG: printk(KERN_ERR "error: EFBIG\n");break;
+                        case -EPIPE: printk(KERN_ERR "error: EPIPE\n");break;
+                        case -EMSGSIZE: printk(KERN_ERR "error: EMSGSIZE\n");break;
+                        case -ESHUTDOWN: printk(KERN_ERR "error: ESHUTDOWN\n");break;
+                        case -EPERM: printk(KERN_ERR "error: EPERM\n");break;
+                        case -EHOSTUNREACH: printk(KERN_ERR "error: EHOSTUNREACH\n");break;
                     }        
                     goto error;
                 }
@@ -657,27 +657,26 @@ static ssize_t U4all_write(struct file *file, const char *user_buffer,
              
     }
 
-error_unanchor:
-    usb_unanchor_urb(urb);
-error:
-    if (urb) {
-        usb_free_coherent(dev->udev, writesize, buf, urb->transfer_dma);
-        usb_free_urb(urb);
-    }
-    up(&dev->limit_sem);
-
-exit:
-    return retval;
+    error_unanchor:
+        usb_unanchor_urb(urb);
+    error:
+        if (urb) {
+            usb_free_coherent(dev->udev, writesize, buf, urb->transfer_dma);
+            usb_free_urb(urb);
+        }
+        up(&dev->limit_sem);
+    exit:
+        return retval;
 }
 
-static int usb4all_ioctl(struct inode *inode, struct file *file, unsigned int code, unsigned long user_data){
-        struct usb_U4all *u4alldev;
+static long U4all_ioctl(struct file *file, unsigned int code, unsigned long user_data){
+    struct usb_U4all *u4alldev;
     struct usb_device* dev;
     int ret;
     struct usb_device_descriptor* descriptor; 
-        u4alldev = (struct usb_U4all *)file->private_data;
-        if (u4alldev == NULL)
-                return -ENODEV;
+    u4alldev = (struct usb_U4all *)file->private_data;
+    if (u4alldev == NULL)
+            return -ENODEV;
     dev = u4alldev->udev;
     switch (code) {
     case SET_DESC_INDEX: {
@@ -685,16 +684,16 @@ static int usb4all_ioctl(struct inode *inode, struct file *file, unsigned int co
         return ret;
         break;
     }
-        case SET_TIMEOUT: {
-                ret = get_user(timeout, (unsigned char*)user_data);
-                return ret;
-                break;
-        }
+    case SET_TIMEOUT: {
+        ret = get_user(timeout, (unsigned char*)user_data);
+        return ret;
+        break;
+    }
     case SET_TRANSFER_TYPE: {
-                ret = get_user(transferType, (const char*)user_data);
-                return ret;
-                break;
-        }
+        ret = get_user(transferType, (const char*)user_data);
+        return ret;
+        break;
+    }
     case SET_IN_ENDPOINT: {
         ret = get_user(u4alldev->in_endpointAddr, (unsigned char*)user_data);
         u4alldev->in_size = endpointSizes[descindex].wMaxPacketSize;
@@ -707,37 +706,37 @@ static int usb4all_ioctl(struct inode *inode, struct file *file, unsigned int co
         break;
     }
     case GET_STRING_DESCRIPTOR: {
-            struct usb_string_descriptor StringDesc;
-            struct usb_string_descriptor *pStringDesc;
-            dbg("%s - USB String ID = %d", __FUNCTION__, Id );
+        struct usb_string_descriptor StringDesc;
+        struct usb_string_descriptor *pStringDesc;
+        //printk(KERN_INFO "%s - USB String ID = %d", __FUNCTION__, Id );
 
-            if (!usb_get_descriptor(dev, USB_DT_STRING, descindex, &StringDesc, sizeof(StringDesc))) {
-                       return 0;
-            }
+        if (!usb_get_descriptor(dev, USB_DT_STRING, descindex, &StringDesc, sizeof(StringDesc))) {
+            return 0;
+        }
 
-            pStringDesc = kmalloc (StringDesc.bLength, GFP_KERNEL);
+        pStringDesc = kmalloc (StringDesc.bLength, GFP_KERNEL);
 
-            if (!pStringDesc) {
-                    return 0;
-            }
+        if (!pStringDesc) {
+            return 0;
+        }
 
-            if (!usb_get_descriptor(dev, USB_DT_STRING, descindex, pStringDesc, StringDesc.bLength )) {
-                    kfree(pStringDesc);
-                    return 0;
-            }
+        if (!usb_get_descriptor(dev, USB_DT_STRING, descindex, pStringDesc, StringDesc.bLength )) {
+            kfree(pStringDesc);
+            return 0;
+        }
 
-            //unicode_to_ascii(string,  pStringDesc->wData,     pStringDesc->bLength/2-1);
+        //unicode_to_ascii(string,  pStringDesc->wData,     pStringDesc->bLength/2-1);
         ret = copy_to_user((unsigned int __user *) user_data, pStringDesc, sizeof(*pStringDesc));
         //ret = copy_to_user((unsigned int __user *) user_data, string, strlen(string)+1);
-            kfree(pStringDesc);
-            return ret;
+        kfree(pStringDesc);
+        return ret;
         break;
     }
     case DEBUG_STRING_DESCRIPTOR: {
             struct usb_string_descriptor StringDesc;
                 struct usb_string_descriptor *pStringDesc;
                 char* string;
-                dbg("%s - USB String ID = %d", __FUNCTION__, Id );
+                //printk(KERN_INFO "%s - USB String ID = %d", __FUNCTION__, Id );
 
                 if (!usb_get_descriptor(dev, USB_DT_STRING, descindex, &StringDesc, sizeof(StringDesc))) {
                         return 0;
@@ -776,12 +775,13 @@ static int usb4all_ioctl(struct inode *inode, struct file *file, unsigned int co
                 struct usb_host_interface *iface_desc;
                 struct usb_endpoint_descriptor *endpoint;
                 struct endpointSizeItem item;
-        int subminor;
+                struct inode *inode = file->f_path.dentry->d_inode;
+                int subminor;
                 subminor = iminor(inode);
                 interface = usb_find_interface(&U4all_driver, subminor);
                 endpoint = kmalloc(USB_DT_ENDPOINT_SIZE, GFP_NOIO);//TODO preguntar andres pq esa memoria
-        if (!interface) {
-                        dbg ("%s - error, can't find device for minor %d",
+                if (!interface) {
+                        printk(KERN_INFO "%s - error, can't find device for minor %d",
                         __FUNCTION__, subminor);
                         ret = -ENODEV;
                         return ret;
@@ -798,12 +798,13 @@ static int usb4all_ioctl(struct inode *inode, struct file *file, unsigned int co
     case GET_INTERFACE_DESCRIPTOR: {
         struct usb_interface *interface;
         struct usb_host_interface *iface_desc;
-            int subminor;
+        struct inode *inode = file->f_path.dentry->d_inode;
+        int subminor;
         subminor = iminor(inode);
         iface_desc = kmalloc(USB_DT_INTERFACE_SIZE, GFP_NOIO);
         interface = usb_find_interface(&U4all_driver, subminor);
             if (!interface) {
-                    dbg ("%s - error, can't find device for minor %d",
+                    printk(KERN_INFO "%s - error, can't find device for minor %d",
                        __FUNCTION__, subminor);
                     ret = -ENODEV;
                     return ret;
@@ -834,13 +835,14 @@ static int usb4all_ioctl(struct inode *inode, struct file *file, unsigned int co
 
 
 static const struct file_operations U4all_fops = {
-    .owner =    THIS_MODULE,
-    .read =        U4all_read,
-    .write =    U4all_write,
-    .open =        U4all_open,
-    .release =    U4all_release,
-    .flush =    U4all_flush,
-    .llseek =static struct usb_device_id USB4all_table    U4all_llseek,
+    .owner =          THIS_MODULE,
+    .read =           U4all_read,
+    .write =          U4all_write,
+    .open =           U4all_open,
+    .release =        U4all_release,
+    .unlocked_ioctl = U4all_ioctl,
+    //.flush =    U4all_flush,
+    //.llseek =static struct usb_device_id USB4all_table    U4all_llseek,
 };
 
 /*
@@ -864,12 +866,12 @@ static int U4all_probe(struct usb_interface *interface,
     /* allocate memory for our device state and initialize it */
     dev = kzalloc(sizeof(*dev), GFP_KERNEL);
     if (dev == NULL) {
-        err("Out of memory");
+        printk(KERN_ERR "Out of memory");
         goto error;
     }
     kref_init(&dev->kref);
     sema_init(&dev->limit_sem, WRITES_IN_FLIGHT);
-
+    mutex_init(&dev->io_mutex);
     dev->udev = usb_get_dev(interface_to_usbdev(interface));
     dev->interface = interface;
 
@@ -898,7 +900,7 @@ static int U4all_probe(struct usb_interface *interface,
             dev->bulk_in_endpointAddr = endpoint->bEndpointAddress;*/
             dev->in_buffer = kmalloc(0x0040/*buffer_size*/, GFP_KERNEL);
             if (!dev->in_buffer) {
-                err("Could not allocate bulk_in_buffer");
+                printk(KERN_ERR "Could not allocate in_buffer");
                 goto error;
             }/*
         }
@@ -913,7 +915,7 @@ static int U4all_probe(struct usb_interface *interface,
         }
     }
     if (!(dev->bulk_in_endpointAddr && dev->bulk_out_endpointAddr)) {
-        err("Could not find both bulk-in and bulk-out endpoints");
+        printk(KERN_ERR "Could not find both bulk-in and bulk-out endpoints");
         goto error;
     }*/
 
@@ -924,24 +926,24 @@ static int U4all_probe(struct usb_interface *interface,
     retval = usb_register_dev(interface, &U4all_class);
     if (retval) {
         /* something prevented us from registering this driver */
-        err("Not able to get a minor for this device.");
+        printk(KERN_ERR "Not able to get a minor for this device.");
         usb_set_intfdata(interface, NULL);
         goto error;
     }
 
     /* let the user know what node this device is now attached to */
-    info("USB4all device now attached to usb4all-%d", interface->minor);
+    printk(KERN_INFO "USB4all device now attached to usb4all-%d", interface->minor);
     return 0;
 
-error:
-    if (dev)
-        kref_put(&dev->kref, U4all_delete);
-    return retval;
+    error:
+        if (dev)
+            kref_put(&dev->kref, U4all_delete);
+        return retval;
 }
 
 static void U4all_disconnect(struct usb_interface *interface)
 {
-    struct usb_skel *dev;
+    struct usb_U4all *dev;
     int minor = interface->minor;
 
     dev = usb_get_intfdata(interface);
@@ -998,9 +1000,9 @@ static int U4all_pre_reset(struct usb_interface *intf)
     return 0;
 }
 
-static int skel_post_reset(struct usb_interface *intf)
+static int U4all_post_reset(struct usb_interface *intf)
 {
-    struct usb_skel *dev = usb_get_intfdata(intf);
+    struct usb_U4all *dev = usb_get_intfdata(intf);
 
     /* we are sure no URBs are active - no locking needed */
     dev->errors = -EPIPE;
@@ -1028,7 +1030,7 @@ static int __init usb_U4all_init(void)
     /* register this driver with the USB subsystem */
     result = usb_register(&U4all_driver);
     if (result)
-        err("usb_register failed. Error number %d", result);
+        printk(KERN_ERR "usb_register failed. Error number %d", result);
 
     return result;
 }
