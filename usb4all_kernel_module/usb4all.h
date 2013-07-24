@@ -2,10 +2,11 @@
  * USB4all driver - 1.0
  *
  * Copyright (C) 2007 Andres Aguirre, Daniel Pedraja
+ * Copyright (C) 2001-2004 Greg Kroah-Hartman (greg@kroah.com)
  *
- *      This program is free software; you can redistribute it and/or
- *      modify it under the terms of the GNU General Public License as
- *      published by the Free Software Foundation, version 2.
+ *	This program is free software; you can redistribute it and/or
+ *	modify it under the terms of the GNU General Public License as
+ *	published by the Free Software Foundation, version 2.
  *
  */
 
@@ -16,11 +17,12 @@
 #include <linux/slab.h>
 #include <linux/module.h>
 #include <linux/kref.h>
-#include <asm/uaccess.h>
+#include <linux/uaccess.h>
 #include <linux/usb.h>
+#include <linux/mutex.h>
 #include <linux/list.h>
 #include <linux/delay.h>
-#include <linux/smp_lock.h>
+//#include <linux/smp_lock.h>
 //#include <linux/usb/ch9.h>
 
 
