@@ -121,7 +121,7 @@ void PortReceived(byte* recBuffPtr, byte len, byte handler) {
 
         case GET_RES:
             ((PORT_DATA_PACKET*) sendBufferPort)->_byte[0] = ((PORT_DATA_PACKET*) recBuffPtr)->_byte[0];
-            aux = port.get_val_detection_pin();
+            //aux = port.get_val_detection_pin();
             ((PORT_DATA_PACKET*) sendBufferPort)->_byte[1] = 255;
             //((PORT_DATA_PACKET*) sendBufferPort)->_byte[2] = MSB(aux);
             PortCounter = 0x02;
@@ -132,9 +132,9 @@ void PortReceived(byte* recBuffPtr, byte len, byte handler) {
     }//end switch(s)
     if (PortCounter != (byte) 0) {
         j = 255;
-        while (mUSBGenTxIsBusy() && j-- > (byte) 0); // pruebo un máximo de 255 veces
-        if (!mUSBGenTxIsBusy())
-            USBGenWrite2(handler, PortCounter);
+        while (mUSBGenTxIsBusy() && j-- > (byte) 0); // pruebo un maximo de 255 veces
+            if (!mUSBGenTxIsBusy())
+                USBGenWrite2(handler, PortCounter);
     }//end if
 }//end PortReceived
 
