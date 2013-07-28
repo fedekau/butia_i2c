@@ -72,8 +72,8 @@ extern byte detected_device_type_id[];
 /*Remember to change the old maping for that*/
 extern rom const device_resistance table_device_id_resistance[];
 
-#define PNP_MINOR_VERSION 0xff //FIXME
-#define PNP_MAJOR_VERSION 0xff //FIXME
+#define PNP_MINOR_VERSION 0x01
+#define PNP_MAJOR_VERSION 0x00
 
 typedef union PNP_PACKET {
     byte _byte[USBGEN_EP_SIZE]; //For byte access
