@@ -152,13 +152,15 @@ void adminReceived(byte* recBuffPtr, byte len, byte admin_handler) {
             break;
 
         case LOAD:
+            //((AM_PACKET*) sendBufferAdmin)->CMD = LOAD;
             //Ver loaderModule.h
             //loadModule(byte idModule, byte* binaryStream);
-            adminCounter = 0x01;
+            //adminCounter = 0x01;
             break;
 
         case UNLOAD:
-            adminCounter = 0x03;
+            //((AM_PACKET*) sendBufferAdmin)->CMD = UNLOAD;
+            //adminCounter = 0x01;
             break;
 
             /* retorna la cantidad de modulos de usuarios presentes en el firmware */
@@ -181,18 +183,10 @@ void adminReceived(byte* recBuffPtr, byte len, byte admin_handler) {
             adminCounter = 0x09;
             break;
 
-//        case CONFIGURE:
-//            handler = ((AM_PACKET*) recBuffPtr)->handlerNumber;
-//            response = configureHandlerTableEntry(handler);
-//            ((AM_PACKET*) sendBufferAdmin)->response = response;
-//            ((AM_PACKET*) sendBufferAdmin)->CMD = CONFIGURE;
-//            adminCounter = 0x02; //1 byte para el campo CMD, otro para la respuesta
-//            break;
-
         case BOOT:
             Escribir_memoria_boot();
             goodByeCruelWorld();
-            adminCounter = 0x01; //;)
+            //adminCounter = 0x01; //;)
             break;
 
         case GET_HANDLER_SIZE:
@@ -215,7 +209,7 @@ void adminReceived(byte* recBuffPtr, byte len, byte admin_handler) {
 
         case RESET:
             goodByeCruelWorld();
-            adminCounter = 0x01; //1 byte para el campo CMD sensless ;)
+            //adminCounter = 0x01; //1 byte para el campo CMD sensless ;)
             break;
 
         default:
@@ -278,18 +272,6 @@ void watchdogStart(void) {
     keepAlive = TRUE;
     registerT0event(2 * TIME_UNIT_WATCHDOG, &watchdogEvent);
 }
-
-/*
-void sendMes(char mensaje[8]){
-        byte adminCounter, j;
-        ((AM_PACKET*)sendBufferAdmin)->CMD = MESSAGE;
-        for (j = 0; j < 8; j++){
-                ((AM_PACKET*)sendBufferAdmin)->texto[j] = mensaje[j];
-        }
-        adminCounter = 9; //sizeof(adminDataPacket);
-    if(!mUSBGenTxIsBusy())
-        USBGenWrite2(adminHandler,sendBufferAdmin,adminCounter);
-}*/
 
 /** EOF adminModule.c ***************************************************************/
 

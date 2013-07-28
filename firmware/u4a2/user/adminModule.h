@@ -54,7 +54,7 @@ typedef union _AM_PACKET {
             GET_HANDLER_SIZE = 0x0A,
             GET_HANDLER_TYPE = 0x0B,
             GET_FIRMWARE_VERSION = 0xFE,
-            RESET = 0xff
+            RESET = 0xFF
         } CMD;
         byte payload[HM_PACKET_PAYLOAD_SIZE];
     };
