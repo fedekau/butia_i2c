@@ -263,14 +263,14 @@ byte getEPSizeIN(byte ep){
 	return 64;  
 }
 
-int getMaxHandler(void){
+byte getMaxHandler(void){
     byte handler, max_handler = 0;
     for(handler=0;handler<MAX_HANDLERS;handler++){
         if (epHandlerMap[handler].ep.empty == (unsigned) 0){
             max_handler = handler;
         }
     }
-    return (int)max_handler;
+    return max_handler;
 }
 
 /** EOF handlerManager.c ***************************************************************/

@@ -85,5 +85,5 @@ void unsetHandlerReceiveFunction(byte handler);
 byte* getSharedBuffer(byte handler);
 byte getEPSizeIN(byte ep);
 byte getEPSizeOUT(byte ep);
-int getMaxHandler(void);
+byte getMaxHandler(void);
 #endif //HANDLER_MANAGER_H
