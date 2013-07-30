@@ -1,0 +1,52 @@
+Cmp-Mod V01 Created by CvPcb (2012-nov-02)-testing date = mar 30 jul 2013 19:41:11 UYT
+
+BeginCmp
+TimeStamp = /51F06AA4;
+Reference = D1;
+ValeurCmp = LED;
+IdModule  = LEDV;
+EndCmp
+
+BeginCmp
+TimeStamp = /51F06D93;
+Reference = J1;
+ValeurCmp = RJ45;
+IdModule  = RJ45_8;
+EndCmp
+
+BeginCmp
+TimeStamp = /51F069B4;
+Reference = PHD1;
+ValeurCmp = PHOTO_DETECTOR;
+IdModule  = LEDV;
+EndCmp
+
+BeginCmp
+TimeStamp = /51F070DD;
+Reference = R1;
+ValeurCmp = 4K7;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /51F06B8D;
+Reference = R2;
+ValeurCmp = 390R;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /51F068E8;
+Reference = R3;
+ValeurCmp = 1M;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /51F068BE;
+Reference = U1;
+ValeurCmp = LM358N;
+IdModule  = DIP-8__300_ELL;
+EndCmp
+
+EndListe
