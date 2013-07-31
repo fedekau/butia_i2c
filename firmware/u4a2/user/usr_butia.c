@@ -119,7 +119,6 @@ void UserButiaRelease(byte i){
  *****************************************************************************/
 
 void UserButiaReceived(byte* recBuffPtr, byte len, byte handler){
-    byte i;
     byte UserButiaCounter = 0;
     int data_received = 3;
 

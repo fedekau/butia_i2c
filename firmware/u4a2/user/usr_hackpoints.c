@@ -110,7 +110,7 @@ void HackPointsRelease(byte handler) {
 
 void HackPointsReceived(byte* recBufferHackPoints, byte len, byte handler) {
     byte HackPointsCounter = 0;
-    int pin;
+    byte pin;
 
     switch (((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->CMD) {
         case READ_VERSION:
