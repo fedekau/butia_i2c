@@ -109,7 +109,6 @@ void HackPointsRelease(byte handler) {
  *****************************************************************************/
 
 void HackPointsReceived(byte* recBufferHackPoints, byte len, byte handler) {
-    byte j;
     byte HackPointsCounter = 0;
     int pin;
 
@@ -176,12 +175,9 @@ void HackPointsReceived(byte* recBufferHackPoints, byte len, byte handler) {
         default:
             break;
     }/*end switch(s) */
-    if (HackPointsCounter != (byte) 0) {
-        j = 255;
-        while (mUSBGenTxIsBusy() && j-- > (byte) 0);
-            if (!mUSBGenTxIsBusy())
-                USBGenWrite2(handler, HackPointsCounter);
-    }/*end if*/
+
+    USBGenWrite2(handler, HackPointsCounter);
+
 }/*end HACK_POINTSReceived*/
 
 /** EOF HACK_POINTS.c ***************************************************************/

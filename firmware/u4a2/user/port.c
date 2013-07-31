@@ -104,7 +104,6 @@ void PortRelease(byte i) {
  *****************************************************************************/
 
 void PortReceived(byte* recBuffPtr, byte len, byte handler) {
-    byte j;
     byte PortCounter = 0;
     WORD aux;
     port_descriptor port;
@@ -130,12 +129,9 @@ void PortReceived(byte* recBuffPtr, byte len, byte handler) {
         default:
             break;
     }//end switch(s)
-    if (PortCounter != (byte) 0) {
-        j = 255;
-        while (mUSBGenTxIsBusy() && j-- > (byte) 0); // pruebo un maximo de 255 veces
-            if (!mUSBGenTxIsBusy())
-                USBGenWrite2(handler, PortCounter);
-    }//end if
+
+    USBGenWrite2(handler, PortCounter);
+
 }//end PortReceived
 
 /** EOF port.c ***************************************************************/

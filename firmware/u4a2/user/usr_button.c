@@ -119,7 +119,6 @@ void UserButtonRelease(byte i) {
  *****************************************************************************/
 
 void UserButtonReceived(byte* recBuffPtr, byte len, byte handler) {
-    byte j;
     byte userButtonCounter = 0;
 
     switch (((BUTTON_DATA_PACKET*) recBuffPtr)->CMD) {
@@ -143,12 +142,8 @@ void UserButtonReceived(byte* recBuffPtr, byte len, byte handler) {
         default:
             break;
     }/*end switch(s)*/
-    if (userButtonCounter != (byte) 0) {
-        j = 255;
-        while (mUSBGenTxIsBusy() && j-- > (byte) 0); /* pruebo un maximo de 255 veces */
-            if (!mUSBGenTxIsBusy())
-                USBGenWrite2(handler, userButtonCounter);
-    }/*end if */
+
+    USBGenWrite2(handler, userButtonCounter);
 
 }/*end UserButtonReceived*/
 

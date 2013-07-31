@@ -122,7 +122,6 @@ void UserLightRelease(byte i) {
  * Note:            None
  *****************************************************************************/
 void UserLightReceived(byte* recBuffPtr, byte len, byte handler) {
-    byte j;
     WORD data;
     byte userLightCounter = 0;
     switch (((LIGHT_DATA_PACKET*) recBuffPtr)->CMD) {
@@ -149,12 +148,8 @@ void UserLightReceived(byte* recBuffPtr, byte len, byte handler) {
             break;
     }/*end switch(s)*/
 
-    if (userLightCounter != (byte) 0) {
-        j = 255;
-        while (mUSBGenTxIsBusy() && j-- > (byte) 0); /* pruebo un maximo de 255 veces */
-            if (!mUSBGenTxIsBusy())
-                USBGenWrite2(handler, userLightCounter);
-    }/*end if*/
+    USBGenWrite2(handler, userLightCounter);
+
 }/*end UserLightReceived*/
 
 /** EOF usr_light.c ***************************************************************/

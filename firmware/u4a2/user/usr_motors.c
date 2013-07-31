@@ -319,7 +319,7 @@ void UserMotorsRelease(byte i) {
  *****************************************************************************/
 void UserMotorsReceived(byte* recBuffPtr, byte len, byte handler) {
     byte userMotorsCounter = 0;
-    byte direction1, direction2, lowVel1, lowVel2, highVel1, highVel2, idmotor, j;
+    byte direction1, direction2, lowVel1, lowVel2, highVel1, highVel2, idmotor;
     word vel1, vel2;
     switch (((MOTORS_DATA_PACKET*) recBuffPtr)->CMD) {
 
@@ -382,13 +382,8 @@ void UserMotorsReceived(byte* recBuffPtr, byte len, byte handler) {
         default:
             break;
     }/*end switch(s)*/
-    if (userMotorsCounter != (byte) 0) {
-        j = 255;
-        while (mUSBGenTxIsBusy() && j-- > (byte) 0); /*pruebo un maximo de 255 veces*/
-            if (!mUSBGenTxIsBusy())
-                USBGenWrite2(handler, userMotorsCounter);
-    }/*end if*/
 
+    USBGenWrite2(handler, userMotorsCounter);
 
 }/*end UserMotorsReceived*/
 

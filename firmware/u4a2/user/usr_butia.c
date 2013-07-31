@@ -119,7 +119,7 @@ void UserButiaRelease(byte i){
  *****************************************************************************/
 
 void UserButiaReceived(byte* recBuffPtr, byte len, byte handler){
-    byte i, j;
+    byte i;
     byte UserButiaCounter = 0;
     int data_received = 3;
 
@@ -129,26 +129,22 @@ void UserButiaReceived(byte* recBuffPtr, byte len, byte handler){
             ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[0] = ((BUTIA_DATA_PACKET*)recBuffPtr)->_byte[0];
             ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[1] = BUTIA_VERSION;
             UserButiaCounter=0x02;
-        break;
+            break;
         case GET_VOLT:
             ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[0] = ((BUTIA_DATA_PACKET*)recBuffPtr)->_byte[0];
             getVoltage(&data_received);
             ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[1] = (byte) (data_received % 256);
             UserButiaCounter=0x02;
-        break;
+            break;
         case RESET:
             Reset();
-        break;
+            break;
 
         default:
-        break;
+            break;
     }/*end switch(s)*/
-    if(UserButiaCounter != (byte) 0){
-        j = 255;
-        while(mUSBGenTxIsBusy() && j--> (byte) 0); // pruebo un maximo de 255 veces
-            if(!mUSBGenTxIsBusy())
-                USBGenWrite2(handler, UserButiaCounter);
-    }/*end if*/
+
+    USBGenWrite2(handler, UserButiaCounter);
 
 }/*end UserButiaReceived*/
 

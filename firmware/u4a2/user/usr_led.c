@@ -131,7 +131,6 @@ void UserLedRelease(byte i){
  *****************************************************************************/
 
 void UserLedReceived(byte* recBuffPtr, byte len, byte handler){
-    byte j;	
     byte userLedCounter = 0;
     switch(((LED_DATA_PACKET*)recBuffPtr)->CMD)
     {
@@ -159,13 +158,8 @@ void UserLedReceived(byte* recBuffPtr, byte len, byte handler){
         default:
             break;
       }/*end switch(s)*/
-      if(userLedCounter != (byte) 0)
-      {
-      j = 255;
-       while(mUSBGenTxIsBusy() && j--> (byte) 0); /* pruebo un maximo de 255 veces*/
-           if(!mUSBGenTxIsBusy())
-                  USBGenWrite2(handler, userLedCounter);
-      }/*end if*/
+
+      USBGenWrite2(handler, userLedCounter);
 
 }/*end UserLedReceived*/
 

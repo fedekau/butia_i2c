@@ -123,7 +123,6 @@ void UserResistanceRelease(byte usrResistanceHandler){
  * Note:            None
  *****************************************************************************/
 void UserResistanceReceived(byte* recBuffPtr, byte len, byte handler){
-    byte j;
     WORD data;
     byte userResistanceCounter = 0;
     switch(((RESISTANCE_DATA_PACKET*)recBuffPtr)->CMD)
@@ -151,13 +150,8 @@ void UserResistanceReceived(byte* recBuffPtr, byte len, byte handler){
             break;
     }/* end switch(s)*/
 
-    if(userResistanceCounter != (byte) 0)
-    {
-        j = 255;
-        while(mUSBGenTxIsBusy() && j--> (byte) 0); /* try at last 255 tries */
-            if(!mUSBGenTxIsBusy())
-                USBGenWrite2(handler, userResistanceCounter);
-    }/* end if */
+    USBGenWrite2(handler, userResistanceCounter);
+
 }/* end UserResistanceReceived */
 
 /** EOF usr_resistance.c **************************************************/

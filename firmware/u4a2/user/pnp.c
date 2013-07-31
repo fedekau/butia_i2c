@@ -161,12 +161,9 @@ void PNPReceived(byte* recBuffPtr, byte len, byte handler) {
             userPNPCounter = 0x03;
             break;
     }
-    if (userPNPCounter != (byte) 0) {
-        j = 255;
-        while (mUSBGenTxIsBusy() && j-- > (byte) 0); /* pruebo un maximo de 255 veces */
-            if (!mUSBGenTxIsBusy())
-                USBGenWrite2(PNPHandler, userPNPCounter);
-    }//end if
+
+    USBGenWrite2(PNPHandler, userPNPCounter);
+
 }//end PNPReceived
 
 

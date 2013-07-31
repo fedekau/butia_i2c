@@ -123,7 +123,6 @@ void UserVoltageRelease(byte usrVoltageHandler){
  * Note:            None
  *****************************************************************************/
 void UserVoltageReceived(byte* recBuffPtr, byte len, byte handler){
-    byte j;
     WORD data;
     byte userVoltageCounter = 0;
     switch(((VOLTAGE_DATA_PACKET*)recBuffPtr)->CMD)
@@ -151,13 +150,8 @@ void UserVoltageReceived(byte* recBuffPtr, byte len, byte handler){
             break;
     }/* end switch(s)*/
 
-    if(userVoltageCounter != (byte) 0)
-    {
-        j = 255;
-        while(mUSBGenTxIsBusy() && j--> (byte) 0); /* try at last 255 tries */
-            if(!mUSBGenTxIsBusy())
-                USBGenWrite2(handler, userVoltageCounter);
-    }/* end if */
+    USBGenWrite2(handler, userVoltageCounter);
+
 }/* end UserVoltageReceived */
 
 /** EOF usr_voltage.c **************************************************/

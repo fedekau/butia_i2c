@@ -87,9 +87,15 @@ void USBGenRead2(void){
 }//end USBGenRead
 
 void USBGenWrite2(byte handler, byte len) {
-	byte i;
+	byte i, j;
 	epHandlerMapItem hmi;
 	byte ep;
+
+        if (len == (byte) 0) return;
+        j = 255;
+        while (mUSBGenTxIsBusy() && j-- > (byte) 0); /* pruebo un maximo de 255 veces */
+        if (mUSBGenTxIsBusy()) return;
+
 	hmi = epHandlerMap[handler];
 	ep = hmi.ep.EPNum;
 	/*

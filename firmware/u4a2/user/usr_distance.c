@@ -122,7 +122,6 @@ void UserDistRelease(byte usrDistHandler) {
  * Note:            None
  *****************************************************************************/
 void UserDistReceived(byte* recBuffPtr, byte len, byte handler) {
-    byte j;
     WORD data;
     byte userDistCounter = 0;
 
@@ -150,12 +149,8 @@ void UserDistReceived(byte* recBuffPtr, byte len, byte handler) {
             break;
     }/*end switch(s)*/
 
-    if (userDistCounter != (byte) 0) {
-        j = 255;
-        while (mUSBGenTxIsBusy() && j-- > (byte) 0); /* pruebo un maximo de 255 veces */
-            if (!mUSBGenTxIsBusy())
-                USBGenWrite2(handler, userDistCounter);
-    }/*end if*/
+    USBGenWrite2(handler, userDistCounter);
+
 }/*end UserDistReceived*/
 
 /** EOF usr_distancia.c ***************************************************************/

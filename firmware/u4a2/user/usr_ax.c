@@ -120,11 +120,8 @@ void UserAX12Received(byte* recBuffPtr, byte lenght, byte usrAXHandler) {
         default:
             break;
     }
-    if (userAXCounter != (byte) 0) {
-        j = 255;
-        while (mUSBGenTxIsBusy() && j-- > (byte) 0);
-        if (!mUSBGenTxIsBusy())
-            USBGenWrite2(usrAXHandler, userAXCounter);
-    }
+
+    USBGenWrite2(usrAXHandler, userAXCounter);
+
 }
 /** EOF usr_ax.c **************************************************************/

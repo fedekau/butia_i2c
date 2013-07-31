@@ -148,7 +148,7 @@ void adminReceived(byte* recBuffPtr, byte len, byte admin_handler) {
 
         case MESSAGE:
             // me limito a solamente mandar el paquete que me genera el usuario mediante sendMes (ping)
-            adminCounter = sizeof (((AM_PACKET*) recBuffPtr));
+            //adminCounter = sizeof (((AM_PACKET*) recBuffPtr));
             break;
 
         case LOAD:
@@ -216,16 +216,12 @@ void adminReceived(byte* recBuffPtr, byte len, byte admin_handler) {
             break;
 
     }//end switch()
-    if (adminCounter != (byte) 0) {
-        j = 255;
-        while (mUSBGenTxIsBusy() && j-- > (byte) 0); // probing a max of 255 times
-        if (!mUSBGenTxIsBusy())
-            USBGenWrite2(adminHandler, adminCounter);
-    }//end if
+
+    USBGenWrite2(adminHandler, adminCounter);
 
 }//end adminReceived
 
-/* Not used*/
+/* Not used
 void sendMes(char* mensaje, byte len) {
     byte adminCounter, j;
     ((AM_PACKET*) sendBufferAdmin)->CMD = MESSAGE;
@@ -235,7 +231,7 @@ void sendMes(char* mensaje, byte len) {
     adminCounter = len + 1; //sizeof(adminDataPacket);
     if (!mUSBGenTxIsBusy())
         USBGenWrite2(adminHandler, adminCounter);
-}
+}*/
 
 /*****************************************************************************
  * Keep Alive para el watchdog
