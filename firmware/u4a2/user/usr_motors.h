@@ -34,6 +34,9 @@
 #define MASK_SHIELD (byte) 0x07
 #define SHIELD_CC   (byte) 0x04
 
+typedef void (*fGetVolt)(int *);
+//fGetVolt getVoltage;
+
 /** S T R U C T U R E S ******************************************************/
 typedef union MOTORS_DATA_PACKET {
     byte _byte[USBGEN_EP_SIZE]; /*For byte access*/
@@ -70,6 +73,6 @@ typedef union MOTORS_DATA_PACKET {
 
 /** P U B L I C  P R O T O T Y P E S *****************************************/
 void autoDetectWheels(void);
-void getVoltage(int*);
+//void getVoltage(int*);
 
 #endif /*USER_MOTORS_H*/

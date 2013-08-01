@@ -30,6 +30,13 @@ typedef struct _WHEELS {
     MOTOR right;
 } WHEELS;
 
+typedef void (*myFunc)(unsigned int, byte);
+myFunc moveLeftMOTOR;
+myFunc moveRightMOTOR;
+
+//typedef void (*fGetVolt)(int *);
+fGetVolt getVoltage;
+
 /** V A R I A B L E S ********************************************************/
 #pragma udata
 
@@ -56,7 +63,7 @@ const uTab userMotorsModuleTable = {&UserMotorsInit, &UserMotorsRelease, "motors
 byte current_id = 0;
 byte index = 0;
 byte list_motors[2];
-byte CC_MOTORS = 0;
+byte MOTORS_T;
 
 void moveRightCC(unsigned int vel, byte sen){
     /*
@@ -110,20 +117,12 @@ void moveLeftCC(unsigned int vel, byte sen){
     }
 }
 
-void moveRightMOTOR(unsigned int vel, byte sen){
-    if (CC_MOTORS) {
-        moveRightCC(vel, sen);
-    } else {
-        endlessTurn(wheels.right.id, vel, sen);
-    }
+void moveRightAX(unsigned int vel, byte sen){
+    endlessTurn(wheels.right.id, vel, sen);
 }
 
-void moveLeftMOTOR(unsigned int vel, byte sen){
-    if (CC_MOTORS) {
-        moveLeftCC(vel, sen);
-    } else {
-        endlessTurn(wheels.left.id, vel, sen);
-    }
+void moveLeftAX(unsigned int vel, byte sen){
+    endlessTurn(wheels.left.id, vel, sen);
 }
 
 void stopRight() {
@@ -156,25 +155,21 @@ void forwardLeft() {
 }
 
 void sexyMotorMoveStart() {
-    if (!CC_MOTORS) {
-        setEndlessTurnMode(wheels.left.id, 1);
-        setEndlessTurnMode(wheels.right.id, 1);
-    }
     registerT0event(TIME_UNIT, &forwardLeft);
 }
 
-void getVoltage(int *data_received) {
+void getVoltAX(int *data_received) {
     byte data [2];
     int err = 0;
     byte id;
-    if (CC_MOTORS) {
-        *data_received = 255;
-    } else {
-        data[0] = PRESENT_VOLTAGE;
-        data[1] = 0x01; /*length of data to read*/
-        ax12SendPacket(wheels.left.id, 0x02, READ_DATA, data);
-        ax12ReadPacket(&id, &err, data_received);
-    }
+    data[0] = PRESENT_VOLTAGE;
+    data[1] = 0x01; /*length of data to read*/
+    ax12SendPacket(wheels.left.id, 0x02, READ_DATA, data);
+    ax12ReadPacket(&id, &err, data_received);
+}
+
+void getVoltCC(int *data_received) {
+    *data_received = 255;
 }
 
 void ConfigWheels(byte id) {
@@ -227,12 +222,21 @@ void TryAutoDetect() {
 }
 
 void autoDetectWheels() {
-    CC_MOTORS = ((PORTC & MASK_SHIELD) == SHIELD_CC);
-    if (CC_MOTORS) {
+    if ((PORTC & MASK_SHIELD) == SHIELD_CC) {
+        moveLeftMOTOR = &moveLeftCC;
+        moveRightMOTOR = &moveRightCC;
+        MOTORS_T = MOTORS_SHIELD_CC;
+        getVoltage = &getVoltCC;
         TRISD = 0x09;
         PORTD = 0x00;
         sexyMotorMoveStart();
     } else {
+        moveLeftMOTOR = &moveLeftAX;
+        moveRightMOTOR = &moveRightAX;
+        MOTORS_T = MOTORS_AX12;
+        getVoltage = &getVoltAX;
+        setEndlessTurnMode(wheels.left.id, 1);
+        setEndlessTurnMode(wheels.right.id, 1);
         registerT0event(TIME_UNIT, &TryAutoDetect);
     }
 }
@@ -332,11 +336,7 @@ void UserMotorsReceived(byte* recBuffPtr, byte len, byte handler) {
 
         case GET_TYPE:
             ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[0];
-            if (CC_MOTORS) {
-                ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[1] = MOTORS_SHIELD_CC;
-            } else {
-                ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[1] = MOTORS_AX12;
-            }
+            ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[1] = MOTORS_T;
             userMotorsCounter = 0x02;
             break;
 
