@@ -31,8 +31,8 @@
 
 //		tamaño de los endpoints(va a quedar deprecated)
 
-#define USBGEN_EP_SIZE 64
-#define MAX_EP_NUMBER           3          // max nro de endpoints
+#define USBGEN_EP_SIZE   64
+#define MAX_EP_NUMBER     3          // max nro de endpoints
 
 //Memory Types for Control Transfer - used in USB_DEVICE_STATUS
 
@@ -104,8 +104,8 @@ extern byte usb_device_state;
 extern USB_DEVICE_STATUS usb_stat;
 extern byte usb_active_cfg;
 extern byte usb_alt_intf[MAX_NUM_INT];
-extern byte epOutSize[MAX_EP_NUMBER];
-extern byte epInSize[MAX_EP_NUMBER];
+//extern byte epOutSize[MAX_EP_NUMBER];
+//extern byte epInSize[MAX_EP_NUMBER];
 extern rom unsigned char ROM_MAX_EP_NUMBER;
 
 extern volatile far BDT ep0Bo;          //Endpoint #0 BD Out
@@ -144,12 +144,12 @@ extern volatile far BDT ep15Bi;          //Endpoint #15 BD In
 extern volatile far CTRL_TRF_SETUP SetupPkt;
 extern volatile far CTRL_TRF_DATA CtrlTrfData;
 
-extern volatile far byte ep1_out_buffer[64];
-extern volatile far byte ep1_in_buffer[64];
-extern volatile far byte ep2_out_buffer[64];
-extern volatile far byte ep2_in_buffer[64];
-extern volatile far byte ep3_out_buffer[64];
-extern volatile far byte ep3_in_buffer[64];
+extern volatile far byte ep1_out_buffer[USBGEN_EP_SIZE];
+extern volatile far byte ep1_in_buffer[USBGEN_EP_SIZE];
+extern volatile far byte ep2_out_buffer[USBGEN_EP_SIZE];
+extern volatile far byte ep2_in_buffer[USBGEN_EP_SIZE];
+extern volatile far byte ep3_out_buffer[USBGEN_EP_SIZE];
+extern volatile far byte ep3_in_buffer[USBGEN_EP_SIZE];
 // P U B L I C  P R O T O T Y P E S *****************************************
 
 void USBInitEPs(void);

@@ -62,26 +62,29 @@ void USBGenRead2(void){
 	len = PACKET_MTU-1;
 	for(ep=1;ep<=ram_max_ep_number;ep++){
             if(!EPOUT_IS_BUSY(ep)){
-	        /*
-	         * Adjust the expected number of bytes to equal
-	         * the actual number of bytes received.
-	         */
-	        if(len > EPOUT_SIZE(ep))
-	        	len = EPOUT_SIZE(ep);
-		//antes de copiar el dato en el buffer tengo que mirar de que 
-		//handler es y pedir el buffer de receive del modulo de usuario
-		dph = (HM_DATA_PACKET_HEADER*)EPBUFFEROUT(ep);
-		handlerReceivedFuncion[dph->handlerNumber](EPBUFFEROUT(ep)+SIZE__HM_DATA_PACKET_HEADER,len-SIZE__HM_DATA_PACKET_HEADER, dph->handlerNumber);
-		/*
-	         * Prepare dual-ram buffer for next OUT transaction
-	         */
-		EPOUT_SIZE(ep) = getEPSizeOUT(ep);
-	        //mUSBBufferReady(USBGEN_BD_OUT);
-		if (ep < (byte) 3){
+                /*
+                 * Adjust the expected number of bytes to equal
+                 * the actual number of bytes received.
+                 */
+                if(len > EPOUT_SIZE(ep))
+                    len = EPOUT_SIZE(ep);
+                //antes de copiar el dato en el buffer tengo que mirar de que
+                //handler es y pedir el buffer de receive del modulo de usuario
+                dph = (HM_DATA_PACKET_HEADER*)EPBUFFEROUT(ep);
+                handlerReceivedFuncion[dph->handlerNumber](EPBUFFEROUT(ep)+SIZE__HM_DATA_PACKET_HEADER,len-SIZE__HM_DATA_PACKET_HEADER, dph->handlerNumber);
+                /*
+                 * Prepare dual-ram buffer for next OUT transaction
+                 */
+                EPOUT_SIZE(ep) = getEPSizeOUT(ep);
+
+                //mUSBBufferReady(USBGEN_BD_OUT);
+
+                mUSBBufferReady2(EPOUT_BDT(ep));
+		/*if (ep < (byte) 3){
 			mUSBBufferReady2(EPOUT_BDT(ep));
 		}else{
 			mUSBBufferReady3(EPOUT_BDT(ep));
-		}
+		}*/
 	    }//end if
 	}    
 }//end USBGenRead
@@ -102,8 +105,8 @@ void USBGenWrite2(byte handler, byte len) {
 	* Value of len should be equal to or smaller than USBGEN_EP_SIZE.
 	* This check forces the value of len to meet the precondition.
 	*/
-	if(len > getEPSizeIN(ep)-SIZE__HM_DATA_PACKET_HEADER)
-	    len = getEPSizeIN(ep)-SIZE__HM_DATA_PACKET_HEADER;
+	if(len > PACKET_DATA_SIZE)
+	    len = PACKET_DATA_SIZE;
 
 	//seteo los datos del header
 	hn_opType.handlerNumber=handler;
@@ -120,14 +123,16 @@ void USBGenWrite2(byte handler, byte len) {
 	//TODO if (!EPIN_IS_BUSY(ep)) { //testear deberia sustituir el if(!mUSBGenTxIsBusy()) en los modulos de user
 	/*TODO deshardcodear la invocacion segun el numero de endpoint, hay que hacerlo segun el tipo de endpoint, 
 	 *mUSBBufferReady3 solo debe de invocarse para los endpoints interrupt*/
- 
+
+        mUSBBufferReady2(EPIN_BDT(ep));
+        
 	/*segun el tipo de transferencia es el BufferReady que tengo que invocar*/
-	if(ep < (byte) 3){
+	/*if(ep < (byte) 3){
 		mUSBBufferReady2(EPIN_BDT(ep));
 	}
 	else{
 		mUSBBufferReady3(EPIN_BDT(ep));
-	}		
+	}*/
 }//end USBGenWrite
 
 byte newHandlerTableEntry(byte endPIn, rom near char* uTableDirection){
@@ -210,7 +215,6 @@ void initHandlerManager(void){
     epHandlerMap[MAX_PORTS + 1].uTableDirection = getUserTableDirection((byte *) modulename);
     autoDetectWheels();
     PNPInit(MAX_PORTS + 1);
-
 }
 
 respType removeHandlerTableEntry(byte handler){
@@ -260,13 +264,13 @@ byte* getSharedBuffer(byte handler){
 
 byte getEPSizeOUT(byte ep){
 	// TODO deshardcodear el 64 !!
-	return 64;  
+	return USBGEN_EP_SIZE;
 }
 
 
 byte getEPSizeIN(byte ep){
 	// TODO deshardcodear el 64 !!
-	return 64;  
+	return USBGEN_EP_SIZE;
 }
 
 byte getMaxHandler(void){

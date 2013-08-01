@@ -14,9 +14,10 @@
 #include "user/usb4butia.h"
 
 /** D E F I N I T I O N S ****************************************************/
-#define PACKET_MTU 256
-#define PACKET_DATA_SIZE (256-3)
+#define PACKET_MTU       (byte) 64
+#define PACKET_DATA_SIZE (byte) 61
 #define MAX_HANDLERS     (byte) 14 //20 es el maximo de handlers;
+#define SIZE__HM_DATA_PACKET_HEADER 3 //TODO que se calcule en tiempo de compilacion en base  la estructura
 
 /** S T R U C T U R E S ******************************************************/
 
@@ -49,9 +50,6 @@ typedef union _HANDLER_OPTYPE {
 	};
 } HANDLER_OPTYPE;	 
 
-//TODO que se calcule en tiempo de compilacion en base  la estructura
-#define SIZE__HM_DATA_PACKET_HEADER 3 //tendria que calcularse solo
-				
 typedef enum _opType {
 	SEND 	= 0x00,
 	CONFIG  = 0x01,
