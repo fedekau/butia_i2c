@@ -81,7 +81,7 @@ void UserLoopBackInit(byte usrLoopbackHandler) {
 
 void UserLoopBackProcessIO(void) {
 
-    if ((usb_device_state < CONFIGURED_STATE) || (UCONbits.SUSPND == 1)) return;
+    if ((usb_device_state < CONFIGURED_STATE) || (UCONbits.SUSPND == (unsigned) 1)) return;
     // here enter the code that want to be called periodically, per example interaction with buttons and leds
 
 }//end ProcessIO
@@ -145,18 +145,8 @@ void UserLoopBackReceived(byte* recBuffPtr, byte len, byte handler) {
             break;
     }
     
-    /*
-    //para que devuelva el doble de lo que recibe
-    for (UserLoopBackCounter=0 ; UserLoopBackCounter < len ; UserLoopBackCounter++){
-     *(sendBufferUsrLoopback+(UserLoopBackCounter+len))= *(recBuffPtr+UserLoopBackCounter); // TODO pensar algo mas eficiente
-    }
-UserLoopBackCounter=len*2; //por las dudas
-     */
+    USBGenWrite2(handler, UserLoopBackCounter);
 
-    if (UserLoopBackCounter != 0) {
-        if (!mUSBGenTxIsBusy())
-            USBGenWrite2(handler, UserLoopBackCounter);
-    }//end if
 }//end UserLoopBackReceived
 
 /** EOF usr_skeleton.c ***************************************************************/
