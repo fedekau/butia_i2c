@@ -21,18 +21,24 @@
 #define R_DIST_MAX 40654
 #define R_LIGHT_MIN 7728
 #define R_LIGHT_MAX 9204
-#define R_GPIO_MIN 65280
-#define R_GPIO_MAX 65535
 #define R_VOLT_MIN 24730
 #define R_VOLT_MAX 27887
 #define R_RES_MIN 19162
 #define R_RES_MAX 21992
 #define R_LED_MAX 1815
 #define R_LED_MIN 1493
-#define R_SHIELD_CC_MAX 12531
-#define R_SHIELD_CC_MIN 10622
+#define R_MODULE_A_MAX 57740
+#define R_MODULE_A_MIN 56253
+#define R_MODULE_B_MAX 54704
+#define R_MODULE_B_MIN 52766
+#define R_MODULE_C_MAX 48509
+#define R_MODULE_C_MIN 45861
 
-#define R_LUZ 9999
+//#define R_SHIELD_CC_MAX 12531
+//#define R_SHIELD_CC_MIN 10622
+//#define R_GPIO_MIN 65280
+//#define R_GPIO_MAX 65535
+
 #define R_ACCELEROMETER 9999
 #define R_PRECION
 #define R_TEMPERATURE 9999
@@ -46,11 +52,10 @@
 /*Actuators*/
 #define R_DCMOTOR 9999
 #define R_RELAY 9999
-#define R_LED 9999
 #define R_BUZZER 9999
 
 
-#define MAX_DEVICES (byte) 10 /*Max cant of senssor/actuator type*/
+#define MAX_DEVICES (byte) 11 /*Max cant of senssor/actuator type*/
 /*TODO review this time, the micro is running @20MHZ with a pipeline of 4steps => 20000000/4 = 5000000 instructions per second */
 #define PNP_DETECTION_TIME 20000
 

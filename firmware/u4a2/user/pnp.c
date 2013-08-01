@@ -9,11 +9,12 @@ rom const device_resistance table_device_id_resistance[MAX_DEVICES] = {
     { "button", R_BOTON_MIN, R_BOTON_MAX},
     { "grey", R_GREY_MIN, R_GREY_MAX},
     { "distanc", R_DIST_MIN, R_DIST_MAX},
-    { "gpio", R_GPIO_MIN, R_GPIO_MAX},
     { "volt", R_VOLT_MIN, R_VOLT_MAX},
     { "res", R_RES_MIN, R_RES_MAX},
     { "led", R_LED_MIN, R_LED_MAX},
-    { "shld_cc", R_SHIELD_CC_MIN, R_SHIELD_CC_MAX}
+    { "moduleA", R_MODULE_A_MIN, R_MODULE_A_MAX},
+    { "moduleB", R_MODULE_B_MIN, R_MODULE_B_MAX},
+    { "moduleC", R_MODULE_C_MIN, R_MODULE_C_MAX}
 };
 
 #pragma udata 
