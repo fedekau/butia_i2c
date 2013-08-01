@@ -14,17 +14,17 @@
 /** S T R U C T U R E S ******************************************************/
 
 typedef union _endpoint{
-	byte endPoint;       // Acceso crudo del  byte
-	struct {             // Acceso de a bits a cada campo
-          unsigned EPNum:4;
-          unsigned EPDir:1;  // 1 1n 0 0ut
-	  unsigned empty:1;  // criptico pero eficiente ;) 1 byte ahorrado es un byte ganado
-	  enum {
-		INT  = 0x01,
-		ISO  = 0x02,
-		BULK = 0x03
-	  }type;
-	};
+    byte endPoint;       // Acceso crudo del  byte
+    struct {             // Acceso de a bits a cada campo
+        unsigned EPNum:4;
+        unsigned EPDir:1;  // 1 1n 0 0ut
+        unsigned empty:1;  // criptico pero eficiente ;) 1 byte ahorrado es un byte ganado
+        enum {
+            ISO  = 0x01,
+            BULK = 0x02,
+            INT  = 0x03
+        }type;
+    };
 }endpoint;
 
 /** P U B L I C  P R O T O T Y P E S *****************************************/
