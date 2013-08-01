@@ -57,8 +57,9 @@ void PortInit(byte i) {
     setHandlerReceiveFunction(i, &PortReceived);
     // initialize the send buffer, used to send data to the PC
     sendBufferPort = getSharedBuffer(i);
-    board_ports[i - 1].change_port_direction(IN);
-}//end UserLedAmarilloInit
+    //get port where sensor/actuator is connected and set to OUT mode
+    getPortDescriptor(i)->change_port_direction(IN);
+}//end PortInit
 
 void PortProcessIO(void) {
 
@@ -104,9 +105,9 @@ void PortRelease(byte i) {
 
 void PortReceived(byte* recBuffPtr, byte len, byte handler) {
     byte PortCounter = 0;
-    WORD aux;
-    port_descriptor port;
-    port = board_ports[0]; //it's harcode to port 1
+    //WORD aux;
+    //port_descriptor port;
+    //port = board_ports[0]; //it's harcode to port 1
 
     switch (((PORT_DATA_PACKET*) recBuffPtr)->CMD) {
         case READ_VERSION:
