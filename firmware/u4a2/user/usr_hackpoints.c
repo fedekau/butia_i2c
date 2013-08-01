@@ -12,8 +12,8 @@
 #include "user/usr_hackpoints.h"
 #include "io_cfg.h"              /* I/O pin mapping */
 #include "user/handlerManager.h"
-#include "dynamicPolling.h"   
-#include "usb4all/proxys/T0Proxy.h"
+#include "dynamicPolling.h"
+
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata 

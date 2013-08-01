@@ -5,7 +5,6 @@
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>../system/typedefs.h</itemPath>
-      <itemPath>../usb4all/proxys/T0Proxy.h</itemPath>
       <itemPath>../usb4all/proxys/T0Service.h</itemPath>
       <itemPath>../user/adminModule.h</itemPath>
       <itemPath>../user/descriptorManager.h</itemPath>
@@ -53,7 +52,6 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>../usb4all/proxys/T0Proxy.c</itemPath>
       <itemPath>../usb4all/proxys/T0Service.c</itemPath>
       <itemPath>../user/adminModule.c</itemPath>
       <itemPath>../user/descriptorManager.c</itemPath>

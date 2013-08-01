@@ -57,7 +57,7 @@ void UserLoopBackInit(byte usrLoopbackHandler) {
     // add my receive function to the handler module, to be called automatically when the pc sends data to the user module
     setHandlerReceiveFunction(usrLoopbackHandler, &UserLoopBackReceived);
     // add my receive pooling function to the dynamic pooling module, to be called periodically
-    res = addPollingFunction(&UserLoopBackProcessIO);
+    //res = addPollingFunction(&UserLoopBackProcessIO);
     // initialize the send buffer, used to send data to the PC
     sendBufferUsrLoopback = getSharedBuffer(usrLoopbackHandler);
 }//end UserLoopBackInit
