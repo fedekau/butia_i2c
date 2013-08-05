@@ -1,0 +1,31 @@
+Cmp-Mod V01 Created by CvPcb (2013-mar-13)-testing date = lun 05 ago 2013 17:39:13 UYT
+
+BeginCmp
+TimeStamp = /51FFFDA5;
+Reference = C1;
+ValeurCmp = CAPAPOL;
+IdModule  = C1;
+EndCmp
+
+BeginCmp
+TimeStamp = /51FFF8A5;
+Reference = J1;
+ValeurCmp = RJ45;
+IdModule  = RJ45_8;
+EndCmp
+
+BeginCmp
+TimeStamp = /51FFF896;
+Reference = R1;
+ValeurCmp = R;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /51FFF87D;
+Reference = U1;
+ValeurCmp = LM35;
+IdModule  = TO92;
+EndCmp
+
+EndListe
