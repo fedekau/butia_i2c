@@ -30,19 +30,15 @@ typedef struct _WHEELS {
     MOTOR right;
 } WHEELS;
 
-typedef void (*myFunc)(unsigned int, byte);
-myFunc moveLeftMOTOR;
-myFunc moveRightMOTOR;
-
-//typedef void (*fGetVolt)(int *);
-fGetVolt getVoltage;
-
 /** V A R I A B L E S ********************************************************/
 #pragma udata
 
 /* robot wheels */
 WHEELS wheels;
 byte* sendBufferUsrMotors; // buffer to send data
+fMoveMotor moveLeftMOTOR;
+fMoveMotor moveRightMOTOR;
+fGetVolt getVolt;
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
 void UserMotorsProcessIO(void);
@@ -63,14 +59,14 @@ const uTab userMotorsModuleTable = {&UserMotorsInit, &UserMotorsRelease, "motors
 byte current_id = 0;
 byte index = 0;
 byte list_motors[2];
-byte MOTORS_T;
+byte MOTORS_T = MOTORS_AX12;
 
 void moveRightCC(unsigned int vel, byte sen){
     /*
      * ENABLE A = RD1
      * SENTIDO A : RD5 - RD6
      */
-    TRISD = 0x09;
+    //TRISD = 0x09;
     if (vel == (unsigned) 0) {
         /* detener motor derecho */
         PORTDbits.RD5 = 0;
@@ -96,7 +92,7 @@ void moveLeftCC(unsigned int vel, byte sen){
      * ENABLE B = RD2
      * SENTIDO B : RD4 - RD7
      */
-    TRISD = 0x09;
+    //TRISD = 0x09;
     if (vel == (unsigned) 0) {
         /* detener motor izquierdo */
         PORTDbits.RD4 = 0;
@@ -172,6 +168,10 @@ void getVoltCC(int *data_received) {
     *data_received = 255;
 }
 
+void getVoltage(int *data_received) {
+    getVolt(data_received);
+}
+
 void ConfigWheels(byte id) {
     setEndlessTurnMode(id, 1);
     writeInfo(id, CW_COMPLIANCE_MARGIN, 0);
@@ -226,7 +226,7 @@ void autoDetectWheels() {
         moveLeftMOTOR = &moveLeftCC;
         moveRightMOTOR = &moveRightCC;
         MOTORS_T = MOTORS_SHIELD_CC;
-        getVoltage = &getVoltCC;
+        getVolt = &getVoltCC;
         TRISD = 0x09;
         PORTD = 0x00;
         sexyMotorMoveStart();
@@ -234,11 +234,13 @@ void autoDetectWheels() {
         moveLeftMOTOR = &moveLeftAX;
         moveRightMOTOR = &moveRightAX;
         MOTORS_T = MOTORS_AX12;
-        getVoltage = &getVoltAX;
-        setEndlessTurnMode(wheels.left.id, 1);
-        setEndlessTurnMode(wheels.right.id, 1);
+        getVolt = &getVoltAX;
         registerT0event(TIME_UNIT, &TryAutoDetect);
     }
+}
+
+byte getMotorType() {
+    return MOTORS_T;
 }
 
 /******************************************************************************

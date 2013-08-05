@@ -33,7 +33,7 @@ extern const port_descriptor board_ports[MAX_PORTS];
 
 byte get_device_type(WORD resistValue);
 
-const void initPorts(void);
+const void initPorts(byte motors_cc);
 
 const port_descriptor * getPortDescriptor(byte handler);
 

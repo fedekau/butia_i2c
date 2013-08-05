@@ -35,7 +35,7 @@
 #define SHIELD_CC   (byte) 0x04
 
 typedef void (*fGetVolt)(int *);
-//fGetVolt getVoltage;
+typedef void (*fMoveMotor)(unsigned int, byte);
 
 /** S T R U C T U R E S ******************************************************/
 typedef union MOTORS_DATA_PACKET {
@@ -73,6 +73,7 @@ typedef union MOTORS_DATA_PACKET {
 
 /** P U B L I C  P R O T O T Y P E S *****************************************/
 void autoDetectWheels(void);
-//void getVoltage(int*);
+void getVoltage(int*);
+byte getMotorType(void);
 
 #endif /*USER_MOTORS_H*/

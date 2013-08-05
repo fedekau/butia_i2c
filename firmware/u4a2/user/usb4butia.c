@@ -416,7 +416,7 @@ WORD getDetectionPinValue6(void){
 /******************************************************************************/
 
 
-const void initPorts(void){
+const void initPorts(byte motors_cc){
     byte i;
 
     /*Confiugures pins to be analogic*/
@@ -428,8 +428,13 @@ const void initPorts(void){
     ADCON2bits.ACQT = 0x07; /*Acquisition Time Select*/
     ADCON2bits.ADCS = 0x04; /*Acquisition Time Select Fosc/4*/
 
-    PORTD = 0x00;
-    TRISD = 0xFF;
+    if (motors_cc) {
+        TRISD = 0x09;
+    } else {
+        PORTD = 0x00;
+        TRISD = 0xFF;
+    }
+    
     for(i = 0; i < MAX_PORTS; i++)
         board_ports[i].change_port_direction(_IN);
 }

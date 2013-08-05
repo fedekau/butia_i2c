@@ -1,6 +1,7 @@
 #include "pnp.h"
 #include "handlerManager.h"
 #include "loaderModule.h"
+#include "user/usr_motors.h"
 
 /** VARIABLES INITIALIZED, CONST ROM **/
 rom const device_resistance table_device_id_resistance[MAX_DEVICES] = {
@@ -49,7 +50,7 @@ void initTableDetectedDevice(void) {
 
 void PNPInit(byte i) {
     byte modulename[8];
-
+    
     if (PNPHandler) return;
     PNPHandler = i;
     // add my receive function to the handler module, to be called automatically when the pc sends data to the user module
@@ -59,8 +60,11 @@ void PNPInit(byte i) {
     // initialize the send buffer, used to send data to the PC
     sendBufferPNP = getSharedBuffer(PNPHandler);
     pnpEndpoint = getPnPEndpoint();
-
-    initPorts(); //USB4butia init port
+    if (getMotorType() == SHIELD_CC) {
+        initPorts(1);
+    } else {
+        initPorts(0);
+    }
     initTableDetectedDevice(); //All Disconected
 
     modulename[0] = 'p';
