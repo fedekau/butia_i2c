@@ -16,7 +16,6 @@
 #include "system/usb/usb.h"
 #include "io_cfg.h"   
 #include <p18cxxx.h>
-#include "user/userTemp.h"
 #include "usb4all/boot/boot.h"
 #include <string.h>
 #include <EEP.h>

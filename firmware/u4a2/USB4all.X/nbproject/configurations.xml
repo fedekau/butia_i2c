@@ -38,6 +38,7 @@
       <itemPath>../user/usr_moduleA.h</itemPath>
       <itemPath>../user/usr_moduleB.h</itemPath>
       <itemPath>../user/usr_moduleC.h</itemPath>
+      <itemPath>../user/usr_temp.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LibraryFiles"
                    displayName="Library Files"
@@ -86,6 +87,7 @@
       <itemPath>../user/usr_moduleA.c</itemPath>
       <itemPath>../user/usr_moduleB.c</itemPath>
       <itemPath>../user/usr_moduleC.c</itemPath>
+      <itemPath>../user/usr_temp.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -129,10 +131,10 @@
         <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
       </makeCustomizationType>
       <C18>
-        <property key="code-model" value="mS"/>
-        <property key="data-model" value="Oa-"/>
+        <property key="code-model" value="ms"/>
+        <property key="data-model" value="oa-"/>
         <property key="default-char-unsigned" value="false"/>
-        <property key="enable-all-optimizations" value="false"/>
+        <property key="enable-all-optimizations" value="true"/>
         <property key="enable-int-promotion" value="false"/>
         <property key="enable-multi-bank-stack-model" value="false"/>
         <property key="enable-ob" value="false"/>
@@ -148,7 +150,7 @@
         <property key="enable-ow" value="false"/>
         <property key="extra-include-directories"
                   value="../user;../usb4all/proxys;../usb4all/dynamicISR;../usb4all/usbconf/usballoc;../usb4all/usbconf/desc;../system;../system/usb;../autofiles;.."/>
-        <property key="optimization-master" value="Disable all"/>
+        <property key="optimization-master" value="Enable all"/>
         <property key="preprocessor-macros" value=""/>
         <property key="procedural-abstraction-passes" value="9"/>
         <property key="storage-class" value="sca"/>
