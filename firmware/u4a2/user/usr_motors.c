@@ -40,7 +40,6 @@ fMoveMotor moveRightMOTOR;
 fGetVolt getVolt;
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void UserMotorsProcessIO(void);
 void UserMotorsInit(byte handler);
 void UserMotorsReceived(byte*, byte, byte);
 void UserMotorsRelease(byte handler);
@@ -264,26 +263,6 @@ void UserMotorsInit(byte handler) {
     sendBufferUsrMotors = getSharedBuffer(handler);
 }
 
-/******************************************************************************
- * Function:        UserAX12ProcessIO(void)
- *
- * PreCondition:    None
- *
- * Input:           None
- *
- * Output:          None
- *
- * Side Effects:    None
- *
- * Overview:        This function is registered in the dinamic polling, who call ir periodically to process the IO interaction
- *                    int the PIC, also it can comunicate things to the pc by the USB
- *
- * Note:            None
- *****************************************************************************/
-
-void UserMotorsProcessIO(void) {
-    if ((usb_device_state < CONFIGURED_STATE) || (UCONbits.SUSPND == (unsigned) 1)) return;
-}/*end ProcessIO*/
 
 /******************************************************************************
  * Function:        UserAX12Release(byte i)

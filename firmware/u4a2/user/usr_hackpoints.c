@@ -20,7 +20,6 @@
 byte* sendBufferHackPoints; /* buffer to send data*/
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void HackPointsProcessIO(void);
 void HackPointsInit(byte handler);
 void HackPointsReceived(byte*, byte, byte);
 void HackPointsRelease(byte handler);
@@ -63,8 +62,6 @@ void HackPointsInit(byte handler) {
     TRISD = INPUT;
 }/*end UserLedAmarilloInit*/
 
-void HackPointsProcessIO(void) {
-}/*end ProcessIO */
 
 /******************************************************************************
  * Function:        HACK_POINTSRelease(byte i)

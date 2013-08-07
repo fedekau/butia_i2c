@@ -24,7 +24,6 @@ byte* sendBufferPNP; // buffer to send data
 
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void PNPProcessIO(void);
 void PNPInit(byte i);
 void PNPReceived(byte*, byte, byte);
 void PNPRelease(byte i);
@@ -55,8 +54,6 @@ void PNPInit(byte i) {
     PNPHandler = i;
     // add my receive function to the handler module, to be called automatically when the pc sends data to the user module
     setHandlerReceiveFunction(PNPHandler, &PNPReceived);
-    // add my receive pooling function to the dynamic pooling module, to be called periodically
-    //res = addPollingFunction(&UserPNPProcessIO);
     // initialize the send buffer, used to send data to the PC
     sendBufferPNP = getSharedBuffer(PNPHandler);
     pnpEndpoint = getPnPEndpoint();
@@ -91,7 +88,6 @@ void PNPInit(byte i) {
 void PNPRelease(byte i) {
     unsetHandlerReceiveBuffer(i);
     unsetHandlerReceiveFunction(i);
-    //removePoolingFunction(&UserPNPProcessIO);
     unregisterT0event(&hotplug_pnp);
 }
 

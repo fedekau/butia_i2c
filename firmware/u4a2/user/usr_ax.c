@@ -22,7 +22,6 @@
 byte* sendBufferUsrAX;
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void UserAX12ProcessIO(void);
 void UserAX12Init(byte handler);
 void UserAX12Received(byte*, byte, byte);
 void UserAX12Release(byte handler);
@@ -38,10 +37,6 @@ uTab userAX12ModuleTable = {&UserAX12Init, &UserAX12Release, "ax"};
 void UserAX12Init(byte handler) {
     setHandlerReceiveFunction(handler, &UserAX12Received);
     sendBufferUsrAX = getSharedBuffer(handler);
-}
-
-void UserAX12ProcessIO(void) {
-    if ((usb_device_state < CONFIGURED_STATE) || (UCONbits.SUSPND == (unsigned) 1)) return;
 }
 
 void UserAX12Release(byte handler) {

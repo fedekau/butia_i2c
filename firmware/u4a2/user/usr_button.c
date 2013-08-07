@@ -17,7 +17,6 @@
 byte* sendBufferUsrButton; /* buffer to send data*/
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void UserButtonProcessIO(void);
 void UserButtonInit(byte handler);
 void UserButtonReceived(byte*, byte, byte);
 void UserButtonRelease(byte handler);
@@ -56,28 +55,6 @@ void UserButtonInit(byte handler) {
     getPortDescriptor(handler)->change_port_direction(IN);
 }/*end UserButtonInit*/
 
-/******************************************************************************
- * Function:        UserButtonProcessIO(void)
- *
- * PreCondition:    None
- *
- * Input:           None
- *
- * Output:          None
- *
- * Side Effects:    None
- *
- * Overview:        This function is registered in the dinamic polling, who call ir periodically to process the IO interaction
- *					int the PIC, also it can comunicate things to the pc by the USB	
- *
- * Note:            None
- *****************************************************************************/
-
-void UserButtonProcessIO(void) {
-    if ((usb_device_state < CONFIGURED_STATE) || (UCONbits.SUSPND == (unsigned) 1)) return;
-    /* here enter the code that want to be called periodically, per example interaction with buttons and leds*/
-
-}/*end ProcessIO*/
 
 /******************************************************************************
  * Function:        UserButtonRelease(byte i)

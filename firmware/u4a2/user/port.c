@@ -12,16 +12,13 @@
 #include "user/port.h"
 #include "io_cfg.h"              // I/O pin mapping
 #include "user/handlerManager.h"
-#include "dynamicPolling.h"
 
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata 
 
-
 byte* sendBufferPort; // buffer to send data
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void PortProcessIO(void);
 void PortInit(byte i);
 void PortReceived(byte*, byte, byte);
 void PortRelease(byte i);
@@ -61,9 +58,6 @@ void PortInit(byte i) {
     getPortDescriptor(i)->change_port_direction(IN);
 }//end PortInit
 
-void PortProcessIO(void) {
-
-}//end ProcessIO
 
 /******************************************************************************
  * Function:        PortRelease(byte i)

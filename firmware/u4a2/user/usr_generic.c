@@ -19,7 +19,6 @@
 byte* sendBufferUsrGeneric; /* buffer to send data*/
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void UserGenericProcessIO(void);
 void UserGenericInit(byte handler);
 void UserGenericReceived(byte*, byte, byte);
 void UserGenericRelease(byte handler);
@@ -69,26 +68,6 @@ void UserGenericInit(byte handler) {
     getPortDescriptor(handler)->change_port_direction(IN);
 }/*end UserModuleAInit*/
 
-/******************************************************************************
- * Function:        UserGenericProcessIO(void)
- *
- * PreCondition:    None
- *
- * Input:           None
- *
- * Output:          None
- *
- * Side Effects:    None
- *
- * Overview:        This function is registered in the dinamic polling, who
- *                  calls it periodically to process the IO interaction in the
- *                  PIC, it also can comunicate things to the pc by the USB.
- *
- * Note:            None
- *****************************************************************************/
-void UserGenericProcessIO(void) {
-    if ((usb_device_state < CONFIGURED_STATE) || (UCONbits.SUSPND == (unsigned) 1)) return;
-}/*end UserGenericProcessIO*/
 
 /******************************************************************************
  * Function:        UserGenericRelease(byte i)
