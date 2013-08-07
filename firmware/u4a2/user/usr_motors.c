@@ -13,7 +13,6 @@
 #include "user/usr_motors.h"
 #include "io_cfg.h"              // I/O pin mapping
 #include "user/handlerManager.h"
-#include "dynamicPolling.h"
 #include "usb4all/proxys/T0Service.h"
 #include "pnp.h"
 
@@ -42,10 +41,10 @@ fGetVolt getVolt;
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
 void UserMotorsProcessIO(void);
-void UserMotorsInit(byte i);
+void UserMotorsInit(byte handler);
 void UserMotorsReceived(byte*, byte, byte);
-void UserMotorsRelease(byte i);
-void sexyMotorMoveStart(void);
+void UserMotorsRelease(byte handler);
+void sexyMotorMoveStart();
 // Table used by the framework to get a fixed reference point to the user module functions defined by the framework
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
@@ -259,10 +258,10 @@ byte getMotorType() {
  *
  * Note:            None
  *****************************************************************************/
-void UserMotorsInit(byte usrMotorsHandler) {
-    setHandlerReceiveFunction(usrMotorsHandler, &UserMotorsReceived);
+void UserMotorsInit(byte handler) {
+    setHandlerReceiveFunction(handler, &UserMotorsReceived);
     // initialize the send buffer, used to send data to the PC
-    sendBufferUsrMotors = getSharedBuffer(usrMotorsHandler);
+    sendBufferUsrMotors = getSharedBuffer(handler);
 }
 
 /******************************************************************************
@@ -303,9 +302,9 @@ void UserMotorsProcessIO(void) {
  * Note:            None
  *****************************************************************************/
 
-void UserMotorsRelease(byte i) {
-    unsetHandlerReceiveBuffer(i);
-    unsetHandlerReceiveFunction(i);
+void UserMotorsRelease(byte handler) {
+    unsetHandlerReceiveBuffer(handler);
+    unsetHandlerReceiveFunction(handler);
 }
 
 /******************************************************************************

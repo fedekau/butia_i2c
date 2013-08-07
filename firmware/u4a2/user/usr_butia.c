@@ -8,7 +8,6 @@
 #include "system/typedefs.h"
 #include "user/usr_butia.h"
 #include "user/handlerManager.h"
-#include "dynamicPolling.h"                              
 #include "usr_motors.h"
 
 /** V A R I A B L E S ********************************************************/
@@ -18,9 +17,9 @@ byte* sendBufferusrButia; // buffer to send data
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
 void UserButiaProcessIO(void);
-void UserButiaInit(byte i);
+void UserButiaInit(byte handler);
 void UserButiaReceived(byte*, byte, byte);
-void UserButiaRelease(byte i);
+void UserButiaRelease(byte handler);
 
 // Table used by te framework to get a fixed reference point to the user module functions defined by the framework 
 /** USER MODULE REFERENCE*****************************************************/
@@ -48,13 +47,11 @@ const uTab UserButiaModuleTable = {&UserButiaInit,&UserButiaRelease,"butia"};
  * Note:            None
  *****************************************************************************/
 
-void UserButiaInit(byte usrButiaHandler){
+void UserButiaInit(byte handler){
     // add my receive function to the handler module, to be called automatically when the pc sends data to the user module
-    setHandlerReceiveFunction(usrButiaHandler,&UserButiaReceived);
-    // add my receive pooling function to the dynamic pooling module, to be called periodically
-    // res = addPollingFunction(&UserButiaProcessIO);
+    setHandlerReceiveFunction(handler,&UserButiaReceived);
     // initialize the send buffer, used to send data to the PC
-    sendBufferusrButia = getSharedBuffer(usrButiaHandler);
+    sendBufferusrButia = getSharedBuffer(handler);
 }//end UserButiaInit
 
 /******************************************************************************
@@ -76,7 +73,7 @@ void UserButiaInit(byte usrButiaHandler){
 
 void UserButiaProcessIO(void){
     if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND== (unsigned) 1)) return;
-	// here enter the code that want to be called periodically, per example interaction with buttons and leds
+    // here enter the code that want to be called periodically, per example interaction with buttons and leds
 	
 }//end ProcessIO
 
@@ -97,9 +94,9 @@ void UserButiaProcessIO(void){
  * Note:            None
  *****************************************************************************/
 
-void UserButiaRelease(byte i){
-    unsetHandlerReceiveBuffer(i);
-    unsetHandlerReceiveFunction(i);
+void UserButiaRelease(byte handler){
+    unsetHandlerReceiveBuffer(handler);
+    unsetHandlerReceiveFunction(handler);
 }
 
 /******************************************************************************

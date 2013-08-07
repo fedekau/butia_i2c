@@ -9,7 +9,6 @@
 #include "user/usr_button.h"
 #include "io_cfg.h"              /* I/O pin mapping */
 #include "user/handlerManager.h"
-#include "dynamicPolling.h"                              
 #include "user/usb4butia.h"
 
 /** V A R I A B L E S ********************************************************/
@@ -19,9 +18,9 @@ byte* sendBufferUsrButton; /* buffer to send data*/
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
 void UserButtonProcessIO(void);
-void UserButtonInit(byte i);
+void UserButtonInit(byte handler);
 void UserButtonReceived(byte*, byte, byte);
-void UserButtonRelease(byte i);
+void UserButtonRelease(byte handler);
 
 /* Table used by te framework to get a fixed reference point to the user module functions defined by the framework */
 /** USER MODULE REFERENCE*****************************************************/
@@ -97,9 +96,9 @@ void UserButtonProcessIO(void) {
  * Note:            None
  *****************************************************************************/
 
-void UserButtonRelease(byte i) {
-    unsetHandlerReceiveBuffer(i);
-    unsetHandlerReceiveFunction(i);
+void UserButtonRelease(byte handler) {
+    unsetHandlerReceiveBuffer(handler);
+    unsetHandlerReceiveFunction(handler);
 }
 
 /******************************************************************************

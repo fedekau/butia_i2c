@@ -12,7 +12,6 @@
 #include "user/usr_led.h"
 #include "io_cfg.h"              // I/O pin mapping
 #include "user/handlerManager.h"
-#include "dynamicPolling.h"
 
 #define LED_ON    (byte) 1
 #define LED_OFF   (byte) 0
@@ -23,10 +22,10 @@
 byte* sendBufferUsrLed; /* buffer to send data */
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void UserLedProcessIO(byte);
-void UserLedInit(byte i);
+void UserLedProcessIO(void);
+void UserLedInit(byte handler);
 void UserLedReceived(byte*, byte, byte);
-void UserLedRelease(byte i);
+void UserLedRelease(byte handler);
 
 // Table used by te framework to get a fixed reference point to the user module functions defined by the framework 
 /** USER MODULE REFERENCE*****************************************************/
@@ -54,16 +53,16 @@ const uTab userLedModuleTable = {&UserLedInit,&UserLedRelease,"led"};
  * Note:            None
  *****************************************************************************/
 
-void UserLedInit(byte usrLedHandler){
+void UserLedInit(byte handler){
     /* add my receive function to the handler module, to be called automatically
      * when the pc sends data to the user module */
-    setHandlerReceiveFunction(usrLedHandler,&UserLedReceived);
+    setHandlerReceiveFunction(handler, &UserLedReceived);
     /* initialize the send buffer, used to send data to the PC */
-    sendBufferUsrLed = getSharedBuffer(usrLedHandler);
+    sendBufferUsrLed = getSharedBuffer(handler);
     /* get port where sensor/actuator is connected and set to OUT mode*/
-    getPortDescriptor(usrLedHandler)->change_port_direction(OUT);
+    getPortDescriptor(handler)->change_port_direction(OUT);
     /*init the LED off*/
-    getPortDescriptor(usrLedHandler)->set_data(LED_OFF);
+    getPortDescriptor(handler)->set_data(LED_OFF);
 }/*end UserLedInit*/
 
 /******************************************************************************
@@ -83,8 +82,7 @@ void UserLedInit(byte usrLedHandler){
  * Note:            None
  *****************************************************************************/
 
-void UserLedProcessIO(byte i){
-
+void UserLedProcessIO(void){
     if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND== (unsigned) 1)) return;
 	/* here enter the code that want to be called periodically,
          * per example interaction with buttons and leds */
@@ -107,11 +105,11 @@ void UserLedProcessIO(byte i){
  * Note:            None
  *****************************************************************************/
 
-void UserLedRelease(byte i){
-    getPortDescriptor(i)->set_data(LED_OFF);
-    getPortDescriptor(i)->change_port_direction(IN);
-    unsetHandlerReceiveBuffer(i);
-    unsetHandlerReceiveFunction(i);    
+void UserLedRelease(byte handler){
+    getPortDescriptor(handler)->set_data(LED_OFF);
+    getPortDescriptor(handler)->change_port_direction(IN);
+    unsetHandlerReceiveBuffer(handler);
+    unsetHandlerReceiveFunction(handler);
 }
 
 /******************************************************************************

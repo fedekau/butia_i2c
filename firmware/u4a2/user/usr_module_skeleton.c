@@ -61,6 +61,8 @@ void UserSkeletonInit(byte usrSkeletonHandler){
     /* get port where sensor/actuator is connected and set to IN/OUT mode
      * as an example, it is set to IN mode */
     getPortDescriptor(usrSkeletonHandler)->change_port_direction(IN);
+    /* init the polling function */
+    //addPollingFunction(UserSkeletonProcessIO);
 }/* end UserSkeletonInit */
 
 /******************************************************************************
@@ -126,6 +128,7 @@ void UserSkeletonProcessIO(void){
 void UserSkeletonRelease(byte usrSkeletonHandler){
     unsetHandlerReceiveBuffer(usrSkeletonHandler);
     unsetHandlerReceiveFunction(usrSkeletonHandler);
+    removePoolingFunction(&UserSkeletonProcessIO);
 }/* end UserSkeletonRelease */
 
 /******************************************************************************

@@ -12,7 +12,6 @@
 #include "user/usr_hackpoints.h"
 #include "io_cfg.h"              /* I/O pin mapping */
 #include "user/handlerManager.h"
-#include "dynamicPolling.h"
 
 
 /** V A R I A B L E S ********************************************************/
@@ -22,9 +21,9 @@ byte* sendBufferHackPoints; /* buffer to send data*/
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
 void HackPointsProcessIO(void);
-void HackPointsInit(byte i);
+void HackPointsInit(byte handler);
 void HackPointsReceived(byte*, byte, byte);
-void HackPointsRelease(byte i);
+void HackPointsRelease(byte handler);
 
 /* Table used by te framework to get a fixed reference point
  * to the user module functions defined by the framework
@@ -59,7 +58,6 @@ void HackPointsInit(byte handler) {
     setHandlerReceiveFunction(handler, &HackPointsReceived);
     /* initialize the send buffer, used to send data to the PC */
     sendBufferHackPoints = getSharedBuffer(handler);
-
     /* setting pins to IN mode*/
     PORTD = ZERO;
     TRISD = INPUT;

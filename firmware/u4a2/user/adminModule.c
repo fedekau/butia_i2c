@@ -221,17 +221,6 @@ void adminReceived(byte* recBuffPtr, byte len, byte admin_handler) {
 
 }//end adminReceived
 
-/* Not used
-void sendMes(char* mensaje, byte len) {
-    byte adminCounter, j;
-    ((AM_PACKET*) sendBufferAdmin)->CMD = MESSAGE;
-    for (j = 0; j < len; j++) {
-        ((AM_PACKET*) sendBufferAdmin)->texto[j] = mensaje[j];
-    }
-    adminCounter = len + 1; //sizeof(adminDataPacket);
-    if (!mUSBGenTxIsBusy())
-        USBGenWrite2(adminHandler, adminCounter);
-}*/
 
 /*****************************************************************************
  * Keep Alive para el watchdog
