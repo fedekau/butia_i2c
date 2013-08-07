@@ -57,7 +57,7 @@ void PNPInit(byte i) {
     // initialize the send buffer, used to send data to the PC
     sendBufferPNP = getSharedBuffer(PNPHandler);
     pnpEndpoint = getPnPEndpoint();
-    if (getMotorType() == SHIELD_CC) {
+    if (getMotorType() == MOTORS_SHIELD_CC) {
         initPorts(1);
     } else {
         initPorts(0);
