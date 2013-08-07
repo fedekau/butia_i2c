@@ -296,16 +296,11 @@ void main(void) {
     InitializeSystem();      
     while(1) {
         USBTasks();         // USB Tasks
-        polling();
+        //polling();
         USBGenRead2();
     }//end while
 }//end main
 
-// not used:
-//void initButiaMotors(){
-//    ax12InitSerial();
-//    autoDetectWheels();
-//}
 /******************************************************************************
  * Function:        static void InitializeSystem(void)
  *
@@ -344,8 +339,8 @@ static void InitializeSystem(void) {
 
     initISRFunctions();      // Initialize interrupt service routines mechanism of USB4all
     initT0Service();         // Inicializa servicio T0 para manejar recurso de timmer
-//    initT1Service();         // Inicializa servicio T1 para manejar recurso de timmer
-    initPollingFunctions();  // inicializa el buffer con 0s (dynamicPolling.c)
+    //initT1Service();         // Inicializa servicio T1 para manejar recurso de timmer
+    //initPollingFunctions();  // inicializa el buffer con 0s (dynamicPolling.c)
     initHandlerManager();    // inicializa el map de enpoints y crea el enpoint 0 (adminModule.c)
 	
 }//end InitializeSystem
@@ -366,12 +361,12 @@ static void InitializeSystem(void) {
  * Note:            None
  *****************************************************************************/
 void USBTasks(void) {
-	/*
-	* Servicing Hardware
-	*/
-	USBCheckBusStatus();                    // Must use polling method
-	if(UCFGbits.UTEYE!= (unsigned) 1)
-		USBDriverService();                 // Interrupt or polling method
+    /*
+    * Servicing Hardware
+    */
+    USBCheckBusStatus();                    // Must use polling method
+    if(UCFGbits.UTEYE!= (unsigned) 1)
+        USBDriverService();                 // Interrupt or polling method
 
 }// end USBTasks
 

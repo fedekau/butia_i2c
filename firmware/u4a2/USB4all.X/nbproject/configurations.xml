@@ -9,7 +9,6 @@
       <itemPath>../user/adminModule.h</itemPath>
       <itemPath>../user/descriptorManager.h</itemPath>
       <itemPath>../usb4all/dynamicISR/dynamicISR.h</itemPath>
-      <itemPath>../user/dynamicPolling.h</itemPath>
       <itemPath>../user/handlerManager.h</itemPath>
       <itemPath>../io_cfg.h</itemPath>
       <itemPath>../user/loaderModule.h</itemPath>
@@ -52,7 +51,6 @@
       <itemPath>../user/adminModule.c</itemPath>
       <itemPath>../user/descriptorManager.c</itemPath>
       <itemPath>../usb4all/dynamicISR/dynamicISR.c</itemPath>
-      <itemPath>../user/dynamicPolling.c</itemPath>
       <itemPath>../user/handlerManager.c</itemPath>
       <itemPath>../user/loaderModule.c</itemPath>
       <itemPath>../main.c</itemPath>
