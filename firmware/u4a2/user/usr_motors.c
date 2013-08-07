@@ -73,7 +73,7 @@ void moveRightCC(unsigned int vel, byte sen){
     } else {
         /* mover motor derecho */
         PORTDbits.RD1 = 1;
-        if (sen == (byte) 0) {
+        if (sen == (byte) 1) {
             /* adelante */
             PORTDbits.RD5 = 0;
             PORTDbits.RD6 = 1;
