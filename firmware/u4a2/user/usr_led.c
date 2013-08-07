@@ -31,7 +31,7 @@ void UserLedRelease(byte i);
 // Table used by te framework to get a fixed reference point to the user module functions defined by the framework 
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
-uTab userLedModuleTable = {&UserLedInit,&UserLedRelease,"led"};
+const uTab userLedModuleTable = {&UserLedInit,&UserLedRelease,"led"};
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/

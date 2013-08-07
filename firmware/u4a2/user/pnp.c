@@ -32,7 +32,7 @@ void PNPRelease(byte i);
 // Table used by te framework to get a fixed reference point to the user module functions defined by the framework
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
-uTab PNPModuleTable = {&PNPInit, &PNPRelease, "pnp"};
+const uTab PNPModuleTable = {&PNPInit, &PNPRelease, "pnp"};
 #pragma code
 
 
