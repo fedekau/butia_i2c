@@ -43,7 +43,7 @@ const uTab userDistModuleTable = {&UserGenericInit, &UserGenericRelease, "distan
 #pragma code module
 
 /******************************************************************************
- * Function:        UserModuleAInit(void)
+ * Function:        UserGenericInit(void)
  *
  * PreCondition:    None
  *
@@ -88,8 +88,6 @@ void UserGenericInit(byte usrGenericHandler) {
  *****************************************************************************/
 void UserGenericProcessIO(void) {
     if ((usb_device_state < CONFIGURED_STATE) || (UCONbits.SUSPND == (unsigned) 1)) return;
-    /* here enter the code that want to be called periodically,
-     * per example interaction with buttons and leds */
 }/*end UserGenericProcessIO*/
 
 /******************************************************************************
@@ -109,9 +107,9 @@ void UserGenericProcessIO(void) {
  *
  * Note:            None
  *****************************************************************************/
-void UserGenericRelease(byte i) {
-    unsetHandlerReceiveBuffer(i);
-    unsetHandlerReceiveFunction(i);
+void UserGenericRelease(byte handler) {
+    unsetHandlerReceiveBuffer(handler);
+    unsetHandlerReceiveFunction(handler);
 }/*end UserModuleARelease*/
 
 /******************************************************************************

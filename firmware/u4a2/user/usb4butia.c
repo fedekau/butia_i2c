@@ -441,5 +441,4 @@ const void initPorts(byte motors_cc){
 
 const port_descriptor * getPortDescriptor(byte handler){
     return &board_ports[handler-1]; /*Internally ports are mapped 0..5*/
-    //return board_ports[handler_id];
 }
