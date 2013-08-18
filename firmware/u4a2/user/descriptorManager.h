@@ -28,7 +28,6 @@ typedef union _endpoint{
 }endpoint;
 
 /** P U B L I C  P R O T O T Y P E S *****************************************/
-endpoint getDefaultEndpoint(void);
 endpoint getAdminEndpoint(void);
 endpoint getPnPEndpoint(void);
 

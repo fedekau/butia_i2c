@@ -63,9 +63,8 @@ extern epHandlerMapItem epHandlerMap[MAX_HANDLERS];
 
 /** P U B L I C  P R O T O T Y P E S *****************************************/
 
-void checkHandlerManagerIO(void);
 void USBGenRead2(void);
-void USBGenWrite2(byte handler /*,byte *buffer*/, byte len);
+void USBGenWrite2(byte handler, byte len);
 void initHandlerBuffers(void);
 void setHandlerReceiveBuffer(byte handler, byte *rb);
 void setHandlerReceiveFunction(byte handler,void (*pf) (byte* recBuffPtr,byte, byte));
