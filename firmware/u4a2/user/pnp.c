@@ -49,6 +49,7 @@ void initTableDetectedDevice(void) {
 
 void PNPInit(byte i) {
     byte modulename[8];
+    byte aux;
     
     if (PNPHandler) return;
     PNPHandler = i;
@@ -73,12 +74,9 @@ void PNPInit(byte i) {
     modulename[6] = 0;
     modulename[7] = 0;
 
-    openPnP(modulename, 1);
-    openPnP(modulename, 2);
-    openPnP(modulename, 3);
-    openPnP(modulename, 4);
-    openPnP(modulename, 5);
-    openPnP(modulename, 6);
+    for (aux = 0; aux < MAX_PORTS; aux++) {
+        openPnP(modulename, aux + 1);
+    }
 
     //register the detection mecanism in the timmer interrupt
     registerT0event(PNP_DETECTION_TIME, &hotplug_pnp);
@@ -101,7 +99,6 @@ byte get_device_type(WORD resistValue) {
         MIN = table_device_id_resistance[i].resValue_min;
         if ((resistValue._word <= MAX._word) && (MIN._word <= resistValue._word)) return i;
     }
-
     return DISCONECTED; // 0 = "port" device
 }
 
@@ -109,7 +106,6 @@ void openPnP(byte moduleId[8], byte handler) {
     void (*pUser)(byte);
     rom near char* tableDirec;
     tableDirec = getUserTableDirection(moduleId);
-
     if (tableDirec != (rom near char*) ERROR) {
         handler = newHandlerTableEntryForcingHandler(pnpEndpoint.endPoint, tableDirec, handler);
         pUser = getModuleInitDirection(tableDirec);
@@ -123,13 +119,13 @@ void closePnP(byte handler) {
 
 void hotplug_pnp(void) {
     byte port, device_type;
-    char modulename[8];
+    byte modulename[8];
     /*do detection*/
     for (port = 0; port < MAX_PORTS; port++) {
         device_type = get_device_type(board_ports[port].get_val_detection_pin());
         if (device_type != detected_device_type_id[port]) {
-            // Change that board_port[device_type].detected_device_id for detected_device_type_id[port]
             closePnP(port + 1);
+            // is this necessary or we can use table_devie.. directly ?
             modulename[0] = table_device_id_resistance[device_type].name[0];
             modulename[1] = table_device_id_resistance[device_type].name[1];
             modulename[2] = table_device_id_resistance[device_type].name[2];
@@ -138,9 +134,7 @@ void hotplug_pnp(void) {
             modulename[5] = table_device_id_resistance[device_type].name[5];
             modulename[6] = table_device_id_resistance[device_type].name[6];
             modulename[7] = table_device_id_resistance[device_type].name[7];
-            
-
-            openPnP((byte *) modulename, port + 1); /*in table_device_id_resistance_value are defined all device types with the resistance value*/
+            openPnP(modulename, port + 1);
             detected_device_type_id[port] = device_type;
         }
     }

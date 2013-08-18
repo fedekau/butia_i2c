@@ -62,7 +62,7 @@
 /** ESTRUCTURES **/
 
 typedef struct _device_resistance {
-    char name[8]; /*name of the string*/
+    byte name[8]; /*name of the string*/
     WORD resValue_min; /*5v = 1023*/
     WORD resValue_max; /*5v = 1023*/
 } device_resistance;
