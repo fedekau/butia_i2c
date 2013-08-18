@@ -14,8 +14,8 @@
 
 /** D E F I N I T I O N S ****************************************************/
 
-#define MOTORS_AX12            0x01
-#define MOTORS_SHIELD_CC       0x02
+#define MOTORS_AX12        (byte) 0x01
+#define MOTORS_SHIELD_CC   (byte) 0x02
 
 #define MOTORS_MINOR_VERSION   0x02    /*motors version*/
 #define MOTORS_MAJOR_VERSION   0x00
