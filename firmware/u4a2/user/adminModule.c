@@ -52,21 +52,6 @@ void Escribir_memoria_boot(void) {
     Write_b_eep(ADDRESS_BOOT, BOOT_FLAG);
 }
 
-
-/*the device_type_module_name_map asociates for each string representing a module name an internal index
- for optimization propurses. Also this structure parses dynamically the name of the modules using rom data user*/
-
-/*void device_type_module_name_map_popullate(void){
-    byte userTableSize = 0;
-    byte lineNumber;
-    byte lineName[8]; //Se le cambio el tipo a byte, porque device_type_module_name_map es un arreglo de bytes
-    userTableSize = getUserTableSize();
-    for(lineNumber=0;lineNumber<userTableSize;lineNumber++){
-        getModuleName(lineNumber, (char*)lineName);
-        device_type_module_name_map[lineNumber]= lineName; 
-    }
-}
- */
 void adminModuleInit(byte handler) {
     /*system initialization*/
     adminHandler = handler; //hardcode, the admin module allways respond at handler 0
@@ -176,7 +161,6 @@ void adminReceived(byte* recBuffPtr, byte len, byte admin_handler) {
             ((AM_PACKET*) sendBufferAdmin)->CMD = GET_USER_MODULES_LINE;
             lineNumber = ((AM_PACKET*) recBuffPtr)->line;
             getModuleName(lineNumber, (char*) lineName);
-            //memcpy(((AM_PACKET*)sendBufferAdmin)->lineName, lineName, 8); no anda, sera porque estan en espacios de memoria separados (RAM/ROM)?
             for (j = (byte) 0; j < (byte) 8; j++) {
                 ((AM_PACKET*) sendBufferAdmin)->lineName[j] = lineName[j];
             }
@@ -186,7 +170,6 @@ void adminReceived(byte* recBuffPtr, byte len, byte admin_handler) {
         case BOOT:
             Escribir_memoria_boot();
             goodByeCruelWorld();
-            //adminCounter = 0x01; //;)
             break;
 
         case GET_HANDLER_SIZE:
@@ -209,7 +192,6 @@ void adminReceived(byte* recBuffPtr, byte len, byte admin_handler) {
 
         case RESET:
             goodByeCruelWorld();
-            //adminCounter = 0x01; //1 byte para el campo CMD sensless ;)
             break;
 
         default:
@@ -226,9 +208,9 @@ void adminReceived(byte* recBuffPtr, byte len, byte admin_handler) {
  * Keep Alive para el watchdog
  *****************************************************************************/
 
-void watchdogKeepAlive(void) {
+/*void watchdogKeepAlive(void) {
     keepAlive = TRUE;
-}
+}*/
 
 /***********************************************************************
  *
@@ -236,7 +218,7 @@ void watchdogKeepAlive(void) {
  *
  ************************************************************************/
 
-void watchdogEvent(void) {
+/*void watchdogEvent(void) {
     //    timeOutTicksWatchdog --;
     //    if(timeOutTicksWatchdog == 0){
     if (keepAlive) {
@@ -247,16 +229,16 @@ void watchdogEvent(void) {
     }
     //    }
     registerT0eventInEvent(TIME_UNIT_WATCHDOG, &watchdogEvent);
-}
+}*/
 
 /*****************************************************************************
  * Start watchdog
  *****************************************************************************/
 
-void watchdogStart(void) {
+/*void watchdogStart(void) {
     keepAlive = TRUE;
     registerT0event(2 * TIME_UNIT_WATCHDOG, &watchdogEvent);
-}
+}*/
 
 /** EOF adminModule.c ***************************************************************/
 

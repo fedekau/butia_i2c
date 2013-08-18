@@ -138,7 +138,6 @@ typedef union _AM_PACKET {
 void adminModuleInit(byte);
 void adminModuleRelease(byte);
 void adminReceived(byte* recBuffPtr,byte len, byte);
-void sendMes(char* mensaje, byte len);
 void Escribir_memoria_boot(void);
 void Busy_eep_non_block(void);
 
