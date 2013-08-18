@@ -28,16 +28,13 @@ typedef rom struct uTab{         // struct para mapear en rom los datos que iden
 
 /** P U B L I C  P R O T O T Y P E S *****************************************/
 
-// Me imagino que para cargar el modulo se le pasa el binaryStream que es el .hex a cargar
+// Para cargar el modulo se le pasa el binaryStream que es el .hex a cargar
 // y un identificador de modulo
-void loadModule(byte idModule, byte* binaryStream); 
-//TODO moduleId debe ser byte moduleId[8]
-//pUserFunc getModuleDirection(byte moduleId[8]);
+//void loadModule(byte idModule, byte* binaryStream);
 rom near char* getUserTableDirection(byte moduleId[8]);
 byte getUserTableSize(void);
 void getModuleName(byte line, char* modName);
 pUserFunc getModuleInitDirection(rom near char* direction);
 pUserFunc getModuleReleaseDirection(rom near char* direction);
-//pUserFunc getModuleConfigureDirection(rom near char* direction);
 byte getModuleType(rom near char* uTableDirection);
 #endif //LOADER_MODULE_H

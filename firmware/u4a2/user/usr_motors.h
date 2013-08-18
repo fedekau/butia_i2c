@@ -20,11 +20,6 @@
 #define MOTORS_MINOR_VERSION   0x02    /*motors version*/
 #define MOTORS_MAJOR_VERSION   0x00
 
-#define FIRST_ON    0x01
-#define DELAY       0x02
-#define SECOND_ON   0x03
-#define END         0x04
-
 #define TIME_UNIT        2000
 #define LONG_TIME_UNIT   5000
 
