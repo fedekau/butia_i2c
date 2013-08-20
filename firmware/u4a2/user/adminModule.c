@@ -132,8 +132,11 @@ void adminReceived(byte* recBuffPtr, byte len, byte admin_handler) {
             break;
 
         case MESSAGE:
-            // me limito a solamente mandar el paquete que me genera el usuario mediante sendMes (ping)
-            //adminCounter = sizeof (((AM_PACKET*) recBuffPtr));
+            // me limito a solamente mandar el paquete que me genera el usuario
+            for (adminCounter = 0; adminCounter < len; adminCounter++) {
+                *(sendBufferAdmin + adminCounter) = *(recBuffPtr + adminCounter);
+            }
+            adminCounter = len;
             break;
 
         case LOAD:
@@ -203,42 +206,6 @@ void adminReceived(byte* recBuffPtr, byte len, byte admin_handler) {
 
 }//end adminReceived
 
-
-/*****************************************************************************
- * Keep Alive para el watchdog
- *****************************************************************************/
-
-/*void watchdogKeepAlive(void) {
-    keepAlive = TRUE;
-}*/
-
-/***********************************************************************
- *
- * Callback function to execute periodicaly by te Timmer interrupt ISR
- *
- ************************************************************************/
-
-/*void watchdogEvent(void) {
-    //    timeOutTicksWatchdog --;
-    //    if(timeOutTicksWatchdog == 0){
-    if (keepAlive) {
-        //            timeOutTicksWatchdog = cantTicksW;
-        keepAlive = FALSE;
-    } else {
-        goodByeCruelWorld();
-    }
-    //    }
-    registerT0eventInEvent(TIME_UNIT_WATCHDOG, &watchdogEvent);
-}*/
-
-/*****************************************************************************
- * Start watchdog
- *****************************************************************************/
-
-/*void watchdogStart(void) {
-    keepAlive = TRUE;
-    registerT0event(2 * TIME_UNIT_WATCHDOG, &watchdogEvent);
-}*/
 
 /** EOF adminModule.c ***************************************************************/
 

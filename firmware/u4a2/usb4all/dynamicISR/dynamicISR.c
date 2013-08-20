@@ -27,43 +27,43 @@ byte ISRListeners;
 
 
 void initISRFunctions(void){
-	byte i;
-	for (i=0; i<MAX_ISR_FUNCTIONS;i++){
-		ISRFunction[i] = 0; //supongo 0 = null
-	}
-	ISRListeners=0;							
+    byte i;
+    for (i=0; i<MAX_ISR_FUNCTIONS;i++){
+        ISRFunction[i] = 0; //supongo 0 = null
+    }
+    ISRListeners=0;
 }
 
 BOOL addISRFunction(void (*ISRFun) (void)){
-	if (ISRListeners==MAX_ISR_FUNCTIONS) return FALSE;
-	ISRFunction[ISRListeners] = ISRFun;
-	if ((ISRListeners++) > (byte) 0){
-		INTCONbits.GIE = 1; //cuando se agrega la primer funcion listener prendo ints globales 
-	}
-	return TRUE;
+    if (ISRListeners==MAX_ISR_FUNCTIONS) return FALSE;
+    ISRFunction[ISRListeners] = ISRFun;
+    if ((ISRListeners++) > (byte) 0){
+        INTCONbits.GIE = 1; //cuando se agrega la primer funcion listener prendo ints globales
+    }
+    return TRUE;
 } 		
 
 BOOL removeISRFunction(void (*ISRFun) (void)){
-	byte i=0;
-	while (i<MAX_ISR_FUNCTIONS && ISRFunction[i]!=0){
-		if ( ISRFunction[i] == ISRFun) {
-			ISRFunction [i] = ISRFunction [--ISRListeners];
-			if (ISRListeners== (byte) 0) {
-				INTCONbits.GIE = 0; //si se va el ultimo listener apago ints globales
-			}
-			return TRUE;
-		}
-		i++;
-	}
-	return FALSE;
+    byte i=0;
+    while (i<MAX_ISR_FUNCTIONS && ISRFunction[i]!=0){
+        if ( ISRFunction[i] == ISRFun) {
+            ISRFunction [i] = ISRFunction [--ISRListeners];
+            if (ISRListeners== (byte) 0) {
+                INTCONbits.GIE = 0; //si se va el ultimo listener apago ints globales
+            }
+            return TRUE;
+        }
+        i++;
+    }
+    return FALSE;
 }
 //save is not necessary: http://www.xargs.com/pic/c18-isr-optim.pdf (page 7)
 #pragma interrupt interruption //save=section(".tmpdata")
 void interruption(void){
-	byte i=0;
-	while (i<ISRListeners){
-		ISRFunction[i]();
-		i++;
-	}
+    byte i=0;
+    while (i<ISRListeners){
+        ISRFunction[i]();
+        i++;
+    }
 }
 

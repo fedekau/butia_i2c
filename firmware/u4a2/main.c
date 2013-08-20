@@ -44,7 +44,7 @@
 #include "io_cfg.h"                                 // Required
 
 #include "system/usb/usb_compile_time_validation.h" // Optional
-#include "user/dynamicPolling.h"                    // Modifiable
+//#include "user/dynamicPolling.h"                    // Modifiable
 #include "usb4all/dynamicISR/dynamicISR.h"          // Modifiable
 #include "usb4all/proxys/T0Service.h"
 //#include "usb4all/proxys/T1Service.h"
@@ -209,70 +209,6 @@ void _low_ISR (void)
 
 /** D E C L A R A T I O N S **************************************************/
 #pragma code sys
-
-
-/******************************************************************************
- * Function:        void initial_test(void)
- *
- * PreCondition:    None
- *
- * Input:           None
- *
- * Output:          None
- *
- * Side Effects:    None
- *
- * Overview:        Hace un test de los perifericos al inicio
- *
- * Note:            None
- *****************************************************************************/
-
-void wait_time(int N) {
-    int i;
-    for(i=0; i<N; i++) {Delay10KTCYx(250);}
-}
-/*
-void setMensaje(char * m, int N) {
-    int i;
-    for(i=0; i<32; i++) m[i]=' ';
-    m[5]='P';m[6]='r';m[7]='o';m[8]='b';m[9]='a';m[10]='n';m[11]='d';m[12]='o';
-    switch(N) {
-        case 1:
-            break;
-        case 2:
-            break;
-        case 3:
-            break;
-    }
-}
-*/
-  
-/*void initial_test(void) {
-    char mensaje1[] = "Firmware ver 2.2   build 2.2.01 ";
-    char mensaje2[] = "    Probando          Leds      ";
-    char mensaje3[] = "    Probando         Buzzer     ";
-    
-    printScreen(mensaje1);
-    BACK_LIGHT_ON();
-    wait_time(20);
-
-    BACK_LIGHT_OFF(); wait_time(3); BACK_LIGHT_ON();
-
-    printScreen(mensaje2);
-    blink_led(2, 30, 1);
-    blink_led(4, 15, 2);
-    blink_led(6, 10, 3);
-    wait_time(30);
-
-    BACK_LIGHT_OFF(); wait_time(3); BACK_LIGHT_ON();
-
-    printScreen(mensaje3);
-    wait_time(4);
-    boubleBeep(3, 1, 4);
-    wait_time(5);
-    BACK_LIGHT_OFF();
-}
-*/
 
 /******************************************************************************
  * Function:        void main(void)

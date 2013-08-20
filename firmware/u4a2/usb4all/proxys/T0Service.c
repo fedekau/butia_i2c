@@ -264,7 +264,6 @@ void interrupt_handler(void) {
     unsigned int nexttime;
     void (*callback)(void);
 
-//mLED_2_Off();
     //we need ckock interrupts
     if (INTCONbits.TMR0IF){    
         //TODO este servicio atrasa cada vez que se registra o procesa un evento.
