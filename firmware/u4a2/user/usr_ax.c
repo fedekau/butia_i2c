@@ -28,7 +28,7 @@ void UserAX12Release(byte handler);
 
 /** U S E R   M O D U L E   R E F E R E N C E ********************************/
 #pragma romdata user
-uTab userAX12ModuleTable = {&UserAX12Init, &UserAX12Release, "ax"};
+const uTab userAX12ModuleTable = {&UserAX12Init, &UserAX12Release, "ax"};
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
