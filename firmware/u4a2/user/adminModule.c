@@ -12,13 +12,9 @@
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata
-//AM_PACKET adminDataPacket;
 byte* sendBufferAdmin;
 byte adminHandler;
 word counter_big;
-byte cantTicksW = 50;
-byte keepAlive = TRUE;
-byte timeOutTicksWatchdog;
 
 
 /** USER MODULE REFERENCE *************************************************/

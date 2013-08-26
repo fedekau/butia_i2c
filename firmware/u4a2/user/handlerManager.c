@@ -51,12 +51,11 @@ void USBGenRead2(void){
     byte usbgen_rx_len = 0;
     byte len;
     epHandlerMapItem hmi;
-    byte ep;
-    //byte* buffer;
+    byte ep = 1;
     HM_DATA_PACKET_HEADER* dph;
     if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND== (unsigned) 1)) return;
     len = PACKET_MTU-1;
-    for(ep=1;ep<=ram_max_ep_number;ep++){
+    //for(ep=1;ep<=ram_max_ep_number;ep++){
         if(!EPOUT_IS_BUSY(ep)){
             /*
              * Adjust the expected number of bytes to equal
@@ -77,7 +76,7 @@ void USBGenRead2(void){
             mUSBBufferReady2(EPOUT_BDT(ep));
 
         }//end if
-    }
+    //}
 }//end USBGenRead
 
 void USBGenWrite2(byte handler, byte len) {

@@ -102,10 +102,10 @@ volatile far CTRL_TRF_DATA CtrlTrfData;
 
 volatile far byte ep1_out_buffer[USBGEN_EP_SIZE];
 volatile far byte ep1_in_buffer[USBGEN_EP_SIZE];
-volatile far byte ep2_out_buffer[USBGEN_EP_SIZE];
+/*volatile far byte ep2_out_buffer[USBGEN_EP_SIZE];
 volatile far byte ep2_in_buffer[USBGEN_EP_SIZE];
 volatile far byte ep3_out_buffer[USBGEN_EP_SIZE];
-volatile far byte ep3_in_buffer[USBGEN_EP_SIZE];
+volatile far byte ep3_in_buffer[USBGEN_EP_SIZE];*/
 #pragma udata
 
 #pragma romdata _rom_usb_endpoints_init
@@ -132,7 +132,7 @@ void USBInitEPs(void){
     ep1Bo.Stat._byte = _USIE|_DAT0|_DTSEN;// Set status
     ep1Bi.ADR = (byte*)&ep1_in_buffer;      // Set buffer address
     ep1Bi.Stat._byte = _UCPU|_DAT1;      // Set buffer status
-    UEP2 = EP_OUT_IN|HSHK_EN;             // Enable 2 data pipes
+    /*UEP2 = EP_OUT_IN|HSHK_EN;             // Enable 2 data pipes
     ep2Bo.Cnt = sizeof(ep2_out_buffer);     // Set buffer size
     ep2Bo.ADR = (byte*)&ep2_out_buffer;     // Set buffer address
     ep2Bo.Stat._byte = _USIE|_DAT0|_DTSEN;// Set status
@@ -144,7 +144,7 @@ void USBInitEPs(void){
     //ep3Bo.Stat._byte = _USIE|_DAT0|_DTSEN;// Set status
     ep3Bo.Stat._byte = _USIE|_DAT0;// Set status
     ep3Bi.ADR = (byte*)&ep3_in_buffer;      // Set buffer address
-    ep3Bi.Stat._byte = _UCPU|_DAT1;      // Set buffer status
+    ep3Bi.Stat._byte = _UCPU|_DAT1;      // Set buffer status*/
 
     //boot_trf_state = WAIT_FOR_CMD;
 }//end USBGenInitEP

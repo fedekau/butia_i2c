@@ -32,7 +32,7 @@
 //		tamaño de los endpoints(va a quedar deprecated)
 
 #define USBGEN_EP_SIZE   64
-#define MAX_EP_NUMBER     3          // max nro de endpoints
+#define MAX_EP_NUMBER     1         // max nro de endpoints
 
 //Memory Types for Control Transfer - used in USB_DEVICE_STATUS
 
