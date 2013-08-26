@@ -99,9 +99,6 @@ void PortRelease(byte i) {
 
 void PortReceived(byte* recBuffPtr, byte len, byte handler) {
     byte PortCounter = 0;
-    //WORD aux;
-    //port_descriptor port;
-    //port = board_ports[0]; //it's harcode to port 1
 
     switch (((PORT_DATA_PACKET*) recBuffPtr)->CMD) {
         case READ_VERSION:
@@ -114,9 +111,7 @@ void PortReceived(byte* recBuffPtr, byte len, byte handler) {
 
         case GET_RES:
             ((PORT_DATA_PACKET*) sendBufferPort)->_byte[0] = ((PORT_DATA_PACKET*) recBuffPtr)->_byte[0];
-            //aux = port.get_val_detection_pin();
             ((PORT_DATA_PACKET*) sendBufferPort)->_byte[1] = 255;
-            //((PORT_DATA_PACKET*) sendBufferPort)->_byte[2] = MSB(aux);
             PortCounter = 0x02;
             break;
 

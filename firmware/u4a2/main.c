@@ -202,8 +202,7 @@ void _high_ISR (void)
 #pragma code _LOW_INTERRUPT_VECTOR = 0x0008D8
 void _low_ISR (void)
 {
-    //mLED_2_On();
-	//interruption();
+    //interruption();
 }
 //#pragma code
 

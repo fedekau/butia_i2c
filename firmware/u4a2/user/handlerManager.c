@@ -48,9 +48,7 @@ void unsetHandlerReceiveFunction(byte handler){
 }
 
 void USBGenRead2(void){
-    byte usbgen_rx_len = 0;
     byte len;
-    epHandlerMapItem hmi;
     byte ep = 1;
     HM_DATA_PACKET_HEADER* dph;
 

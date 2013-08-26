@@ -132,8 +132,6 @@ void USBCtrlEPService(void)
  *****************************************************************************/
 void USBCtrlTrfSetupHandler(void)
 {
-    byte i;
-
     /* Stage 1 */
     ctrl_trf_state = WAIT_SETUP;
     ctrl_trf_session_owner = MUID_NULL;     // Set owner to NULL

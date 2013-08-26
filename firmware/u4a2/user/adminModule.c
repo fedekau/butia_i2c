@@ -72,7 +72,7 @@ void goodByeCruelWorld(void) {
 
 void adminReceived(byte* recBuffPtr, byte len, byte admin_handler) {
     byte adminCounter;
-    byte endIn = nullEP, endOut = nullEP;
+    byte endIn = nullEP;
     byte lineNumber = 0;
     char lineName[8];
     rom near char* tableDirec;

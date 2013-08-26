@@ -145,15 +145,17 @@ void hotplug_pnp(void) {
 //This is a internal module model as a user module, so this command are for testing purpouse only
 
 void PNPReceived(byte* recBuffPtr, byte len, byte handler) {
-    byte index;
     byte userPNPCounter = 0;
-    byte j;
+
     switch (((PNP_DATA_PACKET*) recBuffPtr)->CMD) {
         case READ_VERSION:
             ((PNP_DATA_PACKET*) sendBufferPNP)->_byte[0] = ((PNP_DATA_PACKET*) recBuffPtr)->_byte[0];
             ((PNP_DATA_PACKET*) sendBufferPNP)->_byte[1] = PNP_MINOR_VERSION;
             ((PNP_DATA_PACKET*) sendBufferPNP)->_byte[2] = PNP_MAJOR_VERSION;
             userPNPCounter = 0x03;
+            break;
+
+        default:
             break;
     }
 
