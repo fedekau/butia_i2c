@@ -73,14 +73,11 @@ void goodByeCruelWorld(void) {
 void adminReceived(byte* recBuffPtr, byte len, byte admin_handler) {
     byte adminCounter;
     byte endIn = nullEP, endOut = nullEP;
-    byte userTableSize = 0;
     byte lineNumber = 0;
     char lineName[8];
     rom near char* tableDirec;
-    pUserFunc dir;
     void (*pUser)(byte);
     byte handler, response;
-    byte i;
     byte j;
     adminCounter = 0;
 
@@ -149,9 +146,8 @@ void adminReceived(byte* recBuffPtr, byte len, byte admin_handler) {
 
             /* retorna la cantidad de modulos de usuarios presentes en el firmware */
         case GET_USER_MODULES_SIZE:
-            userTableSize = getUserTableSize();
             ((AM_PACKET*) sendBufferAdmin)->CMD = GET_USER_MODULES_SIZE;
-            ((AM_PACKET*) sendBufferAdmin)->size = userTableSize;
+            ((AM_PACKET*) sendBufferAdmin)->size = getUserTableSize();
             adminCounter = 0x02;
             break;
 

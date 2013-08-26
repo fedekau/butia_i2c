@@ -146,10 +146,10 @@ extern volatile far CTRL_TRF_DATA CtrlTrfData;
 
 extern volatile far byte ep1_out_buffer[USBGEN_EP_SIZE];
 extern volatile far byte ep1_in_buffer[USBGEN_EP_SIZE];
-extern volatile far byte ep2_out_buffer[USBGEN_EP_SIZE];
+/*extern volatile far byte ep2_out_buffer[USBGEN_EP_SIZE];
 extern volatile far byte ep2_in_buffer[USBGEN_EP_SIZE];
 extern volatile far byte ep3_out_buffer[USBGEN_EP_SIZE];
-extern volatile far byte ep3_in_buffer[USBGEN_EP_SIZE];
+extern volatile far byte ep3_in_buffer[USBGEN_EP_SIZE];*/
 // P U B L I C  P R O T O T Y P E S *****************************************
 
 void USBInitEPs(void);
