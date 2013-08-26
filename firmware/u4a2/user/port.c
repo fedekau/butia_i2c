@@ -15,7 +15,7 @@
 
 
 /** V A R I A B L E S ********************************************************/
-#pragma udata 
+#pragma udata
 
 byte* sendBufferPort; // buffer to send data
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
@@ -23,7 +23,7 @@ void PortInit(byte i);
 void PortReceived(byte*, byte, byte);
 void PortRelease(byte i);
 
-// Table used by te framework to get a fixed reference point to the user module functions defined by the framework 
+// Table used by te framework to get a fixed reference point to the user module functions defined by the framework
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
 const uTab PortModuleTable = {&PortInit, &PortRelease, "port"};
@@ -42,9 +42,9 @@ const uTab PortModuleTable = {&PortInit, &PortRelease, "port"};
  * Output:          None
  *
  * Side Effects:    None
- *   
- * Overview:        This function is initialices the resources that the user module needs to work, it is called by the framework 
- *                    when the module is opened    
+ *
+ * Overview:        This function is initialices the resources that the user module needs to work, it is called by the framework
+ *                    when the module is opened
  *
  * Note:            None
  *****************************************************************************/
@@ -70,8 +70,8 @@ void PortInit(byte i) {
  *
  * Side Effects:    None
  *
- * Overview:        This function release all the resources that the user module used, it is called by the framework 
- *                    when the module is close    
+ * Overview:        This function release all the resources that the user module used, it is called by the framework
+ *                    when the module is close
  *
  * Note:            None
  *****************************************************************************/

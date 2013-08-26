@@ -12,7 +12,7 @@
 #include "user/usb4butia.h"
 
 /** V A R I A B L E S ********************************************************/
-#pragma udata 
+#pragma udata
 
 byte* sendBufferUsrButton; /* buffer to send data*/
 
@@ -67,8 +67,8 @@ void UserButtonInit(byte handler) {
  *
  * Side Effects:    None
  *
- * Overview:        This function release all the resources that the user module used, it is called by the framework 
- *					when the module is close	
+ * Overview:        This function release all the resources that the user module used, it is called by the framework
+ *					when the module is close
  *
  * Note:            None
  *****************************************************************************/

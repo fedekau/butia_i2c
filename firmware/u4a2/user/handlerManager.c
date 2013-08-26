@@ -1,7 +1,7 @@
 /* Author               Date        Comment
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * Rafael Fernandez    10/03/07     Original.
- * Andres Aguirre      27/03/07 	
+ * Andres Aguirre      27/03/07
  ********************************************************************/
 
 /** I N C L U D E S **********************************************************/
@@ -28,7 +28,7 @@ HANDLER_OPTYPE hn_opType;
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
 
 /** D E C L A R A T I O N S **************************************************/
-#pragma code 
+#pragma code
 #pragma code module
 
 void setHandlerReceiveBuffer(byte handler, byte *rb){
@@ -55,11 +55,11 @@ void USBGenRead2(void){
     HM_DATA_PACKET_HEADER* dph;
 
     if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND== (unsigned) 1)) return;
-    
+
     len = PACKET_MTU-1;
 
     //for(ep=1;ep<=ram_max_ep_number;ep++){
-    
+
     if(!EPOUT_IS_BUSY(ep)){
         /*
          * Adjust the expected number of bytes to equal
@@ -132,7 +132,7 @@ byte newHandlerTableEntry(byte endPIn, rom near char* uTableDirection){
         i++;
     }
     return ERROR;
-} 			
+}
 
 byte newHandlerTableEntryForcingHandler(byte endPIn, rom near char* uTableDirection, byte handler){
     if (epHandlerMap[handler].ep.empty == (unsigned) 1) {

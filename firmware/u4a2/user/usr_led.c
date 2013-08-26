@@ -17,7 +17,7 @@
 #define LED_OFF   (byte) 0
 
 /** V A R I A B L E S ********************************************************/
-#pragma udata 
+#pragma udata
 
 byte* sendBufferUsrLed; /* buffer to send data */
 
@@ -26,7 +26,7 @@ void UserLedInit(byte handler);
 void UserLedReceived(byte*, byte, byte);
 void UserLedRelease(byte handler);
 
-// Table used by te framework to get a fixed reference point to the user module functions defined by the framework 
+// Table used by te framework to get a fixed reference point to the user module functions defined by the framework
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
 const uTab userLedModuleTable = {&UserLedInit,&UserLedRelease,"led"};
@@ -76,8 +76,8 @@ void UserLedInit(byte handler){
  *
  * Side Effects:    None
  *
- * Overview:        This function release all the resources that the user module used, it is called by the framework 
- *					when the module is close	
+ * Overview:        This function release all the resources that the user module used, it is called by the framework
+ *					when the module is close
  *
  * Note:            None
  *****************************************************************************/
@@ -110,7 +110,7 @@ void UserLedReceived(byte* recBuffPtr, byte len, byte handler){
     switch(((LED_DATA_PACKET*)recBuffPtr)->CMD)
     {
         case READ_VERSION:
-            ((LED_DATA_PACKET*)sendBufferUsrLed)->_byte[0] = ((LED_DATA_PACKET*)recBuffPtr)->_byte[0]; 
+            ((LED_DATA_PACKET*)sendBufferUsrLed)->_byte[0] = ((LED_DATA_PACKET*)recBuffPtr)->_byte[0];
             ((LED_DATA_PACKET*)sendBufferUsrLed)->_byte[1] = LED_MINOR_VERSION;
             ((LED_DATA_PACKET*)sendBufferUsrLed)->_byte[2] = LED_MAJOR_VERSION;
             userLedCounter=0x03;

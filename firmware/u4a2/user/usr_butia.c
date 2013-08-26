@@ -11,7 +11,7 @@
 #include "usr_motors.h"
 
 /** V A R I A B L E S ********************************************************/
-#pragma udata 
+#pragma udata
 
 byte* sendBufferusrButia; // buffer to send data
 
@@ -20,7 +20,7 @@ void UserButiaInit(byte handler);
 void UserButiaReceived(byte*, byte, byte);
 void UserButiaRelease(byte handler);
 
-// Table used by te framework to get a fixed reference point to the user module functions defined by the framework 
+// Table used by te framework to get a fixed reference point to the user module functions defined by the framework
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
 const uTab UserButiaModuleTable = {&UserButiaInit,&UserButiaRelease,"butia"};
@@ -40,8 +40,8 @@ const uTab UserButiaModuleTable = {&UserButiaInit,&UserButiaRelease,"butia"};
  *
  * Side Effects:    None
  *
- * Overview:        This function is initialices the resources that the user module needs to work, it is called by the framework 
- *					when the module is opened	
+ * Overview:        This function is initialices the resources that the user module needs to work, it is called by the framework
+ *					when the module is opened
  *
  * Note:            None
  *****************************************************************************/
@@ -65,8 +65,8 @@ void UserButiaInit(byte handler){
  *
  * Side Effects:    None
  *
- * Overview:        This function release all the resources that the user module used, it is called by the framework 
- *					when the module is close	
+ * Overview:        This function release all the resources that the user module used, it is called by the framework
+ *					when the module is close
  *
  * Note:            None
  *****************************************************************************/

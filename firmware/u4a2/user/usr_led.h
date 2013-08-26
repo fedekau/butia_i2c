@@ -25,7 +25,7 @@ typedef union LED_DATA_PACKET
     struct
     {
         enum
-        { 
+        {
             READ_VERSION    = 0x00,
             TURN            = 0x01,
             RESET           = 0xFF

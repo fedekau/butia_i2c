@@ -14,7 +14,7 @@
 #include "user/usb4butia.h"
 
 /** V A R I A B L E S ********************************************************/
-#pragma udata 
+#pragma udata
 
 byte* sendBufferUsrGeneric; /* buffer to send data*/
 

@@ -1,7 +1,7 @@
-#ifndef __AX12_H 
-#define __AX12_H 
+#ifndef __AX12_H
+#define __AX12_H
 
-/****************************************************************************** 
+/******************************************************************************
  * Nombre: ax12.h
  * Tipo:   HEADER
  * Uso:    Libreria para el control de los servos Dynamixel AX-12.
@@ -101,12 +101,12 @@
 /*****************************************************************************/
 //HEX   //DEC
 #define PING                    0x01    //01
-#define READ_DATA               0x02    //02 
-#define WRITE_DATA              0x03    //03 
-#define REG_WRITE               0x04    //04     
+#define READ_DATA               0x02    //02
+#define WRITE_DATA              0x03    //03
+#define REG_WRITE               0x04    //04
 #define ACTION                  0x05    //05
 #define RESET_AX12              0x06    //06
-#define SYNC_WRITE              0x83    //131 
+#define SYNC_WRITE              0x83    //131
 
 /*****************************************************************************/
 /**************************   Constantes Auxiliares   ************************/

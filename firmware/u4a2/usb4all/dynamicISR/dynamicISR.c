@@ -1,7 +1,7 @@
 /* Author               Date        Comment
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * Rafael Fernandez    16/06/07 	Original
- * 
+ *
  ********************************************************************/
 
 /** I N C L U D E S **********************************************************/
@@ -13,7 +13,7 @@
 #include "dynamicISR.h"                              // Modifiable
 
 #include "system/usb/usb_compile_time_validation.h" // Optional
-//#include "user\user.h" 
+//#include "user\user.h"
 //#include "user\handlerManager.h"                              // Modifiable
 
 
@@ -41,7 +41,7 @@ BOOL addISRFunction(void (*ISRFun) (void)){
         INTCONbits.GIE = 1; //cuando se agrega la primer funcion listener prendo ints globales
     }
     return TRUE;
-} 		
+}
 
 BOOL removeISRFunction(void (*ISRFun) (void)){
     byte i=0;

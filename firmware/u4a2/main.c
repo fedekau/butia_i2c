@@ -32,12 +32,12 @@
  * Author               Date        Comment
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * Rawin Rojvanit       11/19/04    Original.
- * Rafael Fernandez     10/03/07    
- * Andres Aguirre	    27/03/07 	 
+ * Rafael Fernandez     10/03/07
+ * Andres Aguirre	    27/03/07
  ********************************************************************/
 
 /** I N C L U D E S **********************************************************/
-#include <p18cxxx.h>			
+#include <p18cxxx.h>
 #include <delays.h>
 #include "system/typedefs.h"                        // Required
 #include "system/usb/usb.h"                         // Required
@@ -121,7 +121,7 @@
 #pragma config DEBUG = OFF
 
 /* Code Protection Block 0 */
-#pragma config CP0 = OFF 
+#pragma config CP0 = OFF
 
 /* Code Protection Block 1 */
 #pragma config CP1 = OFF
@@ -193,7 +193,7 @@ void _reset (void)
 #pragma code sys
 
 //#pragma interrupt interruption save=section(".tmpdata")
-#pragma code _HIGH_INTERRUPT_VECTOR = 0x0008C8 
+#pragma code _HIGH_INTERRUPT_VECTOR = 0x0008C8
 void _high_ISR (void)
 {
     _asm GOTO interruption _endasm //llamo a interruption() de dynamicISR
@@ -229,7 +229,7 @@ void _low_ISR (void)
 #define WAIT_SECONDS(s) {int i; for(i=0; i<10*(s); i++) Delay10KTCYx(250);}
 
 void main(void) {
-    InitializeSystem();      
+    InitializeSystem();
     while(1) {
         USBTasks();         // USB Tasks
         //polling();
@@ -253,7 +253,7 @@ void main(void) {
  *                  here.
  *
  *                  User application initialization routine should also be
- *                  called from here.                  
+ *                  called from here.
  *
  * Note:            None
  *****************************************************************************/
@@ -278,7 +278,7 @@ static void InitializeSystem(void) {
     //initT1Service();         // Inicializa servicio T1 para manejar recurso de timmer
     //initPollingFunctions();  // inicializa el buffer con 0s (dynamicPolling.c)
     initHandlerManager();    // inicializa el map de enpoints y crea el enpoint 0 (adminModule.c)
-	
+
 }//end InitializeSystem
 
 /******************************************************************************

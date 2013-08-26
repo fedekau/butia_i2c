@@ -1,7 +1,7 @@
 /* Author               Date        Comment
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * Rafael Fernandez    10/03/07     Original.
- * Andres Aguirre	   26/03/07		Modificaciones Nuevo protocolo y agregados	
+ * Andres Aguirre	   26/03/07		Modificaciones Nuevo protocolo y agregados
  ********************************************************************/
 
 #ifndef HANDLER_MANAGER_H
@@ -23,14 +23,14 @@
 
 typedef struct _epHandlerMapItem{
 	endpoint ep;
-	// Se necesita para tener una forma 
+	// Se necesita para tener una forma
 	// de determinar si un modulo ya esta abierto, y para que el close obtenga el ptero a la fs close del usuario
-	rom near char* uTableDirection; 
+	rom near char* uTableDirection;
 } epHandlerMapItem;
 
 typedef union _HM_DATA_PACKET_HEADER {
 	struct {
-		byte hn_op; 
+		byte hn_op;
 		byte pLength_ReservedH;
 		byte pLength_ReservedL;
 	};
@@ -48,14 +48,14 @@ typedef union _HANDLER_OPTYPE {
 		unsigned operationType:3;
 		unsigned handlerNumber:5;
 	};
-} HANDLER_OPTYPE;	 
+} HANDLER_OPTYPE;
 
 typedef enum _opType {
 	SEND 	= 0x00,
 	CONFIG  = 0x01,
 	SEND1   = 0x02,
 	SEND2   = 0x03,
-	SEND3   = 0x04, 
+	SEND3   = 0x04,
 	RT	= 0x05
 } opType;
 

@@ -17,7 +17,7 @@
 #include "usb4all/proxys/T0Service.h"
 
 /** V A R I A B L E S ********************************************************/
-#pragma udata 
+#pragma udata
 
 byte* sendBufferUsrAX;
 

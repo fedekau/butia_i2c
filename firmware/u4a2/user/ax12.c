@@ -1,4 +1,4 @@
-/****************************************************************************** 
+/******************************************************************************
  * Nombre: ax12.c
  * Tipo:   SOURCE FILE
  * Uso:    Funciones para el control de los servos Dynamixel AX-12.
@@ -31,7 +31,7 @@
  ******************************************************************************/
 
 /* Includes */
-#include "p18f4550.h"                                  
+#include "p18f4550.h"
 #include "ax12.h"
 
 #define FF 0xFF
@@ -115,7 +115,7 @@ void int_vector (void){
 
 #pragma interrupt isr_RX
 void isr_RX(void){
-    ax_rx_buffer[(ax_rx_Pointer++)] = RCREG;    //guarda el byte recibido en el 
+    ax_rx_buffer[(ax_rx_Pointer++)] = RCREG;    //guarda el byte recibido en el
                                                 //en el buffer
 }
 

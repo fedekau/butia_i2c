@@ -434,7 +434,7 @@ const void initPorts(byte motors_cc){
         PORTD = 0x00;
         TRISD = 0xFF;
     }
-    
+
     for(i = 0; i < MAX_PORTS; i++)
         board_ports[i].change_port_direction(_IN);
 }

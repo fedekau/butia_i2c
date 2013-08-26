@@ -15,7 +15,7 @@
 
 
 /** V A R I A B L E S ********************************************************/
-#pragma udata 
+#pragma udata
 
 byte* sendBufferHackPoints; /* buffer to send data*/
 
@@ -44,9 +44,9 @@ const uTab HackPointsModuleTable = {&HackPointsInit, &HackPointsRelease, "hackp"
  * Output:          None
  *
  * Side Effects:    None
- *   
- * Overview:        This function is initialices the resources that the user module needs to work, it is called by the framework 
- *                    when the module is opened    
+ *
+ * Overview:        This function is initialices the resources that the user module needs to work, it is called by the framework
+ *                    when the module is opened
  *
  * Note:            None
  *****************************************************************************/
@@ -74,8 +74,8 @@ void HackPointsInit(byte handler) {
  *
  * Side Effects:    None
  *
- * Overview:        This function release all the resources that the user module used, it is called by the framework 
- *                    when the module is close    
+ * Overview:        This function release all the resources that the user module used, it is called by the framework
+ *                    when the module is close
  *
  * Note:            None
  *****************************************************************************/

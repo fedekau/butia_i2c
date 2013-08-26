@@ -4,7 +4,7 @@
 /** C O N S T A N T S ************************************************/
 #pragma romdata _device_dsc
 
-//	 Device Descriptor 
+//	 Device Descriptor
 rom USB_DEV_DSC device_dsc=
 {
     sizeof(USB_DEV_DSC),    // Size of this descriptor in bytes
