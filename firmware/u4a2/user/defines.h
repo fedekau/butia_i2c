@@ -29,8 +29,8 @@
 #define USBGEN_BD_IN            ep1Bi
 
 //auxiliar para parametrizar el endpoint usado
-#define mUSBGenTxIsBusy()           USBGEN_BD_IN.Stat.UOWN
-#define mUSBGenRxIsBusy()           USBGEN_BD_OUT.Stat.UOWN
+//#define mUSBGenTxIsBusy()           USBGEN_BD_IN.Stat.UOWN
+//#define mUSBGenRxIsBusy()           USBGEN_BD_OUT.Stat.UOWN
 
 #define mUSBBufferReady2(bdt){                                   \
     bdt.Stat._byte &= _DTSMASK;          /* Save only DTS bit */     \
@@ -39,10 +39,10 @@
 }
 
 /*en transferencias isoc no necesito toglear el bit DTS*/
-#define mUSBBufferReady3(bdt){                                   \
-    bdt.Stat._byte &= _DTSMASK;          /* Save only DTS bit */     \
-    bdt.Stat._byte |= _USIE|_DTSEN;      /* Turn ownership to SIE */ \
-}
+//#define mUSBBufferReady3(bdt){                                   \
+//    bdt.Stat._byte &= _DTSMASK;          /* Save only DTS bit */     \
+//    bdt.Stat._byte |= _USIE|_DTSEN;      /* Turn ownership to SIE */ \
+//}
 
 //Usado para las respuestas hacia la PC
 typedef enum _respType {
