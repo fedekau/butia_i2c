@@ -3,8 +3,8 @@
  * Alan Aguiar                                      01/08/123   Original.
  *****************************************************************************/
 
-#ifndef USER_GENERIC_H
-#define USER_GENERIC_H
+#ifndef USER_MODSEN_H
+#define USER_MODSEN_H
 
 /** I N C L U D E S **********************************************************/
 #include "system/typedefs.h"
@@ -13,11 +13,11 @@
 
 /** D E F I N I T I O N S ****************************************************/
 
-#define GENERIC_MINOR_VERSION   0x01    /*Grey Version */
-#define GENERIC_MAJOR_VERSION   0x00
+#define MODSEN_MINOR_VERSION   0x01
+#define MODSEN_MAJOR_VERSION   0x00
 
 /** S T R U C T U R E S ******************************************************/
-typedef union GENERIC_DATA_PACKET
+typedef union MODSEN_DATA_PACKET
 {
     byte _byte[USBGEN_EP_SIZE];  /*For byte access*/
     word _word[USBGEN_EP_SIZE/2];/*For word access(USBGEN_EP_SIZE msut be even)*/
@@ -47,8 +47,8 @@ typedef union GENERIC_DATA_PACKET
         unsigned :8;
         word word_data;
     };
-} GENERIC_DATA_PACKET;
+} MODSEN_DATA_PACKET;
 
 /** P U B L I C  P R O T O T Y P E S *****************************************/
 
-#endif /*USER_GENERIC_H*/
+#endif /*USER_MODSEN_H*/

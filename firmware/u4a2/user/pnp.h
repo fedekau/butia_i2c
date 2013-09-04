@@ -9,7 +9,6 @@
 #include "user/loaderModule.h"
 /*******************************************************************************/
 
-
 /*Sensors*/
 #define R_PORT_MIN 0
 #define R_PORT_MAX 255
@@ -27,12 +26,22 @@
 #define R_RES_MAX 21992
 #define R_LED_MAX 1815
 #define R_LED_MIN 1493
-#define R_MODULE_A_MAX 57740
-#define R_MODULE_A_MIN 56253
-#define R_MODULE_B_MAX 54704
-#define R_MODULE_B_MIN 52766
-#define R_MODULE_C_MAX 48509
-#define R_MODULE_C_MIN 45861
+#define R_TEMP_MAX 59147
+#define R_TEMP_MIN 57893
+//generic sensors
+#define R_MOD_SEN_A_MAX 57740
+#define R_MOD_SEN_A_MIN 56253
+#define R_MOD_SEN_B_MAX 54704
+#define R_MOD_SEN_B_MIN 52766
+#define R_MOD_SEN_C_MAX 48509
+#define R_MOD_SEN_C_MIN 45861
+//generic actuators
+#define R_MOD_ACT_A_MAX 6554
+#define R_MOD_ACT_A_MIN 5461
+#define R_MOD_ACT_B_MAX 4520
+#define R_MOD_ACT_B_MIN 3745
+#define R_MOD_ACT_C_MAX 3151
+#define R_MOD_ACT_C_MIN 2601
 
 //#define R_SHIELD_CC_MAX 12531
 //#define R_SHIELD_CC_MIN 10622
@@ -41,7 +50,6 @@
 
 #define R_ACCELEROMETER 9999
 #define R_PRECION
-#define R_TEMPERATURE 9999
 #define R_MAGNETIC 9999
 #define R_MICROPHONE 9999
 #define R_TILT 9999
@@ -55,7 +63,7 @@
 #define R_BUZZER 9999
 
 
-#define MAX_DEVICES (byte) 11 /*Max cant of senssor/actuator type*/
+#define MAX_DEVICES (byte) 15 /*Max cant of senssor/actuator type*/
 /*TODO review this time, the micro is running @20MHZ with a pipeline of 4steps => 20000000/4 = 5000000 instructions per second */
 #define PNP_DETECTION_TIME 20000
 

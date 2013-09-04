@@ -1,6 +1,6 @@
 /* Author                                           Date        Comment
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- * Alan Aguiar                                      01/08/123   Original.
+ * Alan Aguiar                                      04/09/123   Original.
  *****************************************************************************/
 
 /** I N C L U D E S **********************************************************/
@@ -8,7 +8,7 @@
 #include <usart.h>
 #include "system/typedefs.h"
 #include "system/usb/usb.h"
-#include "user/usr_generic.h"
+#include "user/usr_modSen.h"
 #include "io_cfg.h"              /* I/O pin mapping*/
 #include "user/handlerManager.h"
 #include "user/usb4butia.h"
@@ -16,25 +16,25 @@
 /** V A R I A B L E S ********************************************************/
 #pragma udata
 
-byte* sendBufferUsrGeneric; /* buffer to send data*/
+byte* sendBufferUsrModSen; /* buffer to send data*/
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void UserGenericInit(byte handler);
-void UserGenericReceived(byte*, byte, byte);
-void UserGenericRelease(byte handler);
+void UserModSenInit(byte handler);
+void UserModSenReceived(byte*, byte, byte);
+void UserModSenRelease(byte handler);
 
 /* Table used by te framework to get a fixed reference point to the user module functions defined by the framework */
 /** USER MODULE REFERENCE ****************************************************/
 #pragma romdata user
-const uTab userModuleATable = {&UserGenericInit, &UserGenericRelease, "moduleA"};
-const uTab userModuleBTable = {&UserGenericInit, &UserGenericRelease, "moduleB"};
-const uTab userModuleCTable = {&UserGenericInit, &UserGenericRelease, "moduleC"};
-const uTab userGreyModuleTable = {&UserGenericInit, &UserGenericRelease, "grey"};
-const uTab userLightModuleTable = {&UserGenericInit, &UserGenericRelease, "light"};
-const uTab userResModuleTable = {&UserGenericInit, &UserGenericRelease, "res"};
-const uTab userVoltModuleTable = {&UserGenericInit, &UserGenericRelease, "volt"};
-const uTab userTempModuleTable = {&UserGenericInit, &UserGenericRelease, "temp"};
-const uTab userDistModuleTable = {&UserGenericInit, &UserGenericRelease, "distanc"};
+const uTab userModSenATable = {&UserModSenInit, &UserModSenRelease, "modSenA"};
+const uTab userModSenBTable = {&UserModSenInit, &UserModSenRelease, "modSenB"};
+const uTab userModSenCTable = {&UserModSenInit, &UserModSenRelease, "modSenC"};
+const uTab userGreyModuleTable = {&UserModSenInit, &UserModSenRelease, "grey"};
+const uTab userLightModuleTable = {&UserModSenInit, &UserModSenRelease, "light"};
+const uTab userResModuleTable = {&UserModSenInit, &UserModSenRelease, "res"};
+const uTab userVoltModuleTable = {&UserModSenInit, &UserModSenRelease, "volt"};
+const uTab userTempModuleTable = {&UserModSenInit, &UserModSenRelease, "temp"};
+const uTab userDistModuleTable = {&UserModSenInit, &UserModSenRelease, "distanc"};
 
 #pragma code
 
@@ -42,7 +42,7 @@ const uTab userDistModuleTable = {&UserGenericInit, &UserGenericRelease, "distan
 #pragma code module
 
 /******************************************************************************
- * Function:        UserGenericInit(void)
+ * Function:        UserModSenInit(void)
  *
  * PreCondition:    None
  *
@@ -58,19 +58,19 @@ const uTab userDistModuleTable = {&UserGenericInit, &UserGenericRelease, "distan
  *
  * Note:            None
  *****************************************************************************/
-void UserGenericInit(byte handler) {
+void UserModSenInit(byte handler) {
     /* add my receive function to the handler module, to be called automatically
      * when the pc sends data to the user module */
-    setHandlerReceiveFunction(handler, &UserGenericReceived);
+    setHandlerReceiveFunction(handler, &UserModSenReceived);
     /* initialize the send buffer, used to send data to the PC */
-    sendBufferUsrGeneric = getSharedBuffer(handler);
+    sendBufferUsrModSen = getSharedBuffer(handler);
     /* get port where sensor/actuator is connected and set to IN/OUT mode*/
     getPortDescriptor(handler)->change_port_direction(IN);
 }/*end UserModuleAInit*/
 
 
 /******************************************************************************
- * Function:        UserGenericRelease(byte i)
+ * Function:        UserModSenRelease(byte i)
  *
  * PreCondition:    None
  *
@@ -86,13 +86,13 @@ void UserGenericInit(byte handler) {
  *
  * Note:            None
  *****************************************************************************/
-void UserGenericRelease(byte handler) {
+void UserModSenRelease(byte handler) {
     unsetHandlerReceiveBuffer(handler);
     unsetHandlerReceiveFunction(handler);
 }/*end UserModuleARelease*/
 
 /******************************************************************************
- * Function:        UserModuleAReceived(byte* recBuffPtr, byte len)
+ * Function:        UserModSenReceived(byte* recBuffPtr, byte len)
  *
  * PreCondition:    None
  *
@@ -106,23 +106,23 @@ void UserGenericRelease(byte handler) {
  *
  * Note:            None
  *****************************************************************************/
-void UserGenericReceived(byte* recBuffPtr, byte len, byte handler) {
+void UserModSenReceived(byte* recBuffPtr, byte len, byte handler) {
     WORD data;
-    byte userGenericCounter = 0;
-    switch (((GENERIC_DATA_PACKET*) recBuffPtr)->CMD) {
+    byte userModSenCounter = 0;
+    switch (((MODSEN_DATA_PACKET*) recBuffPtr)->CMD) {
         case READ_VERSION:
-            ((GENERIC_DATA_PACKET*) sendBufferUsrGeneric)->_byte[0] = ((GENERIC_DATA_PACKET*) recBuffPtr)->_byte[0];
-            ((GENERIC_DATA_PACKET*) sendBufferUsrGeneric)->_byte[1] = GENERIC_MINOR_VERSION;
-            ((GENERIC_DATA_PACKET*) sendBufferUsrGeneric)->_byte[2] = GENERIC_MAJOR_VERSION;
-            userGenericCounter = 0x03;
+            ((MODSEN_DATA_PACKET*) sendBufferUsrModSen)->_byte[0] = ((MODSEN_DATA_PACKET*) recBuffPtr)->_byte[0];
+            ((MODSEN_DATA_PACKET*) sendBufferUsrModSen)->_byte[1] = MODSEN_MINOR_VERSION;
+            ((MODSEN_DATA_PACKET*) sendBufferUsrModSen)->_byte[2] = MODSEN_MAJOR_VERSION;
+            userModSenCounter = 0x03;
             break;
 
         case GET_VALUE:
-            ((GENERIC_DATA_PACKET*) sendBufferUsrGeneric)->_byte[0] = ((GENERIC_DATA_PACKET*) recBuffPtr)->_byte[0];
+            ((MODSEN_DATA_PACKET*) sendBufferUsrModSen)->_byte[0] = ((MODSEN_DATA_PACKET*) recBuffPtr)->_byte[0];
             data = getPortDescriptor(handler)->get_data_analog();
-            ((GENERIC_DATA_PACKET*) sendBufferUsrGeneric)->_byte[1] = LSB(data);
-            ((GENERIC_DATA_PACKET*) sendBufferUsrGeneric)->_byte[2] = MSB(data);
-            userGenericCounter = 0x03;
+            ((MODSEN_DATA_PACKET*) sendBufferUsrModSen)->_byte[1] = LSB(data);
+            ((MODSEN_DATA_PACKET*) sendBufferUsrModSen)->_byte[2] = MSB(data);
+            userModSenCounter = 0x03;
             break;
 
         case RESET:
@@ -133,8 +133,8 @@ void UserGenericReceived(byte* recBuffPtr, byte len, byte handler) {
             break;
     }/*end switch(s)*/
 
-    USBGenWrite2(handler, userGenericCounter);
+    USBGenWrite2(handler, userModSenCounter);
 
-}/*end UserGenericReceived*/
+}/*end UserModSenReceived*/
 
-/** EOF usr_generic.c ***************************************************************/
+/** EOF usr_ModSen.c ***************************************************************/

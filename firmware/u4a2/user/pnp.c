@@ -13,9 +13,13 @@ rom const device_resistance table_device_id_resistance[MAX_DEVICES] = {
     { "volt", R_VOLT_MIN, R_VOLT_MAX},
     { "res", R_RES_MIN, R_RES_MAX},
     { "led", R_LED_MIN, R_LED_MAX},
-    { "moduleA", R_MODULE_A_MIN, R_MODULE_A_MAX},
-    { "moduleB", R_MODULE_B_MIN, R_MODULE_B_MAX},
-    { "moduleC", R_MODULE_C_MIN, R_MODULE_C_MAX}
+    { "temp", R_TEMP_MAX, R_TEMP_MIN},
+    { "modSenA", R_MOD_SEN_A_MIN, R_MOD_SEN_A_MAX},
+    { "modSenB", R_MOD_SEN_B_MIN, R_MOD_SEN_B_MAX},
+    { "modSenC", R_MOD_SEN_C_MIN, R_MOD_SEN_C_MAX},
+    { "modActA", R_MOD_ACT_A_MIN, R_MOD_ACT_A_MAX},
+    { "modActB", R_MOD_ACT_B_MIN, R_MOD_ACT_B_MAX},
+    { "modActB", R_MOD_ACT_C_MIN, R_MOD_ACT_C_MAX}
 };
 
 #pragma udata
