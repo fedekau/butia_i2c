@@ -15,10 +15,6 @@
     USB_INTF_DSC            i00a00;	\
     USB_EP_DSC              ep01o_i00a00;	\
     USB_EP_DSC              ep01i_i00a00;	\
-    USB_EP_DSC              ep02o_i00a00;	\
-    USB_EP_DSC              ep02i_i00a00;	\
-    USB_EP_DSC              ep03o_i00a00;	\
-    USB_EP_DSC              ep03i_i00a00;	\
 } cfg01
 //		 E X T E R N S **************************************************
 extern rom USB_DEV_DSC device_dsc;
