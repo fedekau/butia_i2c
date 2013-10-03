@@ -39,7 +39,7 @@ sizeof(USB_INTF_DSC),   // Size of this descriptor in bytes
 DSC_INTF,               // INTERFACE descriptor type
 0,                      // Interface Number
 0,                      // Alternate Setting Number
-6,                      // Number of endpoints in this intf
+2,                      // Number of endpoints in this intf
 0x0,                   // Class code
 0x0,                   // Subclass code
 0x0,                   // Protocol code
