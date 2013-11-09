@@ -70,7 +70,7 @@ void recv_usb(picdem_handle *d, int len, byte *dest) {
 void rjl_request_version(picdem_handle *d, unsigned char *ret)
 {
   int r;
-  char unsigned buf[4];
+  byte buf[4];
 
   // ### "\0\0\0\0\0" may not be correct in future firmware versions
   r=usb_bulk_write(d, fsusb_endpoint, "\0\0\0\0\0", 5, fsusb_timeout);
