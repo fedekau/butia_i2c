@@ -23,8 +23,8 @@ epHandlerMapItem epHandlerMap[MAX_HANDLERS];
 HM_DATA_PACKET_HEADER hmDataPacketHeader;
 byte* HandlerReceiveBuffer[MAX_HANDLERS];
 void (*handlerReceivedFuncion[MAX_HANDLERS]) (byte*, byte, byte); //arreglo de punteros a las funcioens received de los modulos
-
 HANDLER_OPTYPE hn_opType;
+
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
 
 /** D E C L A R A T I O N S **************************************************/

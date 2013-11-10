@@ -13,7 +13,6 @@
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata
-
 byte* sendBufferUsrButton; /* buffer to send data*/
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/

@@ -8,13 +8,11 @@
 #include "system/usb/usb.h"                         // Required
 #include "io_cfg.h"                                 // Required
 
-//#include "usb4all\dynamicISR\dynamicISR.h"
 #include "usb4all/dynamicISR/dynamicISR.h"
-#include "usb4all/proxys/T0Service.h"                              // Modifiable
+#include "usb4all/proxys/T0Service.h"               // Modifiable
 
 #include "system/usb/usb_compile_time_validation.h" // Optional
-//#include "user\user.h"
-//#include "user\handlerManager.h"                  // Modifiable
+
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata

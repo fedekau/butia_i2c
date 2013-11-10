@@ -13,11 +13,10 @@
 #include "io_cfg.h"              // I/O pin mapping
 #include "user/handlerManager.h"
 
-
 /** V A R I A B L E S ********************************************************/
 #pragma udata
-
 byte* sendBufferPort; // buffer to send data
+
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
 void PortInit(byte i);
 void PortReceived(byte*, byte, byte);

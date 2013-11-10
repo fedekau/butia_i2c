@@ -150,7 +150,6 @@
 /* Write Protection Block 3 */
 #pragma config WRT3 = OFF
 
-
 /* Boot Block Write Protection */
 #pragma config WRTB = OFF
 

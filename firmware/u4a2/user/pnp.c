@@ -22,9 +22,12 @@ rom const device_resistance table_device_id_resistance[MAX_DEVICES] = {
     { "modActB", R_MOD_ACT_C_MIN, R_MOD_ACT_C_MAX}
 };
 
+/** VARIABLES UNINITIALIZED, RAM **/
 #pragma udata
 byte PNPHandler = 0;
 byte* sendBufferPNP; // buffer to send data
+byte detected_device_type_id[MAX_PORTS]; /*the device_type_id of the device connected*/
+endpoint pnpEndpoint;
 
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
@@ -38,11 +41,6 @@ void PNPRelease(byte i);
 const uTab PNPModuleTable = {&PNPInit, &PNPRelease, "pnp"};
 #pragma code
 
-
-/** VARIABLES UNINITIALIZED, RAM **/
-#pragma udata
-byte detected_device_type_id[MAX_PORTS]; /*the device_type_id of the device connected*/
-endpoint pnpEndpoint;
 /* CODE */
 #pragma code module
 

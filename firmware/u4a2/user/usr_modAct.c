@@ -15,7 +15,6 @@
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata
-
 byte* sendBufferUsrModAct; /* buffer to send data*/
 
 #define ACT_ON    (byte) 1
@@ -33,7 +32,6 @@ const uTab userModActATable = {&UserModActInit, &UserModActRelease, "modActA"};
 const uTab userModActBTable = {&UserModActInit, &UserModActRelease, "modActB"};
 const uTab userModActCTable = {&UserModActInit, &UserModActRelease, "modActC"};
 const uTab userLedModuleTable = {&UserModActInit, &UserModActRelease, "led"};
-
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/

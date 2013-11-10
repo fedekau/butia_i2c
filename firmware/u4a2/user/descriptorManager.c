@@ -15,19 +15,19 @@
 #pragma code sys
 
 endpoint getAdminEndpoint(void){
-	endpoint adminEndpoint;
-	adminEndpoint.EPNum = 1;
-	adminEndpoint.EPDir = 0;
-	adminEndpoint.empty = 0;
-	return adminEndpoint;
+    endpoint adminEndpoint;
+    adminEndpoint.EPNum = 1;
+    adminEndpoint.EPDir = 0;
+    adminEndpoint.empty = 0;
+    return adminEndpoint;
 }
 
 endpoint getPnPEndpoint(void){
-	endpoint PnPEndpoint;
-	PnPEndpoint.EPNum = 1;
-	PnPEndpoint.EPDir = 0;
-	PnPEndpoint.empty = 0;
-	return PnPEndpoint;
+    endpoint PnPEndpoint;
+    PnPEndpoint.EPNum = 1;
+    PnPEndpoint.EPDir = 0;
+    PnPEndpoint.empty = 0;
+    return PnPEndpoint;
 }
 
 /** EOF descriptorManager.c ***************************************************************/

@@ -16,9 +16,9 @@
 #include "usb4all/proxys/T0Service.h"
 #include "pnp.h"
 
-/* Structures to hold motors */
 #pragma code module
 
+/* Structures to hold motors */
 typedef struct _MOTOR {
     byte id;
     byte inverse;
@@ -31,19 +31,22 @@ typedef struct _WHEELS {
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata
-
-/* robot wheels */
 WHEELS wheels;
 byte* sendBufferUsrMotors; // buffer to send data
 fMoveMotor moveLeftMOTOR;
 fMoveMotor moveRightMOTOR;
 fGetVolt getVolt;
+byte current_id = 0;
+byte index = 0;
+byte list_motors[2];
+byte MOTORS_T = MOTORS_AX12;
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
 void UserMotorsInit(byte handler);
 void UserMotorsReceived(byte*, byte, byte);
 void UserMotorsRelease(byte handler);
 void sexyMotorMoveStart();
+
 // Table used by the framework to get a fixed reference point to the user module functions defined by the framework
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
@@ -53,11 +56,6 @@ const uTab userMotorsModuleTable = {&UserMotorsInit, &UserMotorsRelease, "motors
 /** D E C L A R A T I O N S **************************************************/
 #pragma code module
 
-/* Definitions to deal with autodetection motors */
-byte current_id = 0;
-byte index = 0;
-byte list_motors[2];
-byte MOTORS_T = MOTORS_AX12;
 
 void moveRightCC(unsigned int vel, byte sen){
     /*
