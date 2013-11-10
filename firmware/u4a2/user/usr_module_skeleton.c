@@ -1,6 +1,7 @@
 /* Author                                           Date        Comment
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * Aylen Ricca                                      10/10/12    Original.
+ * Alan Aguiar                                      18/08/13    Changes to new use
  *****************************************************************************/
 
 /** I N C L U D E S **********************************************************/
@@ -9,7 +10,7 @@
 #include "system/typedefs.h"
 #include "system/usb/usb.h"
 #include "io_cfg.h"
-#include "dynamicPolling.h"
+//#include "dynamicPolling.h"
 #include "user/usb4butia.h"
 #include "user/handlerManager.h"
 #include "user/usr_module_skeleton.h"
@@ -20,16 +21,15 @@
 byte* sendBufferUsrSkeleton; /* buffer to send data*/
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void UserSkeletonProcessIO(void);
+//void UserSkeletonProcessIO(void);
 void UserSkeletonInit(byte i);
 void UserSkeletonReceived(byte*, byte, byte);
 void UserSkeletonRelease(byte i);
-void UserSkeletonConfigure(void);
 
 /* Table used by te framework to get a fixed reference point to the user module functions defined by the framework */
 /** USER MODULE REFERENCE ****************************************************/
 #pragma romdata user
-const uTab userSkeletonModuleTable = {&UserSkeletonInit,&UserSkeletonRelease,&UserSkeletonConfigure,"modName"}; /* modName must be less 8 characters */
+const uTab userSkeletonModuleTable = {&UserSkeletonInit,&UserSkeletonRelease,"modName"}; /* modName must be less 8 characters */
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
@@ -61,27 +61,10 @@ void UserSkeletonInit(byte usrSkeletonHandler){
     /* get port where sensor/actuator is connected and set to IN/OUT mode
      * as an example, it is set to IN mode */
     getPortDescriptor(usrSkeletonHandler)->change_port_direction(IN);
+    /* init the polling function */
+    //addPollingFunction(UserSkeletonProcessIO);
 }/* end UserSkeletonInit */
 
-/******************************************************************************
- * Function:        UserSkeletonConfigure(void)
- *
- * PreCondition:    None
- *
- * Input:           None
- *
- * Output:          None
- *
- * Side Effects:    None
- *
- * Overview:        This function sets the specific configuration for the user
- *                  module, it is called by the framework.
- *
- * Note:            None
- *****************************************************************************/
-void UserSkeletonConfigure(void){
-    /* Do the configuration needed */
-}/* end UserSkeletonConfigure */
 
 /******************************************************************************
  * Function:        UserSkeletonProcessIO(void)
@@ -100,11 +83,11 @@ void UserSkeletonConfigure(void){
  *
  * Note:            None
  *****************************************************************************/
-void UserSkeletonProcessIO(void){
-    if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND==1)) return;
+//void UserSkeletonProcessIO(void){
+//    if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND==1)) return;
     /* here enter the code that want to be called periodically,
      * per example interaction with buttons and leds */
-}/* end UserSkeletonProcessIO */
+//}/* end UserSkeletonProcessIO */
 
 /******************************************************************************
  * Function:        UserSkeletonRelease(byte i)
@@ -126,6 +109,7 @@ void UserSkeletonProcessIO(void){
 void UserSkeletonRelease(byte usrSkeletonHandler){
     unsetHandlerReceiveBuffer(usrSkeletonHandler);
     unsetHandlerReceiveFunction(usrSkeletonHandler);
+    //removePoolingFunction(&UserSkeletonProcessIO);
 }/* end UserSkeletonRelease */
 
 /******************************************************************************
@@ -182,13 +166,8 @@ void UserSkeletonReceived(byte* recBuffPtr, byte len, byte handler){
             break;
     }/* end switch(s)*/
 
-    if(userSkeletonCounter != 0)
-    {
-        j = 255;
-        while(mUSBGenTxIsBusy() && j-->0); /* try at last 255 tries */
-        if(!mUSBGenTxIsBusy())
-            USBGenWrite2(handler, userSkeletonCounter);
-    }/* end if */
+    USBGenWrite2(handler, userSkeletonCounter);
+
 }/* end UserSkeletonReceived */
 
 /** EOF usr_module_skelton.c **************************************************/

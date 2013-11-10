@@ -14,9 +14,8 @@
 #include "user/loaderModule.h"
 #include "system/typedefs.h"
 #include "system/usb/usb.h"
-#include "io_cfg.h"   
+#include "io_cfg.h"
 #include <p18cxxx.h>
-#include "user/userTemp.h"
 #include "usb4all/boot/boot.h"
 #include <string.h>
 #include <EEP.h>
@@ -31,7 +30,7 @@
 #define ADDRESS_BOOT 0x09
 #define BOOT_FLAG 0x11
 
-#define FIRMWARE_VERSION 0x07   /* This value can be return as firmware version */
+#define FIRMWARE_VERSION 0x08   /* This value can be return as firmware version */
 
 /** S T R U C T U R E S ******************************************************/
 
@@ -139,7 +138,6 @@ typedef union _AM_PACKET {
 void adminModuleInit(byte);
 void adminModuleRelease(byte);
 void adminReceived(byte* recBuffPtr,byte len, byte);
-void sendMes(char* mensaje, byte len);
 void Escribir_memoria_boot(void);
 void Busy_eep_non_block(void);
 

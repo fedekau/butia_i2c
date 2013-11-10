@@ -17,83 +17,75 @@ BOOL isEqual(byte str1[8], byte str2[8]);
 /** D E C L A R A T I O N S **************************************************/
 #pragma code sys
 
-void loadModule(byte idModule, byte binaryStream[8]){
-
-}
 // No quiero usar strcmp para no incluir string y que consuma mas memoria
 BOOL isEqual(byte str1[8], byte str2[8]){
-	byte j = 0;
-	BOOL result = TRUE, termine = FALSE;
-	for(j = (byte) 0; j < (byte) 8 && !termine; j++){
-		if((str1[j] == (unsigned char)'\0') || (str2[j] == (unsigned char)'\0')){
-			termine = TRUE;
-		}
-		if((char)str1[j] != (char)str2[j]){
-			result = FALSE;
-		}
-	}
-	return result;
+    byte j = 0;
+    BOOL result = TRUE, termine = FALSE;
+    for(j = (byte) 0; j < (byte) 8 && !termine; j++){
+        if((str1[j] == (unsigned char)'\0') || (str2[j] == (unsigned char)'\0')){
+            termine = TRUE;
+        }
+        if((char)str1[j] != (char)str2[j]){
+            result = FALSE;
+        }
+    }
+    return result;
 }
 
 rom near char* getUserTableDirection(byte moduleId[8]){
-	rom near char * i = (rom near char *)DIRECTION_TABLE;
-	const uTab * tabla;
-	byte dest[8];
-	byte j = 0;
-	while (*i != MEM_VACIO){
-		tabla = (const uTab*) i;
-		for (j = (byte) 0; j < (byte) 8; j++){       // hacking para poder comparar strings
-			dest[j] = (tabla->id)[j];  // para poderse comparar ambos strings deben estar en igual espacio de memoria (RAM / ROM)
-		}
-		if (isEqual(dest, moduleId)){
-			return i;
-		}
-		i = i + TAM_U_TAB;
-	}
-	return (rom near char*)ERROR;
+    rom near char * i = (rom near char *)DIRECTION_TABLE;
+    const uTab * tabla;
+    byte dest[8];
+    byte j = 0;
+    while (*i != MEM_VACIO){
+        tabla = (const uTab*) i;
+        for (j = (byte) 0; j < (byte) 8; j++){  // hacking para poder comparar strings
+            dest[j] = (tabla->id)[j];  // para poderse comparar ambos strings deben estar en igual espacio de memoria (RAM / ROM)
+        }
+        if (isEqual(dest, moduleId)){
+            return i;
+        }
+        i = i + TAM_U_TAB;
+    }
+    return (rom near char*)ERROR;
 }
 
 byte getUserTableSize(){
-	rom near char * i = (rom near char *)DIRECTION_TABLE;
-	byte size = 0;
-	while (*i != MEM_VACIO){
-		i = i + TAM_U_TAB;
-		size++;
-	}
-	return size;	
+    rom near char * i = (rom near char *)DIRECTION_TABLE;
+    byte size = 0;
+    while (*i != MEM_VACIO){
+        i = i + TAM_U_TAB;
+        size++;
+    }
+    return size;
 }
 
 byte getModuleType(rom near char* uTableDirection){
-        rom near char * moduleTableInitPos = (rom near char *)DIRECTION_TABLE;
-        return (uTableDirection-moduleTableInitPos)/TAM_U_TAB;
+    rom near char * moduleTableInitPos = (rom near char *)DIRECTION_TABLE;
+    return (uTableDirection-moduleTableInitPos)/TAM_U_TAB;
 }
 
 //Precondicion: Capas superiores se encargan de hacer el chequeo de que no se exceda del espacio de modulos
 void getModuleName(byte line, char* modName){
-	byte j;
-	rom near char * i = (rom near char *)DIRECTION_TABLE;
-	uTab* tabla; 
-	i = i + (line * TAM_U_TAB);
-	tabla = (uTab*) i;
-	for (j = (byte) 0; j < (byte) 8; j++){
-		modName[j] = (tabla->id)[j];  
-	}
-	//memcpy(modName, tabla->id, 8); no anda, sera porque estan en espacios de memoria separados?(RAM/ROM)	
+    byte j;
+    rom near char * i = (rom near char *)DIRECTION_TABLE;
+    uTab* tabla;
+    i = i + (line * TAM_U_TAB);
+    tabla = (uTab*) i;
+    for (j = (byte) 0; j < (byte) 8; j++){
+        modName[j] = (tabla->id)[j];
+    }
+    //memcpy(modName, tabla->id, 8); no anda, sera porque estan en espacios de memoria separados?(RAM/ROM)
 }
 
 pUserFunc getModuleInitDirection(rom near char* direction){
-	const uTab* tabla = (const uTab*) direction;
-	return tabla->pfI;
+    const uTab* tabla = (const uTab*) direction;
+    return tabla->pfI;
 }
 
 pUserFunc getModuleReleaseDirection(rom near char* direction){
-	const uTab* tabla = (const uTab*) direction;
-	return tabla->pfR;
+    const uTab* tabla = (const uTab*) direction;
+    return tabla->pfR;
 }
-//
-//pUserFunc getModuleConfigureDirection(rom near char* direction){
-//	const uTab* tabla = (const uTab*) direction;
-//	return tabla->pfC;
-//}
 
 /** EOF loaderModule.c ***************************************************************/

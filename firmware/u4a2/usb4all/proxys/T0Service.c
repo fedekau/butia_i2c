@@ -1,4 +1,4 @@
-/* 
+/*
     jvisca@fing.edu.uy
 */
 
@@ -8,13 +8,11 @@
 #include "system/usb/usb.h"                         // Required
 #include "io_cfg.h"                                 // Required
 
-//#include "usb4all\dynamicISR\dynamicISR.h"
 #include "usb4all/dynamicISR/dynamicISR.h"
-#include "usb4all/proxys/T0Service.h"                              // Modifiable
+#include "usb4all/proxys/T0Service.h"               // Modifiable
 
 #include "system/usb/usb_compile_time_validation.h" // Optional
-//#include "user\user.h" 
-//#include "user\handlerManager.h"                  // Modifiable
+
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata
@@ -76,14 +74,14 @@ void pop_first(void) {
     first=next_entry(first);
 }
 
-//Adds a element to the end of the queue, and returns a pointer to it 
+//Adds a element to the end of the queue, and returns a pointer to it
 //(or NULL, if the queue was full)
 Entry *push_end(void) {
     byte next1=next_entry(next);
     Entry *entry=&(queue[next]);
 
     if (next1==first) return NULL; //buffer full
-    
+
     next=next1;
     return entry;
 }
@@ -122,7 +120,7 @@ BOOL registerT0event(unsigned int t, void (*callback)(void)) {
     T0CONbits.TMR0ON  = FALSE;
 
     //we will calculate
-    if (is_empty()) { 
+    if (is_empty()) {
          // first in queue, nobody counting
         timestamp=t;
     } else {
@@ -131,7 +129,7 @@ BOOL registerT0event(unsigned int t, void (*callback)(void)) {
         currtime  = queue[first].timestamp - (0xFFFF-TMR0);
         timestamp = currtime + t;
 
-        //As we advance the clock marks, we will finally reach the max int. Then we must reduce 
+        //As we advance the clock marks, we will finally reach the max int. Then we must reduce
         //all the marks down.
         if (timestamp < currtime) { // overflow!
             pos=first;
@@ -153,31 +151,31 @@ BOOL registerT0event(unsigned int t, void (*callback)(void)) {
     if (entry==NULL) { return FALSE; } //error adding an entry
     entry->timestamp=timestamp;
     entry->callback=callback;
-    
+
     //"buble-up" while out of order.
     while (pos!=first && queue[pos].timestamp < queue[prevpos].timestamp) {
         //swap
         Entry t_entry=queue[prevpos];
         queue[prevpos]=queue[pos];
         queue[pos]=t_entry;
-        
+
         //go back 1
         pos=prevpos;
         prevpos=prev_entry(pos);
     } ;
-    
+
     //the new entry is the first in the queue.
     //this runs for either a new event that replaces a current event already
     //in queue,or the first event in an empty queue.
-    if (pos==first) { 
+    if (pos==first) {
         //configure interrupt for the (new) head event
         INTCONbits.TMR0IF = 0; //apago bandera de interrupcion de timer0 por las dudas
-        INTCONbits.TMR0IE = 1; //cuando se agrega la primer funcion listener prendo ints de Timer0 
+        INTCONbits.TMR0IE = 1; //cuando se agrega la primer funcion listener prendo ints de Timer0
         timestamp=0xFFFF-timestamp;
         TMR0H = (byte)(timestamp>>8);
         TMR0L = (byte)timestamp;
     }
-        
+
     //(re)start clock
     T0CONbits.TMR0ON  = TRUE;
     return TRUE;
@@ -199,7 +197,7 @@ BOOL registerT0eventInEvent(unsigned int t, void (*callback)(void)) {
     currtime = queue[first].timestamp;
     timestamp = currtime+t;//we're in the fist event handler
 
-    //As we advance the clock marks, we will finally reach the max int. Then we must reduce 
+    //As we advance the clock marks, we will finally reach the max int. Then we must reduce
     //all the marks down.
     //TODO hacer esto en el register normal
     if (timestamp < currtime) { // overflow!
@@ -221,7 +219,7 @@ BOOL registerT0eventInEvent(unsigned int t, void (*callback)(void)) {
     if (entry==NULL) { return FALSE; } //error adding an entry
     entry->timestamp=timestamp;
     entry->callback=callback;
-    
+
     //"buble-up" while out of order. stop before replacing the first event (the one being
     //from whose handler called us)
     while (prevpos!=first && pos!=first && queue[pos].timestamp < queue[prevpos].timestamp) {
@@ -229,12 +227,12 @@ BOOL registerT0eventInEvent(unsigned int t, void (*callback)(void)) {
         Entry t_entry=queue[prevpos];
         queue[prevpos]=queue[pos];
         queue[pos]=t_entry;
-        
+
         //go back 1
         pos=prevpos;
         prevpos=prev_entry(pos);
     } ;
-    
+
     return TRUE;
 }
 
@@ -253,7 +251,7 @@ BOOL unregisterT0event(void (*callback)(void)) {
         }
         pos=next_entry(pos);
     }
-    
+
     return TRUE;
 }
 
@@ -264,9 +262,8 @@ void interrupt_handler(void) {
     unsigned int nexttime;
     void (*callback)(void);
 
-//mLED_2_Off();
     //we need ckock interrupts
-    if (INTCONbits.TMR0IF){    
+    if (INTCONbits.TMR0IF){
         //TODO este servicio atrasa cada vez que se registra o procesa un evento.
         //disable interrupts
         T0CONbits.TMR0ON  = FALSE;
@@ -281,7 +278,7 @@ void interrupt_handler(void) {
         //advance the queue
         pop_first();
         e=get_first();
-    
+
         //if there's a new head event, configure the clock
         if (e!=NULL) {
             nexttime = 0xFFFF - (e->timestamp - currtime);

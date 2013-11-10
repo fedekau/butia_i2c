@@ -14,16 +14,11 @@
 
 /** D E F I N I T I O N S ****************************************************/
 
-#define MOTORS_AX12            0x01
-#define MOTORS_SHIELD_CC       0x02
+#define MOTORS_AX12        (byte) 0x01
+#define MOTORS_SHIELD_CC   (byte) 0x02
 
 #define MOTORS_MINOR_VERSION   0x02    /*motors version*/
 #define MOTORS_MAJOR_VERSION   0x00
-
-#define FIRST_ON    0x01
-#define DELAY       0x02
-#define SECOND_ON   0x03
-#define END         0x04
 
 #define TIME_UNIT        2000
 #define LONG_TIME_UNIT   5000
@@ -33,6 +28,9 @@
 
 #define MASK_SHIELD (byte) 0x07
 #define SHIELD_CC   (byte) 0x04
+
+typedef void (*fGetVolt)(int *);
+typedef void (*fMoveMotor)(unsigned int, byte);
 
 /** S T R U C T U R E S ******************************************************/
 typedef union MOTORS_DATA_PACKET {
@@ -71,5 +69,6 @@ typedef union MOTORS_DATA_PACKET {
 /** P U B L I C  P R O T O T Y P E S *****************************************/
 void autoDetectWheels(void);
 void getVoltage(int*);
+byte getMotorType(void);
 
 #endif /*USER_MOTORS_H*/

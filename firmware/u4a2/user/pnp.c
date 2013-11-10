@@ -1,6 +1,7 @@
 #include "pnp.h"
 #include "handlerManager.h"
 #include "loaderModule.h"
+#include "user/usr_motors.h"
 
 /** VARIABLES INITIALIZED, CONST ROM **/
 rom const device_resistance table_device_id_resistance[MAX_DEVICES] = {
@@ -9,20 +10,27 @@ rom const device_resistance table_device_id_resistance[MAX_DEVICES] = {
     { "button", R_BOTON_MIN, R_BOTON_MAX},
     { "grey", R_GREY_MIN, R_GREY_MAX},
     { "distanc", R_DIST_MIN, R_DIST_MAX},
-    { "gpio", R_GPIO_MIN, R_GPIO_MAX},
     { "volt", R_VOLT_MIN, R_VOLT_MAX},
     { "res", R_RES_MIN, R_RES_MAX},
     { "led", R_LED_MIN, R_LED_MAX},
-    { "shld_cc", R_SHIELD_CC_MIN, R_SHIELD_CC_MAX}
+    { "temp", R_TEMP_MAX, R_TEMP_MIN},
+    { "modSenA", R_MOD_SEN_A_MIN, R_MOD_SEN_A_MAX},
+    { "modSenB", R_MOD_SEN_B_MIN, R_MOD_SEN_B_MAX},
+    { "modSenC", R_MOD_SEN_C_MIN, R_MOD_SEN_C_MAX},
+    { "modActA", R_MOD_ACT_A_MIN, R_MOD_ACT_A_MAX},
+    { "modActB", R_MOD_ACT_B_MIN, R_MOD_ACT_B_MAX},
+    { "modActB", R_MOD_ACT_C_MIN, R_MOD_ACT_C_MAX}
 };
 
-#pragma udata 
+/** VARIABLES UNINITIALIZED, RAM **/
+#pragma udata
 byte PNPHandler = 0;
 byte* sendBufferPNP; // buffer to send data
+byte detected_device_type_id[MAX_PORTS]; /*the device_type_id of the device connected*/
+endpoint pnpEndpoint;
 
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void PNPProcessIO(void);
 void PNPInit(byte i);
 void PNPReceived(byte*, byte, byte);
 void PNPRelease(byte i);
@@ -30,14 +38,9 @@ void PNPRelease(byte i);
 // Table used by te framework to get a fixed reference point to the user module functions defined by the framework
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
-uTab PNPModuleTable = {&PNPInit, &PNPRelease, "pnp"};
+const uTab PNPModuleTable = {&PNPInit, &PNPRelease, "pnp"};
 #pragma code
 
-
-/** VARIABLES UNINITIALIZED, RAM **/
-#pragma udata
-byte detected_device_type_id[MAX_PORTS]; /*the device_type_id of the device connected*/
-endpoint pnpEndpoint;
 /* CODE */
 #pragma code module
 
@@ -48,18 +51,20 @@ void initTableDetectedDevice(void) {
 
 void PNPInit(byte i) {
     byte modulename[8];
+    byte aux;
 
     if (PNPHandler) return;
     PNPHandler = i;
     // add my receive function to the handler module, to be called automatically when the pc sends data to the user module
     setHandlerReceiveFunction(PNPHandler, &PNPReceived);
-    // add my receive pooling function to the dynamic pooling module, to be called periodically
-    //res = addPollingFunction(&UserPNPProcessIO);
     // initialize the send buffer, used to send data to the PC
     sendBufferPNP = getSharedBuffer(PNPHandler);
     pnpEndpoint = getPnPEndpoint();
-
-    initPorts(); //USB4butia init port
+    if (getMotorType() == MOTORS_SHIELD_CC) {
+        initPorts(1);
+    } else {
+        initPorts(0);
+    }
     initTableDetectedDevice(); //All Disconected
 
     modulename[0] = 'p';
@@ -71,12 +76,9 @@ void PNPInit(byte i) {
     modulename[6] = 0;
     modulename[7] = 0;
 
-    openPnP(modulename, 1);
-    openPnP(modulename, 2);
-    openPnP(modulename, 3);
-    openPnP(modulename, 4);
-    openPnP(modulename, 5);
-    openPnP(modulename, 6);
+    for (aux = 0; aux < MAX_PORTS; aux++) {
+        openPnP(modulename, aux + 1);
+    }
 
     //register the detection mecanism in the timmer interrupt
     registerT0event(PNP_DETECTION_TIME, &hotplug_pnp);
@@ -86,7 +88,6 @@ void PNPInit(byte i) {
 void PNPRelease(byte i) {
     unsetHandlerReceiveBuffer(i);
     unsetHandlerReceiveFunction(i);
-    //removePoolingFunction(&UserPNPProcessIO);
     unregisterT0event(&hotplug_pnp);
 }
 
@@ -100,7 +101,6 @@ byte get_device_type(WORD resistValue) {
         MIN = table_device_id_resistance[i].resValue_min;
         if ((resistValue._word <= MAX._word) && (MIN._word <= resistValue._word)) return i;
     }
-
     return DISCONECTED; // 0 = "port" device
 }
 
@@ -108,7 +108,6 @@ void openPnP(byte moduleId[8], byte handler) {
     void (*pUser)(byte);
     rom near char* tableDirec;
     tableDirec = getUserTableDirection(moduleId);
-
     if (tableDirec != (rom near char*) ERROR) {
         handler = newHandlerTableEntryForcingHandler(pnpEndpoint.endPoint, tableDirec, handler);
         pUser = getModuleInitDirection(tableDirec);
@@ -122,13 +121,13 @@ void closePnP(byte handler) {
 
 void hotplug_pnp(void) {
     byte port, device_type;
-    char modulename[8];
+    byte modulename[8];
     /*do detection*/
     for (port = 0; port < MAX_PORTS; port++) {
         device_type = get_device_type(board_ports[port].get_val_detection_pin());
         if (device_type != detected_device_type_id[port]) {
-            // Change that board_port[device_type].detected_device_id for detected_device_type_id[port]
             closePnP(port + 1);
+            // is this necessary or we can use table_devie.. directly ?
             modulename[0] = table_device_id_resistance[device_type].name[0];
             modulename[1] = table_device_id_resistance[device_type].name[1];
             modulename[2] = table_device_id_resistance[device_type].name[2];
@@ -137,9 +136,7 @@ void hotplug_pnp(void) {
             modulename[5] = table_device_id_resistance[device_type].name[5];
             modulename[6] = table_device_id_resistance[device_type].name[6];
             modulename[7] = table_device_id_resistance[device_type].name[7];
-            
-
-            openPnP((byte *) modulename, port + 1); /*in table_device_id_resistance_value are defined all device types with the resistance value*/
+            openPnP(modulename, port + 1);
             detected_device_type_id[port] = device_type;
         }
     }
@@ -150,9 +147,8 @@ void hotplug_pnp(void) {
 //This is a internal module model as a user module, so this command are for testing purpouse only
 
 void PNPReceived(byte* recBuffPtr, byte len, byte handler) {
-    byte index;
     byte userPNPCounter = 0;
-    byte j;
+
     switch (((PNP_DATA_PACKET*) recBuffPtr)->CMD) {
         case READ_VERSION:
             ((PNP_DATA_PACKET*) sendBufferPNP)->_byte[0] = ((PNP_DATA_PACKET*) recBuffPtr)->_byte[0];
@@ -160,13 +156,13 @@ void PNPReceived(byte* recBuffPtr, byte len, byte handler) {
             ((PNP_DATA_PACKET*) sendBufferPNP)->_byte[2] = PNP_MAJOR_VERSION;
             userPNPCounter = 0x03;
             break;
+
+        default:
+            break;
     }
-    if (userPNPCounter != (byte) 0) {
-        j = 255;
-        while (mUSBGenTxIsBusy() && j-- > (byte) 0); /* pruebo un maximo de 255 veces */
-            if (!mUSBGenTxIsBusy())
-                USBGenWrite2(PNPHandler, userPNPCounter);
-    }//end if
+
+    USBGenWrite2(PNPHandler, userPNPCounter);
+
 }//end PNPReceived
 
 

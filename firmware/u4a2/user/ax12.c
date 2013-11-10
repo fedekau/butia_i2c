@@ -1,4 +1,4 @@
-/****************************************************************************** 
+/******************************************************************************
  * Nombre: ax12.c
  * Tipo:   SOURCE FILE
  * Uso:    Funciones para el control de los servos Dynamixel AX-12.
@@ -31,7 +31,7 @@
  ******************************************************************************/
 
 /* Includes */
-#include "p18f4550.h"                                  
+#include "p18f4550.h"
 #include "ax12.h"
 
 #define FF 0xFF
@@ -115,7 +115,7 @@ void int_vector (void){
 
 #pragma interrupt isr_RX
 void isr_RX(void){
-    ax_rx_buffer[(ax_rx_Pointer++)] = RCREG;    //guarda el byte recibido en el 
+    ax_rx_buffer[(ax_rx_Pointer++)] = RCREG;    //guarda el byte recibido en el
                                                 //en el buffer
 }
 
@@ -128,24 +128,24 @@ void isr_RX(void){
 /*****************************************************************************/
 void ax12InitSerial(void) {
     TXSTA = 0; // configuraci?n del registro TXSTA
-    TXSTAbits.TX9 = 0; // transmisi?n de 8 bits
-    TXSTAbits.TXEN = 0; // transmisi?n deshabilitada*
-    TXSTAbits.SYNC = 0; // modo asincr?nico
+    TXSTAbits.TX9 = 0; // transmision de 8 bits
+    TXSTAbits.TXEN = 0; // transmision deshabilitada*
+    TXSTAbits.SYNC = 0; // modo asincronico
     TXSTAbits.SENDB = 0; // Break Character //Send Sync Break on next transmission
     TXSTAbits.BRGH = 1; // High Speed
 
-    RCSTA = 0; // configuraci?n del registro RCSTA
-    RCSTAbits.SPEN = 1; // pins RX y TX para comunicaci?n serial
-    RCSTAbits.RX9 = 0; // recepci?n de 8 bits
+    RCSTA = 0; // configuracion del registro RCSTA
+    RCSTAbits.SPEN = 1; // pins RX y TX para comunicacion serial
+    RCSTAbits.RX9 = 0; // recepcion de 8 bits
     RCSTAbits.CREN = 0; // recepcion deshabilitada*
 
-    BAUDCON = 0; // configuraci?n del registro BAUDCON
+    BAUDCON = 0; // configuracion del registro BAUDCON
     BAUDCONbits.BRG16 = 1; // Generador de BAUD RATE de 16 bits
     SPBRG = 0x04; // BRGH=BRG16 = 1 | OSC = 20MHZ => 1 Mbps
 
-    // configuraci?n de interrupciones
+    // configuracion de interrupciones
     INTCONbits.GIE = 1; // habilito interrupciones globales
-    INTCONbits.PEIE = 1; // habilito interrupciones de perif?ricos
+    INTCONbits.PEIE = 1; // habilito interrupciones de perifericos
 
     TRISCbits.TRISC7 = 1; // PORTC<7> como entrada
     //setRX();                        // MODO RX
@@ -159,27 +159,26 @@ void ax12InitSerial(void) {
 /*****************************************************************************/
 
 void setTX(void) { // Modo TX
-    //PIE1bits.RCIE = 0;              // deshabilita la interrupci?n de recepci?n
-    RCSTAbits.CREN = 0; // deshabilita la recepci?n
-    // Configuro la transmisi?n
+    //PIE1bits.RCIE = 0; // deshabilita la interrupcion de recepcion
+    RCSTAbits.CREN = 0; // deshabilita la recepcion
+    // Configuro la transmision
     TRISCbits.TRISC6 = 0; // PORTC<6> como salida
-    TXSTAbits.TXEN = 1; // habilita la transmisi?n
-
+    TXSTAbits.TXEN = 1; // habilita la transmision
 }
 
 void setRX(void) { // Modo RX
-    // Desconfiguro la transmisi?n
+    // Desconfiguro la transmision
     TRISCbits.TRISC6 = 1; // PORTC<6> como entrada
-    TXSTAbits.TXEN = 0; // deshabilita la transmisi?n
+    TXSTAbits.TXEN = 0; // deshabilita la transmision
 
-    RCSTAbits.CREN = 1; // habilita la recepci?n
-    //PIE1bits.RCIE = 1;              // habilita la interrupci?n de recepci?n
+    RCSTAbits.CREN = 1; // habilita la recepcion
+    //PIE1bits.RCIE = 1; // habilita la interrupcion de recepcion
     ax_rx_Pointer = 0; // resetea el puntero del buffer
 }
 
 void setNone(void) { // Modo RESET
-    RCSTAbits.CREN = 0; // deshabilita la recepci?n
-    TXSTAbits.TXEN = 0; // deshabilita la transmisi?n
+    RCSTAbits.CREN = 0; // deshabilita la recepcion
+    TXSTAbits.TXEN = 0; // deshabilita la transmision
 }
 
 byte ax12writeB(byte data) {
@@ -210,11 +209,11 @@ void ax12SendPacket(byte id, byte datalength, byte instruction, byte *data) {
     checksum += ax12writeB(id);
     checksum += ax12writeB(datalength + 2);
     checksum += ax12writeB(instruction);
-    for (f = 0; f < datalength; f++) { // data = par?metros
+    for (f = 0; f < datalength; f++) { // data = parametros
         checksum += ax12writeB(data[f]);
     }
     ax12writeB(~checksum); // Espero que se
-    while (!TXSTAbits.TRMT); // complete la transmisi?n
+    while (!TXSTAbits.TRMT); // complete la transmision
     setRX(); // Modo RX
 }
 

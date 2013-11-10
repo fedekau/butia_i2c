@@ -32,19 +32,19 @@
  * Author               Date        Comment
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * Rawin Rojvanit       11/19/04    Original.
- * Rafael Fernandez     10/03/07    
- * Andres Aguirre	    27/03/07 	 
+ * Rafael Fernandez     10/03/07
+ * Andres Aguirre	    27/03/07
  ********************************************************************/
 
 /** I N C L U D E S **********************************************************/
-#include <p18cxxx.h>			
+#include <p18cxxx.h>
 #include <delays.h>
 #include "system/typedefs.h"                        // Required
 #include "system/usb/usb.h"                         // Required
 #include "io_cfg.h"                                 // Required
 
 #include "system/usb/usb_compile_time_validation.h" // Optional
-#include "user/dynamicPolling.h"                    // Modifiable
+//#include "user/dynamicPolling.h"                    // Modifiable
 #include "usb4all/dynamicISR/dynamicISR.h"          // Modifiable
 #include "usb4all/proxys/T0Service.h"
 //#include "usb4all/proxys/T1Service.h"
@@ -121,7 +121,7 @@
 #pragma config DEBUG = OFF
 
 /* Code Protection Block 0 */
-#pragma config CP0 = OFF 
+#pragma config CP0 = OFF
 
 /* Code Protection Block 1 */
 #pragma config CP1 = OFF
@@ -149,7 +149,6 @@
 
 /* Write Protection Block 3 */
 #pragma config WRT3 = OFF
-
 
 /* Boot Block Write Protection */
 #pragma config WRTB = OFF
@@ -193,7 +192,7 @@ void _reset (void)
 #pragma code sys
 
 //#pragma interrupt interruption save=section(".tmpdata")
-#pragma code _HIGH_INTERRUPT_VECTOR = 0x0008C8 
+#pragma code _HIGH_INTERRUPT_VECTOR = 0x0008C8
 void _high_ISR (void)
 {
     _asm GOTO interruption _endasm //llamo a interruption() de dynamicISR
@@ -202,77 +201,12 @@ void _high_ISR (void)
 #pragma code _LOW_INTERRUPT_VECTOR = 0x0008D8
 void _low_ISR (void)
 {
-    //mLED_2_On();
-	//interruption();
+    //interruption();
 }
 //#pragma code
 
 /** D E C L A R A T I O N S **************************************************/
 #pragma code sys
-
-
-/******************************************************************************
- * Function:        void initial_test(void)
- *
- * PreCondition:    None
- *
- * Input:           None
- *
- * Output:          None
- *
- * Side Effects:    None
- *
- * Overview:        Hace un test de los perifericos al inicio
- *
- * Note:            None
- *****************************************************************************/
-
-void wait_time(int N) {
-    int i;
-    for(i=0; i<N; i++) {Delay10KTCYx(250);}
-}
-/*
-void setMensaje(char * m, int N) {
-    int i;
-    for(i=0; i<32; i++) m[i]=' ';
-    m[5]='P';m[6]='r';m[7]='o';m[8]='b';m[9]='a';m[10]='n';m[11]='d';m[12]='o';
-    switch(N) {
-        case 1:
-            break;
-        case 2:
-            break;
-        case 3:
-            break;
-    }
-}
-*/
-  
-/*void initial_test(void) {
-    char mensaje1[] = "Firmware ver 2.2   build 2.2.01 ";
-    char mensaje2[] = "    Probando          Leds      ";
-    char mensaje3[] = "    Probando         Buzzer     ";
-    
-    printScreen(mensaje1);
-    BACK_LIGHT_ON();
-    wait_time(20);
-
-    BACK_LIGHT_OFF(); wait_time(3); BACK_LIGHT_ON();
-
-    printScreen(mensaje2);
-    blink_led(2, 30, 1);
-    blink_led(4, 15, 2);
-    blink_led(6, 10, 3);
-    wait_time(30);
-
-    BACK_LIGHT_OFF(); wait_time(3); BACK_LIGHT_ON();
-
-    printScreen(mensaje3);
-    wait_time(4);
-    boubleBeep(3, 1, 4);
-    wait_time(5);
-    BACK_LIGHT_OFF();
-}
-*/
 
 /******************************************************************************
  * Function:        void main(void)
@@ -293,19 +227,14 @@ void setMensaje(char * m, int N) {
 #define WAIT_SECONDS(s) {int i; for(i=0; i<10*(s); i++) Delay10KTCYx(250);}
 
 void main(void) {
-    InitializeSystem();      
+    InitializeSystem();
     while(1) {
         USBTasks();         // USB Tasks
-        polling();
+        //polling();
         USBGenRead2();
     }//end while
 }//end main
 
-// not used:
-//void initButiaMotors(){
-//    ax12InitSerial();
-//    autoDetectWheels();
-//}
 /******************************************************************************
  * Function:        static void InitializeSystem(void)
  *
@@ -322,7 +251,7 @@ void main(void) {
  *                  here.
  *
  *                  User application initialization routine should also be
- *                  called from here.                  
+ *                  called from here.
  *
  * Note:            None
  *****************************************************************************/
@@ -344,10 +273,10 @@ static void InitializeSystem(void) {
 
     initISRFunctions();      // Initialize interrupt service routines mechanism of USB4all
     initT0Service();         // Inicializa servicio T0 para manejar recurso de timmer
-//    initT1Service();         // Inicializa servicio T1 para manejar recurso de timmer
-    initPollingFunctions();  // inicializa el buffer con 0s (dynamicPolling.c)
+    //initT1Service();         // Inicializa servicio T1 para manejar recurso de timmer
+    //initPollingFunctions();  // inicializa el buffer con 0s (dynamicPolling.c)
     initHandlerManager();    // inicializa el map de enpoints y crea el enpoint 0 (adminModule.c)
-	
+
 }//end InitializeSystem
 
 /******************************************************************************
@@ -366,12 +295,12 @@ static void InitializeSystem(void) {
  * Note:            None
  *****************************************************************************/
 void USBTasks(void) {
-	/*
-	* Servicing Hardware
-	*/
-	USBCheckBusStatus();                    // Must use polling method
-	if(UCFGbits.UTEYE!= (unsigned) 1)
-		USBDriverService();                 // Interrupt or polling method
+    /*
+    * Servicing Hardware
+    */
+    USBCheckBusStatus();                    // Must use polling method
+    if(UCFGbits.UTEYE!= (unsigned) 1)
+        USBDriverService();                 // Interrupt or polling method
 
 }// end USBTasks
 

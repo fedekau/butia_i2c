@@ -23,7 +23,7 @@ typedef union BUTIA_DATA_PACKET
     struct
     {
         enum
-        { 
+        {
             READ_VERSION_BUTIA = 0x02,
             GET_VOLT     = 0x03,
             RESET	 = 0xFF

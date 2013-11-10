@@ -21,7 +21,7 @@ typedef union BUTTON_DATA_PACKET
     struct
     {
         enum
-        { 
+        {
             READ_VERSION = 0x00,
             GET_VALUE    = 0x01,
             RESET        = 0xFF  /*backward compatibility*/

@@ -4,7 +4,7 @@
 /** C O N S T A N T S ************************************************/
 #pragma romdata _device_dsc
 
-//	 Device Descriptor 
+//	 Device Descriptor
 rom USB_DEV_DSC device_dsc=
 {
     sizeof(USB_DEV_DSC),    // Size of this descriptor in bytes
@@ -39,19 +39,19 @@ sizeof(USB_INTF_DSC),   // Size of this descriptor in bytes
 DSC_INTF,               // INTERFACE descriptor type
 0,                      // Interface Number
 0,                      // Alternate Setting Number
-6,                      // Number of endpoints in this intf
+2,                      // Number of endpoints in this intf
 0x0,                   // Class code
 0x0,                   // Subclass code
 0x0,                   // Protocol code
 0,                      // Interface string index
 
 //				 Endpoint Descriptors
-sizeof(USB_EP_DSC),DSC_EP,_EP01_OUT,_BULK,64,255,
-sizeof(USB_EP_DSC),DSC_EP,_EP01_IN,_BULK,64,255,
-sizeof(USB_EP_DSC),DSC_EP,_EP02_OUT,_BULK,64,255,
-sizeof(USB_EP_DSC),DSC_EP,_EP02_IN,_BULK,64,255,
-sizeof(USB_EP_DSC),DSC_EP,_EP03_OUT,_ISO,64,6,
-sizeof(USB_EP_DSC),DSC_EP,_EP03_IN,_ISO,64,6};
+sizeof(USB_EP_DSC),DSC_EP,_EP01_OUT,_BULK,USBGEN_EP_SIZE,255,
+sizeof(USB_EP_DSC),DSC_EP,_EP01_IN,_BULK,USBGEN_EP_SIZE,255};
+//sizeof(USB_EP_DSC),DSC_EP,_EP02_OUT,_BULK,USBGEN_EP_SIZE,255,
+//sizeof(USB_EP_DSC),DSC_EP,_EP02_IN,_BULK,USBGEN_EP_SIZE,255,
+//sizeof(USB_EP_DSC),DSC_EP,_EP03_OUT,_ISO,USBGEN_EP_SIZE,6,
+//sizeof(USB_EP_DSC),DSC_EP,_EP03_IN,_ISO,USBGEN_EP_SIZE,6};
 rom struct{byte bLength;byte bDscType;word string[1];}sd000={
 sizeof(sd000),DSC_STR,0x409};
 rom struct{byte bLength;byte bDscType;word string[36];}sd001={

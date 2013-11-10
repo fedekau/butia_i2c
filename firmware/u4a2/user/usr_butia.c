@@ -8,21 +8,18 @@
 #include "system/typedefs.h"
 #include "user/usr_butia.h"
 #include "user/handlerManager.h"
-#include "dynamicPolling.h"                              
 #include "usr_motors.h"
 
 /** V A R I A B L E S ********************************************************/
-#pragma udata 
-
+#pragma udata
 byte* sendBufferusrButia; // buffer to send data
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void UserButiaProcessIO(void);
-void UserButiaInit(byte i);
+void UserButiaInit(byte handler);
 void UserButiaReceived(byte*, byte, byte);
-void UserButiaRelease(byte i);
+void UserButiaRelease(byte handler);
 
-// Table used by te framework to get a fixed reference point to the user module functions defined by the framework 
+// Table used by te framework to get a fixed reference point to the user module functions defined by the framework
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
 const uTab UserButiaModuleTable = {&UserButiaInit,&UserButiaRelease,"butia"};
@@ -42,43 +39,19 @@ const uTab UserButiaModuleTable = {&UserButiaInit,&UserButiaRelease,"butia"};
  *
  * Side Effects:    None
  *
- * Overview:        This function is initialices the resources that the user module needs to work, it is called by the framework 
- *					when the module is opened	
+ * Overview:        This function is initialices the resources that the user module needs to work, it is called by the framework
+ *					when the module is opened
  *
  * Note:            None
  *****************************************************************************/
 
-void UserButiaInit(byte usrButiaHandler){
+void UserButiaInit(byte handler){
     // add my receive function to the handler module, to be called automatically when the pc sends data to the user module
-    setHandlerReceiveFunction(usrButiaHandler,&UserButiaReceived);
-    // add my receive pooling function to the dynamic pooling module, to be called periodically
-    // res = addPollingFunction(&UserButiaProcessIO);
+    setHandlerReceiveFunction(handler,&UserButiaReceived);
     // initialize the send buffer, used to send data to the PC
-    sendBufferusrButia = getSharedBuffer(usrButiaHandler);
+    sendBufferusrButia = getSharedBuffer(handler);
 }//end UserButiaInit
 
-/******************************************************************************
- * Function:        UserButiaProcessIO(void)
- *
- * PreCondition:    None
- *
- * Input:           None
- *
- * Output:          None
- *
- * Side Effects:    None
- *
- * Overview:        This function is registered in the dinamic polling, who call ir periodically to process the IO interaction
- *					int the PIC, also it can comunicate things to the pc by the USB	
- *
- * Note:            None
- *****************************************************************************/
-
-void UserButiaProcessIO(void){
-    if((usb_device_state < CONFIGURED_STATE)||(UCONbits.SUSPND== (unsigned) 1)) return;
-	// here enter the code that want to be called periodically, per example interaction with buttons and leds
-	
-}//end ProcessIO
 
 /******************************************************************************
  * Function:        UserButiaRelease(byte i)
@@ -91,15 +64,15 @@ void UserButiaProcessIO(void){
  *
  * Side Effects:    None
  *
- * Overview:        This function release all the resources that the user module used, it is called by the framework 
- *					when the module is close	
+ * Overview:        This function release all the resources that the user module used, it is called by the framework
+ *					when the module is close
  *
  * Note:            None
  *****************************************************************************/
 
-void UserButiaRelease(byte i){
-    unsetHandlerReceiveBuffer(i);
-    unsetHandlerReceiveFunction(i);
+void UserButiaRelease(byte handler){
+    unsetHandlerReceiveBuffer(handler);
+    unsetHandlerReceiveFunction(handler);
 }
 
 /******************************************************************************
@@ -119,7 +92,6 @@ void UserButiaRelease(byte i){
  *****************************************************************************/
 
 void UserButiaReceived(byte* recBuffPtr, byte len, byte handler){
-    byte i, j;
     byte UserButiaCounter = 0;
     int data_received = 3;
 
@@ -129,26 +101,22 @@ void UserButiaReceived(byte* recBuffPtr, byte len, byte handler){
             ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[0] = ((BUTIA_DATA_PACKET*)recBuffPtr)->_byte[0];
             ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[1] = BUTIA_VERSION;
             UserButiaCounter=0x02;
-        break;
+            break;
         case GET_VOLT:
             ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[0] = ((BUTIA_DATA_PACKET*)recBuffPtr)->_byte[0];
             getVoltage(&data_received);
             ((BUTIA_DATA_PACKET*)sendBufferusrButia)->_byte[1] = (byte) (data_received % 256);
             UserButiaCounter=0x02;
-        break;
+            break;
         case RESET:
             Reset();
-        break;
+            break;
 
         default:
-        break;
+            break;
     }/*end switch(s)*/
-    if(UserButiaCounter != (byte) 0){
-        j = 255;
-        while(mUSBGenTxIsBusy() && j--> (byte) 0); // pruebo un maximo de 255 veces
-            if(!mUSBGenTxIsBusy())
-                USBGenWrite2(handler, UserButiaCounter);
-    }/*end if*/
+
+    USBGenWrite2(handler, UserButiaCounter);
 
 }/*end UserButiaReceived*/
 

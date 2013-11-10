@@ -12,25 +12,20 @@
 #include "user/port.h"
 #include "io_cfg.h"              // I/O pin mapping
 #include "user/handlerManager.h"
-#include "dynamicPolling.h"   
-#include "usb4all/proxys/T0Proxy.h"
-
 
 /** V A R I A B L E S ********************************************************/
-#pragma udata 
-
-
+#pragma udata
 byte* sendBufferPort; // buffer to send data
+
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void PortProcessIO(void);
 void PortInit(byte i);
 void PortReceived(byte*, byte, byte);
 void PortRelease(byte i);
 
-// Table used by te framework to get a fixed reference point to the user module functions defined by the framework 
+// Table used by te framework to get a fixed reference point to the user module functions defined by the framework
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
-uTab PortModuleTable = {&PortInit, &PortRelease, "port"};
+const uTab PortModuleTable = {&PortInit, &PortRelease, "port"};
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
@@ -46,9 +41,9 @@ uTab PortModuleTable = {&PortInit, &PortRelease, "port"};
  * Output:          None
  *
  * Side Effects:    None
- *   
- * Overview:        This function is initialices the resources that the user module needs to work, it is called by the framework 
- *                    when the module is opened    
+ *
+ * Overview:        This function is initialices the resources that the user module needs to work, it is called by the framework
+ *                    when the module is opened
  *
  * Note:            None
  *****************************************************************************/
@@ -58,12 +53,10 @@ void PortInit(byte i) {
     setHandlerReceiveFunction(i, &PortReceived);
     // initialize the send buffer, used to send data to the PC
     sendBufferPort = getSharedBuffer(i);
-    board_ports[i - 1].change_port_direction(IN);
-}//end UserLedAmarilloInit
+    //get port where sensor/actuator is connected and set to OUT mode
+    getPortDescriptor(i)->change_port_direction(IN);
+}//end PortInit
 
-void PortProcessIO(void) {
-
-}//end ProcessIO
 
 /******************************************************************************
  * Function:        PortRelease(byte i)
@@ -76,8 +69,8 @@ void PortProcessIO(void) {
  *
  * Side Effects:    None
  *
- * Overview:        This function release all the resources that the user module used, it is called by the framework 
- *                    when the module is close    
+ * Overview:        This function release all the resources that the user module used, it is called by the framework
+ *                    when the module is close
  *
  * Note:            None
  *****************************************************************************/
@@ -104,11 +97,7 @@ void PortRelease(byte i) {
  *****************************************************************************/
 
 void PortReceived(byte* recBuffPtr, byte len, byte handler) {
-    byte j;
     byte PortCounter = 0;
-    WORD aux;
-    port_descriptor port;
-    port = board_ports[0]; //it's harcode to port 1
 
     switch (((PORT_DATA_PACKET*) recBuffPtr)->CMD) {
         case READ_VERSION:
@@ -121,21 +110,16 @@ void PortReceived(byte* recBuffPtr, byte len, byte handler) {
 
         case GET_RES:
             ((PORT_DATA_PACKET*) sendBufferPort)->_byte[0] = ((PORT_DATA_PACKET*) recBuffPtr)->_byte[0];
-            //aux = port.get_val_detection_pin();
             ((PORT_DATA_PACKET*) sendBufferPort)->_byte[1] = 255;
-            //((PORT_DATA_PACKET*) sendBufferPort)->_byte[2] = MSB(aux);
             PortCounter = 0x02;
             break;
 
         default:
             break;
     }//end switch(s)
-    if (PortCounter != (byte) 0) {
-        j = 255;
-        while (mUSBGenTxIsBusy() && j-- > (byte) 0); // pruebo un maximo de 255 veces
-            if (!mUSBGenTxIsBusy())
-                USBGenWrite2(handler, PortCounter);
-    }//end if
+
+    USBGenWrite2(handler, PortCounter);
+
 }//end PortReceived
 
 /** EOF port.c ***************************************************************/

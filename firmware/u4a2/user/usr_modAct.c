@@ -1,6 +1,6 @@
 /* Author                                           Date        Comment
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- * Aylen Ricca                                      19/04/12    Original.
+ * Alan Aguiar                                      04/09/123   Original.
  *****************************************************************************/
 
 /** I N C L U D E S **********************************************************/
@@ -8,34 +8,37 @@
 #include <usart.h>
 #include "system/typedefs.h"
 #include "system/usb/usb.h"
-#include "user/usr_light.h"
+#include "user/usr_modAct.h"
 #include "io_cfg.h"              /* I/O pin mapping*/
 #include "user/handlerManager.h"
-#include "dynamicPolling.h"
-#include "user/usb4butia.h"     /**/
+#include "user/usb4butia.h"
 
 /** V A R I A B L E S ********************************************************/
-#pragma udata 
+#pragma udata
+byte* sendBufferUsrModAct; /* buffer to send data*/
 
-byte* sendBufferUsrLight; /* buffer to send data*/
+#define ACT_ON    (byte) 1
+#define ACT_OFF   (byte) 0
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void UserLightProcessIO(void);
-void UserLightInit(byte i);
-void UserLightReceived(byte*, byte, byte);
-void UserLightRelease(byte i);
+void UserModActInit(byte handler);
+void UserModActReceived(byte*, byte, byte);
+void UserModActRelease(byte handler);
 
 /* Table used by te framework to get a fixed reference point to the user module functions defined by the framework */
 /** USER MODULE REFERENCE ****************************************************/
 #pragma romdata user
-const uTab userLightModuleTable = {&UserLightInit, &UserLightRelease, "light"};
+const uTab userModActATable = {&UserModActInit, &UserModActRelease, "modActA"};
+const uTab userModActBTable = {&UserModActInit, &UserModActRelease, "modActB"};
+const uTab userModActCTable = {&UserModActInit, &UserModActRelease, "modActC"};
+const uTab userLedModuleTable = {&UserModActInit, &UserModActRelease, "led"};
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
 #pragma code module
 
 /******************************************************************************
- * Function:        UserLightInit(void)
+ * Function:        UserModActInit(void)
  *
  * PreCondition:    None
  *
@@ -51,41 +54,19 @@ const uTab userLightModuleTable = {&UserLightInit, &UserLightRelease, "light"};
  *
  * Note:            None
  *****************************************************************************/
-void UserLightInit(byte usrLightHandler) {
+void UserModActInit(byte handler) {
     /* add my receive function to the handler module, to be called automatically
      * when the pc sends data to the user module */
-    setHandlerReceiveFunction(usrLightHandler, &UserLightReceived);
+    setHandlerReceiveFunction(handler, &UserModActReceived);
     /* initialize the send buffer, used to send data to the PC */
-    sendBufferUsrLight = getSharedBuffer(usrLightHandler);
+    sendBufferUsrModAct = getSharedBuffer(handler);
     /* get port where sensor/actuator is connected and set to IN/OUT mode*/
-    getPortDescriptor(usrLightHandler)->change_port_direction(IN);
-}/*end UserLightInit*/
+    getPortDescriptor(handler)->change_port_direction(OUT);
+}/*end UserModActInit*/
+
 
 /******************************************************************************
- * Function:        UserLightProcessIO(void)
- *
- * PreCondition:    None
- *
- * Input:           None
- *
- * Output:          None
- *
- * Side Effects:    None
- *
- * Overview:        This function is registered in the dinamic polling, who
- *                  calls it periodically to process the IO interaction in the
- *                  PIC, it also can comunicate things to the pc by the USB.
- *
- * Note:            None
- *****************************************************************************/
-void UserLightProcessIO(void) {
-    if ((usb_device_state < CONFIGURED_STATE) || (UCONbits.SUSPND == (unsigned) 1)) return;
-    /* here enter the code that want to be called periodically,
-     * per example interaction with buttons and leds */
-}/*end UserLightProcessIO*/
-
-/******************************************************************************
- * Function:        UserLightRelease(byte i)
+ * Function:        UserModActRelease(byte i)
  *
  * PreCondition:    None
  *
@@ -101,13 +82,15 @@ void UserLightProcessIO(void) {
  *
  * Note:            None
  *****************************************************************************/
-void UserLightRelease(byte i) {
-    unsetHandlerReceiveBuffer(i);
-    unsetHandlerReceiveFunction(i);
-}/*end UserLightRelease*/
+void UserModActRelease(byte handler) {
+    getPortDescriptor(handler)->set_data(ACT_OFF);
+    getPortDescriptor(handler)->change_port_direction(IN);
+    unsetHandlerReceiveBuffer(handler);
+    unsetHandlerReceiveFunction(handler);
+}/*end UserModActRelease*/
 
 /******************************************************************************
- * Function:        UserLightReceived(byte* recBuffPtr, byte len)
+ * Function:        UserModActReceived(byte* recBuffPtr, byte len)
  *
  * PreCondition:    None
  *
@@ -121,23 +104,24 @@ void UserLightRelease(byte i) {
  *
  * Note:            None
  *****************************************************************************/
-void UserLightReceived(byte* recBuffPtr, byte len, byte handler) {
-    WORD data;
-    byte userLightCounter = 0;
-    switch (((LIGHT_DATA_PACKET*) recBuffPtr)->CMD) {
+void UserModActReceived(byte* recBuffPtr, byte len, byte handler) {
+    byte userModActCounter = 0;
+    switch (((MODACT_DATA_PACKET*) recBuffPtr)->CMD) {
         case READ_VERSION:
-            ((LIGHT_DATA_PACKET*) sendBufferUsrLight)->_byte[0] = ((LIGHT_DATA_PACKET*) recBuffPtr)->_byte[0];
-            ((LIGHT_DATA_PACKET*) sendBufferUsrLight)->_byte[1] = LIGHT_MINOR_VERSION;
-            ((LIGHT_DATA_PACKET*) sendBufferUsrLight)->_byte[2] = LIGHT_MAJOR_VERSION;
-            userLightCounter = 0x03;
+            ((MODACT_DATA_PACKET*) sendBufferUsrModAct)->_byte[0] = ((MODACT_DATA_PACKET*) recBuffPtr)->_byte[0];
+            ((MODACT_DATA_PACKET*) sendBufferUsrModAct)->_byte[1] = MODACT_MINOR_VERSION;
+            ((MODACT_DATA_PACKET*) sendBufferUsrModAct)->_byte[2] = MODACT_MAJOR_VERSION;
+            userModActCounter = 0x03;
             break;
 
-        case GET_VALUE:
-            ((LIGHT_DATA_PACKET*) sendBufferUsrLight)->_byte[0] = ((LIGHT_DATA_PACKET*) recBuffPtr)->_byte[0];
-            data = getPortDescriptor(handler)->get_data_analog();
-            ((LIGHT_DATA_PACKET*) sendBufferUsrLight)->_byte[1] = LSB(data);
-            ((LIGHT_DATA_PACKET*) sendBufferUsrLight)->_byte[2] = MSB(data);
-            userLightCounter = 0x03;
+        case TURN:
+            ((MODACT_DATA_PACKET*) sendBufferUsrModAct)->_byte[0] = ((MODACT_DATA_PACKET*) recBuffPtr)->_byte[0];
+            if (((MODACT_DATA_PACKET*)recBuffPtr)->_byte[1] == ACT_ON) {
+                getPortDescriptor(handler)->set_data(ACT_ON);
+            } else {
+                getPortDescriptor(handler)->set_data(ACT_OFF);
+            }
+            userModActCounter = 0x01;
             break;
 
         case RESET:
@@ -148,8 +132,8 @@ void UserLightReceived(byte* recBuffPtr, byte len, byte handler) {
             break;
     }/*end switch(s)*/
 
-    USBGenWrite2(handler, userLightCounter);
+    USBGenWrite2(handler, userModActCounter);
 
-}/*end UserLightReceived*/
+}/*end UserModActReceived*/
 
-/** EOF usr_light.c ***************************************************************/
+/** EOF usr_modAct.c ***************************************************************/

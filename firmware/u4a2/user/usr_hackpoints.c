@@ -12,19 +12,16 @@
 #include "user/usr_hackpoints.h"
 #include "io_cfg.h"              /* I/O pin mapping */
 #include "user/handlerManager.h"
-#include "dynamicPolling.h"   
-#include "usb4all/proxys/T0Proxy.h"
+
 
 /** V A R I A B L E S ********************************************************/
-#pragma udata 
-
+#pragma udata
 byte* sendBufferHackPoints; /* buffer to send data*/
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void HackPointsProcessIO(void);
-void HackPointsInit(byte i);
+void HackPointsInit(byte handler);
 void HackPointsReceived(byte*, byte, byte);
-void HackPointsRelease(byte i);
+void HackPointsRelease(byte handler);
 
 /* Table used by te framework to get a fixed reference point
  * to the user module functions defined by the framework
@@ -46,9 +43,9 @@ const uTab HackPointsModuleTable = {&HackPointsInit, &HackPointsRelease, "hackp"
  * Output:          None
  *
  * Side Effects:    None
- *   
- * Overview:        This function is initialices the resources that the user module needs to work, it is called by the framework 
- *                    when the module is opened    
+ *
+ * Overview:        This function is initialices the resources that the user module needs to work, it is called by the framework
+ *                    when the module is opened
  *
  * Note:            None
  *****************************************************************************/
@@ -59,14 +56,11 @@ void HackPointsInit(byte handler) {
     setHandlerReceiveFunction(handler, &HackPointsReceived);
     /* initialize the send buffer, used to send data to the PC */
     sendBufferHackPoints = getSharedBuffer(handler);
-
     /* setting pins to IN mode*/
     PORTD = ZERO;
     TRISD = INPUT;
 }/*end UserLedAmarilloInit*/
 
-void HackPointsProcessIO(void) {
-}/*end ProcessIO */
 
 /******************************************************************************
  * Function:        HACK_POINTSRelease(byte i)
@@ -79,8 +73,8 @@ void HackPointsProcessIO(void) {
  *
  * Side Effects:    None
  *
- * Overview:        This function release all the resources that the user module used, it is called by the framework 
- *                    when the module is close    
+ * Overview:        This function release all the resources that the user module used, it is called by the framework
+ *                    when the module is close
  *
  * Note:            None
  *****************************************************************************/
@@ -109,9 +103,8 @@ void HackPointsRelease(byte handler) {
  *****************************************************************************/
 
 void HackPointsReceived(byte* recBufferHackPoints, byte len, byte handler) {
-    byte j;
     byte HackPointsCounter = 0;
-    int pin;
+    byte pin;
 
     switch (((HACK_POINTS_DATA_PACKET*) recBufferHackPoints)->CMD) {
         case READ_VERSION:
@@ -176,12 +169,9 @@ void HackPointsReceived(byte* recBufferHackPoints, byte len, byte handler) {
         default:
             break;
     }/*end switch(s) */
-    if (HackPointsCounter != (byte) 0) {
-        j = 255;
-        while (mUSBGenTxIsBusy() && j-- > (byte) 0);
-            if (!mUSBGenTxIsBusy())
-                USBGenWrite2(handler, HackPointsCounter);
-    }/*end if*/
+
+    USBGenWrite2(handler, HackPointsCounter);
+
 }/*end HACK_POINTSReceived*/
 
 /** EOF HACK_POINTS.c ***************************************************************/

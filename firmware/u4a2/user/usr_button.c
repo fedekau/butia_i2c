@@ -9,19 +9,16 @@
 #include "user/usr_button.h"
 #include "io_cfg.h"              /* I/O pin mapping */
 #include "user/handlerManager.h"
-#include "dynamicPolling.h"                              
 #include "user/usb4butia.h"
 
 /** V A R I A B L E S ********************************************************/
-#pragma udata 
-
+#pragma udata
 byte* sendBufferUsrButton; /* buffer to send data*/
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void UserButtonProcessIO(void);
-void UserButtonInit(byte i);
+void UserButtonInit(byte handler);
 void UserButtonReceived(byte*, byte, byte);
-void UserButtonRelease(byte i);
+void UserButtonRelease(byte handler);
 
 /* Table used by te framework to get a fixed reference point to the user module functions defined by the framework */
 /** USER MODULE REFERENCE*****************************************************/
@@ -57,28 +54,6 @@ void UserButtonInit(byte handler) {
     getPortDescriptor(handler)->change_port_direction(IN);
 }/*end UserButtonInit*/
 
-/******************************************************************************
- * Function:        UserButtonProcessIO(void)
- *
- * PreCondition:    None
- *
- * Input:           None
- *
- * Output:          None
- *
- * Side Effects:    None
- *
- * Overview:        This function is registered in the dinamic polling, who call ir periodically to process the IO interaction
- *					int the PIC, also it can comunicate things to the pc by the USB	
- *
- * Note:            None
- *****************************************************************************/
-
-void UserButtonProcessIO(void) {
-    if ((usb_device_state < CONFIGURED_STATE) || (UCONbits.SUSPND == (unsigned) 1)) return;
-    /* here enter the code that want to be called periodically, per example interaction with buttons and leds*/
-
-}/*end ProcessIO*/
 
 /******************************************************************************
  * Function:        UserButtonRelease(byte i)
@@ -91,15 +66,15 @@ void UserButtonProcessIO(void) {
  *
  * Side Effects:    None
  *
- * Overview:        This function release all the resources that the user module used, it is called by the framework 
- *					when the module is close	
+ * Overview:        This function release all the resources that the user module used, it is called by the framework
+ *					when the module is close
  *
  * Note:            None
  *****************************************************************************/
 
-void UserButtonRelease(byte i) {
-    unsetHandlerReceiveBuffer(i);
-    unsetHandlerReceiveFunction(i);
+void UserButtonRelease(byte handler) {
+    unsetHandlerReceiveBuffer(handler);
+    unsetHandlerReceiveFunction(handler);
 }
 
 /******************************************************************************
@@ -119,7 +94,6 @@ void UserButtonRelease(byte i) {
  *****************************************************************************/
 
 void UserButtonReceived(byte* recBuffPtr, byte len, byte handler) {
-    byte j;
     byte userButtonCounter = 0;
 
     switch (((BUTTON_DATA_PACKET*) recBuffPtr)->CMD) {
@@ -143,12 +117,8 @@ void UserButtonReceived(byte* recBuffPtr, byte len, byte handler) {
         default:
             break;
     }/*end switch(s)*/
-    if (userButtonCounter != (byte) 0) {
-        j = 255;
-        while (mUSBGenTxIsBusy() && j-- > (byte) 0); /* pruebo un maximo de 255 veces */
-            if (!mUSBGenTxIsBusy())
-                USBGenWrite2(handler, userButtonCounter);
-    }/*end if */
+
+    USBGenWrite2(handler, userButtonCounter);
 
 }/*end UserButtonReceived*/
 

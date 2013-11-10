@@ -13,13 +13,12 @@
 #include "user/usr_motors.h"
 #include "io_cfg.h"              // I/O pin mapping
 #include "user/handlerManager.h"
-#include "dynamicPolling.h"
 #include "usb4all/proxys/T0Service.h"
 #include "pnp.h"
 
-/* Structures to hold motors */
 #pragma code module
 
+/* Structures to hold motors */
 typedef struct _MOTOR {
     byte id;
     byte inverse;
@@ -32,18 +31,22 @@ typedef struct _WHEELS {
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata
-
-/* robot wheels */
 WHEELS wheels;
 byte* sendBufferUsrMotors; // buffer to send data
+fMoveMotor moveLeftMOTOR;
+fMoveMotor moveRightMOTOR;
+fGetVolt getVolt;
+byte current_id = 0;
+byte index = 0;
+byte list_motors[2];
+byte MOTORS_T = MOTORS_AX12;
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void UserMotorsProcessIO(void);
-void UserMotorsInit(byte i);
-void UserMotorsReceivedAX_12(byte*, byte, byte);
-void UserMotorsReceivedSHIELD_CC(byte*, byte, byte);
-void UserMotorsRelease(byte i);
-void sexyMotorMoveStart(void);
+void UserMotorsInit(byte handler);
+void UserMotorsReceived(byte*, byte, byte);
+void UserMotorsRelease(byte handler);
+void sexyMotorMoveStart();
+
 // Table used by the framework to get a fixed reference point to the user module functions defined by the framework
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
@@ -53,47 +56,101 @@ const uTab userMotorsModuleTable = {&UserMotorsInit, &UserMotorsRelease, "motors
 /** D E C L A R A T I O N S **************************************************/
 #pragma code module
 
-/* Definitions to deal with autodetection motors */
-byte current_id = 0;
-byte index = 0;
-byte list_motors[2];
+
+void moveRightCC(unsigned int vel, byte sen){
+    /*
+     * ENABLE A = RD1
+     * SENTIDO A : RD5 - RD6
+     */
+    //TRISD = 0x09;
+    if (vel == (unsigned) 0) {
+        /* detener motor derecho */
+        PORTDbits.RD5 = 0;
+        PORTDbits.RD6 = 0;
+        PORTDbits.RD1 = 0;
+    } else {
+        /* mover motor derecho */
+        PORTDbits.RD1 = 1;
+        if (sen == (byte) 1) {
+            /* adelante */
+            PORTDbits.RD5 = 0;
+            PORTDbits.RD6 = 1;
+        } else {
+            /* atras */
+            PORTDbits.RD5 = 1;
+            PORTDbits.RD6 = 0;
+        }
+    }
+}
+
+void moveLeftCC(unsigned int vel, byte sen){
+     /*
+     * ENABLE B = RD2
+     * SENTIDO B : RD4 - RD7
+     */
+    //TRISD = 0x09;
+    if (vel == (unsigned) 0) {
+        /* detener motor izquierdo */
+        PORTDbits.RD4 = 0;
+        PORTDbits.RD7 = 0;
+        PORTDbits.RD2 = 0;
+    } else {
+        /* mover motor izquierdo */
+        PORTDbits.RD2 = 1;
+        if (sen == (byte) 0) {
+            /* adelante */
+            PORTDbits.RD4 = 0;
+            PORTDbits.RD7 = 1;
+        } else {
+            /* atras */
+            PORTDbits.RD4 = 1;
+            PORTDbits.RD7 = 0;
+        }
+    }
+}
+
+void moveRightAX(unsigned int vel, byte sen){
+    endlessTurn(wheels.right.id, vel, sen);
+}
+
+void moveLeftAX(unsigned int vel, byte sen){
+    endlessTurn(wheels.left.id, vel, sen);
+}
 
 void stopRight() {
-    writeInfo(wheels.right.id, 32, 0);
+    moveRightMOTOR(0, 0);
 }
 
 void backwardRight() {
-    endlessTurn(wheels.right.id, -600, 1);
+    moveRightMOTOR(600, 0);
     registerT0eventInEvent(LONG_TIME_UNIT, &stopRight);
 }
 
 void forwardRight() {
-    endlessTurn(wheels.right.id, 600, 1);
+    moveRightMOTOR(600, 1);
     registerT0eventInEvent(LONG_TIME_UNIT, &backwardRight);
 }
 
 void stopLeft() {
-    writeInfo(wheels.left.id, 32, 0);
+    moveLeftMOTOR(0, 0);
     registerT0eventInEvent(LONG_TIME_UNIT, &forwardRight);
 }
 
 void backwardLeft() {
-    endlessTurn(wheels.left.id, -600, 0);
+    moveLeftMOTOR(600, 1);
     registerT0eventInEvent(LONG_TIME_UNIT, &stopLeft);
 }
 
 void forwardLeft() {
-    endlessTurn(wheels.left.id, 600, 0);
+    moveLeftMOTOR(600, 0);
     registerT0eventInEvent(LONG_TIME_UNIT, &backwardLeft);
 }
 
 void sexyMotorMoveStart() {
-    setEndlessTurnMode(wheels.left.id, 1);
-    setEndlessTurnMode(wheels.right.id, 1);
     registerT0event(TIME_UNIT, &forwardLeft);
 }
 
-void getVoltage(int *data_received) {
+void getVoltAX(int *data_received) {
     byte data [2];
     int err = 0;
     byte id;
@@ -101,6 +158,14 @@ void getVoltage(int *data_received) {
     data[1] = 0x01; /*length of data to read*/
     ax12SendPacket(wheels.left.id, 0x02, READ_DATA, data);
     ax12ReadPacket(&id, &err, data_received);
+}
+
+void getVoltCC(int *data_received) {
+    *data_received = 255;
+}
+
+void getVoltage(int *data_received) {
+    getVolt(data_received);
 }
 
 void ConfigWheels(byte id) {
@@ -153,9 +218,25 @@ void TryAutoDetect() {
 }
 
 void autoDetectWheels() {
-    if ((PORTC & MASK_SHIELD) != SHIELD_CC) {
+    if ((PORTC & MASK_SHIELD) == SHIELD_CC) {
+        moveLeftMOTOR = &moveLeftCC;
+        moveRightMOTOR = &moveRightCC;
+        MOTORS_T = MOTORS_SHIELD_CC;
+        getVolt = &getVoltCC;
+        TRISD = 0x09;
+        PORTD = 0x00;
+        sexyMotorMoveStart();
+    } else {
+        moveLeftMOTOR = &moveLeftAX;
+        moveRightMOTOR = &moveRightAX;
+        MOTORS_T = MOTORS_AX12;
+        getVolt = &getVoltAX;
         registerT0event(TIME_UNIT, &TryAutoDetect);
     }
+}
+
+byte getMotorType() {
+    return MOTORS_T;
 }
 
 /******************************************************************************
@@ -174,39 +255,12 @@ void autoDetectWheels() {
  *
  * Note:            None
  *****************************************************************************/
-void UserMotorsInit(byte usrMotorsHandler) {
-
-    if ((PORTC & MASK_SHIELD) == SHIELD_CC) {
-        TRISD = 0x09;
-        PORTD = 0x00;
-        setHandlerReceiveFunction(usrMotorsHandler, &UserMotorsReceivedSHIELD_CC);
-    } else {
-        setHandlerReceiveFunction(usrMotorsHandler, &UserMotorsReceivedAX_12);
-    }
+void UserMotorsInit(byte handler) {
+    setHandlerReceiveFunction(handler, &UserMotorsReceived);
     // initialize the send buffer, used to send data to the PC
-    sendBufferUsrMotors = getSharedBuffer(usrMotorsHandler);
+    sendBufferUsrMotors = getSharedBuffer(handler);
 }
 
-/******************************************************************************
- * Function:        UserAX12ProcessIO(void)
- *
- * PreCondition:    None
- *
- * Input:           None
- *
- * Output:          None
- *
- * Side Effects:    None
- *
- * Overview:        This function is registered in the dinamic polling, who call ir periodically to process the IO interaction
- *                    int the PIC, also it can comunicate things to the pc by the USB
- *
- * Note:            None
- *****************************************************************************/
-
-void UserMotorsProcessIO(void) {
-    if ((usb_device_state < CONFIGURED_STATE) || (UCONbits.SUSPND == (unsigned) 1)) return;
-}/*end ProcessIO*/
 
 /******************************************************************************
  * Function:        UserAX12Release(byte i)
@@ -225,9 +279,9 @@ void UserMotorsProcessIO(void) {
  * Note:            None
  *****************************************************************************/
 
-void UserMotorsRelease(byte i) {
-    unsetHandlerReceiveBuffer(i);
-    unsetHandlerReceiveFunction(i);
+void UserMotorsRelease(byte handler) {
+    unsetHandlerReceiveBuffer(handler);
+    unsetHandlerReceiveFunction(handler);
 }
 
 /******************************************************************************
@@ -245,154 +299,9 @@ void UserMotorsRelease(byte i) {
  *
  * Note:            None
  *****************************************************************************/
-void UserMotorsReceivedSHIELD_CC(byte* recBuffPtr, byte len, byte handler) {
-    byte motor, j, sen_MI, sen_MD, velH_MI, velH_MD, velL_MI, velL_MD, userMotorsCounter = 0;
-    unsigned int velD, velI;
-
-    switch (((MOTORS_DATA_PACKET*) recBuffPtr)->CMD) {
-
-        case READ_VERSION:
-            ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[0];
-            ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[1] = MOTORS_MINOR_VERSION;
-            ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[2] = MOTORS_MAJOR_VERSION;
-            userMotorsCounter = 0x03;
-            break;
-
-        case GET_TYPE:
-            ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[0];
-            ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[1] = MOTORS_SHIELD_CC;
-            userMotorsCounter = 0x02;
-            break;
-
-        case SET_VEL_MTR:
-            ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[0];
-            motor = (byte) ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[1];
-            sen_MI = (byte) ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[2];
-            velH_MI = (byte) ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[3];
-            velL_MI = (byte) ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[4];
-            velI = (unsigned int) velH_MI << 8 | velL_MI;
-            if (motor == (byte) 0) {
-                /* motor izquierdo */
-                if (velI == (unsigned) 0) {
-                    /* detener motor izquierdo */
-                    PORTDbits.RD4 = 0;
-                    PORTDbits.RD7 = 0;
-                    PORTDbits.RD2 = 0;
-                } else {
-                    /* mover motor izquierdo */
-                    PORTDbits.RD2 = 1;
-
-                    if (sen_MI == (byte) 0) {
-                        /* adelante */
-                        PORTDbits.RD4 = 0;
-                        PORTDbits.RD7 = 1;
-                    } else {
-                        /* atras */
-                        PORTDbits.RD4 = 1;
-                        PORTDbits.RD7 = 0;
-                    }
-                }
-            } else {
-                if (velI == (unsigned) 0) {
-                    /* detener motor derecho */
-                    PORTDbits.RD5 = 0;
-                    PORTDbits.RD6 = 0;
-                    PORTDbits.RD1 = 0;
-                } else {
-                    /* mover motor derecho */
-                    PORTDbits.RD1 = 1;
-
-                    if (sen_MI == (unsigned) 0) {
-                        /* adelante */
-                        PORTDbits.RD5 = 0;
-                        PORTDbits.RD6 = 1;
-                    } else {
-                        /* atras */
-                        PORTDbits.RD5 = 1;
-                        PORTDbits.RD6 = 0;
-                    }
-                }
-            }
-            userMotorsCounter = 0x01;
-            break;
-
-        case SET_VEL_2MTR:
-            ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[0];
-            sen_MI = (byte) ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[1];
-            velH_MI = (byte) ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[2];
-            velL_MI = (byte) ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[3];
-            sen_MD = (byte) ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[4];
-            velH_MD = (byte) ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[5];
-            velL_MD = (byte) ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[6];
-
-            velD = (unsigned int) velH_MD << 8 | velL_MD;
-            velI = (unsigned int) velH_MI << 8 | velL_MI;
-            /*
-             * ENABLE A = RD1
-             * SENTIDO A : RD5 - RD6
-             */
-            if (velD == (unsigned) 0) {
-                /* detener motor derecho */
-                PORTDbits.RD5 = 0;
-                PORTDbits.RD6 = 0;
-                PORTDbits.RD1 = 0;
-            } else {
-                /* mover motor derecho */
-                PORTDbits.RD1 = 1;
-
-                if (sen_MD == (byte) 0) {
-                    /* adelante */
-                    PORTDbits.RD5 = 0;
-                    PORTDbits.RD6 = 1;
-                } else {
-                    /* atras */
-                    PORTDbits.RD5 = 1;
-                    PORTDbits.RD6 = 0;
-                }
-            }
-            /*
-             * ENABLE B = RD2
-             * SENTIDO B : RD4 - RD7
-             */
-            if (velI == (unsigned) 0) {
-                /* detener motor izquierdo */
-                PORTDbits.RD4 = 0;
-                PORTDbits.RD7 = 0;
-                PORTDbits.RD2 = 0;
-            } else {
-                /* mover motor izquierdo */
-                PORTDbits.RD2 = 1;
-
-                if (sen_MI == (byte) 0) {
-                    /* adelante */
-                    PORTDbits.RD4 = 0;
-                    PORTDbits.RD7 = 1;
-                } else {
-                    /* atras */
-                    PORTDbits.RD4 = 1;
-                    PORTDbits.RD7 = 0;
-                }
-            }
-
-            userMotorsCounter = 0x01;
-            break;
-
-        default:
-            break;
-    }/*end switch(s)*/
-
-    if (userMotorsCounter != (byte) 0) {
-        j = 255;
-        while (mUSBGenTxIsBusy() && j-- > (byte) 0); /*pruebo un maximo de 255 veces*/
-        if (!mUSBGenTxIsBusy())
-            USBGenWrite2(handler, userMotorsCounter);
-    }/*end if*/
-}
-
-void UserMotorsReceivedAX_12(byte* recBuffPtr, byte len, byte handler) {
-    byte j;
+void UserMotorsReceived(byte* recBuffPtr, byte len, byte handler) {
     byte userMotorsCounter = 0;
-    byte direction1, direction2, lowVel1, lowVel2, highVel1, highVel2, res, idmotor;
+    byte direction1, direction2, lowVel1, lowVel2, highVel1, highVel2, idmotor;
     word vel1, vel2;
     switch (((MOTORS_DATA_PACKET*) recBuffPtr)->CMD) {
 
@@ -405,7 +314,7 @@ void UserMotorsReceivedAX_12(byte* recBuffPtr, byte len, byte handler) {
 
         case GET_TYPE:
             ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[0];
-            ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[1] = MOTORS_AX12;
+            ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[1] = MOTORS_T;
             userMotorsCounter = 0x02;
             break;
 
@@ -418,17 +327,9 @@ void UserMotorsReceivedAX_12(byte* recBuffPtr, byte len, byte handler) {
             vel1 = highVel1;
             vel1 = vel1 << 8 | lowVel1;
             if (idmotor == (byte) 0) {
-                if (direction1 == (byte) 1) {
-                    endlessTurn(wheels.left.id, vel1, 0);
-                } else {
-                    endlessTurn(wheels.left.id, 0 - vel1, 0);
-                }
+                moveLeftMOTOR(vel1, 1 - direction1);
             } else {
-                if (direction1 == (byte) 1) {
-                    endlessTurn(wheels.right.id, vel1, 1);
-                } else {
-                    endlessTurn(wheels.right.id, 0 - vel1, 1);
-                }
+                moveRightMOTOR(vel1, direction1);
             }
             userMotorsCounter = 0x01;
             break;
@@ -445,32 +346,23 @@ void UserMotorsReceivedAX_12(byte* recBuffPtr, byte len, byte handler) {
             lowVel2 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[6];
             vel2 = highVel2;
             vel2 = vel2 << 8 | lowVel2;
-            if (direction1 == (byte) 1) {
-                endlessTurn(wheels.left.id, vel1, 0);
-            } else {
-                endlessTurn(wheels.left.id, 0 - vel1, 0);
-            }
-            if (direction2 == (byte) 1)
-                endlessTurn(wheels.right.id, vel2, 1);
-            else
-                endlessTurn(wheels.right.id, 0 - vel2, 1);
+            moveLeftMOTOR(vel1, 1 - direction1);
+            moveRightMOTOR(vel2, direction2);
             userMotorsCounter = 0x01;
             break;
 
         case TEST_MOTORS:
-            sexyMotorMoveStart();
             ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[0];
+            sexyMotorMoveStart();
             userMotorsCounter = 0x01;
             break;
+
         default:
             break;
     }/*end switch(s)*/
-    if (userMotorsCounter != (byte) 0) {
-        j = 255;
-        while (mUSBGenTxIsBusy() && j-- > (byte) 0); /*pruebo un maximo de 255 veces*/
-            if (!mUSBGenTxIsBusy())
-                USBGenWrite2(handler, userMotorsCounter);
-    }/*end if*/
+
+    USBGenWrite2(handler, userMotorsCounter);
+
 }/*end UserMotorsReceived*/
 
 /** EOF usr_motors.c ***************************************************************/

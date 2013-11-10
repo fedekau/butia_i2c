@@ -24,9 +24,9 @@ typedef union PORT_PACKET
     struct
     {
         enum
-        { 
+        {
             READ_VERSION    = 0x00,
-            GET_RES         = 0x01            
+            GET_RES         = 0x01
         } CMD;
         byte len;
     };

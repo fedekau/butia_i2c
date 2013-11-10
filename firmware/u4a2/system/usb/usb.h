@@ -59,5 +59,5 @@
 #if defined(USB_USE_GEN)               // See autofiles\usbcfg.h
 #include "system\usb\class\generic\usbgen.h"
 #endif
-          
+
 #endif //USB_H

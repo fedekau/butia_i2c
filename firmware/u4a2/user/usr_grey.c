@@ -122,7 +122,6 @@ void UserGreyRelease(byte i) {
  * Note:            None
  *****************************************************************************/
 void UserGreyReceived(byte* recBuffPtr, byte len, byte handler) {
-    byte j;
     WORD data;
     byte userGreyCounter = 0;
     switch (((GREY_DATA_PACKET*) recBuffPtr)->CMD) {
@@ -149,12 +148,8 @@ void UserGreyReceived(byte* recBuffPtr, byte len, byte handler) {
             break;
     }/*end switch(s)*/
 
-    if (userGreyCounter != (byte) 0) {
-        j = 255;
-        while (mUSBGenTxIsBusy() && j-- > (byte) 0); /* pruebo un maximo de 255 veces */
-            if (!mUSBGenTxIsBusy())
-                USBGenWrite2(handler, userGreyCounter);
-    }/*end if*/
+    USBGenWrite2(handler, userGreyCounter);
+
 }/*end UserGreyReceived*/
 
 /** EOF usr_grey.c ***************************************************************/

@@ -14,41 +14,33 @@
 #include "user/usr_ax.h"
 #include "io_cfg.h"
 #include "user/handlerManager.h"
-#include "dynamicPolling.h"   
 #include "usb4all/proxys/T0Service.h"
 
 /** V A R I A B L E S ********************************************************/
-#pragma udata 
-
+#pragma udata
 byte* sendBufferUsrAX;
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void UserAX12ProcessIO(void);
-void UserAX12Init(byte);
+void UserAX12Init(byte handler);
 void UserAX12Received(byte*, byte, byte);
-void UserAX12Release(byte);
+void UserAX12Release(byte handler);
 
 /** U S E R   M O D U L E   R E F E R E N C E ********************************/
 #pragma romdata user
-uTab userAX12ModuleTable = {&UserAX12Init, &UserAX12Release, "ax"};
+const uTab userAX12ModuleTable = {&UserAX12Init, &UserAX12Release, "ax"};
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
 #pragma code module
 
-void UserAX12Init(byte usrAXHandler) {
-    setHandlerReceiveFunction(usrAXHandler, &UserAX12Received);
-    sendBufferUsrAX = getSharedBuffer(usrAXHandler);
+void UserAX12Init(byte handler) {
+    setHandlerReceiveFunction(handler, &UserAX12Received);
+    sendBufferUsrAX = getSharedBuffer(handler);
 }
 
-void UserAX12ProcessIO(void) {
-    if ((usb_device_state < CONFIGURED_STATE) || (UCONbits.SUSPND == (unsigned) 1)) return;
-}
-
-void UserAX12Release(byte usrAXHandler) {
-    unsetHandlerReceiveBuffer(usrAXHandler);
-    unsetHandlerReceiveFunction(usrAXHandler);
-    removePoolingFunction(&UserAX12ProcessIO);
+void UserAX12Release(byte handler) {
+    unsetHandlerReceiveBuffer(handler);
+    unsetHandlerReceiveFunction(handler);
 }
 
 void UserAX12Received(byte* recBuffPtr, byte lenght, byte usrAXHandler) {
@@ -120,11 +112,8 @@ void UserAX12Received(byte* recBuffPtr, byte lenght, byte usrAXHandler) {
         default:
             break;
     }
-    if (userAXCounter != (byte) 0) {
-        j = 255;
-        while (mUSBGenTxIsBusy() && j-- > (byte) 0);
-        if (!mUSBGenTxIsBusy())
-            USBGenWrite2(usrAXHandler, userAXCounter);
-    }
+
+    USBGenWrite2(usrAXHandler, userAXCounter);
+
 }
 /** EOF usr_ax.c **************************************************************/

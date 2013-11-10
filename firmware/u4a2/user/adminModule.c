@@ -12,13 +12,9 @@
 
 /** V A R I A B L E S ********************************************************/
 #pragma udata
-//AM_PACKET adminDataPacket;
 byte* sendBufferAdmin;
 byte adminHandler;
 word counter_big;
-byte cantTicksW = 50;
-byte keepAlive = TRUE;
-byte timeOutTicksWatchdog;
 
 
 /** USER MODULE REFERENCE *************************************************/
@@ -52,21 +48,6 @@ void Escribir_memoria_boot(void) {
     Write_b_eep(ADDRESS_BOOT, BOOT_FLAG);
 }
 
-
-/*the device_type_module_name_map asociates for each string representing a module name an internal index
- for optimization propurses. Also this structure parses dynamically the name of the modules using rom data user*/
-
-/*void device_type_module_name_map_popullate(void){
-    byte userTableSize = 0;
-    byte lineNumber;
-    byte lineName[8]; //Se le cambio el tipo a byte, porque device_type_module_name_map es un arreglo de bytes
-    userTableSize = getUserTableSize();
-    for(lineNumber=0;lineNumber<userTableSize;lineNumber++){
-        getModuleName(lineNumber, (char*)lineName);
-        device_type_module_name_map[lineNumber]= lineName; 
-    }
-}
- */
 void adminModuleInit(byte handler) {
     /*system initialization*/
     adminHandler = handler; //hardcode, the admin module allways respond at handler 0
@@ -91,15 +72,12 @@ void goodByeCruelWorld(void) {
 
 void adminReceived(byte* recBuffPtr, byte len, byte admin_handler) {
     byte adminCounter;
-    byte endIn = nullEP, endOut = nullEP;
-    byte userTableSize = 0;
+    byte endIn = nullEP;
     byte lineNumber = 0;
     char lineName[8];
     rom near char* tableDirec;
-    pUserFunc dir;
     void (*pUser)(byte);
     byte handler, response;
-    byte i;
     byte j;
     adminCounter = 0;
 
@@ -147,8 +125,11 @@ void adminReceived(byte* recBuffPtr, byte len, byte admin_handler) {
             break;
 
         case MESSAGE:
-            // me limito a solamente mandar el paquete que me genera el usuario mediante sendMes (ping)
-            adminCounter = sizeof (((AM_PACKET*) recBuffPtr));
+            // me limito a solamente mandar el paquete que me genera el usuario
+            for (adminCounter = 0; adminCounter < len; adminCounter++) {
+                *(sendBufferAdmin + adminCounter) = *(recBuffPtr + adminCounter);
+            }
+            adminCounter = len;
             break;
 
         case LOAD:
@@ -165,9 +146,8 @@ void adminReceived(byte* recBuffPtr, byte len, byte admin_handler) {
 
             /* retorna la cantidad de modulos de usuarios presentes en el firmware */
         case GET_USER_MODULES_SIZE:
-            userTableSize = getUserTableSize();
             ((AM_PACKET*) sendBufferAdmin)->CMD = GET_USER_MODULES_SIZE;
-            ((AM_PACKET*) sendBufferAdmin)->size = userTableSize;
+            ((AM_PACKET*) sendBufferAdmin)->size = getUserTableSize();
             adminCounter = 0x02;
             break;
 
@@ -176,7 +156,6 @@ void adminReceived(byte* recBuffPtr, byte len, byte admin_handler) {
             ((AM_PACKET*) sendBufferAdmin)->CMD = GET_USER_MODULES_LINE;
             lineNumber = ((AM_PACKET*) recBuffPtr)->line;
             getModuleName(lineNumber, (char*) lineName);
-            //memcpy(((AM_PACKET*)sendBufferAdmin)->lineName, lineName, 8); no anda, sera porque estan en espacios de memoria separados (RAM/ROM)?
             for (j = (byte) 0; j < (byte) 8; j++) {
                 ((AM_PACKET*) sendBufferAdmin)->lineName[j] = lineName[j];
             }
@@ -186,7 +165,6 @@ void adminReceived(byte* recBuffPtr, byte len, byte admin_handler) {
         case BOOT:
             Escribir_memoria_boot();
             goodByeCruelWorld();
-            //adminCounter = 0x01; //;)
             break;
 
         case GET_HANDLER_SIZE:
@@ -209,69 +187,17 @@ void adminReceived(byte* recBuffPtr, byte len, byte admin_handler) {
 
         case RESET:
             goodByeCruelWorld();
-            //adminCounter = 0x01; //1 byte para el campo CMD sensless ;)
             break;
 
         default:
             break;
 
     }//end switch()
-    if (adminCounter != (byte) 0) {
-        j = 255;
-        while (mUSBGenTxIsBusy() && j-- > (byte) 0); // probing a max of 255 times
-        if (!mUSBGenTxIsBusy())
-            USBGenWrite2(adminHandler, adminCounter);
-    }//end if
+
+    USBGenWrite2(adminHandler, adminCounter);
 
 }//end adminReceived
 
-/* Not used*/
-void sendMes(char* mensaje, byte len) {
-    byte adminCounter, j;
-    ((AM_PACKET*) sendBufferAdmin)->CMD = MESSAGE;
-    for (j = 0; j < len; j++) {
-        ((AM_PACKET*) sendBufferAdmin)->texto[j] = mensaje[j];
-    }
-    adminCounter = len + 1; //sizeof(adminDataPacket);
-    if (!mUSBGenTxIsBusy())
-        USBGenWrite2(adminHandler, adminCounter);
-}
-
-/*****************************************************************************
- * Keep Alive para el watchdog
- *****************************************************************************/
-
-void watchdogKeepAlive(void) {
-    keepAlive = TRUE;
-}
-
-/***********************************************************************
- *
- * Callback function to execute periodicaly by te Timmer interrupt ISR
- *
- ************************************************************************/
-
-void watchdogEvent(void) {
-    //    timeOutTicksWatchdog --;
-    //    if(timeOutTicksWatchdog == 0){
-    if (keepAlive) {
-        //            timeOutTicksWatchdog = cantTicksW;
-        keepAlive = FALSE;
-    } else {
-        goodByeCruelWorld();
-    }
-    //    }
-    registerT0eventInEvent(TIME_UNIT_WATCHDOG, &watchdogEvent);
-}
-
-/*****************************************************************************
- * Start watchdog
- *****************************************************************************/
-
-void watchdogStart(void) {
-    keepAlive = TRUE;
-    registerT0event(2 * TIME_UNIT_WATCHDOG, &watchdogEvent);
-}
 
 /** EOF adminModule.c ***************************************************************/
 
