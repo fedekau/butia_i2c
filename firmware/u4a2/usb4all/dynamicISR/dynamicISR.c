@@ -13,8 +13,6 @@
 #include "dynamicISR.h"                              // Modifiable
 
 #include "system/usb/usb_compile_time_validation.h" // Optional
-//#include "user\user.h"
-//#include "user\handlerManager.h"                              // Modifiable
 
 
 /** V A R I A B L E S ********************************************************/

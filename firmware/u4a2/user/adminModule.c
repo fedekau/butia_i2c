@@ -3,6 +3,7 @@
  * Andres Aguirre	   27/03/07 	Original
  * Andres Aguirre 	   18/04/09     adding RESET
  * Andres Aguirre          22/03/12     Adding PnP support
+ * Alan Aguiar             31/07/13     Lot of changes - cleans
  ********************************************************************/
 
 #include "user/adminModule.h"
@@ -18,19 +19,9 @@ word counter_big;
 
 
 /** USER MODULE REFERENCE *************************************************/
-// Admin ModuleType=0,
-//#pragma romdata user=DIRECTION_TABLE       // THIS DONT WORK!!!
 #pragma romdata user
 const uTab AdminModuleTable = {&adminModuleInit, &adminModuleRelease, "admin"}; //modName must be less or equal 8 characters
 #pragma code
-
-/*mapping between module name and an device type id used for optimization
- 0 dist
- 1 grises
- 2 boton
- 3 luz
- ....*/
-/*byte* device_type_module_name_map[MAX_DEVICES];*/
 
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
