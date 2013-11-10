@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date mar 20 mar 2012 11:04:06 UYT
+EESchema Schematic File Version 2  date lun 05 ago 2013 18:30:27 UYT
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -29,9 +29,10 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
-EELAYER 43  0
+LIBS:Sensores 2.0-cache
+EELAYER 24 0
 EELAYER END
-$Descr A4 11700 8267
+$Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title ""
@@ -95,6 +96,8 @@ U 1 1 4F6888FE
 P 3150 3350
 F 0 "K1" V 3100 3350 50  0000 C CNN
 F 1 "Conn_Sensor" V 3200 3350 40  0000 C CNN
+F 2 "" H 3150 3350 60  0001 C CNN
+F 3 "" H 3150 3350 60  0001 C CNN
 	1    3150 3350
 	1    0    0    -1  
 $EndComp
@@ -108,6 +111,8 @@ U 1 1 4F688199
 P 3850 2200
 F 0 "P1" V 3800 2200 40  0000 C CNN
 F 1 "Conn_ID" V 3900 2200 40  0000 C CNN
+F 2 "" H 3850 2200 60  0001 C CNN
+F 3 "" H 3850 2200 60  0001 C CNN
 	1    3850 2200
 	1    0    0    -1  
 $EndComp
@@ -117,6 +122,8 @@ U 1 1 4F68816E
 P 2350 1500
 F 0 "J1" H 2550 2000 60  0000 C CNN
 F 1 "RJ45" H 2200 2000 60  0000 C CNN
+F 2 "" H 2350 1500 60  0001 C CNN
+F 3 "" H 2350 1500 60  0001 C CNN
 	1    2350 1500
 	1    0    0    -1  
 $EndComp
