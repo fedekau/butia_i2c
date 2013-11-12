@@ -70,5 +70,6 @@ typedef union MOTORS_DATA_PACKET {
 void autoDetectWheels(void);
 void getVoltage(int*);
 byte getMotorType(void);
+void getVoltCC(int*);
 
 #endif /*USER_MOTORS_H*/

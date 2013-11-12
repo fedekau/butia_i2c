@@ -36,7 +36,7 @@ WHEELS wheels;
 byte* sendBufferUsrMotors; // buffer to send data
 fMoveMotor moveLeftMOTOR;
 fMoveMotor moveRightMOTOR;
-fGetVolt getVolt;
+fGetVolt getVolt = &getVoltCC;
 byte current_id = 0;
 byte index = 0;
 byte list_motors[2];
