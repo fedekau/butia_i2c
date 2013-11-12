@@ -51,7 +51,7 @@
 #if defined(USE_USB_BUS_SENSE_IO)
 #define usb_bus_sense       PORTAbits.RA1
 #else
-#define usb_bus_sense       1
+#define usb_bus_sense       (unsigned) 1
 #endif
 
 #define tris_self_power     TRISAbits.TRISA2    // Input
@@ -59,7 +59,7 @@
 #if defined(USE_SELF_POWER_SENSE_IO)
 #define self_power          PORTAbits.RA2
 #else
-#define self_power          1
+#define self_power          (unsigned) 1
 #endif
 
 #define mInitPortA() TRISA=0XFF; //is a good practice to set unused pins to input

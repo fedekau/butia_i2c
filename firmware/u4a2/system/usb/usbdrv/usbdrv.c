@@ -12,8 +12,8 @@
  * Software License Agreement
  *
  * The software supplied herewith by Microchip Technology Incorporated
- * (the “Company”) for its PICmicro® Microcontroller is intended and
- * supplied to you, the Company’s customer, for use solely and
+ * (the ?Company?) for its PICmicro? Microcontroller is intended and
+ * supplied to you, the Company?s customer, for use solely and
  * exclusively on Microchip PICmicro Microcontroller products. The
  * software is owned by the Company and/or its supplier, and is
  * protected under applicable copyright laws. All rights are reserved.
@@ -22,7 +22,7 @@
  * civil liability for the breach of the terms and conditions of this
  * license.
  *
- * THIS SOFTWARE IS PROVIDED IN AN “AS IS” CONDITION. NO WARRANTIES,
+ * THIS SOFTWARE IS PROVIDED IN AN ?AS IS? CONDITION. NO WARRANTIES,
  * WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT NOT LIMITED
  * TO, IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
  * PARTICULAR PURPOSE APPLY TO THIS SOFTWARE. THE COMPANY SHALL NOT,
@@ -79,17 +79,14 @@ void USBCheckBusStatus(void)
      * Bus Attachment & Detachment Detection
      * usb_bus_sense is an i/o pin defined in io_cfg.h
      *************************************************************************/
-    #define USB_BUS_ATTACHED    1
-    #define USB_BUS_DETACHED    0
 
-    if(usb_bus_sense == USB_BUS_ATTACHED)       // Is USB bus attached?
-    {
-        if(UCONbits.USBEN == (unsigned) 0)                 // Is the module off?
-            USBModuleEnable();                  // Is off, enable it
+    if(usb_bus_sense == ATTACHED_STATE) {      // Is USB bus attached?
+        if(UCONbits.USBEN == (unsigned) 0)     // Is the module off?
+            USBModuleEnable();                 // Is off, enable it
     }
-    else
-    {
-        if(UCONbits.USBEN == (unsigned) 1)                 // Is the module on?
+
+    if(usb_bus_sense == DETACHED_STATE) {
+        if(UCONbits.USBEN == (unsigned) 1)      // Is the module on?
             USBModuleDisable();                 // Is on, disable it
     }//end if(usb_bus_sense...)
 
@@ -162,6 +159,7 @@ void USBModuleDisable(void)
 {
     UCON = 0;                               // Disable module & detach from bus
     UIE = 0;                                // Mask all USB interrupts
+    UCONbits.USBEN = 0;
     usb_device_state = DETACHED_STATE;      // Defined in usbmmap.c & .h
 }//end USBModuleDisable
 
