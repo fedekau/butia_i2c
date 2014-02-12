@@ -22,6 +22,7 @@
 
 #define TIME_UNIT        2000
 #define LONG_TIME_UNIT   5000
+#define TIME_C           1000
 
 #define C_ID_MOTORS   (byte) 253
 #define C_TRIES       (byte) 2
@@ -44,7 +45,7 @@ typedef union MOTORS_DATA_PACKET {
             SET_VEL_2MTR = 0x01,
             SET_VEL_MTR = 0x02,
             TEST_MOTORS = 0x03,
-            GET_TYPE = 0x04
+            GET_TYPE = 0x04            
         } CMD;
         byte len;
     };

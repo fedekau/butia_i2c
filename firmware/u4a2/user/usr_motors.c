@@ -30,6 +30,13 @@ typedef struct _WHEELS {
     MOTOR right;
 } WHEELS;
 
+typedef enum {CHANGE_VEL,OP} state;
+void apagarR();
+void prenderR();
+void apagarL();
+void prenderL();
+typedef enum {MIZQ,MDER} primerMotor;
+
 /** V A R I A B L E S ********************************************************/
 #pragma udata
 WHEELS wheels;
@@ -41,6 +48,17 @@ byte current_id = 0;
 byte index = 0;
 byte list_motors[2];
 byte MOTORS_T = MOTORS_AX12;
+word velL;
+word velR;
+byte dirL;
+byte dirR;
+int timeL;
+int timeR;
+BOOL onR;
+BOOL onL;
+primerMotor primM=MIZQ;
+
+
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
 void UserMotorsInit(byte handler);
@@ -150,6 +168,74 @@ void forwardLeft() {
 void sexyMotorMoveStart() {
     registerT0event(TIME_UNIT, &forwardLeft);
 }
+
+void prenderL(){
+    if(onR == TRUE){
+        registerT0eventInEvent(0, &prenderR);
+        onR = FALSE;
+    }    
+    moveLeftMOTOR(velL,dirL);
+    registerT0eventInEvent(timeL, &apagarL);
+}
+
+void apagarL(){   
+    moveLeftMOTOR(0,0);
+    registerT0eventInEvent((TIME_C - timeL), &prenderL);
+}
+
+void prenderR(){
+    if(onL == TRUE){
+        onR = FALSE;
+        onL = FALSE;
+        registerT0eventInEvent(0, &prenderL);
+    }
+    moveRightMOTOR(velR,dirR);
+    registerT0eventInEvent(timeR, &apagarR);
+}
+
+void apagarR(){   
+    moveRightMOTOR(0,0);
+    registerT0eventInEvent((TIME_C - timeR), &prenderR);
+}
+
+
+void speed(void){  
+    onR = FALSE;
+    onL = FALSE;
+    if(velR == 1023u){
+       moveRightMOTOR(1023,dirR);
+    }else if (velR == 0u){
+        moveRightMOTOR(0,0);
+    }
+    else if(velR != -1){
+        timeR = velR * (TIME_C/(double)1023);
+        onR = TRUE;//para prender motor derecho
+    }
+    
+    if(velL == 1023u){
+       moveLeftMOTOR(1023,dirL);
+    }
+    else if (velL == 0u){
+        moveLeftMOTOR(0,0);
+    }
+    else if (velL != -1){
+        timeL = velL * (TIME_C/(double)1023);
+        if(primM == MIZQ){
+            primM = MDER;
+            registerT0event(TIME_UNIT/2, &prenderL);
+        }
+        else{
+            primM = MIZQ;
+            onL=TRUE;
+            registerT0event(TIME_UNIT/2, &prenderR);
+        }
+        
+    }else if(onR == TRUE){
+        timeR = velR * (TIME_C/(double)1023);
+        registerT0event(TIME_UNIT/2, &prenderR);
+    }   
+}
+
 
 void getVoltAX(int *data_received) {
     byte data [2];
@@ -302,53 +388,78 @@ void UserMotorsRelease(byte handler) {
  *****************************************************************************/
 void UserMotorsReceived(byte* recBuffPtr, byte len, byte handler) {
     byte userMotorsCounter = 0;
-    byte direction1, direction2, lowVel1, lowVel2, highVel1, highVel2, idmotor;
-    word vel1, vel2;
+    byte lowVel1, lowVel2, highVel1, highVel2, idmotor, highV,lowV;    
     switch (((MOTORS_DATA_PACKET*) recBuffPtr)->CMD) {
 
         case READ_VERSION:
             ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[0];
             ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[1] = MOTORS_MINOR_VERSION;
-            ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[2] = MOTORS_MAJOR_VERSION;
+            ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[2] = MOTORS_MAJOR_VERSION;            
             userMotorsCounter = 0x03;
             break;
 
         case GET_TYPE:
             ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[0];
-            ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[1] = MOTORS_T;
+            ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[1] = MOTORS_T;            
             userMotorsCounter = 0x02;
             break;
 
         case SET_VEL_MTR:
             ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[0];
             idmotor = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[1];
-            direction1 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[2];
+            dirR = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[2];
             highVel1 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[3];
             lowVel1 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[4];
-            vel1 = highVel1;
-            vel1 = vel1 << 8 | lowVel1;
-            if (idmotor == (byte) 0) {
-                moveLeftMOTOR(vel1, 1 - direction1);
-            } else {
-                moveRightMOTOR(vel1, direction1);
+            velR = highVel1;
+            velR = velR << 8 | lowVel1;
+            dirL = 1 - dirR;
+            if(MOTORS_T == MOTORS_SHIELD_CC){
+                if (idmotor == (byte) 0) {
+                    velL = velR;
+                    velR =-1;
+                } else {
+                    velL = -1;
+                }
+                unregisterT0event(&prenderL);
+                unregisterT0event(&apagarL);
+                unregisterT0event(&prenderR);
+                unregisterT0event(&apagarR);
+                speed();
+            }else{
+                if (idmotor == (byte) 0) {
+                    moveLeftMOTOR(velR, dirL);
+                }
+                else {
+                    moveRightMOTOR(velR, dirR);
+                }
             }
             userMotorsCounter = 0x01;
             break;
 
         case SET_VEL_2MTR:
             ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[0];
-            direction1 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[1];
+            dirL = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[1];
             highVel1 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[2];
             lowVel1 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[3];
-            vel1 = highVel1;
-            vel1 = vel1 << 8 | lowVel1;
-            direction2 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[4];
+            velL = highVel1;
+            velL = velL << 8 | lowVel1;
+            dirR = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[4];
             highVel2 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[5];
             lowVel2 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[6];
-            vel2 = highVel2;
-            vel2 = vel2 << 8 | lowVel2;
-            moveLeftMOTOR(vel1, 1 - direction1);
-            moveRightMOTOR(vel2, direction2);
+            velR = highVel2;
+            velR = velR << 8 | lowVel2;
+            dirL = 1 - dirL;         
+            if(MOTORS_T == MOTORS_SHIELD_CC){
+                unregisterT0event(&prenderR);
+                unregisterT0event(&apagarR);
+                unregisterT0event(&prenderL);
+                unregisterT0event(&apagarL);                
+                speed();             
+            }
+            else{
+                moveLeftMOTOR(velL, dirL);
+                moveRightMOTOR(velR, dirR);
+            }
             userMotorsCounter = 0x01;
             break;
 
