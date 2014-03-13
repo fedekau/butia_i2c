@@ -56,7 +56,9 @@ int timeL;
 int timeR;
 BOOL onR;
 BOOL onL;
-primerMotor primM=MIZQ;
+word vAntL;
+word vAntR;
+BOOL primero = TRUE;
 
 
 
@@ -174,7 +176,7 @@ void prenderL(){
         registerT0eventInEvent(0, &prenderR);
         onR = FALSE;
     }    
-    moveLeftMOTOR(velL,dirL);
+    moveLeftMOTOR(velL,dirL);    
     registerT0eventInEvent(timeL, &apagarL);
 }
 
@@ -189,7 +191,7 @@ void prenderR(){
         onL = FALSE;
         registerT0eventInEvent(0, &prenderL);
     }
-    moveRightMOTOR(velR,dirR);
+    moveRightMOTOR(velR,dirR);    
     registerT0eventInEvent(timeR, &apagarR);
 }
 
@@ -199,13 +201,13 @@ void apagarR(){
 }
 
 
-void speed(void){  
+void speed(void){    
     onR = FALSE;
     onL = FALSE;
     if(velR == 1023u){
        moveRightMOTOR(1023,dirR);
     }else if (velR == 0u){
-        moveRightMOTOR(0,0);
+       moveRightMOTOR(0,0);
     }
     else if(velR != -1){
         timeR = velR * (TIME_C/(double)1023);
@@ -220,20 +222,11 @@ void speed(void){
     }
     else if (velL != -1){
         timeL = velL * (TIME_C/(double)1023);
-        if(primM == MIZQ){
-            primM = MDER;
-            registerT0event(TIME_UNIT/2, &prenderL);
-        }
-        else{
-            primM = MIZQ;
-            onL=TRUE;
-            registerT0event(TIME_UNIT/2, &prenderR);
-        }
-        
+        registerT0event(TIME_UNIT/2, &prenderL);
     }else if(onR == TRUE){
         timeR = velR * (TIME_C/(double)1023);
         registerT0event(TIME_UNIT/2, &prenderR);
-    }   
+    }    
 }
 
 
@@ -391,20 +384,22 @@ void UserMotorsReceived(byte* recBuffPtr, byte len, byte handler) {
     byte lowVel1, lowVel2, highVel1, highVel2, idmotor, highV,lowV;    
     switch (((MOTORS_DATA_PACKET*) recBuffPtr)->CMD) {
 
-        case READ_VERSION:
+        case READ_VERSION:            
             ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[0];
             ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[1] = MOTORS_MINOR_VERSION;
             ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[2] = MOTORS_MAJOR_VERSION;            
             userMotorsCounter = 0x03;
+            primero = TRUE;
             break;
 
-        case GET_TYPE:
+        case GET_TYPE:            
             ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[0];
             ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[1] = MOTORS_T;            
             userMotorsCounter = 0x02;
+            primero = TRUE;
             break;
 
-        case SET_VEL_MTR:
+        case SET_VEL_MTR:            
             ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[0];
             idmotor = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[1];
             dirR = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[2];
@@ -434,6 +429,7 @@ void UserMotorsReceived(byte* recBuffPtr, byte len, byte handler) {
                 }
             }
             userMotorsCounter = 0x01;
+            primero = TRUE;
             break;
 
         case SET_VEL_2MTR:
@@ -450,11 +446,22 @@ void UserMotorsReceived(byte* recBuffPtr, byte len, byte handler) {
             velR = velR << 8 | lowVel2;
             dirL = 1 - dirL;         
             if(MOTORS_T == MOTORS_SHIELD_CC){
-                unregisterT0event(&prenderR);
-                unregisterT0event(&apagarR);
-                unregisterT0event(&prenderL);
-                unregisterT0event(&apagarL);                
-                speed();             
+                if(velR==1023u && velL==1023u){
+                    moveRightMOTOR(1023,dirR);
+                    moveLeftMOTOR(1023,dirL);
+                }
+                else{
+                    if((vAntL != velL) ||(vAntR != velR) || primero){
+                        unregisterT0event(&prenderR);
+                        unregisterT0event(&apagarR);
+                        unregisterT0event(&prenderL);
+                        unregisterT0event(&apagarL);
+                        speed();
+                    }
+                    primero = FALSE;
+                    vAntL = velL;
+                    vAntR = velR;
+                }
             }
             else{
                 moveLeftMOTOR(velL, dirL);
@@ -467,6 +474,7 @@ void UserMotorsReceived(byte* recBuffPtr, byte len, byte handler) {
             ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[0];
             sexyMotorMoveStart();
             userMotorsCounter = 0x01;
+            primero = TRUE;
             break;
 
         default:
