@@ -223,13 +223,20 @@ void speed(void){
     else if (velL != -1){
         timeL = velL * (TIME_C/(double)1023);
         registerT0event(TIME_UNIT/2, &prenderL);
-    }else if(onR == TRUE){
+    }
+
+    if((onR == TRUE) && (velL == 1023u || velL ==0u)){
         timeR = velR * (TIME_C/(double)1023);
         registerT0event(TIME_UNIT/2, &prenderR);
     }    
 }
 
-
+void unregisterFuncMotors(void){
+    unregisterT0event(&prenderR);
+    unregisterT0event(&apagarR);
+    unregisterT0event(&prenderL);
+    unregisterT0event(&apagarL);
+}
 void getVoltAX(int *data_received) {
     byte data [2];
     int err = 0;
@@ -415,10 +422,7 @@ void UserMotorsReceived(byte* recBuffPtr, byte len, byte handler) {
                 } else {
                     velL = -1;
                 }
-                unregisterT0event(&prenderL);
-                unregisterT0event(&apagarL);
-                unregisterT0event(&prenderR);
-                unregisterT0event(&apagarR);
+                unregisterFuncMotors();
                 speed();
             }else{
                 if (idmotor == (byte) 0) {
@@ -434,28 +438,28 @@ void UserMotorsReceived(byte* recBuffPtr, byte len, byte handler) {
 
         case SET_VEL_2MTR:
             ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[0];
-            dirL = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[1];
-            highVel1 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[2];
-            lowVel1 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[3];
+            
+            dirL = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[4];
+            highVel1 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[5];
+            lowVel1 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[6];
             velL = highVel1;
             velL = velL << 8 | lowVel1;
-            dirR = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[4];
-            highVel2 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[5];
-            lowVel2 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[6];
+            dirR = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[1];
+            highVel2 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[2];
+            lowVel2 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[3];
             velR = highVel2;
             velR = velR << 8 | lowVel2;
-            dirL = 1 - dirL;         
+           
+            dirL = 1 - dirL;
             if(MOTORS_T == MOTORS_SHIELD_CC){
                 if(velR==1023u && velL==1023u){
+                    unregisterFuncMotors();
                     moveRightMOTOR(1023,dirR);
                     moveLeftMOTOR(1023,dirL);
                 }
                 else{
-                    if((vAntL != velL) ||(vAntR != velR) || primero){
-                        unregisterT0event(&prenderR);
-                        unregisterT0event(&apagarR);
-                        unregisterT0event(&prenderL);
-                        unregisterT0event(&apagarL);
+                    if((vAntL != velL) ||(vAntR != velR) || primero){                        
+                        unregisterFuncMotors();
                         speed();
                     }
                     primero = FALSE;
