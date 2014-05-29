@@ -19,7 +19,7 @@ rom const device_resistance table_device_id_resistance[MAX_DEVICES] = {
     { "modSenC", R_MOD_SEN_C_MIN, R_MOD_SEN_C_MAX},
     { "modActA", R_MOD_ACT_A_MIN, R_MOD_ACT_A_MAX},
     { "modActB", R_MOD_ACT_B_MIN, R_MOD_ACT_B_MAX},
-    { "modActB", R_MOD_ACT_C_MIN, R_MOD_ACT_C_MAX}
+    { "modActC", R_MOD_ACT_C_MIN, R_MOD_ACT_C_MAX}
 };
 
 /** VARIABLES UNINITIALIZED, RAM **/
