@@ -3,6 +3,8 @@
 #include "loaderModule.h"
 #include "user/usr_motors.h"
 
+#pragma code sys
+
 /** VARIABLES INITIALIZED, CONST ROM **/
 rom const device_resistance table_device_id_resistance[MAX_DEVICES] = {
     { "port", R_PORT_MIN, R_PORT_MAX},
