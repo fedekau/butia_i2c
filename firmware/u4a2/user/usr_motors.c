@@ -54,8 +54,10 @@ byte directionRight;
 int timeLeft;
 int timeRight;
 BOOL onRight;
-word prevSpeedLeft = 0;
+word prevSpeedLeft  = 0;
 word prevSpeedRight = 0;
+byte prevDirLeft  = 0;
+byte prevDirRight = 0;
 BOOL changeVel = FALSE;
 
 
@@ -177,6 +179,12 @@ void unregisterFuncMotors(){
 
 void speedControl(){
     if(changeVel){
+        if (speedRight == 0 && speedLeft == 0){
+            registerT0eventInEvent(0,&hotplug_pnp);
+        }
+        else{
+            unregisterT0event(&hotplug_pnp);
+        }
         changeVel = FALSE;
         unregisterFuncMotors();
         onRight = FALSE;
@@ -199,7 +207,7 @@ void speedControl(){
             registerT0eventInEvent(0, &turnOnRight);
         }
     }
-    registerT0eventInEvent(TIME_UNIT, &speedControl);
+    registerT0eventInEvent(1000, &speedControl);
 }
 
 void sexyMotorMoveStart() {
@@ -440,10 +448,13 @@ void UserMotorsReceived(byte* recBuffPtr, byte len, byte handler) {
             directionLeft = 1 - directionLeft;
 
             if(MOTORS_T == MOTORS_SHIELD_CC){
-                if((prevSpeedLeft != speedLeft) ||(prevSpeedRight != speedRight)){
+                if((prevSpeedLeft != speedLeft) ||(prevSpeedRight != speedRight) ||
+                        (prevDirLeft != directionLeft) ||(prevDirRight != directionRight)){
                     changeVel = TRUE;
-                    prevSpeedLeft = speedLeft;
+                    prevSpeedLeft  = speedLeft;
                     prevSpeedRight = speedRight;
+                    prevDirLeft  = directionLeft;
+                    prevDirRight = directionRight;
                 }
             }
             else{
