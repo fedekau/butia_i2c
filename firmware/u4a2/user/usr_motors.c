@@ -170,7 +170,6 @@ void forwardLeft() {
 }
 
 void unregisterFuncMotors(){
-    //unregisterT0event(&hotplug_pnp);
     unregisterT0event(&turnOnRight);
     unregisterT0event(&turnoffRight);
     unregisterT0event(&turnOnLeft);
@@ -435,16 +434,17 @@ void UserMotorsReceived(byte* recBuffPtr, byte len, byte handler) {
 
         case SET_VEL_2MTR:
             ((MOTORS_DATA_PACKET*) sendBufferUsrMotors)->_byte[0] = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[0];
-            directionLeft = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[4];
+            directionRight = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[4];
             highVel1 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[5];
             lowVel1 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[6];
-            speedLeft = highVel1;
-            speedLeft = speedLeft << 8 | lowVel1;
-            directionRight = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[1];
+            speedRight = highVel1;
+            speedRight = speedRight << 8 | lowVel1;
+
+            directionLeft = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[1];
             highVel2 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[2];
             lowVel2 = ((MOTORS_DATA_PACKET*) recBuffPtr)->_byte[3];
-            speedRight = highVel2;
-            speedRight = speedRight << 8 | lowVel2;
+            speedLeft = highVel2;
+            speedLeft = speedLeft << 8 | lowVel2;
             directionLeft = 1 - directionLeft;
 
             if(MOTORS_T == MOTORS_SHIELD_CC){
