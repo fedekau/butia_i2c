@@ -458,6 +458,8 @@ void UserMotorsReceived(byte* recBuffPtr, byte len, byte handler) {
                 }
             }
             else{
+                directionLeft = 1 - directionLeft;
+                directionRight = 1 - directionRight;
                 moveLeftMOTOR(speedLeft, directionLeft);
                 moveRightMOTOR(speedRight, directionRight);
             }
