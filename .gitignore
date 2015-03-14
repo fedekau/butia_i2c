@@ -8,6 +8,7 @@ $savepcb.brd
 *.lst
 *.map
 *.cod
+*.bak
 *~
 
 # Compilacion y linkeado
