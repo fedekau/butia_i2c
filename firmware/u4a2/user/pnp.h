@@ -43,6 +43,13 @@
 #define R_MOD_ACT_C_MAX 3151
 #define R_MOD_ACT_C_MIN 2601
 
+
+#define R_MOD_BUZZER_MAX 3810 // 180K
+#define R_MOD_BUZZER_MIN 3151
+#define R_MOD_RELAY_MAX 5554 // 120K
+#define R_MOD_RELAY_MIN 4615
+
+
 //#define R_SHIELD_CC_MAX 12531
 //#define R_SHIELD_CC_MIN 10622
 //#define R_GPIO_MIN 65280
@@ -57,10 +64,8 @@
 #define R_POTENTIOMETER 9999
 #define R_CAMERA 9999
 #define R_MOTION 9999
-/*Actuators*/
 #define R_DCMOTOR 9999
-#define R_RELAY 9999
-#define R_BUZZER 9999
+
 
 
 #define MAX_DEVICES (byte) 15 /*Max cant of senssor/actuator type*/

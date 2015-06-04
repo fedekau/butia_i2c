@@ -14,14 +14,14 @@ rom const device_resistance table_device_id_resistance[MAX_DEVICES] = {
     { "distanc", R_DIST_MIN, R_DIST_MAX},
     { "volt", R_VOLT_MIN, R_VOLT_MAX},
     { "res", R_RES_MIN, R_RES_MAX},
-    { "led", R_LED_MIN, R_LED_MAX},
-    { "temp", R_TEMP_MAX, R_TEMP_MIN},
     { "modSenA", R_MOD_SEN_A_MIN, R_MOD_SEN_A_MAX},
     { "modSenB", R_MOD_SEN_B_MIN, R_MOD_SEN_B_MAX},
     { "modSenC", R_MOD_SEN_C_MIN, R_MOD_SEN_C_MAX},
     { "modActA", R_MOD_ACT_A_MIN, R_MOD_ACT_A_MAX},
     { "modActB", R_MOD_ACT_B_MIN, R_MOD_ACT_B_MAX},
-    { "modActC", R_MOD_ACT_C_MIN, R_MOD_ACT_C_MAX}
+    { "modActC", R_MOD_ACT_C_MIN, R_MOD_ACT_C_MAX},
+    { "buzzer", R_MOD_BUZZER_MIN, R_MOD_BUZZER_MAX},
+    { "relay", R_MOD_RELAY_MIN, R_MOD_RELAY_MAX}
 };
 
 /** VARIABLES UNINITIALIZED, RAM **/

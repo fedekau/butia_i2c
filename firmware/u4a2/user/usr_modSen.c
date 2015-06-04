@@ -33,7 +33,6 @@ const uTab userGreyModuleTable = {&UserModSenInit, &UserModSenRelease, "grey"};
 const uTab userLightModuleTable = {&UserModSenInit, &UserModSenRelease, "light"};
 const uTab userResModuleTable = {&UserModSenInit, &UserModSenRelease, "res"};
 const uTab userVoltModuleTable = {&UserModSenInit, &UserModSenRelease, "volt"};
-const uTab userTempModuleTable = {&UserModSenInit, &UserModSenRelease, "temp"};
 const uTab userDistModuleTable = {&UserModSenInit, &UserModSenRelease, "distanc"};
 
 #pragma code

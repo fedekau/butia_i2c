@@ -31,7 +31,8 @@ void UserModActRelease(byte handler);
 const uTab userModActATable = {&UserModActInit, &UserModActRelease, "modActA"};
 const uTab userModActBTable = {&UserModActInit, &UserModActRelease, "modActB"};
 const uTab userModActCTable = {&UserModActInit, &UserModActRelease, "modActC"};
-const uTab userLedModuleTable = {&UserModActInit, &UserModActRelease, "led"};
+const uTab userBuzzerModTable = {&UserModActInit, &UserModActRelease, "buzzer"};
+const uTab userRelayModTable = {&UserModActInit, &UserModActRelease, "relay"};
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
