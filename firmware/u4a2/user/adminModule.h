@@ -30,7 +30,7 @@
 #define ADDRESS_BOOT 0x09
 #define BOOT_FLAG 0x11
 
-#define FIRMWARE_VERSION 0x0C   /* This value can be return as firmware version */
+#define FIRMWARE_VERSION 0x0D   /* This value can be return as firmware version */
 
 /** S T R U C T U R E S ******************************************************/
 

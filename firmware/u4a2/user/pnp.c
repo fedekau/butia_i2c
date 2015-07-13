@@ -20,7 +20,6 @@ rom const device_resistance table_device_id_resistance[MAX_DEVICES] = {
     { "modActA", R_MOD_ACT_A_MIN, R_MOD_ACT_A_MAX},
     { "modActB", R_MOD_ACT_B_MIN, R_MOD_ACT_B_MAX},
     { "modActC", R_MOD_ACT_C_MIN, R_MOD_ACT_C_MAX},
-    { "buzzer", R_MOD_BUZZER_MIN, R_MOD_BUZZER_MAX},
     { "relay", R_MOD_RELAY_MIN, R_MOD_RELAY_MAX}
 };
 

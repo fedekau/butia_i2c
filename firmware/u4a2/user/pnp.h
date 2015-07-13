@@ -44,8 +44,6 @@
 #define R_MOD_ACT_C_MIN 2601
 
 
-#define R_MOD_BUZZER_MAX 3810 // 180K
-#define R_MOD_BUZZER_MIN 3151
 #define R_MOD_RELAY_MAX 5554 // 120K
 #define R_MOD_RELAY_MIN 4615
 
@@ -68,7 +66,7 @@
 
 
 
-#define MAX_DEVICES (byte) 15 /*Max cant of senssor/actuator type*/
+#define MAX_DEVICES (byte) 14 /*Max cant of senssor/actuator type*/
 /*TODO review this time, the micro is running @20MHZ with a pipeline of 4steps => 20000000/4 = 5000000 instructions per second */
 #define PNP_DETECTION_TIME 20000
 /** ESTRUCTURES **/
