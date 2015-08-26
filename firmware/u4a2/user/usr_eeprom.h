@@ -1,6 +1,6 @@
 /* Author                                                   Date        Comment
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- *  Andres Aguirre                                         08/09/2010    Original.
+ *  Andres Aguirre                                         08/09/2010    Original
  *****************************************************************************/
 
 #ifndef USER_SEC_H
@@ -16,18 +16,12 @@
 
 /** D E F I N I T I O N S ****************************************************/
 
-#define SEC_MINOR_VERSION   0x01    
-#define SEC_MAJOR_VERSION   0x00
-#define BROKEN_FLAG        0x42
-#define ADDRESS_FLAG        0x69
-#define FLAG_RESET    0xFF
-/*
-#define mInitIOR_D() TRISD &= 0x00;
-#define mReleaseIOR_D() TRISD |= 0xFF;
-void Busy_eep_non_block(void);
-*/
+#define EEPROM_MINOR_VERSION   0x01    
+#define EEPROM_MAJOR_VERSION   0x00
+
+
 /** S T R U C T U R E S ******************************************************/
-typedef union SEC_DATA_PACKET
+typedef union EEPROM_DATA_PACKET
 {
     byte _byte[USBGEN_EP_SIZE];  //For byte access
     word _word[USBGEN_EP_SIZE/2];//For word access(USBGEN_EP_SIZE msut be even)
@@ -36,11 +30,8 @@ typedef union SEC_DATA_PACKET
         enum
         { 
             READ_VERSION    = 0x00,
-            GET_SEC         = 0X01,
-            INTRUSION       = 0x02,
-            RESET_FLAG      = 0x03,
-            CONT_INT        = 0x04,
-            MESS            = 0x05,
+            WRITE           = 0X01,
+            READ            = 0x02,
             RESET           = 0xFF //backward compatibility
         }CMD;
         byte len;
@@ -61,10 +52,11 @@ typedef union SEC_DATA_PACKET
         unsigned :8;
         word word_data;
     };
-} SEC_DATA_PACKET;
+} EEPROM_DATA_PACKET;
 
 /** P U B L I C  P R O T O T Y P E S *****************************************/
 
+void write_eeprom(unsigned int address, unsigned char data);
+unsigned char read_eeprom(unsigned int address);
 
-
-#endif //USER_SEC_H
+#endif //USER_EEPROM_H

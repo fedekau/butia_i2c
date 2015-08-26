@@ -169,7 +169,7 @@ void forwardLeft() {
     registerT0eventInEvent(LONG_TIME_UNIT, &backwardLeft);
 }
 
-void unregisterFuncMotors(){
+void unregisterFuncMotors(void){
     unregisterT0event(&turnOnRight);
     unregisterT0event(&turnoffRight);
     unregisterT0event(&turnOnLeft);

@@ -15,53 +15,33 @@ guardados en la EEPROM */
 #include "system/usb/usb.h"
 #include "io_cfg.h"              // I/O pin mapping
 #include "user/handlerManager.h"
-#include "dynamicPolling.h"
-#include "user/usr_sec.h"
+#include "user/usr_eeprom.h"
 #include "user/adminModule.h"
-#define TRUE 0x01
-#define FALSE 0x00
+
   
 /** V A R I A B L E S ********************************************************/
 #pragma udata 
 
-byte  usrSecHandler;     // Handler number asigned to the module
-byte* sendBufferUsrSec;  // buffer to send data
-byte  SecSensorValue_1, SecSensorValue_2;
-int contAlarma = 0;
-int maxContAlarma = 6000;
-byte isWriteIntrusion = FALSE;
-byte esperandoBajaSensor = FALSE;
+
+byte* sendBufferUsrEeprom;  // buffer to send data
+
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
-void UserSecProcessIO(void);
-void UserSecInit(byte handler);
-void UserSecReceived(byte*, byte, byte);
-void UserSecRelease(byte handler);
+void UserEepromInit(byte handler);
+void UserEepromReceived(byte*, byte, byte);
+void UserEepromRelease(byte handler);
 
-void Escribir_memoria(void);
-unsigned char isHimenBroken(void);
-void Alarma(void);
-unsigned char resetFlag(void);
 
 
 // Table used by te framework to get a fixed reference point to the user module functions defined by the framework 
 /** USER MODULE REFERENCE*****************************************************/
 #pragma romdata user
-const uTab UserSecModuleTable = {&UserSecInit,&UserSecRelease,"eeprom"}; //modName must be less or equal 8 characters
+const uTab UserEepromModuleTable = {&UserEepromInit,&UserEepromRelease,"eeprom"}; //modName must be less or equal 8 characters
 #pragma code
 
 /** D E C L A R A T I O N S **************************************************/
 #pragma code module
 
-/***************************************************************************************
-* helper function to test if the eeprom is ready similar to Busy_eep but non blockiing
-***************************************************************************************/
-/*
-void Busy_eep_non_block ( void ){
-    byte j = 255;
-    while(EECON1bits.WR && j-->0);
-}
-*/
 
 /******************************************************************************
  * Function:        UserSecInit(void)
@@ -80,10 +60,10 @@ void Busy_eep_non_block ( void ){
  * Note:            None
  *****************************************************************************/
 
-void UserSecInit(byte handler){
+void UserEepromInit(byte handler){
     
-    setHandlerReceiveFunction(handler, &UserSecReceived);
-    sendBufferUsrSec = getSharedBuffer(handler);
+    setHandlerReceiveFunction(handler, &UserEepromReceived);
+    sendBufferUsrEeprom = getSharedBuffer(handler);
 
 }
 
@@ -105,18 +85,17 @@ void UserSecInit(byte handler){
  * Note:            None
  *****************************************************************************/
 
-void UserSecRelease(byte handler){
+void UserEepromRelease(byte handler){
     unsetHandlerReceiveBuffer(handler);
     unsetHandlerReceiveFunction(handler);
-    
 }
 
 /******************************************************************************
- * Function:        Escribir_memoria(void)
+ * Function:        write_eeprom(unsigned int address, unsigned char data)
  *
  * PreCondition:    None
  *
- * Input:           None
+ * Input:           Direccion y valor
  *
  * Output:          None
  *
@@ -128,52 +107,34 @@ void UserSecRelease(byte handler){
  * Note:            None
  *****************************************************************************/
 
-void Escribir_memoria(void){
+void write_eeprom(unsigned int address, unsigned char data) {
     Busy_eep_non_block();
-    Write_b_eep(ADDRESS_FLAG,BROKEN_FLAG);
+    Write_b_eep(address, data);
 }
 
 /******************************************************************************
- * Function:        isHimenBroken(void)
+ * Function:        read_eeprom(unsigned int address)
  *
  * PreCondition:    None
  *
- * Input:           None
+ * Input:           Direccion
  *
- * Output:          Valor de bandera alertando sobre una intrusion
+ * Output:          Valor de memoria en esa direccion
  *
  * Side Effects:    None
  *
- * Overview:       Lee un valor desde un lugar específico de la eeprom y lo compara para saber si hubo instrusion     
+ * Overview:        Lee un valor desde un lugar especifico de la eeprom     
  *
  * Note:            None
  *****************************************************************************/
-unsigned char isHimenBroken(void){
-    unsigned char data_eeprom;
+unsigned char read_eeprom(unsigned int address){
     Busy_eep_non_block(); 
-    data_eeprom = Read_b_eep(ADDRESS_FLAG);
-    if(data_eeprom == BROKEN_FLAG)
-        return 1;
-    else    
-	return 0;
-}
-
-unsigned char resetFlag(void){
-    unsigned char data_eeprom;
-    data_eeprom = Read_b_eep(ADDRESS_FLAG);
-    data_eeprom = Read_b_eep(ADDRESS_FLAG);
-    if(data_eeprom == BROKEN_FLAG){
-        Busy_eep_non_block();
-        Write_b_eep(ADDRESS_FLAG,FLAG_RESET);
-        return 1;
-    }
-    else
-        return 0;
+    return Read_b_eep(address);
 }
 
 
 /******************************************************************************
- * Function:        UserSecReceived(byte* recBuffPtr, byte len)
+ * Function:        UserSecReceived(byte* recBuffPtr, byte len, byte handler)
  *
  * PreCondition:    None
  *
@@ -188,47 +149,45 @@ unsigned char resetFlag(void){
  * Note:            None
  *****************************************************************************/
 
-void UserSecReceived(byte* recBuffPtr, byte len, byte handler){
+void UserEepromReceived(byte* recBuffPtr, byte len, byte handler){
       
-      byte UserSecCounter = 0;
-      switch(((SEC_DATA_PACKET*)recBuffPtr)->CMD){
+    byte UserEepromCounter = 0;
+    unsigned int address;
+    unsigned char data;
+    
+    switch(((EEPROM_DATA_PACKET*)recBuffPtr)->CMD){
         case READ_VERSION:
-              ((SEC_DATA_PACKET*)sendBufferUsrSec)->_byte[0] = ((SEC_DATA_PACKET*)recBuffPtr)->_byte[0]; 
-              ((SEC_DATA_PACKET*)sendBufferUsrSec)->_byte[1] = SEC_MINOR_VERSION;
-              ((SEC_DATA_PACKET*)sendBufferUsrSec)->_byte[2] = SEC_MAJOR_VERSION;
-              UserSecCounter = 0x03;
-              break;  
+            ((EEPROM_DATA_PACKET*)sendBufferUsrEeprom)->_byte[0] = ((EEPROM_DATA_PACKET*)recBuffPtr)->_byte[0]; 
+            ((EEPROM_DATA_PACKET*)sendBufferUsrEeprom)->_byte[1] = EEPROM_MINOR_VERSION;
+            ((EEPROM_DATA_PACKET*)sendBufferUsrEeprom)->_byte[2] = EEPROM_MAJOR_VERSION;
+            UserEepromCounter = 0x03;
+            break;  
 
-        case GET_SEC:
-              SecSensorValue_1 = 0x00;
-              SecSensorValue_2 = 0x00;
-              SecSensorValue_1 = PORTDbits.RD7;
-              SecSensorValue_2 = PORTAbits.RA4;
-              ((SEC_DATA_PACKET*)sendBufferUsrSec)->_byte[0] = ((SEC_DATA_PACKET*)recBuffPtr)->_byte[0]; 
-              ((SEC_DATA_PACKET*)sendBufferUsrSec)->_byte[1] = SecSensorValue_1;
-              ((SEC_DATA_PACKET*)sendBufferUsrSec)->_byte[2] = SecSensorValue_2;
-              UserSecCounter = 0x03;
-              break;  
+        case WRITE:
+            ((EEPROM_DATA_PACKET*)sendBufferUsrEeprom)->_byte[0] = ((EEPROM_DATA_PACKET*)recBuffPtr)->_byte[0]; 
+            address = ((EEPROM_DATA_PACKET*)recBuffPtr)->_byte[1];
+            data = ((EEPROM_DATA_PACKET*)recBuffPtr)->_byte[2];
+            write_eeprom(address, data);
+            UserEepromCounter = 0x01;
+            break;  
 
-        case INTRUSION:
-                ((SEC_DATA_PACKET*)sendBufferUsrSec)->_byte[0] = isHimenBroken();
-                UserSecCounter=0x01;
+        case READ:
+            ((EEPROM_DATA_PACKET*)sendBufferUsrEeprom)->_byte[0] = ((EEPROM_DATA_PACKET*)recBuffPtr)->_byte[0];
+            address = ((EEPROM_DATA_PACKET*)recBuffPtr)->_byte[1];
+            ((EEPROM_DATA_PACKET*)sendBufferUsrEeprom)->_byte[1] = read_eeprom(address);
+            UserEepromCounter=0x02;
             break; 
-        case RESET_FLAG:
-                ((SEC_DATA_PACKET*)sendBufferUsrSec)->_byte[0] = resetFlag();
-                isWriteIntrusion = FALSE;
-                esperandoBajaSensor = TRUE;
-                UserSecCounter=0x01;
-            break; 
+ 
         case RESET:
-              Reset();
-              break;
+            Reset();
+            break;
           
-         default:
-              break;
+        default:
+            break;
+ 
       }//end switch(s)
 
-    USBGenWrite2(handler, UserSecCounter);
+    USBGenWrite2(handler, UserEepromCounter);
                 
 }//end UserSecReceived
 
