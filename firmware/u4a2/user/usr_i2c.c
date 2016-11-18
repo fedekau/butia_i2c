@@ -155,7 +155,7 @@ void UserI2CReceived(byte* recBuffPtr, byte len, byte handler) {
         case WRITE_I2C:
             ((I2C_DATA_PACKET*) sendBufferUsrI2C)->_byte[0] = ((I2C_DATA_PACKET*) recBuffPtr)->_byte[0];
             //blinkVerde();
-            WriteI2C(2);
+            WriteI2C(((I2C_DATA_PACKET*) recBuffPtr)->_byte[1]);
             //blinkVerde();
             IdleI2C();
             //blinkVerde();
