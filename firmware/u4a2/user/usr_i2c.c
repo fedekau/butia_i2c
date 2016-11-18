@@ -124,7 +124,7 @@ void UserI2CReceived(byte* recBuffPtr, byte len, byte handler) {
     ADCON1bits.PCFG = 1;
     ADCON1 = 0x07;
     ADCON0bits.ADON = 0;
-    blinkRojo();
+    //blinkRojo();
     switch (((I2C_DATA_PACKET*) recBuffPtr)->CMD) {
         case READ_VERSION:
            ((I2C_DATA_PACKET*) sendBufferUsrI2C)->_byte[0] = ((I2C_DATA_PACKET*) recBuffPtr)->_byte[0];
@@ -180,7 +180,7 @@ void UserI2CReceived(byte* recBuffPtr, byte len, byte handler) {
         default:
             break;
     }/*end switch(s)*/
-    blinkRojo();
+    //blinkRojo();
     ADCON1 = adcon;
     ADCON0bits.ADON = adon;
     ADCON1bits.PCFG = pcfg;
