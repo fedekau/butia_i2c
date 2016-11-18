@@ -225,9 +225,49 @@ void _low_ISR (void)
  *****************************************************************************/
 
 #define WAIT_SECONDS(s) {int i; for(i=0; i<10*(s); i++) Delay10KTCYx(250);}
+#include "i2c.h"
 
+void blinkAll(){
+    TRISDbits.TRISD4 = 0;
+    TRISDbits.TRISD5 = 0;
+    
+    LATDbits.LATD4 = 1;
+    LATDbits.LATD5 = 1;
+    Delay10KTCYx(0);
+    LATDbits.LATD4 = 0;
+    LATDbits.LATD5 = 0;
+    Delay10KTCYx(0);
+}
+
+void morse(int a){
+    if(a == 0){
+        blinkVerde();
+    }else{
+        blinkRojo();
+    }
+}
+
+void send(int a){
+    OpenI2C(MASTER, SLEW_OFF);
+    SSPADD = 0x31; //100kHz Baud clock(0x31) @20MHz
+    StartI2C();
+    IdleI2C();
+    WriteI2C( 0x02 ); //send address
+    IdleI2C();
+    WriteI2C(a);
+    IdleI2C();                         // Wait for ACK
+    StopI2C();
+    CloseI2C();
+}
+
+char hola[] = "Inicio";
 void main(void) {
+    blinkAll();
+    
+    send(1);
+    
     InitializeSystem();
+    blinkAll();
     while(1) {
         USBTasks();         // USB Tasks
         //polling();
@@ -260,7 +300,7 @@ static void InitializeSystem(void) {
     ax12InitSerial();
     ADCON1 = ADCON1 & 0xF0;        /* Default all pins to analogic */
     ADCON0bits.ADON = 1;            /* Enable Analogic */
-
+    
     #if defined(USE_USB_BUS_SENSE_IO)
     tris_usb_bus_sense = INPUT_PIN; // See io_cfg.h
     #endif

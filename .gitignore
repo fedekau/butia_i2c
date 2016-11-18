@@ -36,3 +36,7 @@ usb4all-code/pcb/butia2.0/usb4butia/john/*.pdf
 usb4all-code/pcb/butia2.0/usb4butia/john/*.ps
 sb4all-code/pcb/LDR/*.cmp
 
+/firmware/u4a2/USB4allSlave/nbproject/private/
+/firmware/u4a2/USB4allMaster.X/nbproject/private/
+/firmware/u4a2/USB4allMaster.X/build/default/
+/firmware/u4a2/USB4allMaster.X/dist/default/

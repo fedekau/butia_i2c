@@ -30,6 +30,7 @@
       <itemPath>../user/usr_butia.h</itemPath>
       <itemPath>../user/usr_modAct.h</itemPath>
       <itemPath>../user/usr_modSen.h</itemPath>
+      <itemPath>../user/usr_i2c.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LibraryFiles"
                    displayName="Library Files"
@@ -70,6 +71,7 @@
       <itemPath>../user/usr_butia.c</itemPath>
       <itemPath>../user/usr_modAct.c</itemPath>
       <itemPath>../user/usr_modSen.c</itemPath>
+      <itemPath>../user/usr_i2c.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

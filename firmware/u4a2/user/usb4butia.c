@@ -53,6 +53,17 @@ void setData4(byte data);
 WORD getDetectionPinValue4(void);
 
 /*------------ Port 5 ------------------*/
+//void changeDirectionPort5(direction io);
+//
+//byte getDataD5();
+//
+//WORD getDataA5();
+//
+//void setData5(byte data);
+//
+//WORD getDetectionPinValue5(void);
+
+/*------------ Port 6 ------------------*/
 void changeDirectionPort5(direction io);
 
 byte getDataD5();
@@ -62,17 +73,6 @@ WORD getDataA5();
 void setData5(byte data);
 
 WORD getDetectionPinValue5(void);
-
-/*------------ Port 6 ------------------*/
-void changeDirectionPort6(direction io);
-
-byte getDataD6();
-
-WORD getDataA6();
-
-void setData6(byte data);
-
-WORD getDetectionPinValue6(void);
 
 
 
@@ -86,8 +86,8 @@ const port_descriptor board_ports[MAX_PORTS]=
         { &getDataD2 , &getDataA2 , &setData2, &getDetectionPinValue2 , &changeDirectionPort2 },
         { &getDataD3 , &getDataA3 , &setData3, &getDetectionPinValue3 , &changeDirectionPort3 },
         { &getDataD4 , &getDataA4 , &setData4, &getDetectionPinValue4 , &changeDirectionPort4 },
-        { &getDataD5 , &getDataA5 , &setData5, &getDetectionPinValue5 , &changeDirectionPort5 },
-        { &getDataD6 , &getDataA6 , &setData6, &getDetectionPinValue6 , &changeDirectionPort6 }
+//        { &getDataD5 , &getDataA5 , &setData5, &getDetectionPinValue5 , &changeDirectionPort5 },
+        { &getDataD5 , &getDataA5 , &setData5, &getDetectionPinValue5 , &changeDirectionPort5 }
     };
 
 
@@ -308,64 +308,64 @@ WORD getDetectionPinValue4(void){
 }
 
 /*------------ Port 5 ------------------*/
-void changeDirectionPort5(direction io){
-    TRISBbits.RB1 = io;
-}
-
-WORD getDataA5(){
-
-    WORD res = 0;
-    byte counter = 255;
-    /*Configure Analogic Chanel 10, AN10 _ PIN 34*/
-    ADCON0bits.CHS3 =  1;
-    ADCON0bits.CHS2 =  0;
-    ADCON0bits.CHS1 =  1;
-    ADCON0bits.CHS0 =  0;
-
-    ADCON0bits.GO =  1; /*Start Reading Analogic pin*/
-    while(ADCON0bits.NOT_DONE && counter--> (byte) 0);
-    LSB(res) = ADRESL;
-    MSB(res) = ADRESH;
-
-    return res;
-}
-
-byte getDataD5(){
-    WORD res;
-    res = getDataA5();
-    if (res.HighB.b7)
-        return 0x01;
-    return 0x00;
-}
-
-void setData5(byte data){
-    PORTBbits.RB1 = data;
-}
-
-WORD getDetectionPinValue5(void){
-
-    WORD res;
-    byte counter = 255;
-    /*Configure Analogic Chanel 12, AN12*/
-    ADCON0bits.CHS3 =  1;
-    ADCON0bits.CHS2 =  1;
-    ADCON0bits.CHS1 =  0;
-    ADCON0bits.CHS0 =  0;
-
-    ADCON0bits.GO =  1; /*Start Reading Analogic pin*/
-    while(ADCON0bits.NOT_DONE && counter--> (byte) 0);
-    LSB(res) = ADRESL;
-    MSB(res) = ADRESH;
-
-    return res;
-}
+//void changeDirectionPort5(direction io){
+//    TRISBbits.RB1 = io;
+//}
+//
+//WORD getDataA5(){
+//
+//    WORD res = 0;
+//    byte counter = 255;
+//    /*Configure Analogic Chanel 10, AN10 _ PIN 34*/
+//    ADCON0bits.CHS3 =  1;
+//    ADCON0bits.CHS2 =  0;
+//    ADCON0bits.CHS1 =  1;
+//    ADCON0bits.CHS0 =  0;
+//
+//    ADCON0bits.GO =  1; /*Start Reading Analogic pin*/
+//    while(ADCON0bits.NOT_DONE && counter--> (byte) 0);
+//    LSB(res) = ADRESL;
+//    MSB(res) = ADRESH;
+//
+//    return res;
+//}
+//
+//byte getDataD5(){
+//    WORD res;
+//    res = getDataA5();
+//    if (res.HighB.b7)
+//        return 0x01;
+//    return 0x00;
+//}
+//
+//void setData5(byte data){
+//    PORTBbits.RB1 = data;
+//}
+//
+//WORD getDetectionPinValue5(void){
+//
+//    WORD res;
+//    byte counter = 255;
+//    /*Configure Analogic Chanel 12, AN12*/
+//    ADCON0bits.CHS3 =  1;
+//    ADCON0bits.CHS2 =  1;
+//    ADCON0bits.CHS1 =  0;
+//    ADCON0bits.CHS0 =  0;
+//
+//    ADCON0bits.GO =  1; /*Start Reading Analogic pin*/
+//    while(ADCON0bits.NOT_DONE && counter--> (byte) 0);
+//    LSB(res) = ADRESL;
+//    MSB(res) = ADRESH;
+//
+//    return res;
+//}
 
 /*------------ Port 6 ------------------*/
-void changeDirectionPort6(direction io){
+void changeDirectionPort5(direction io){
     TRISBbits.RB3 = io;
 }
 
-WORD getDataA6(){
+WORD getDataA5(){
 
     WORD res;
     byte counter = 255;
@@ -383,19 +383,19 @@ WORD getDataA6(){
     return res;
 }
 
-byte getDataD6(){
+byte getDataD5(){
     WORD res = 0;
-    res = getDataA6();
+    res = getDataA5();
     if (res.HighB.b7)
         return 0x01;
     return 0x00;
 }
 
-void setData6(byte data){
+void setData5(byte data){
     PORTBbits.RB3 = data;
 }
 
-WORD getDetectionPinValue6(void){
+WORD getDetectionPinValue5(void){
 
     WORD res;
     byte counter = 255;
@@ -427,14 +427,14 @@ const void initPorts(byte motors_cc){
     ADCON2bits.ADFM = 0x00; /*Left justified*/
     ADCON2bits.ACQT = 0x07; /*Acquisition Time Select*/
     ADCON2bits.ADCS = 0x04; /*Acquisition Time Select Fosc/4*/
-
+    
     if (motors_cc) {
         TRISD = 0x09;
     } else {
         PORTD = 0x00;
         TRISD = 0xFF;
     }
-
+    
     for(i = 0; i < MAX_PORTS; i++)
         board_ports[i].change_port_direction(_IN);
 }
