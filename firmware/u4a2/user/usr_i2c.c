@@ -116,6 +116,7 @@ int adcon, pcfg, adon;
 
 void UserI2CReceived(byte* recBuffPtr, byte len, byte handler) {
     byte userI2CCounter = 0;
+    byte readData = -1;
     
     adcon = ADCON1;
     pcfg = ADCON1bits.PCFG;
@@ -163,9 +164,22 @@ void UserI2CReceived(byte* recBuffPtr, byte len, byte handler) {
             //blinkVerde();
             break;
         case READ_I2C:
+            readData = ReadI2C();
+            NotAckI2C();
             ((I2C_DATA_PACKET*) sendBufferUsrI2C)->_byte[0] = ((I2C_DATA_PACKET*) recBuffPtr)->_byte[0];
-            ReadI2C();
-            userI2CCounter = 0x01;
+            ((I2C_DATA_PACKET*) sendBufferUsrI2C)->_byte[1] = readData;
+            
+            blinkAll();
+            
+            if (readData == -1){
+                blinkRojo();
+            } 
+            
+            if (readData == 3){
+                blinkVerde();
+            }
+            
+            userI2CCounter = 0x02;
             break;
         case STOP_I2C:
             ((I2C_DATA_PACKET*) sendBufferUsrI2C)->_byte[0] = ((I2C_DATA_PACKET*) recBuffPtr)->_byte[0];
