@@ -37,7 +37,9 @@ typedef union I2C_DATA_PACKET
             WRITE_I2C = 0x08,
             READ_I2C = 0x09,
             STOP_I2C = 0x10,
-            CLOSE_I2C = 0x11
+            CLOSE_I2C = 0x11,
+            ACK_I2C = 0x12,
+            NACK_I2C = 0x13
         }CMD;
         byte len;
     };
